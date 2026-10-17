@@ -11,76 +11,28 @@
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛺</text></svg>">
 
-    <!-- Fuentes y librerías -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* Ocultar barra de scroll en navegación horizontal manteniendo funcionalidad */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        /* Toasts */
-        #toastContainer {
-            position: fixed;
-            top: 1.25rem;
-            right: 1.25rem;
-            z-index: 99999;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            pointer-events: none;
-        }
-
-        .toast-item {
-            pointer-events: auto;
-            transform: translateX(120%);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .toast-item.show {
-            transform: translateX(0);
-        }
-    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 
-<body class="bg-slate-100 min-h-screen text-slate-800 font-sans antialiased">
-
-    <!-- TOAST NOTIFICATIONS CONTAINER -->
-    <div id="toastContainer"></div>
+<body class="bg-slate-100 min-h-screen text-gray-800 font-sans">
 
     <!-- NAVBAR -->
+<<<<<<< HEAD
     <header class="bg-slate-900 text-white sticky top-0 z-50 border-b-2 border-slate-800 shadow-md">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+=======
+    <nav class="bg-gray-900 text-white p-4 shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <span class="font-bold text-lg tracking-wide flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-amber-400"></i> ADMIN JC2027
+            </span>
+>>>>>>> parent of 27bed34 (Change of Antigravity in UI/UX)
             <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400">
-                    <i class="fa-solid fa-shield-halved text-base"></i>
-                </div>
-                <div>
-                    <span class="font-black text-base tracking-wide flex items-center gap-1.5">
-                        ADMIN <span class="text-amber-400 font-black">JC2027</span>
-                    </span>
-                    <span class="text-[10px] text-slate-400 block -mt-0.5 tracking-wider uppercase font-semibold">Panel de Control & Tesorería</span>
-                </div>
-            </div>
-
-            <div class="flex items-center gap-2 sm:gap-3">
                 <button id="btnPerfilAdmin" onclick="abrirModalPerfilAdmin()"
+<<<<<<< HEAD
                     class="hidden text-xs bg-slate-800 hover:bg-slate-700 text-amber-300 font-black px-3.5 py-2 rounded-xl border border-slate-600 transition flex items-center gap-1.5 shadow-sm">
                     <i class="fa-solid fa-circle-user text-sm text-amber-400"></i>
                     <span id="txtAdminInfo">Mi Perfil</span>
@@ -94,10 +46,22 @@
                     class="text-xs bg-slate-800 hover:bg-slate-700 text-white px-3.5 py-2 rounded-xl border border-slate-600 transition flex items-center gap-1.5 font-bold shadow-sm">
                     <i class="fa-solid fa-arrow-up-right-from-square text-amber-400 text-[10px]"></i>
                     <span>Portal Público</span>
+=======
+                    class="hidden text-xs bg-gray-800 hover:bg-gray-700 text-amber-400 font-bold px-3 py-1.5 rounded-lg border border-gray-700 transition flex items-center gap-1">
+                    <i class="fa-solid fa-user-gear"></i> <span id="txtAdminInfo">Mi Perfil</span>
+                </button>
+                <button id="btnCerrarSesion" onclick="cerrarSesion()"
+                    class="hidden text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg transition">
+                    <i class="fa-solid fa-right-from-bracket"></i> Salir
+                </button>
+                <a href="index.html"
+                    class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg border border-gray-700 transition">
+                    Portal Público
+>>>>>>> parent of 27bed34 (Change of Antigravity in UI/UX)
                 </a>
             </div>
         </div>
-    </header>
+    </nav>
 
     <!-- LOGIN -->
     <section id="secLogin" class="max-w-md mx-auto mt-16 p-6 bg-white rounded-2xl shadow-xl border border-gray-200">
@@ -112,31 +76,22 @@
 
         <form onsubmit="iniciarSesionAdmin(event)" class="space-y-4">
             <div>
-                <label class="text-xs font-bold text-gray-700 block mb-1">Usuario</label>
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
-                        <i class="fa-solid fa-user text-xs"></i>
-                    </span>
-                    <input type="text" id="loginUser" required placeholder="admin"
-                        class="w-full pl-9 p-3 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-600 transition">
-                </div>
+                <label class="text-xs font-bold text-gray-600">Usuario</label>
+                <input type="text" id="loginUser" required placeholder="admin"
+                    class="w-full mt-1 p-3 border border-gray-300 rounded-xl text-sm outline-none">
             </div>
             <div>
-                <label class="text-xs font-bold text-gray-700 block mb-1">Contraseña</label>
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
-                        <i class="fa-solid fa-lock text-xs"></i>
-                    </span>
-                    <input type="password" id="loginPass" required placeholder="••••••••"
-                        class="w-full pl-9 pr-10 p-3 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-600 transition">
-                    <button type="button" onclick="togglePasswordVisibility('loginPass', this)"
-                        class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none">
-                        <i class="fa-solid fa-eye text-sm"></i>
-                    </button>
-                </div>
+                <label class="text-xs font-bold text-gray-600">Contraseña</label>
+                <input type="password" id="loginPass" required placeholder="••••••••"
+                    class="w-full mt-1 p-3 border border-gray-300 rounded-xl text-sm outline-none">
             </div>
+<<<<<<< HEAD
             <button type="submit" id="btnLoginSubmit"
                 class="w-full bg-slate-900 hover:bg-black active:scale-[0.99] text-white font-black py-3.5 rounded-xl shadow-lg transition text-sm flex items-center justify-center gap-2 border border-slate-700">
+=======
+            <button type="submit"
+                class="w-full bg-gray-900 hover:bg-black text-white font-extrabold py-3 rounded-xl shadow-lg transition text-sm flex items-center justify-center gap-2">
+>>>>>>> parent of 27bed34 (Change of Antigravity in UI/UX)
                 <i class="fa-solid fa-right-to-bracket text-amber-400"></i> Ingresar al Panel
             </button>
         </form>
@@ -147,33 +102,52 @@
 
         <!-- MÉTRICAS DE PARTICIPANTES -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+<<<<<<< HEAD
             <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-blue-600 flex justify-between items-center hover:shadow transition">
                 <div>
                     <p class="text-[10px] font-extrabold text-gray-500 uppercase tracking-wider">Campamentistas</p>
                     <h3 class="text-3xl font-black text-gray-900 mt-0.5" id="stCampamentistas">0</h3>
+=======
+            <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-blue-600 flex justify-between items-center">
+                <div>
+                    <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Campamentistas</p>
+                    <h3 class="text-2xl font-black text-gray-900 mt-0.5" id="stCampamentistas">0</h3>
+>>>>>>> parent of 27bed34 (Change of Antigravity in UI/UX)
                 </div>
-                <div class="p-3 bg-blue-50 text-blue-600 rounded-2xl"><i class="fa-solid fa-person-hiking text-xl"></i></div>
+                <div class="p-3 bg-blue-50 text-blue-600 rounded-xl"><i class="fa-solid fa-person-hiking text-lg"></i></div>
             </div>
 
+<<<<<<< HEAD
             <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-purple-600 flex justify-between items-center hover:shadow transition">
                 <div>
                     <p class="text-[10px] font-extrabold text-gray-500 uppercase tracking-wider">Staff Totales</p>
                     <h3 class="text-3xl font-black text-purple-700 mt-0.5" id="stStaff">0</h3>
+=======
+            <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-purple-600 flex justify-between items-center">
+                <div>
+                    <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Staff Totales</p>
+                    <h3 class="text-2xl font-black text-purple-700 mt-0.5" id="stStaff">0</h3>
+>>>>>>> parent of 27bed34 (Change of Antigravity in UI/UX)
                 </div>
-                <div class="p-3 bg-purple-50 text-purple-600 rounded-2xl"><i class="fa-solid fa-user-shield text-xl"></i></div>
+                <div class="p-3 bg-purple-50 text-purple-600 rounded-xl"><i class="fa-solid fa-user-shield text-lg"></i></div>
             </div>
 
+<<<<<<< HEAD
             <div class="bg-white p-5 rounded-2xl border border-emerald-300 shadow-sm border-l-4 border-emerald-600 flex justify-between items-center bg-gradient-to-r from-emerald-50 to-white hover:shadow transition">
+=======
+            <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-emerald-600 flex justify-between items-center bg-emerald-50/20">
+>>>>>>> parent of 27bed34 (Change of Antigravity in UI/UX)
                 <div>
                     <p class="text-[10px] font-extrabold text-emerald-800 uppercase tracking-wider">Total General Participantes</p>
-                    <h3 class="text-3xl font-black text-emerald-600 mt-0.5" id="stTotalGeneral">0</h3>
+                    <h3 class="text-2xl font-black text-emerald-600 mt-0.5" id="stTotalGeneral">0</h3>
                 </div>
-                <div class="p-3 bg-emerald-100 text-emerald-700 rounded-2xl"><i class="fa-solid fa-users text-xl"></i></div>
+                <div class="p-3 bg-emerald-100 text-emerald-700 rounded-xl"><i class="fa-solid fa-users text-lg"></i></div>
             </div>
         </div>
 
         <!-- FINANZAS -->
         <div id="contTarjetasFinanzas" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+<<<<<<< HEAD
             <div id="cardTotalIngresos" class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-green-600 hover:shadow transition">
                 <p class="text-xs font-extrabold text-green-700 uppercase tracking-wider">Total Ingresos</p>
                 <h3 class="text-2xl sm:text-3xl font-black text-green-600 mt-1" id="stIngresos">Bs 0</h3>
@@ -233,6 +207,68 @@
                     <i class="fa-solid fa-clipboard-list"></i> <span>Auditoría</span>
                 </button>
             </nav>
+=======
+            <div id="cardTotalIngresos" class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-green-600">
+                <p class="text-xs font-bold text-gray-400 uppercase">Total Ingresos</p>
+                <h3 class="text-2xl font-black text-green-600 mt-1" id="stIngresos">Bs 0</h3>
+            </div>
+            <div id="cardTotalEgresos" class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-red-600">
+                <p class="text-xs font-bold text-gray-400 uppercase">Total Egresos</p>
+                <h3 class="text-2xl font-black text-red-600 mt-1" id="stEgresos">Bs 0</h3>
+            </div>
+            <div id="cardBalanceNeto"
+                class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-amber-500 bg-amber-50/30">
+                <p class="text-xs font-bold text-amber-800 uppercase">Balance Neto</p>
+                <h3 class="text-2xl font-black text-amber-600 mt-1" id="stBalance">Bs 0</h3>
+            </div>
+        </div>
+
+        <!-- PESTAÑAS -->
+        <div class="flex flex-wrap gap-2 border-b border-gray-200 pb-2">
+            <button id="navSolicitudes" onclick="cambiarPestana('solicitudes')"
+                class="tab-btn bg-gray-900 text-white text-xs font-bold px-4 py-2 rounded-xl transition">
+                <i class="fa-solid fa-clock-rotate-left mr-1"></i> Pendientes
+            </button>
+            <button id="navInscritos" onclick="cambiarPestana('inscritos')"
+                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                <i class="fa-solid fa-users mr-1"></i> Lista de Inscritos & Staff
+            </button>
+
+            <!-- NUEVA PESTAÑA: CAMPOS PERSONALIZADOS / SCRIPTS -->
+            <button id="navCampos" onclick="cambiarPestana('campos')"
+                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                <i class="fa-solid fa-sliders mr-1"></i> Campos de Formulario & SQL
+            </button>
+
+            <button id="navCategorias" onclick="cambiarPestana('categorias')"
+                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                <i class="fa-solid fa-tags mr-1"></i> Tipos de Inscripción
+            </button>
+            <button id="navIngresos" onclick="cambiarPestana('ingresos')"
+                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                <i class="fa-solid fa-file-invoice-dollar mr-1"></i> Ingresos
+            </button>
+            <button id="navEgresos" onclick="cambiarPestana('egresos')"
+                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                <i class="fa-solid fa-arrow-down-short-wide mr-1"></i> Egresos
+            </button>
+            <button id="navReportes" onclick="cambiarPestana('reportes')"
+                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                <i class="fa-solid fa-chart-pie mr-1"></i> Reportes Avanzados
+            </button>
+            <button id="navUsuarios" onclick="cambiarPestana('usuarios')"
+                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                <i class="fa-solid fa-user-shield mr-1"></i> Administradores
+            </button>
+            <button id="navRoles" onclick="cambiarPestana('roles')"
+                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                <i class="fa-solid fa-key mr-1"></i> Permisos y Roles
+            </button>
+            <button id="navAuditoria" onclick="cambiarPestana('auditoria')"
+                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                <i class="fa-solid fa-clipboard-list mr-1"></i> Auditoría / Logs
+            </button>
+>>>>>>> parent of 27bed34 (Change of Antigravity in UI/UX)
         </div>
 
         <!-- PESTAÑA 1: PENDIENTES -->
@@ -353,17 +389,17 @@
         <div id="tabInscritos" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
-                    <div>
-                        <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
-                            <i class="fa-solid fa-users text-green-600"></i> Directorio de Campamentistas y Staff
-                        </h3>
-                        <p class="text-xs text-gray-500 mt-0.5">Control de registros, asignación de equipos y cartas de compromiso.</p>
-                    </div>
+                    <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
+                        <i class="fa-solid fa-users text-green-600"></i> Directorio de Campamentistas y Staff
+                    </h3>
                     <div class="flex flex-wrap gap-2">
+<<<<<<< HEAD
                         <button onclick="exportarInscritosCSV()"
                             class="bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 shadow-sm">
                             <i class="fa-solid fa-file-csv text-white"></i> Exportar CSV
                         </button>
+=======
+>>>>>>> parent of 27bed34 (Change of Antigravity in UI/UX)
                         <button onclick="toggleFormulario('panelConfigColumnas')"
                             class="bg-slate-200 hover:bg-slate-300 text-slate-900 font-black text-xs px-3.5 py-2 rounded-xl border border-slate-300 transition flex items-center gap-1 shadow-sm">
                             <i class="fa-solid fa-sliders"></i> Personalizar Columnas
@@ -373,42 +409,6 @@
                             <i class="fa-solid fa-plus"></i> Inscribir Campamentista / Staff
                         </button>
                     </div>
-                </div>
-
-                <!-- BARRA DE BÚSQUEDA Y FILTROS RÁPIDOS -->
-                <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 mb-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 text-xs">
-                    <div class="flex-1 flex flex-col sm:flex-row gap-2">
-                        <div class="relative flex-1">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                            </span>
-                            <input type="text" id="inputBuscarInscrito" oninput="renderizarTablaInscritos()" placeholder="Buscar por Nombre, C.I. o Célula..."
-                                class="w-full pl-9 pr-3 py-2 border rounded-xl bg-white font-medium outline-none focus:ring-2 focus:ring-green-600 transition">
-                        </div>
-                        <select id="filtroEquipo" onchange="renderizarTablaInscritos()" class="p-2 border rounded-xl bg-white font-semibold outline-none">
-                            <option value="todos">Todos los Equipos</option>
-                            <option value="Sin Asignar">Sin Asignar</option>
-                            <option value="Búfalos">Búfalos 🦬</option>
-                            <option value="Águilas">Águilas 🦅</option>
-                            <option value="Leones">Leones 🦁</option>
-                            <option value="Ciervos">Ciervos 🦌</option>
-                        </select>
-                        <select id="filtroRol" onchange="renderizarTablaInscritos()" class="p-2 border rounded-xl bg-white font-semibold outline-none">
-                            <option value="todos">Todos los Roles</option>
-                            <option value="campamentistas">Solo Campamentistas</option>
-                            <option value="staff">Solo Staff ⭐</option>
-                        </select>
-                        <select id="filtroCarta" onchange="renderizarTablaInscritos()" class="p-2 border rounded-xl bg-white font-semibold outline-none">
-                            <option value="todos">Estado Carta: Todos</option>
-                            <option value="Aprobada">Aprobada</option>
-                            <option value="En Revisión">En Revisión</option>
-                            <option value="Pendiente">Pendiente</option>
-                            <option value="Rechazada">Rechazada</option>
-                        </select>
-                    </div>
-                    <span id="lblContadorInscritos" class="text-gray-500 font-semibold self-center whitespace-nowrap text-[11px] bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm">
-                        Mostrando 0 participantes
-                    </span>
                 </div>
 
                 <div id="panelConfigColumnas" class="hidden bg-slate-50 p-4 rounded-xl border border-slate-200 mb-4 text-xs space-y-3">
@@ -1074,57 +1074,6 @@
         </div>
     </div>
 
-    <!-- MODAL PERFIL ADMIN (GESTIÓN DE CONTRASEÑA) -->
-    <div id="modalPerfilAdmin" class="fixed inset-0 bg-gray-900/70 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center border-b pb-3">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg">
-                        <i class="fa-solid fa-user-gear"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-extrabold text-gray-900 text-base">Mi Perfil de Administrador</h3>
-                        <p class="text-xs text-gray-500">Gestión de credenciales de acceso</p>
-                    </div>
-                </div>
-                <button onclick="cerrarModalPerfilAdmin()" class="text-gray-400 hover:text-gray-600 p-1">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-
-            <form onsubmit="cambiarMiPassword(event)" class="space-y-3">
-                <div>
-                    <label class="text-xs font-bold text-gray-700 block mb-1">Nombre</label>
-                    <input type="text" id="perfilNombre" disabled class="w-full p-2.5 bg-slate-100 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 cursor-not-allowed">
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-700 block mb-1">Nombre de Usuario</label>
-                    <input type="text" id="perfilUsuario" disabled class="w-full p-2.5 bg-slate-100 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 cursor-not-allowed">
-                </div>
-                <div class="border-t pt-3 space-y-2">
-                    <p class="text-xs font-bold text-gray-800 flex items-center gap-1.5">
-                        <i class="fa-solid fa-key text-amber-500"></i> Actualizar Contraseña
-                    </p>
-                    <div>
-                        <input type="password" id="perfilNewPass" placeholder="Nueva Contraseña" class="w-full p-2.5 border rounded-xl text-xs outline-none focus:ring-2 focus:ring-amber-500">
-                    </div>
-                    <div>
-                        <input type="password" id="perfilConfirmPass" placeholder="Confirmar Nueva Contraseña" class="w-full p-2.5 border rounded-xl text-xs outline-none focus:ring-2 focus:ring-amber-500">
-                    </div>
-                </div>
-
-                <div class="flex justify-end gap-2 pt-3 border-t">
-                    <button type="button" onclick="cerrarModalPerfilAdmin()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2.5 rounded-xl transition">
-                        Cancelar
-                    </button>
-                    <button type="submit" class="bg-slate-900 hover:bg-black text-amber-400 font-extrabold text-xs px-5 py-2.5 rounded-xl transition shadow">
-                        Guardar Contraseña
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <script>
         const SUPABASE_URL = 'https://bpwsdgkafjnsgfilbfgg.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwd3NkZ2thZmpuc2dmaWxiZmdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxODM1NzUsImV4cCI6MjEwNzc1OTU3NX0.rnSg8vNFpAuwNfECYwfyynERKwv3CJ7CGZRhAKbyDDM';
@@ -1295,67 +1244,56 @@
             const { data: pagosPend } = await db.from('pagos').select('*, inscritos(nombre_completo)').eq('estado', 'Pendiente');
             const tbodyP = document.getElementById('tblPagosPendientes');
             tbodyP.innerHTML = '';
-            if (!pagosPend || pagosPend.length === 0) {
-                tbodyP.innerHTML = '<tr><td colspan="4" class="text-center py-5 text-slate-400 italic text-xs"><i class="fa-solid fa-circle-check text-emerald-500 mr-1.5"></i> No hay comprobantes pendientes</td></tr>';
-            } else {
-                pagosPend.forEach(p => {
-                    tbodyP.innerHTML += `
-              <tr class="hover:bg-slate-50 transition">
-                <td class="p-2.5 font-semibold text-slate-800">${p.inscritos?.nombre_completo || 'Usuario'}</td>
-                <td class="p-2.5 font-bold text-emerald-600">Bs ${p.monto}</td>
-                <td class="p-2.5"><a href="${p.comprobante_url}" target="_blank" class="text-blue-600 hover:underline font-bold inline-flex items-center gap-1"><i class="fa-solid fa-image text-xs"></i> Ver</a></td>
-                <td class="p-2.5 flex gap-1.5">
-                  <button onclick="procesarPago('${p.id}', 'Aprobado', '${p.inscritos?.nombre_completo}', '${p.monto}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1 rounded-lg text-xs font-bold transition shadow-sm" title="Aprobar pago">✓ Aprobar</button>
-                  <button onclick="procesarPago('${p.id}', 'Rechazado', '${p.inscritos?.nombre_completo}', '${p.monto}')" class="bg-rose-600 hover:bg-rose-700 text-white px-2.5 py-1 rounded-lg text-xs font-bold transition shadow-sm" title="Rechazar pago">✕</button>
-                </td>
-              </tr>`;
-                });
-            }
+            (pagosPend || []).forEach(p => {
+                tbodyP.innerHTML += `
+          <tr>
+            <td class="p-2 font-semibold">${p.inscritos?.nombre_completo || 'Usuario'}</td>
+            <td class="p-2 font-bold text-green-600">Bs ${p.monto}</td>
+            <td class="p-2"><a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline font-bold">Ver Foto</a></td>
+            <td class="p-2 flex gap-1">
+              <button onclick="procesarPago('${p.id}', 'Aprobado', '${p.inscritos?.nombre_completo}', '${p.monto}')" class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs font-bold">✓</button>
+              <button onclick="procesarPago('${p.id}', 'Rechazado', '${p.inscritos?.nombre_completo}', '${p.monto}')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs font-bold">✕</button>
+            </td>
+          </tr>`;
+            });
 
             const { data: edicPend } = await db.from('solicitudes_edicion').select('*, inscritos(*)').eq('estado', 'Pendiente');
             solicitudesEdicionGlobal = edicPend || [];
             const tbodyE = document.getElementById('tblEdicionesPendientes');
             tbodyE.innerHTML = '';
-            if (solicitudesEdicionGlobal.length === 0) {
-                tbodyE.innerHTML = '<tr><td colspan="3" class="text-center py-5 text-slate-400 italic text-xs"><i class="fa-solid fa-circle-check text-emerald-500 mr-1.5"></i> No hay solicitudes de cambio pendientes</td></tr>';
-            } else {
-                solicitudesEdicionGlobal.forEach(e => {
-                    tbodyE.innerHTML += `
-              <tr class="hover:bg-slate-50 transition">
-                <td class="p-2.5 font-semibold text-slate-800">${e.inscritos?.nombre_completo}</td>
-                <td class="p-2.5 text-xs text-indigo-900 font-semibold">
-                  <button onclick="verCambiosSolicitadosModal('${e.id}')" class="bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold px-2.5 py-1 rounded-lg border border-blue-200 transition">
-                    👁️ Ver Cambios
-                  </button>
-                </td>
-                <td class="p-2.5 text-center flex justify-center gap-1.5">
-                  <button onclick="procesarEdicion('${e.id}', 'Aprobado')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1 rounded-lg text-xs font-bold transition shadow-sm">Aprobar ✓</button>
-                  <button onclick="procesarEdicion('${e.id}', 'Rechazado')" class="bg-rose-600 hover:bg-rose-700 text-white px-2.5 py-1 rounded-lg text-xs font-bold transition shadow-sm">Rechazar ✕</button>
-                </td>
-              </tr>`;
-                });
-            }
+
+            solicitudesEdicionGlobal.forEach(e => {
+                tbodyE.innerHTML += `
+          <tr>
+            <td class="p-2 font-semibold">${e.inscritos?.nombre_completo}</td>
+            <td class="p-2 text-xs text-indigo-900 font-semibold">
+              <button onclick="verCambiosSolicitadosModal('${e.id}')" class="bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold px-2 py-1 rounded-lg border border-blue-300">
+                👁️ Ver Cambios
+              </button>
+            </td>
+            <td class="p-2 text-center flex justify-center gap-1">
+              <button onclick="procesarEdicion('${e.id}', 'Aprobado')" class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs font-bold">Aprobar ✓</button>
+              <button onclick="procesarEdicion('${e.id}', 'Rechazado')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs font-bold">Rechazar ✕</button>
+            </td>
+          </tr>`;
+            });
 
             const { data: cartasPend } = await db.from('inscritos').select('*').eq('estado_carta', 'En Revisión');
             const tbodyC = document.getElementById('tblCartasPendientes');
             tbodyC.innerHTML = '';
-            if (!cartasPend || cartasPend.length === 0) {
-                tbodyC.innerHTML = '<tr><td colspan="5" class="text-center py-5 text-slate-400 italic text-xs"><i class="fa-solid fa-circle-check text-emerald-500 mr-1.5"></i> No hay cartas de compromiso pendientes de revisión</td></tr>';
-            } else {
-                cartasPend.forEach(c => {
-                    tbodyC.innerHTML += `
-              <tr class="hover:bg-slate-50 transition">
-                <td class="p-2.5 font-bold text-slate-900">${c.ci}</td>
-                <td class="p-2.5 font-semibold text-slate-800">${c.nombre_completo}</td>
-                <td class="p-2.5">${c.celula || '-'}</td>
-                <td class="p-2.5"><a href="${c.carta_compromiso_url}" target="_blank" class="text-indigo-600 font-bold hover:underline inline-flex items-center gap-1"><i class="fa-solid fa-file-pdf text-xs"></i> Ver Carta</a></td>
-                <td class="p-2.5 text-center flex justify-center gap-1.5">
-                  <button onclick="procesarCarta('${c.id}', 'Aprobada', '${c.nombre_completo}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded-lg text-xs font-bold transition shadow-sm">Aprobar ✓</button>
-                  <button onclick="procesarCarta('${c.id}', 'Rechazada', '${c.nombre_completo}')" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1 rounded-lg text-xs font-bold transition shadow-sm">Rechazar ✕</button>
-                </td>
-              </tr>`;
-                });
-            }
+            (cartasPend || []).forEach(c => {
+                tbodyC.innerHTML += `
+          <tr>
+            <td class="p-2 font-bold">${c.ci}</td>
+            <td class="p-2 font-semibold">${c.nombre_completo}</td>
+            <td class="p-2">${c.celula || '-'}</td>
+            <td class="p-2"><a href="${c.carta_compromiso_url}" target="_blank" class="text-indigo-600 font-bold underline">Ver Carta</a></td>
+            <td class="p-2 text-center flex justify-center gap-1">
+              <button onclick="procesarCarta('${c.id}', 'Aprobada', '${c.nombre_completo}')" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs font-bold">Aprobar ✓</button>
+              <button onclick="procesarCarta('${c.id}', 'Rechazada', '${c.nombre_completo}')" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs font-bold">Rechazar ✕</button>
+            </td>
+          </tr>`;
+            });
         }
 
         async function procesarEdicion(idSol, estado) {
@@ -1808,39 +1746,16 @@
         }
 
         function renderizarTablaInscritos() {
-            const showTel = document.getElementById('col_tel')?.checked;
-            const showCelula = document.getElementById('col_celula')?.checked;
-            const showTalla = document.getElementById('col_talla')?.checked;
-            const showActividad = document.getElementById('col_actividad')?.checked;
-            const showAlergias = document.getElementById('col_alergias')?.checked;
-            const showTutor = document.getElementById('col_tutor')?.checked;
+            const showTel = document.getElementById('col_tel').checked;
+            const showCelula = document.getElementById('col_celula').checked;
+            const showTalla = document.getElementById('col_talla').checked;
+            const showActividad = document.getElementById('col_actividad').checked;
+            const showAlergias = document.getElementById('col_alergias').checked;
+            const showTutor = document.getElementById('col_tutor').checked;
 
-            const campoOrden = document.getElementById('selOrdenInscritos')?.value || 'nombre_completo';
-            const busqueda = (document.getElementById('inputBuscarInscrito')?.value || '').trim().toLowerCase();
-            const filtroEquipo = document.getElementById('filtroEquipo')?.value || 'todos';
-            const filtroRol = document.getElementById('filtroRol')?.value || 'todos';
-            const filtroCarta = document.getElementById('filtroCarta')?.value || 'todos';
+            const campoOrden = document.getElementById('selOrdenInscritos').value;
 
-            let listaFiltrada = [...listaInscritosGlobal].filter(i => {
-                if (busqueda) {
-                    const matchNombre = (i.nombre_completo || '').toLowerCase().includes(busqueda);
-                    const matchCi = (i.ci || '').toLowerCase().includes(busqueda);
-                    const matchCelula = (i.celula || '').toLowerCase().includes(busqueda);
-                    if (!matchNombre && !matchCi && !matchCelula) return false;
-                }
-                if (filtroEquipo !== 'todos') {
-                    if ((i.equipo || 'Sin Asignar') !== filtroEquipo) return false;
-                }
-                if (filtroRol === 'staff' && !i.es_staff) return false;
-                if (filtroRol === 'campamentistas' && i.es_staff) return false;
-                if (filtroCarta !== 'todos') {
-                    const estado = i.estado_carta || (i.carta_compromiso_url ? 'En Revisión' : 'Pendiente');
-                    if (estado !== filtroCarta) return false;
-                }
-                return true;
-            });
-
-            let listaOrdenada = listaFiltrada.sort((a, b) => {
+            let listaOrdenada = [...listaInscritosGlobal].sort((a, b) => {
                 let valA = a[campoOrden] || '';
                 let valB = b[campoOrden] || '';
                 if (campoOrden === 'tipo_inscripcion') {
@@ -1850,107 +1765,56 @@
                 return valA.toString().localeCompare(valB.toString());
             });
 
-            const lblContador = document.getElementById('lblContadorInscritos');
-            if (lblContador) {
-                lblContador.innerText = `Mostrando ${listaOrdenada.length} de ${listaInscritosGlobal.length} participantes`;
-            }
-
             const thead = document.getElementById('theadInscritos');
             thead.innerHTML = `
             <tr>
-                <th class="p-2.5">C.I.</th>
-                <th class="p-2.5">Nombre Completo</th>
-                <th class="p-2.5">Tipo / Rol</th>
-                <th class="p-2.5">Inscripción</th>
-                <th class="p-2.5">Equipo</th>
-                ${showTel ? '<th class="p-2.5">Teléfono</th>' : ''}
-                ${showCelula ? '<th class="p-2.5">Célula</th>' : ''}
-                ${showTalla ? '<th class="p-2.5">Talla</th>' : ''}
-                ${showActividad ? '<th class="p-2.5">Actividad</th>' : ''}
-                ${showAlergias ? '<th class="p-2.5">Alergias</th>' : ''}
-                ${showTutor ? '<th class="p-2.5">Tutor</th>' : ''}
-                <th class="p-2.5">Carta</th>
-                <th class="p-2.5 text-center">Acciones</th>
+                <th class="p-2">C.I.</th>
+                <th class="p-2">Nombre Completo</th>
+                <th class="p-2">Tipo / Rol</th>
+                <th class="p-2">Inscripción</th>
+                <th class="p-2">Equipo</th>
+                ${showTel ? '<th class="p-2">Teléfono</th>' : ''}
+                ${showCelula ? '<th class="p-2">Célula</th>' : ''}
+                ${showTalla ? '<th class="p-2">Talla</th>' : ''}
+                ${showActividad ? '<th class="p-2">Actividad</th>' : ''}
+                ${showAlergias ? '<th class="p-2">Alergias</th>' : ''}
+                ${showTutor ? '<th class="p-2">Tutor</th>' : ''}
+                <th class="p-2">Carta</th>
+                <th class="p-2 text-center">Acciones</th>
             </tr>`;
 
             const tbodyIns = document.getElementById('tblTodosInscritos');
             tbodyIns.innerHTML = '';
 
-            if (listaOrdenada.length === 0) {
-                tbodyIns.innerHTML = `
-                <tr>
-                    <td colspan="13" class="text-center py-8 text-slate-400">
-                        <i class="fa-solid fa-users-slash text-2xl mb-1 text-slate-300 block"></i>
-                        <p class="font-bold text-xs text-slate-600">No se encontraron participantes</p>
-                        <p class="text-[11px] text-slate-400">Prueba cambiando el término de búsqueda o los filtros seleccionados.</p>
-                    </td>
-                </tr>`;
-                return;
-            }
-
             listaOrdenada.forEach(i => {
                 let estadoCarta = i.estado_carta || (i.carta_compromiso_url ? 'En Revisión' : 'Pendiente');
-                let colorBadge = estadoCarta === 'Aprobada' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : (estadoCarta === 'En Revisión' ? 'bg-blue-100 text-blue-800 border border-blue-200' : 'bg-rose-100 text-rose-800 border border-rose-200');
+                let colorBadge = estadoCarta === 'Aprobada' ? 'bg-green-100 text-green-700' : (estadoCarta === 'En Revisión' ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700');
 
                 let badgeRol = i.es_staff 
-                    ? `<span class="bg-purple-100 text-purple-800 font-extrabold px-2 py-0.5 rounded-full border border-purple-300 text-[10px]">⭐ STAFF</span>` 
-                    : `<span class="bg-slate-100 text-slate-700 font-semibold px-2 py-0.5 rounded-full text-[10px]">Campamentista</span>`;
+                    ? `<span class="bg-purple-100 text-purple-800 font-extrabold px-2 py-0.5 rounded-full border border-purple-300">⭐ STAFF</span>` 
+                    : `<span class="bg-gray-100 text-gray-700 font-semibold px-2 py-0.5 rounded-full">Campamentista</span>`;
 
                 tbodyIns.innerHTML += `
-          <tr class="hover:bg-slate-50 transition">
-            <td class="p-2.5 font-bold text-slate-900">${i.ci}</td>
-            <td class="p-2.5 font-semibold text-slate-800">${i.nombre_completo}</td>
-            <td class="p-2.5">${badgeRol}</td>
-            <td class="p-2.5 font-bold text-indigo-900">${i.tipos_inscripcion?.nombre || 'Estándar'}</td>
-            <td class="p-2.5 font-bold text-indigo-700">${i.equipo || 'Sin Asignar'}</td>
-            ${showTel ? `<td class="p-2.5">${i.telefono || '-'}</td>` : ''}
-            ${showCelula ? `<td class="p-2.5">${i.celula || '-'}</td>` : ''}
-            ${showTalla ? `<td class="p-2.5 font-bold">${i.talla_polera || '-'}</td>` : ''}
-            ${showActividad ? `<td class="p-2.5">${i.actividad_favorita || '-'}</td>` : ''}
-            ${showAlergias ? `<td class="p-2.5 text-rose-600 font-semibold">${i.alergias_medicina || '-'}</td>` : ''}
-            ${showTutor ? `<td class="p-2.5">${i.tutor_nombre ? `${i.tutor_nombre} (${i.tutor_telefono || ''})` : '-'}</td>` : ''}
-            <td class="p-2.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${colorBadge}">${estadoCarta}</span></td>
-            <td class="p-2.5 text-center">
-              <button onclick="abrirModalEditarCampamentista('${i.id}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 rounded-lg border border-amber-300 transition shadow-sm" title="Editar">
+          <tr>
+            <td class="p-2 font-bold">${i.ci}</td>
+            <td class="p-2 font-semibold text-gray-800">${i.nombre_completo}</td>
+            <td class="p-2">${badgeRol}</td>
+            <td class="p-2 font-bold text-indigo-900">${i.tipos_inscripcion?.nombre || 'Estándar'}</td>
+            <td class="p-2 font-bold text-indigo-700">${i.equipo || 'Sin Asignar'}</td>
+            ${showTel ? `<td class="p-2">${i.telefono || '-'}</td>` : ''}
+            ${showCelula ? `<td class="p-2">${i.celula || '-'}</td>` : ''}
+            ${showTalla ? `<td class="p-2 font-bold">${i.talla_polera || '-'}</td>` : ''}
+            ${showActividad ? `<td class="p-2">${i.actividad_favorita || '-'}</td>` : ''}
+            ${showAlergias ? `<td class="p-2 text-red-600 font-semibold">${i.alergias_medicina || '-'}</td>` : ''}
+            ${showTutor ? `<td class="p-2">${i.tutor_nombre ? `${i.tutor_nombre} (${i.tutor_telefono || ''})` : '-'}</td>` : ''}
+            <td class="p-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${colorBadge}">${estadoCarta}</span></td>
+            <td class="p-2 text-center">
+              <button onclick="abrirModalEditarCampamentista('${i.id}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 rounded-lg border border-amber-300 transition" title="Editar">
                 <i class="fa-solid fa-pencil text-xs"></i>
               </button>
             </td>
           </tr>`;
             });
-        }
-
-        function exportarInscritosCSV() {
-            if (!listaInscritosGlobal || listaInscritosGlobal.length === 0) {
-                return alert('No hay datos disponibles para exportar.');
-            }
-
-            const encabezados = ['C.I.', 'Nombre Completo', 'Rol', 'Tipo Inscripcion', 'Equipo', 'Telefono', 'Celula', 'Talla', 'Actividad', 'Alergias', 'Tutor', 'Tutor Telefono', 'Estado Carta'];
-            const filas = listaInscritosGlobal.map(i => [
-                `"${i.ci || ''}"`,
-                `"${(i.nombre_completo || '').replace(/"/g, '""')}"`,
-                `"${i.es_staff ? 'STAFF' : 'Campamentista'}"`,
-                `"${i.tipos_inscripcion?.nombre || 'Estándar'}"`,
-                `"${i.equipo || 'Sin Asignar'}"`,
-                `"${i.telefono || ''}"`,
-                `"${i.celula || ''}"`,
-                `"${i.talla_polera || ''}"`,
-                `"${i.actividad_favorita || ''}"`,
-                `"${(i.alergias_medicina || '').replace(/"/g, '""')}"`,
-                `"${(i.tutor_nombre || '').replace(/"/g, '""')}"`,
-                `"${i.tutor_telefono || ''}"`,
-                `"${i.estado_carta || (i.carta_compromiso_url ? 'En Revisión' : 'Pendiente')}"`
-            ]);
-
-            const csvContent = '\uFEFF' + [encabezados.join(','), ...filas.map(f => f.join(','))].join('\n');
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.setAttribute('href', url);
-            link.setAttribute('download', `campamentistas_jesus_camp_2027_${Date.now()}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            alert('Archivo CSV descargado con éxito.');
         }
 
         function guardarPlantillaReporte() {
@@ -2442,105 +2306,17 @@
         async function procesarCarta(id, nuevoEstado, nombre) {
             await db.from('inscritos').update({ estado_carta: nuevoEstado }).eq('id', id);
             await registrarLogAuditoria('Revisión Carta', 'Pendientes', `Marcó la carta de ${nombre} como: ${nuevoEstado}`);
-            alert(`Carta de ${nombre} marcada como: ${nuevoEstado}`);
+            alert(`Carta marcada como: ${nuevoEstado}`);
             cargarTodoElDashboard();
         }
 
         async function procesarPago(id, estado, nombre, monto) {
             await db.from('pagos').update({ estado: estado }).eq('id', id);
             await registrarLogAuditoria('Revisión Pago', 'Pendientes', `Marcó abono de Bs ${monto} de ${nombre} como: ${estado}`);
-            alert(`Comprobante de ${nombre} (${estado})`);
             cargarTodoElDashboard();
         }
 
         function cerrarSesion() { location.reload(); }
-
-        // SISTEMA DE NOTIFICACIONES TOAST NO BLOQUEANTE
-        function showToast(message, type = 'info') {
-            let container = document.getElementById('toastContainer');
-            if (!container) {
-                container = document.createElement('div');
-                container.id = 'toastContainer';
-                container.className = 'fixed top-4 right-4 z-[99999] flex flex-col gap-2 pointer-events-none';
-                document.body.appendChild(container);
-            }
-
-            const toast = document.createElement('div');
-            toast.className = 'toast-item flex items-center gap-3 px-4 py-3 rounded-2xl shadow-xl text-xs font-bold border transition-all duration-300 max-w-sm';
-
-            let iconClass = 'fa-circle-info text-blue-500';
-            let bgClass = 'bg-white text-slate-800 border-slate-200';
-
-            if (type === 'success') {
-                iconClass = 'fa-circle-check text-emerald-500';
-                bgClass = 'bg-white text-slate-900 border-emerald-200 shadow-emerald-500/10';
-            } else if (type === 'error') {
-                iconClass = 'fa-circle-exclamation text-rose-500';
-                bgClass = 'bg-white text-slate-900 border-rose-200 shadow-rose-500/10';
-            } else if (type === 'warning') {
-                iconClass = 'fa-triangle-exclamation text-amber-500';
-                bgClass = 'bg-white text-slate-900 border-amber-200 shadow-amber-500/10';
-            }
-
-            toast.classList.add(...bgClass.split(' '));
-            toast.innerHTML = `
-                <i class="fa-solid ${iconClass} text-base flex-shrink-0"></i>
-                <span class="flex-grow leading-tight">${message}</span>
-            `;
-
-            container.appendChild(toast);
-            requestAnimationFrame(() => toast.classList.add('show'));
-
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 350);
-            }, 4000);
-        }
-
-        // Bridge suave de window.alert para no interrumpir el flujo visual con diálogos nativos
-        window.alert = function(msg) {
-            if (typeof msg === 'string' && (msg.toLowerCase().includes('error') || msg.toLowerCase().includes('incorrecta') || msg.toLowerCase().includes('obligatorio') || msg.includes('⚠️'))) {
-                showToast(msg, 'warning');
-            } else {
-                showToast(msg, 'success');
-            }
-        };
-
-        // Visibilidad de contraseñas
-        function togglePasswordVisibility(inputId, btn) {
-            const input = document.getElementById(inputId);
-            if (!input) return;
-            const isPass = input.type === 'password';
-            input.type = isPass ? 'text' : 'password';
-            const icon = btn.querySelector('i');
-            if (icon) {
-                icon.className = isPass ? 'fa-solid fa-eye-slash text-sm' : 'fa-solid fa-eye text-sm';
-            }
-        }
-
-        // Cerrar modales con tecla Escape y click en fondo oscuro
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                cerrarModalVerCambios();
-                cerrarModalCampamentista();
-                cancelarVerificacionSeguridad();
-                cerrarModalPerfilAdmin();
-            }
-        });
-
-        ['modalVerCambiosSolicitados', 'modalEditCampamentista', 'modalConfirmPass', 'modalPerfilAdmin'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) {
-                el.addEventListener('click', (e) => {
-                    if (e.target === el) {
-                        if (id === 'modalVerCambiosSolicitados') cerrarModalVerCambios();
-                        if (id === 'modalEditCampamentista') cerrarModalCampamentista();
-                        if (id === 'modalConfirmPass') cancelarVerificacionSeguridad();
-                        if (id === 'modalPerfilAdmin') cerrarModalPerfilAdmin();
-                    }
-                });
-            }
-        });
     </script>
 </body>
 
