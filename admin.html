@@ -17,6 +17,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 
+<<<<<<< HEAD
 <body class="bg-slate-100 min-h-screen text-gray-800 font-sans">
 
     <!-- NAVBAR -->
@@ -62,12 +63,14 @@
             </div>
         </div>
     </nav>
+=======
+<body class="bg-slate-100 min-h-screen text-gray-800 font-sans flex flex-col">
+>>>>>>> parent of 42d436f (Make rollback)
 
     <!-- LOGIN -->
-    <section id="secLogin" class="max-w-md mx-auto mt-16 p-6 bg-white rounded-2xl shadow-xl border border-gray-200">
+    <section id="secLogin" class="max-w-md mx-auto my-auto p-6 bg-white rounded-2xl shadow-xl border border-gray-200 w-full mt-16">
         <div class="text-center mb-6">
-            <div
-                class="w-16 h-16 bg-gray-900 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl shadow-lg">
+            <div class="w-16 h-16 bg-gray-900 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl shadow-lg">
                 <i class="fa-solid fa-lock"></i>
             </div>
             <h2 class="text-xl font-bold text-gray-900">Acceso Administrativo</h2>
@@ -97,9 +100,10 @@
         </form>
     </section>
 
-    <!-- DASHBOARD -->
-    <div id="secDashboard" class="hidden max-w-7xl mx-auto p-4 space-y-6">
+    <!-- DASHBOARD PRINCIPAL CON BARRA LATERAL (SIDEBAR) -->
+    <div id="secDashboard" class="hidden flex-1 flex flex-col md:flex-row min-h-screen">
 
+<<<<<<< HEAD
         <!-- MÉTRICAS DE PARTICIPANTES -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
 <<<<<<< HEAD
@@ -290,61 +294,196 @@
                             </thead>
                             <tbody id="tblPagosPendientes" class="divide-y divide-gray-100"></tbody>
                         </table>
+=======
+        <!-- BARRA LATERAL (SIDEBAR) -->
+        <aside class="w-full md:w-64 bg-gray-900 text-slate-300 flex-shrink-0 flex flex-col justify-between shadow-2xl">
+            <div>
+                <!-- CABECERA SIDEBAR -->
+                <div class="p-5 border-b border-gray-800 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-shield-halved text-amber-400 text-xl"></i>
+                        <div>
+                            <h1 class="font-extrabold text-white text-sm tracking-wider">ADMIN JC2027</h1>
+                            <p class="text-[10px] text-gray-400">Panel del Campamento</p>
+                        </div>
+>>>>>>> parent of 42d436f (Make rollback)
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                    <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-user-pen text-blue-500"></i> Cambios de Datos Pendientes
-                    </h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs text-gray-600">
-                            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                                <tr>
-                                    <th class="p-2">Inscrito</th>
-                                    <th class="p-2">Solicitud</th>
-                                    <th class="p-2 text-center">Acción</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tblEdicionesPendientes" class="divide-y divide-gray-100"></tbody>
-                        </table>
-                    </div>
-                </div>
+                <!-- MENÚ DE NAVEGACIÓN -->
+                <nav class="p-3 space-y-1 text-xs font-semibold">
+                    <button id="navSolicitudes" onclick="cambiarPestana('solicitudes')"
+                        class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition bg-gray-800 text-amber-400">
+                        <i class="fa-solid fa-clock-rotate-left w-5 text-center text-sm"></i>
+                        <span>Solicitudes Pendientes</span>
+                    </button>
+
+                    <button id="navInscritos" onclick="cambiarPestana('inscritos')"
+                        class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition hover:bg-gray-800 hover:text-white">
+                        <i class="fa-solid fa-users w-5 text-center text-sm"></i>
+                        <span>Inscritos & Staff</span>
+                    </button>
+
+                    <button id="navCampos" onclick="cambiarPestana('campos')"
+                        class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition hover:bg-gray-800 hover:text-white">
+                        <i class="fa-solid fa-sliders w-5 text-center text-sm"></i>
+                        <span>Campos & SQL</span>
+                    </button>
+
+                    <button id="navCategorias" onclick="cambiarPestana('categorias')"
+                        class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition hover:bg-gray-800 hover:text-white">
+                        <i class="fa-solid fa-tags w-5 text-center text-sm"></i>
+                        <span>Tipos de Inscripción</span>
+                    </button>
+
+                    <button id="navIngresos" onclick="cambiarPestana('ingresos')"
+                        class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition hover:bg-gray-800 hover:text-white">
+                        <i class="fa-solid fa-file-invoice-dollar w-5 text-center text-sm"></i>
+                        <span>Ingresos / Cobros</span>
+                    </button>
+
+                    <button id="navEgresos" onclick="cambiarPestana('egresos')"
+                        class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition hover:bg-gray-800 hover:text-white">
+                        <i class="fa-solid fa-arrow-down-short-wide w-5 text-center text-sm"></i>
+                        <span>Egresos / Gastos</span>
+                    </button>
+
+                    <button id="navReportes" onclick="cambiarPestana('reportes')"
+                        class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition hover:bg-gray-800 hover:text-white">
+                        <i class="fa-solid fa-chart-pie w-5 text-center text-sm"></i>
+                        <span>Reportes Avanzados</span>
+                    </button>
+
+                    <button id="navUsuarios" onclick="cambiarPestana('usuarios')"
+                        class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition hover:bg-gray-800 hover:text-white">
+                        <i class="fa-solid fa-user-shield w-5 text-center text-sm"></i>
+                        <span>Administradores</span>
+                    </button>
+
+                    <button id="navRoles" onclick="cambiarPestana('roles')"
+                        class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition hover:bg-gray-800 hover:text-white">
+                        <i class="fa-solid fa-key w-5 text-center text-sm"></i>
+                        <span>Permisos y Roles</span>
+                    </button>
+
+                    <button id="navAuditoria" onclick="cambiarPestana('auditoria')"
+                        class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition hover:bg-gray-800 hover:text-white">
+                        <i class="fa-solid fa-clipboard-list w-5 text-center text-sm"></i>
+                        <span>Auditoría y Logs</span>
+                    </button>
+                </nav>
             </div>
 
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-file-signature text-indigo-600"></i> Cartas de Compromiso Pendientes
-                </h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-gray-600">
-                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                            <tr>
-                                <th class="p-2">C.I.</th>
-                                <th class="p-2">Campamentista</th>
-                                <th class="p-2">Célula</th>
-                                <th class="p-2">Documento</th>
-                                <th class="p-2 text-center">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tblCartasPendientes" class="divide-y divide-gray-100"></tbody>
-                    </table>
+            <!-- PIE SIDEBAR / USUARIO -->
+            <div class="p-4 border-t border-gray-800 space-y-2">
+                <button id="btnPerfilAdmin" onclick="abrirModalPerfilAdmin()"
+                    class="w-full text-xs bg-gray-800 hover:bg-gray-700 text-amber-400 font-bold p-2.5 rounded-xl border border-gray-700 transition flex items-center justify-between">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-solid fa-user-gear"></i>
+                        <span id="txtAdminInfo">Mi Perfil</span>
+                    </span>
+                    <i class="fa-solid fa-angle-right"></i>
+                </button>
+                <div class="flex gap-2">
+                    <a href="index.html" class="flex-1 text-center text-[10px] bg-slate-800 hover:bg-slate-700 text-gray-300 py-2 rounded-lg border border-gray-700 transition">
+                        <i class="fa-solid fa-globe"></i> Portal
+                    </a>
+                    <button id="btnCerrarSesion" onclick="cerrarSesion()" class="flex-1 text-[10px] bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white py-2 rounded-lg transition border border-red-500/30">
+                        <i class="fa-solid fa-power-off"></i> Salir
+                    </button>
                 </div>
             </div>
-        </div>
+        </aside>
 
-        <!-- PESTAÑA CAMPOS DE FORMULARIO & SCRIPTS SQL -->
-        <div id="tabCampos" class="tab-content hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-6">
-                <div class="flex justify-between items-center border-b pb-3">
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="flex-1 p-4 md:p-8 space-y-6 overflow-y-auto">
+
+            <!-- METRICAS DE PARTICIPANTES -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-blue-600 flex justify-between items-center">
                     <div>
-                        <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
-                            <i class="fa-solid fa-cubes-stacked text-indigo-600"></i> Módulo de Granularidad de Datos
+                        <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Campamentistas</p>
+                        <h3 class="text-2xl font-black text-gray-900 mt-0.5" id="stCampamentistas">0</h3>
+                    </div>
+                    <div class="p-3 bg-blue-50 text-blue-600 rounded-xl"><i class="fa-solid fa-person-hiking text-lg"></i></div>
+                </div>
+
+                <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-purple-600 flex justify-between items-center">
+                    <div>
+                        <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Staff Totales</p>
+                        <h3 class="text-2xl font-black text-purple-700 mt-0.5" id="stStaff">0</h3>
+                    </div>
+                    <div class="p-3 bg-purple-50 text-purple-600 rounded-xl"><i class="fa-solid fa-user-shield text-lg"></i></div>
+                </div>
+
+                <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-emerald-600 flex justify-between items-center bg-emerald-50/20">
+                    <div>
+                        <p class="text-[10px] font-extrabold text-emerald-800 uppercase tracking-wider">Total General Participantes</p>
+                        <h3 class="text-2xl font-black text-emerald-600 mt-0.5" id="stTotalGeneral">0</h3>
+                    </div>
+                    <div class="p-3 bg-emerald-100 text-emerald-700 rounded-xl"><i class="fa-solid fa-users text-lg"></i></div>
+                </div>
+            </div>
+
+            <!-- TARJETAS DE FINANZAS -->
+            <div id="contTarjetasFinanzas" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div id="cardTotalIngresos" class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-green-600">
+                    <p class="text-xs font-bold text-gray-400 uppercase">Total Ingresos</p>
+                    <h3 class="text-2xl font-black text-green-600 mt-1" id="stIngresos">Bs 0</h3>
+                </div>
+                <div id="cardTotalEgresos" class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-red-600">
+                    <p class="text-xs font-bold text-gray-400 uppercase">Total Egresos</p>
+                    <h3 class="text-2xl font-black text-red-600 mt-1" id="stEgresos">Bs 0</h3>
+                </div>
+                <div id="cardBalanceNeto"
+                    class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-amber-500 bg-amber-50/30">
+                    <p class="text-xs font-bold text-amber-800 uppercase">Balance Neto</p>
+                    <h3 class="text-2xl font-black text-amber-600 mt-1" id="stBalance">Bs 0</h3>
+                </div>
+            </div>
+
+            <!-- PESTAÑA 1: PENDIENTES -->
+            <div id="tabSolicitudes" class="tab-content space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                        <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-receipt text-amber-500"></i> Comprobantes Pendientes
                         </h3>
-                        <p class="text-xs text-gray-500">Configura nuevos campos personalizados y genera el script SQL automáticamente para tu base de datos.</p>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs text-gray-600">
+                                <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                                    <tr>
+                                        <th class="p-2">Inscrito</th>
+                                        <th class="p-2">Monto</th>
+                                        <th class="p-2">Recibo</th>
+                                        <th class="p-2">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tblPagosPendientes" class="divide-y divide-gray-100"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                        <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-user-pen text-blue-500"></i> Cambios de Datos Pendientes
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs text-gray-600">
+                                <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                                    <tr>
+                                        <th class="p-2">Inscrito</th>
+                                        <th class="p-2">Solicitud</th>
+                                        <th class="p-2 text-center">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tblEdicionesPendientes" class="divide-y divide-gray-100"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
+<<<<<<< HEAD
                 <form onsubmit="crearNuevoCampoPersonalizado(event)" class="bg-gray-50 p-4 rounded-xl border border-gray-200 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                     <div>
                         <label class="font-bold text-gray-700 block mb-1">Nombre Técnico de la Columna (SQL):</label>
@@ -408,34 +547,49 @@
                             class="bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs px-4 py-2 rounded-xl transition shadow-md flex items-center gap-1">
                             <i class="fa-solid fa-plus"></i> Inscribir Campamentista / Staff
                         </button>
+=======
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                    <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-file-signature text-indigo-600"></i> Cartas de Compromiso Pendientes
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-gray-600">
+                            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                                <tr>
+                                    <th class="p-2">C.I.</th>
+                                    <th class="p-2">Campamentista</th>
+                                    <th class="p-2">Célula</th>
+                                    <th class="p-2">Documento</th>
+                                    <th class="p-2 text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblCartasPendientes" class="divide-y divide-gray-100"></tbody>
+                        </table>
+>>>>>>> parent of 42d436f (Make rollback)
                     </div>
                 </div>
+            </div>
 
-                <div id="panelConfigColumnas" class="hidden bg-slate-50 p-4 rounded-xl border border-slate-200 mb-4 text-xs space-y-3">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-2">
-                        <span class="font-bold text-gray-700 uppercase">Personalización de Tabla</span>
-                        <div class="flex items-center gap-2">
-                            <label class="font-bold text-gray-600">Ordenar Por:</label>
-                            <select id="selOrdenInscritos" onchange="renderizarTablaInscritos()" class="p-1.5 border rounded-lg bg-white font-semibold">
-                                <option value="nombre_completo">Nombre Completo</option>
-                                <option value="ci">C.I.</option>
-                                <option value="equipo">Equipo</option>
-                                <option value="tipo_inscripcion">Tipo de Inscripción</option>
-                                <option value="talla_polera">Talla de Polera</option>
-                                <option value="estado_carta">Estado de Carta</option>
-                            </select>
+            <!-- PESTAÑA 2: INSCRITOS Y STAFF -->
+            <div id="tabInscritos" class="tab-content hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+                        <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
+                            <i class="fa-solid fa-users text-green-600"></i> Directorio de Campamentistas y Staff
+                        </h3>
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="toggleFormulario('panelConfigColumnas')"
+                                class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-3 py-2 rounded-xl border transition flex items-center gap-1">
+                                <i class="fa-solid fa-sliders"></i> Personalizar Columnas
+                            </button>
+                            <button onclick="toggleFormulario('formContenedorCampamentista')"
+                                class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
+                                <i class="fa-solid fa-plus"></i> Inscribir Campamentista / Staff
+                            </button>
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_tel" onchange="renderizarTablaInscritos()" checked> Teléfono</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_celula" onchange="renderizarTablaInscritos()" checked> Célula</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_talla" onchange="renderizarTablaInscritos()" checked> Talla Polera</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_actividad" onchange="renderizarTablaInscritos()"> Actividad</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_alergias" onchange="renderizarTablaInscritos()"> Alergias</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_tutor" onchange="renderizarTablaInscritos()"> Tutor Legal</label>
-                    </div>
-                </div>
 
+<<<<<<< HEAD
                 <div id="formContenedorCampamentista" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
                     <h4 class="font-bold text-gray-700 text-xs uppercase mb-3 border-b pb-1">Nuevo Registro</h4>
                     <form onsubmit="crearNuevoCampamentista(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -716,180 +870,603 @@
                             <div class="flex gap-2">
                                 <select id="selReportePlantillas" onchange="cargarPlantillaReporte(this.value)" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold text-emerald-800">
                                     <option value="">-- Cargar Plantilla --</option>
+=======
+                    <!-- CONTROLES DE COLUMNAS -->
+                    <div id="panelConfigColumnas" class="hidden bg-slate-50 p-4 rounded-xl border border-slate-200 mb-4 text-xs space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-2">
+                            <span class="font-bold text-gray-700 uppercase">Personalización de Tabla</span>
+                            <div class="flex items-center gap-2">
+                                <label class="font-bold text-gray-600">Ordenar Por:</label>
+                                <select id="selOrdenInscritos" onchange="renderizarTablaInscritos()" class="p-1.5 border rounded-lg bg-white font-semibold">
+                                    <option value="nombre_completo">Nombre Completo</option>
+                                    <option value="ci">C.I.</option>
+                                    <option value="equipo">Equipo</option>
+                                    <option value="tipo_inscripcion">Tipo de Inscripción</option>
+                                    <option value="talla_polera">Talla de Polera</option>
+                                    <option value="estado_carta">Estado de Carta</option>
+>>>>>>> parent of 42d436f (Make rollback)
                                 </select>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="border-t pt-3">
-                        <label class="text-[10px] font-bold text-gray-500 uppercase block mb-2">Columnas y Métricas a incluir en la tabla:</label>
-                        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs bg-white p-3 rounded-xl border">
-                            <label class="flex items-center gap-1 font-semibold"><input type="checkbox" id="repColPersonas" checked> Personas (#)</label>
-                            <label class="flex items-center gap-1 font-semibold"><input type="checkbox" id="repColPorcentaje" checked> Porcentaje (%)</label>
-                            <label class="flex items-center gap-1 font-semibold"><input type="checkbox" id="repColMonto" checked> Total Abonado (Bs)</label>
-                            <label class="flex items-center gap-1 font-semibold"><input type="checkbox" id="repColPromedio" checked> Promedio / Pers (Bs)</label>
-                            <label class="flex items-center gap-1 font-semibold"><input type="checkbox" id="repColSaldo" checked> Saldo Deuda (Bs)</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                            <label class="flex items-center gap-1"><input type="checkbox" id="col_tel" onchange="renderizarTablaInscritos()" checked> Teléfono</label>
+                            <label class="flex items-center gap-1"><input type="checkbox" id="col_celula" onchange="renderizarTablaInscritos()" checked> Célula</label>
+                            <label class="flex items-center gap-1"><input type="checkbox" id="col_talla" onchange="renderizarTablaInscritos()" checked> Talla Polera</label>
+                            <label class="flex items-center gap-1"><input type="checkbox" id="col_actividad" onchange="renderizarTablaInscritos()"> Actividad</label>
+                            <label class="flex items-center gap-1"><input type="checkbox" id="col_alergias" onchange="renderizarTablaInscritos()"> Alergias</label>
+                            <label class="flex items-center gap-1"><input type="checkbox" id="col_tutor" onchange="renderizarTablaInscritos()"> Tutor Legal</label>
                         </div>
                     </div>
 
-                    <div class="flex flex-col sm:flex-row justify-between items-center gap-2 pt-2">
-                        <div class="flex items-center gap-2 w-full sm:w-auto">
-                            <input type="text" id="txtNombrePlantilla" placeholder="Nombre de plantilla (Ej. Deudas Por Equipo)" class="p-2 border rounded-xl text-xs w-full sm:w-64">
-                            <button onclick="guardarPlantillaReporte()" class="bg-slate-800 hover:bg-slate-900 text-amber-400 font-bold px-4 py-2 rounded-xl text-xs transition whitespace-nowrap">
-                                <i class="fa-solid fa-bookmark mr-1"></i> Guardar Plantilla
+                    <!-- FORMULARIO DETALLADO Y EXPLICITO DE REGISTRO -->
+                    <div id="formContenedorCampamentista" class="hidden bg-gray-50 p-5 rounded-2xl border border-gray-300 mb-6 space-y-4">
+                        <div class="border-b pb-2">
+                            <h4 class="font-bold text-gray-800 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-user-plus text-green-600"></i> Nuevo Registro de Campamentista o Staff
+                            </h4>
+                            <p class="text-xs text-gray-500">Rellena todos los campos requeridos para inscribir correctamente a un participante.</p>
+                        </div>
+
+                        <form onsubmit="crearNuevoCampamentista(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                            <div>
+                                <label class="font-bold text-gray-700 block mb-1">Cédula de Identidad (C.I.) *</label>
+                                <input type="text" id="newCi" placeholder="Ej. 13489470" required class="p-2.5 border rounded-xl bg-white w-full font-bold">
+                            </div>
+
+                            <div>
+                                <label class="font-bold text-gray-700 block mb-1">Nombre Completo *</label>
+                                <input type="text" id="newNombre" placeholder="Ej. Juan Pérez López" required class="p-2.5 border rounded-xl bg-white w-full">
+                            </div>
+
+                            <div>
+                                <label class="font-bold text-gray-700 block mb-1">Teléfono / WhatsApp</label>
+                                <input type="text" id="newTel" placeholder="Ej. 71234567" class="p-2.5 border rounded-xl bg-white w-full">
+                            </div>
+
+                            <div>
+                                <label class="font-bold text-gray-700 block mb-1">Célula / Grupo de Pertenencia</label>
+                                <input type="text" id="newCelula" placeholder="Ej. Célula Jóvenes Betel" class="p-2.5 border rounded-xl bg-white w-full">
+                            </div>
+
+                            <div>
+                                <label class="font-bold text-gray-700 block mb-1">Talla de Polera Requerida</label>
+                                <select id="newTalla" class="p-2.5 border rounded-xl bg-white w-full font-semibold">
+                                    <option value="XS">Talla XS</option>
+                                    <option value="S">Talla S</option>
+                                    <option value="M" selected>Talla M</option>
+                                    <option value="L">Talla L</option>
+                                    <option value="XL">Talla XL</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="font-bold text-gray-700 block mb-1">Tipo de Inscripción / Categoría *</label>
+                                <select id="newTipoInscripcion" onchange="evaluarPrecioManual(this.value, 'newDivPrecioManual')" class="p-2.5 border rounded-xl bg-white w-full font-bold text-indigo-900"></select>
+                            </div>
+
+                            <div id="newDivPrecioManual" class="hidden">
+                                <label class="font-bold text-amber-800 block mb-1">Precio Personalizado Asignado (Bs)</label>
+                                <input type="number" id="newPrecioManual" placeholder="Monto asignado en Bs" class="p-2.5 border rounded-xl text-xs bg-amber-50 w-full font-bold">
+                            </div>
+
+                            <div>
+                                <label class="font-bold text-gray-700 block mb-1">Equipo Asignado</label>
+                                <select id="newEquipo" class="p-2.5 border rounded-xl bg-white w-full font-bold text-indigo-700">
+                                    <option value="Sin Asignar">Sin Asignar</option>
+                                    <option value="Búfalos">Búfalos 🦬</option>
+                                    <option value="Águilas">Águilas 🦅</option>
+                                    <option value="Leones">Leones 🦁</option>
+                                    <option value="Ciervos">Ciervos 🦌</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="font-bold text-gray-700 block mb-1">Actividad Principal Favorita</label>
+                                <select id="newActividad" class="p-2.5 border rounded-xl bg-white w-full">
+                                    <option value="Fútbol">Fútbol</option>
+                                    <option value="Vóley">Vóley</option>
+                                    <option value="Memorizar Versículos">Memorizar Versículos</option>
+                                    <option value="Canto y Alabanza">Canto y Alabanza</option>
+                                    <option value="Coreografía / Baile">Coreografía / Baile</option>
+                                    <option value="Teatro / Dramatización">Teatro / Dramatización</option>
+                                    <option value="Atletismo / Carreras">Atletismo / Carreras</option>
+                                    <option value="Juegos de Mesa">Juegos de Mesa</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="font-bold text-gray-700 block mb-1">Habilidad o Talento Especial</label>
+                                <input type="text" id="newHabilidad" placeholder="Ej. Tocar guitarra, canto..." class="p-2.5 border rounded-xl bg-white w-full">
+                            </div>
+
+                            <div class="md:col-span-3 flex flex-wrap gap-6 bg-white p-3 rounded-xl border border-gray-200">
+                                <label class="text-xs font-bold text-purple-900 flex items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" id="newEsStaff" class="rounded text-purple-600">
+                                    ⭐ Pertenece a la Categoría/Rol de STAFF
+                                </label>
+                                <label class="text-xs font-bold text-blue-900 flex items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" id="newEsMenor" onchange="toggleSeccionTutor(this.checked)" class="rounded text-blue-600">
+                                    ¿Es Menor de Edad?
+                                </label>
+                            </div>
+
+                            <div id="newSecTutor" class="hidden md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-4 bg-amber-50/50 p-3 rounded-xl border border-amber-200">
+                                <div>
+                                    <label class="font-bold text-gray-700 block mb-1">Nombre Completo del Tutor Legal</label>
+                                    <input type="text" id="newTutorNombre" placeholder="Nombre del Padre/Madre/Tutor" class="p-2.5 border rounded-xl bg-white w-full">
+                                </div>
+                                <div>
+                                    <label class="font-bold text-gray-700 block mb-1">Teléfono del Tutor Legal</label>
+                                    <input type="text" id="newTutorTel" placeholder="Teléfono de contacto del tutor" class="p-2.5 border rounded-xl bg-white w-full">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="font-bold text-gray-700 block mb-1">Contacto de Emergencia</label>
+                                <input type="text" id="newEmergencia" placeholder="Nombre y Teléfono de emergencia" class="p-2.5 border rounded-xl bg-white w-full">
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label class="font-bold text-gray-700 block mb-1">Alergias o Medicamentos Requeridos</label>
+                                <input type="text" id="newAlergias" placeholder="Escriba alergias a alimentos/medicinas o ingrese 'Ninguna'" class="p-2.5 border rounded-xl bg-white w-full">
+                            </div>
+
+                            <div class="md:col-span-3 flex justify-end gap-2 pt-2 border-t">
+                                <button type="button" onclick="toggleFormulario('formContenedorCampamentista')" class="bg-gray-200 text-gray-700 font-bold px-4 py-2 rounded-xl">Cancelar</button>
+                                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-2 rounded-xl transition shadow">+ Guardar Registro</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-gray-600">
+                            <thead id="theadInscritos" class="bg-gray-50 text-gray-400 uppercase font-semibold"></thead>
+                            <tbody id="tblTodosInscritos" class="divide-y divide-gray-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA CAMPOS DE FORMULARIO & SCRIPTS SQL -->
+            <div id="tabCampos" class="tab-content hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-6">
+                    <div class="flex justify-between items-center border-b pb-3">
+                        <div>
+                            <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
+                                <i class="fa-solid fa-cubes-stacked text-indigo-600"></i> Módulo de Granularidad de Datos
+                            </h3>
+                            <p class="text-xs text-gray-500">Configura nuevos campos personalizados y genera el script SQL automáticamente para tu base de datos.</p>
+                        </div>
+                    </div>
+
+                    <form onsubmit="crearNuevoCampoPersonalizado(event)" class="bg-gray-50 p-4 rounded-xl border border-gray-200 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                        <div>
+                            <label class="font-bold text-gray-700 block mb-1">Nombre Técnico de la Columna (SQL):</label>
+                            <input type="text" id="campoSqlName" required placeholder="ej. alergias_alimentos" class="p-2.5 border rounded-xl bg-white w-full font-mono text-indigo-900">
+                        </div>
+                        <div>
+                            <label class="font-bold text-gray-700 block mb-1">Etiqueta para la Interfaz:</label>
+                            <input type="text" id="campoLabelName" required placeholder="ej. Alergias Alimentarias" class="p-2.5 border rounded-xl bg-white w-full">
+                        </div>
+                        <div>
+                            <label class="font-bold text-gray-700 block mb-1">Tipo de Dato:</label>
+                            <select id="campoTipo" class="p-2.5 border rounded-xl bg-white w-full font-bold">
+                                <option value="text">Texto (VARCHAR / TEXT)</option>
+                                <option value="numeric">Número (NUMERIC / INT)</option>
+                                <option value="boolean">Verificación (BOOLEAN)</option>
+                                <option value="date">Fecha (DATE)</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-3 flex justify-end">
+                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-2.5 rounded-xl shadow transition">
+                                <i class="fa-solid fa-code mr-1"></i> Generar Script SQL & Añadir Campo
                             </button>
                         </div>
-                        <button onclick="generarReporteGrafico()" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow transition">
-                            <i class="fa-solid fa-chart-pie mr-1"></i> Generar Reporte
+                    </form>
+
+                    <div class="bg-slate-900 text-slate-100 p-4 rounded-xl space-y-2">
+                        <div class="flex justify-between items-center border-b border-slate-700 pb-2">
+                            <span class="text-xs font-mono text-amber-400 font-bold flex items-center gap-2">
+                                <i class="fa-solid fa-terminal"></i> Script SQL para Supabase Editor
+                            </span>
+                            <button onclick="copiarScriptSql()" class="bg-slate-800 hover:bg-slate-700 text-xs px-3 py-1 rounded-lg border border-slate-600 text-gray-300">
+                                <i class="fa-solid fa-copy mr-1"></i> Copiar Código
+                            </button>
+                        </div>
+                        <pre id="codeSqlOutput" class="text-xs font-mono text-green-400 overflow-x-auto p-2 bg-slate-950 rounded-lg">-- Los scripts SQL generados aparecerán aquí para pegarlos en Supabase SQL Editor</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA CATEGORÍAS -->
+            <div id="tabCategorias" class="tab-content hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-gray-800 text-base">Gestión de Tipos de Inscripción</h3>
+                        <button onclick="prepararCrearCategoria()"
+                            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
+                            <i class="fa-solid fa-plus"></i> Nueva Categoría
                         </button>
                     </div>
-                </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                    <div class="bg-slate-50 p-4 rounded-xl border border-gray-200">
-                        <h4 class="font-bold text-gray-800 text-xs uppercase mb-3 border-b pb-1">Resumen Numérico</h4>
-                        <div id="contenedorTablaEstadisticas" class="overflow-x-auto text-xs">
-                            <p class="text-gray-400 italic">Haz clic en "Generar Reporte" para procesar la información.</p>
+                    <div id="formContenedorCategoria" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
+                        <form onsubmit="guardarTipoInscripcion(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <input type="hidden" id="catIdEdit">
+                            <div>
+                                <label class="text-[10px] font-bold text-gray-500 uppercase">Nombre Categoría:</label>
+                                <input type="text" id="catNombre" placeholder="Nombre" required class="p-2.5 border rounded-xl text-xs bg-white w-full">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-bold text-gray-500 uppercase">Precio Oficial (Bs):</label>
+                                <input type="number" step="0.01" id="catPrecio" placeholder="Precio (Bs)" required class="p-2.5 border rounded-xl text-xs bg-white w-full">
+                            </div>
+
+                            <div class="flex flex-col gap-2 justify-center bg-white p-3 rounded-xl border">
+                                <label class="text-xs font-bold text-gray-700 flex items-center gap-2">
+                                    <input type="checkbox" id="catEsManual" class="rounded text-indigo-600">
+                                    ¿Precio Manual / Especial?
+                                </label>
+                                <label class="text-xs font-bold text-green-700 flex items-center gap-2">
+                                    <input type="checkbox" id="catEsVisible" checked class="rounded text-green-600">
+                                    👁️ Visible para las personas en el Portal
+                                </label>
+                            </div>
+
+                            <div class="col-span-3 flex justify-end gap-2">
+                                <button type="button" onclick="toggleFormulario('formContenedorCategoria')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                                <button type="submit" class="bg-indigo-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">Guardar Tipo de Inscripción</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-gray-600">
+                            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                                <tr>
+                                    <th class="p-2">Nombre de Categoría</th>
+                                    <th class="p-2">Precio Estándar</th>
+                                    <th class="p-2">Modalidad</th>
+                                    <th class="p-2">Visibilidad Portal</th>
+                                    <th class="p-2 text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblTiposInscripcion" class="divide-y divide-gray-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA INGRESOS -->
+            <div id="tabIngresos" class="tab-content hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center border-b pb-3">
+                        <h3 class="font-bold text-gray-800 text-base">Historial de Ingresos Confirmados</h3>
+                        <button onclick="prepararCrearCobroDirecto()"
+                            class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
+                            <i class="fa-solid fa-cash-register"></i> + Registrar Cobro Directo
+                        </button>
+                    </div>
+
+                    <div id="formContenedorPagoDirecto" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-3">
+                        <h4 id="lblTituloPagoForm" class="font-bold text-xs text-gray-700 uppercase border-b pb-1">Registrar Pago Manual a Campamentista</h4>
+                        <form onsubmit="guardarCobroDirecto(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <input type="hidden" id="pagoAdminIdEdit">
+                            <div>
+                                <label class="text-[10px] font-bold text-gray-500 uppercase block mb-1">Campamentista:</label>
+                                <select id="pagoAdminInscrito" required class="p-2.5 border rounded-xl text-xs bg-white font-bold w-full">
+                                    <option value="">-- Seleccionar Campamentista --</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-bold text-gray-500 uppercase block mb-1">Monto (Bs):</label>
+                                <input type="number" step="0.01" id="pagoAdminMonto" placeholder="Monto Recibido (Bs)" required class="p-2.5 border rounded-xl text-xs bg-white font-bold w-full">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-bold text-gray-500 uppercase block mb-1">Comprobante / Foto (Obligatorio):</label>
+                                <input type="file" id="pagoAdminFile" accept="image/*,.pdf" class="p-1 border rounded-xl text-xs bg-white w-full">
+                            </div>
+                            <div class="md:col-span-3">
+                                <label class="text-[10px] font-bold text-gray-500 uppercase block mb-1">Observaciones:</label>
+                                <input type="text" id="pagoAdminObs" placeholder="Ej. Recibo físico entregado en mano" class="p-2.5 border rounded-xl text-xs bg-white w-full">
+                            </div>
+                            <div class="md:col-span-3 flex justify-end gap-2">
+                                <button type="button" onclick="toggleFormulario('formContenedorPagoDirecto')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                                <button type="submit" class="bg-green-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">Confirmar e Ingresar Pago</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-gray-600">
+                            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                                <tr>
+                                    <th class="p-2">Fecha</th>
+                                    <th class="p-2">Inscrito</th>
+                                    <th class="p-2">Monto</th>
+                                    <th class="p-2">Observaciones</th>
+                                    <th class="p-2">Comprobante</th>
+                                    <th class="p-2 text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblHistorialIngresos" class="divide-y divide-gray-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA EGRESOS -->
+            <div id="tabEgresos" class="tab-content hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-gray-800 text-base">Registro de Egresos</h3>
+                        <button onclick="prepararCrearEgreso()"
+                            class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
+                            <i class="fa-solid fa-plus"></i> Registrar Egreso
+                        </button>
+                    </div>
+
+                    <div id="formContenedorEgreso" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
+                        <form onsubmit="registrarNuevoEgreso(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <input type="hidden" id="egIdEdit">
+                            <input type="text" id="egConcepto" placeholder="Concepto de Gasto" required class="p-2.5 border rounded-xl text-xs bg-white">
+                            <select id="egCategoria" class="p-2.5 border rounded-xl text-xs bg-white">
+                                <option value="Alimentación">Alimentación</option>
+                                <option value="Logística">Logística</option>
+                                <option value="Sonido">Sonido / Iluminación</option>
+                                <option value="Transporte">Transporte</option>
+                                <option value="Otros">Otros Gastos</option>
+                            </select>
+                            <input type="number" step="0.01" id="egMonto" placeholder="Monto (Bs)" required class="p-2.5 border rounded-xl text-xs bg-white">
+                            <div class="col-span-3 flex justify-end gap-2">
+                                <button type="button" onclick="toggleFormulario('formContenedorEgreso')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                                <button type="submit" class="bg-red-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">- Guardar Egreso</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-gray-600">
+                            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                                <tr>
+                                    <th class="p-2">Fecha</th>
+                                    <th class="p-2">Concepto</th>
+                                    <th class="p-2">Categoría</th>
+                                    <th class="p-2">Monto</th>
+                                    <th class="p-2">Registrado por</th>
+                                    <th class="p-2 text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblListaEgresos" class="divide-y divide-gray-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA REPORTES AVANZADOS CON GRUPOS Y SUBGRUPOS MULTINIVEL -->
+            <div id="tabReportes" class="tab-content hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center border-b pb-3">
+                        <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
+                            <i class="fa-solid fa-chart-line text-blue-600"></i> Generador de Reportes Multinivel
+                        </h3>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="text-[10px] font-bold text-gray-500 uppercase block">1. Grupo Principal (Categoría):</label>
+                                <select id="repVariableSelect" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold text-indigo-900">
+                                    <option value="equipo">Equipo Asignado</option>
+                                    <option value="celula">Célula</option>
+                                    <option value="talla_polera">Talla de Polera</option>
+                                    <option value="actividad_favorita">Actividad Favorita</option>
+                                    <option value="estado_carta">Estado de Carta de Compromiso</option>
+                                    <option value="es_staff">Rol (Staff vs Campamentista)</option>
+                                    <option value="tipo_inscripcion">Tipo de Inscripción</option>
+                                    <option value="es_menor">Rango de Edad (Menores / Mayores)</option>
+                                    <option value="estado_financiero">Estado Financiero (Pagado/Parcial/Deuda)</option>
+                                    <option value="lista_personas_saldos">📋 Lista Nominal de Personas con Saldos</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="text-[10px] font-bold text-gray-500 uppercase block">2. Subgrupo Secundario (Opcional):</label>
+                                <select id="repSubgrupoSelect" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold text-blue-900">
+                                    <option value="ninguno">-- Sin Subgrupo (Agrupación Simple) --</option>
+                                    <option value="talla_polera">Talla de Polera</option>
+                                    <option value="equipo">Equipo Asignado</option>
+                                    <option value="tipo_inscripcion">Tipo de Inscripción</option>
+                                    <option value="estado_carta">Estado de Carta</option>
+                                    <option value="es_staff">Rol (Staff vs Campamentista)</option>
+                                    <option value="es_menor">Edad (Menor / Mayor)</option>
+                                    <option value="estado_financiero">Estado Financiero</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="text-[10px] font-bold text-gray-500 uppercase block">Tipo de Gráfico Principal:</label>
+                                <select id="repGraficoTipo" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold">
+                                    <option value="bar">Gráfico de Barras (Bar)</option>
+                                    <option value="pie">Gráfico de Torta (Pie)</option>
+                                    <option value="doughnut">Dona (Doughnut)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="border-t pt-3">
+                            <label class="text-[10px] font-bold text-gray-500 uppercase block mb-2">3. Selección Granular de Totales a Mostrar por Columna:</label>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 text-xs bg-white p-3 rounded-xl border">
+                                <label class="flex items-center gap-1.5 font-semibold cursor-pointer"><input type="checkbox" id="repColPersonas" checked class="rounded text-indigo-600"> Personas (#)</label>
+                                <label class="flex items-center gap-1.5 font-semibold cursor-pointer"><input type="checkbox" id="repColPorcentaje" checked class="rounded text-indigo-600"> Porcentaje (%)</label>
+                                <label class="flex items-center gap-1.5 font-semibold cursor-pointer"><input type="checkbox" id="repColCostoTotal" checked class="rounded text-indigo-600"> Costo Total (Bs)</label>
+                                <label class="flex items-center gap-1.5 font-semibold cursor-pointer"><input type="checkbox" id="repColMonto" checked class="rounded text-indigo-600"> Total Abonado (Bs)</label>
+                                <label class="flex items-center gap-1.5 font-semibold cursor-pointer"><input type="checkbox" id="repColPromedio" checked class="rounded text-indigo-600"> Prom/Persona (Bs)</label>
+                                <label class="flex items-center gap-1.5 font-semibold cursor-pointer"><input type="checkbox" id="repColSaldo" checked class="rounded text-indigo-600"> Saldo Deuda (Bs)</label>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row justify-between items-center gap-2 pt-2">
+                            <div class="flex items-center gap-2 w-full sm:w-auto">
+                                <input type="text" id="txtNombrePlantilla" placeholder="Nombre de plantilla guardada" class="p-2 border rounded-xl text-xs w-full sm:w-64">
+                                <button onclick="guardarPlantillaReporte()" class="bg-slate-800 hover:bg-slate-900 text-amber-400 font-bold px-4 py-2 rounded-xl text-xs transition whitespace-nowrap">
+                                    <i class="fa-solid fa-bookmark mr-1"></i> Guardar
+                                </button>
+                            </div>
+                            <button onclick="generarReporteGrafico()" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-chart-pie"></i> Generar Reporte
+                            </button>
                         </div>
                     </div>
 
-                    <div class="bg-slate-50 p-4 rounded-xl border border-gray-200 flex flex-col items-center justify-center min-h-[300px]">
-                        <h4 class="font-bold text-gray-800 text-xs uppercase mb-3 border-b pb-1 w-full text-left">Visualización Gráfica</h4>
-                        <div class="w-full max-w-xs mx-auto">
-                            <canvas id="canvasGraficoReporte"></canvas>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-gray-200">
+                            <h4 class="font-bold text-gray-800 text-xs uppercase mb-3 border-b pb-1">Resumen de Métricas</h4>
+                            <div id="contenedorTablaEstadisticas" class="overflow-x-auto text-xs">
+                                <p class="text-gray-400 italic">Haz clic en "Generar Reporte" para procesar la información.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 p-4 rounded-xl border border-gray-200 flex flex-col items-center justify-center min-h-[300px]">
+                            <h4 class="font-bold text-gray-800 text-xs uppercase mb-3 border-b pb-1 w-full text-left">Visualización Gráfica</h4>
+                            <div class="w-full max-w-xs mx-auto">
+                                <canvas id="canvasGraficoReporte"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div id="tabUsuarios" class="tab-content hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-gray-800 text-base">Administradores del Sistema</h3>
-                    <button onclick="toggleFormulario('formContenedorAdmin')"
-                        class="bg-gray-900 hover:bg-black text-amber-400 font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
-                        <i class="fa-solid fa-user-plus"></i> Crear Admin
-                    </button>
-                </div>
+            <!-- PESTAÑA USUARIOS ADMIN -->
+            <div id="tabUsuarios" class="tab-content hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-gray-800 text-base">Administradores del Sistema</h3>
+                        <button onclick="toggleFormulario('formContenedorAdmin')"
+                            class="bg-gray-900 hover:bg-black text-amber-400 font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
+                            <i class="fa-solid fa-user-plus"></i> Crear Admin
+                        </button>
+                    </div>
 
-                <div id="formContenedorAdmin" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
-                    <form onsubmit="guardarAdmin(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <input type="text" id="adminNewNombre" placeholder="Nombre Completo" required class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="text" id="adminNewUser" placeholder="Usuario" required class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="password" id="adminNewPass" placeholder="Contraseña" required class="p-2.5 border rounded-xl text-xs bg-white">
-                        <select id="adminRolSelect" class="p-2.5 border rounded-xl text-xs bg-white"></select>
-                        <div class="col-span-4 flex justify-end gap-2">
-                            <button type="button" onclick="toggleFormulario('formContenedorAdmin')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
-                            <button type="submit" class="bg-gray-900 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">+ Crear Admin</button>
-                        </div>
-                    </form>
-                </div>
+                    <div id="formContenedorAdmin" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
+                        <form onsubmit="guardarAdmin(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <input type="text" id="adminNewNombre" placeholder="Nombre Completo" required class="p-2.5 border rounded-xl text-xs bg-white">
+                            <input type="text" id="adminNewUser" placeholder="Usuario" required class="p-2.5 border rounded-xl text-xs bg-white">
+                            <input type="password" id="adminNewPass" placeholder="Contraseña" required class="p-2.5 border rounded-xl text-xs bg-white">
+                            <select id="adminRolSelect" class="p-2.5 border rounded-xl text-xs bg-white"></select>
+                            <div class="col-span-4 flex justify-end gap-2">
+                                <button type="button" onclick="toggleFormulario('formContenedorAdmin')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                                <button type="submit" class="bg-gray-900 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">+ Crear Admin</button>
+                            </div>
+                        </form>
+                    </div>
 
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-gray-600">
-                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                            <tr>
-                                <th class="p-2">Nombre</th>
-                                <th class="p-2">Usuario</th>
-                                <th class="p-2">Rol Asignado</th>
-                                <th class="p-2 text-center">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tblListaAdmins" class="divide-y divide-gray-100"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div id="tabRoles" class="tab-content hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-gray-800 text-base">Roles y Permisos Granulares</h3>
-                    <button onclick="prepararCrearRol()"
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
-                        <i class="fa-solid fa-key"></i> Crear / Configurar Rol
-                    </button>
-                </div>
-
-                <div id="formContenedorRol" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
-                    <form onsubmit="guardarRol(event)" class="space-y-4">
-                        <input type="hidden" id="rolIdEdit">
-                        <input type="text" id="rolNombre" placeholder="Nombre del Rol (ej. Staff, Tesorero)" required class="p-2.5 border rounded-xl text-xs w-full max-w-md bg-white">
-
-                        <label class="text-xs font-bold text-gray-700 block">Matriz de Permisos:</label>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-white p-4 rounded-xl border border-gray-200">
-                            <label class="flex items-center gap-2 text-xs font-bold text-green-700 col-span-2 md:col-span-4 bg-green-50 p-2 rounded-lg border border-green-200">
-                                <input type="checkbox" id="permVerFinanzas"> 💰 Permitir ver Totales de Ingresos, Egresos y Balance Neto
-                            </label>
-
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permSolicitudes"> Mod. Pendientes</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permInscritosVer"> Ver Inscritos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permInscritosCrear"> Crear Inscritos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permInscritosEditar"> Editar Inscritos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permInscritosEliminar"> Eliminar Inscritos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permCategorias"> Gestionar Categorías</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permIngresosVer"> Ver Ingresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permIngresosEliminar"> Eliminar Ingresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEgresosVer"> Ver Egresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEgresosCrear"> Crear Egresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEgresosEditar"> Editar Egresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEgresosEliminar"> Eliminar Egresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permReportesVer"> Ver Reportes</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permReportesCrear"> Crear Reportes</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permUsuarios"> Mod. Administradores</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permRoles"> Mod. Permisos y Roles</label>
-                        </div>
-                        <div class="flex justify-end gap-2">
-                            <button type="button" onclick="toggleFormulario('formContenedorRol')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
-                            <button type="submit" class="bg-indigo-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">+ Guardar Rol</button>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-gray-600">
-                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                            <tr>
-                                <th class="p-2">Nombre del Rol</th>
-                                <th class="p-2">Permisos Habilitados</th>
-                                <th class="p-2 text-center">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tblListaRolesExistentes" class="divide-y divide-gray-100"></tbody>
-                    </table>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-gray-600">
+                            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                                <tr>
+                                    <th class="p-2">Nombre</th>
+                                    <th class="p-2">Usuario</th>
+                                    <th class="p-2">Rol Asignado</th>
+                                    <th class="p-2 text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblListaAdmins" class="divide-y divide-gray-100"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div id="tabAuditoria" class="tab-content hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
-                        <i class="fa-solid fa-clipboard-check text-indigo-600"></i> Historial de Auditoría y Revisiones
-                    </h3>
-                    <button onclick="cargarAuditoriaLogs()" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-3 py-1.5 rounded-lg border transition">
-                        <i class="fa-solid fa-arrows-rotate mr-1"></i> Actualizar
-                    </button>
-                </div>
+            <!-- PESTAÑA ROLES -->
+            <div id="tabRoles" class="tab-content hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-gray-800 text-base">Roles y Permisos Granulares</h3>
+                        <button onclick="prepararCrearRol()"
+                            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
+                            <i class="fa-solid fa-key"></i> Crear / Configurar Rol
+                        </button>
+                    </div>
 
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-gray-600">
-                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                            <tr>
-                                <th class="p-2">Fecha y Hora</th>
-                                <th class="p-2">Administrador</th>
-                                <th class="p-2">Módulo</th>
-                                <th class="p-2">Acción / Revisión</th>
-                                <th class="p-2">Detalles</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tblLogsAuditoria" class="divide-y divide-gray-100"></tbody>
-                    </table>
+                    <div id="formContenedorRol" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
+                        <form onsubmit="guardarRol(event)" class="space-y-4">
+                            <input type="hidden" id="rolIdEdit">
+                            <input type="text" id="rolNombre" placeholder="Nombre del Rol (ej. Staff, Tesorero)" required class="p-2.5 border rounded-xl text-xs w-full max-w-md bg-white">
+
+                            <label class="text-xs font-bold text-gray-700 block">Matriz de Permisos:</label>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-white p-4 rounded-xl border border-gray-200">
+                                <label class="flex items-center gap-2 text-xs font-bold text-green-700 col-span-2 md:col-span-4 bg-green-50 p-2 rounded-lg border border-green-200">
+                                    <input type="checkbox" id="permVerFinanzas"> 💰 Permitir ver Totales de Ingresos, Egresos y Balance Neto
+                                </label>
+
+                                <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permSolicitudes"> Mod. Pendientes</label>
+                                <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permInscritosVer"> Ver Inscritos</label>
+                                <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permInscritosCrear"> Crear Inscritos</label>
+                                <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permInscritosEditar"> Editar Inscritos</label>
+                                <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permInscritosEliminar"> Eliminar Inscritos</label>
+                                <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permCategorias"> Gestionar Categorías</label>
+                                <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permIngresosVer"> Ver Ingresos</label>
+                                <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permIngresosEliminar"> Eliminar Ingresos</label>
+                                <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEgresosVer"> Ver Egresos</label>
+                                <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEgresosCrear"> Crear Egresos</label>
+                                <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEgresosEditar"> Editar Egresos</label>
+                                <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEgresosEliminar"> Eliminar Egresos</label>
+                                <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permReportesVer"> Ver Reportes</label>
+                                <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permReportesCrear"> Crear Reportes</label>
+                                <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permUsuarios"> Mod. Administradores</label>
+                                <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permRoles"> Mod. Permisos y Roles</label>
+                            </div>
+                            <div class="flex justify-end gap-2">
+                                <button type="button" onclick="toggleFormulario('formContenedorRol')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                                <button type="submit" class="bg-indigo-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">+ Guardar Rol</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-gray-600">
+                            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                                <tr>
+                                    <th class="p-2">Nombre del Rol</th>
+                                    <th class="p-2">Permisos Habilitados</th>
+                                    <th class="p-2 text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblListaRolesExistentes" class="divide-y divide-gray-100"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
 
+            <!-- PESTAÑA AUDITORÍA -->
+            <div id="tabAuditoria" class="tab-content hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
+                            <i class="fa-solid fa-clipboard-check text-indigo-600"></i> Historial de Auditoría y Revisiones
+                        </h3>
+                        <button onclick="cargarAuditoriaLogs()" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-3 py-1.5 rounded-lg border transition">
+                            <i class="fa-solid fa-arrows-rotate mr-1"></i> Actualizar
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-gray-600">
+                            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                                <tr>
+                                    <th class="p-2">Fecha y Hora</th>
+                                    <th class="p-2">Administrador</th>
+                                    <th class="p-2">Módulo</th>
+                                    <th class="p-2">Acción / Revisión</th>
+                                    <th class="p-2">Detalles</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblLogsAuditoria" class="divide-y divide-gray-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </main>
     </div>
 
     <!-- MODAL COMPARATIVO DE CAMBIOS SOLICITADOS -->
@@ -902,13 +1479,44 @@
                 <button onclick="cerrarModalVerCambios()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
-            <div id="contenidoComparativoCambios" class="space-y-3 text-xs">
-                <!-- Se llena dinámicamente mediante JS -->
+            <div id="contenidoComparativoCambios" class="space-y-3 text-xs"></div>
+
+            <div class="flex justify-end gap-2 border-t pt-3" id="pieModalCambiosAcciones"></div>
+        </div>
+    </div>
+
+    <!-- MODAL PERFIL ADMIN -->
+    <div id="modalPerfilAdmin" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
+                    <i class="fa-solid fa-user-gear text-indigo-600"></i> Mi Perfil de Administrador
+                </h3>
+                <button onclick="cerrarModalPerfilAdmin()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
-            <div class="flex justify-end gap-2 border-t pt-3" id="pieModalCambiosAcciones">
-                <!-- Botones Aprobar / Rechazar dinámicos -->
-            </div>
+            <form onsubmit="cambiarMiPassword(event)" class="space-y-3">
+                <div>
+                    <label class="text-xs font-bold text-gray-500">Nombre</label>
+                    <input type="text" id="perfilNombre" disabled class="w-full p-2.5 bg-gray-100 border rounded-xl text-xs font-bold">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500">Usuario</label>
+                    <input type="text" id="perfilUsuario" disabled class="w-full p-2.5 bg-gray-100 border rounded-xl text-xs font-bold">
+                </div>
+                <div class="border-t pt-2">
+                    <label class="text-xs font-bold text-gray-700">Nueva Contraseña</label>
+                    <input type="password" id="perfilNewPass" required placeholder="••••••••" class="w-full mt-1 p-2.5 border rounded-xl text-xs outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-700">Confirmar Nueva Contraseña</label>
+                    <input type="password" id="perfilConfirmPass" required placeholder="••••••••" class="w-full mt-1 p-2.5 border rounded-xl text-xs outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="cerrarModalPerfilAdmin()" class="bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2 rounded-xl">Cancelar</button>
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-5 py-2 rounded-xl shadow">Actualizar Contraseña</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -1053,7 +1661,7 @@
         </div>
     </div>
 
-    <!-- MODAL CONFIRMACIÓN DE SEGURIDAD -->
+    <!-- MODAL CONFIRMACIÓN SEGURIDAD -->
     <div id="modalConfirmPass" class="fixed inset-0 bg-gray-900/70 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
             <div class="text-center mb-4">
@@ -1095,6 +1703,14 @@
             if (container) container.classList.toggle('hidden');
         }
 
+        function toggleSeccionTutor(esMenor) {
+            const sec = document.getElementById('newSecTutor');
+            if (sec) {
+                if (esMenor) sec.classList.remove('hidden');
+                else sec.classList.add('hidden');
+            }
+        }
+
         async function registrarLogAuditoria(accion, modulo, detalle) {
             try {
                 await db.from('auditoria_logs').insert([{
@@ -1108,7 +1724,22 @@
             }
         }
 
-        // MOSTRAR Y COMPARAR CAMBIOS SOLICITADOS ANTES DE APROBAR
+        function cambiarPestana(tab) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-gray-800', 'text-amber-400');
+                b.classList.add('hover:bg-gray-800', 'hover:text-white', 'text-slate-300');
+            });
+
+            const btnActivo = document.getElementById(`nav${tab.charAt(0).toUpperCase() + tab.slice(1)}`);
+            if (btnActivo) {
+                btnActivo.classList.remove('hover:bg-gray-800', 'hover:text-white', 'text-slate-300');
+                btnActivo.classList.add('bg-gray-800', 'text-amber-400');
+            }
+
+            document.getElementById(`tab${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.remove('hidden');
+        }
+
         function verCambiosSolicitadosModal(idSol) {
             const sol = solicitudesEdicionGlobal.find(s => s.id === idSol);
             if (!sol) return;
@@ -1118,7 +1749,7 @@
             cont.innerHTML = `
                 <p class="font-bold text-gray-700 border-b pb-1">Campamentista: <span class="text-indigo-700">${ins.nombre_completo}</span> (C.I. ${ins.ci})</p>
                 <div class="grid grid-cols-2 gap-2 bg-gray-50 p-3 rounded-xl border text-[11px]">
-                    <div class="font-bold text-gray-500 uppercase">Campo</div>
+                    <div class="font-bold text-gray-500 uppercase">Campo Modificado</div>
                     <div class="grid grid-cols-2 gap-1 font-bold text-gray-500 uppercase">
                         <span>Valor Actual</span>
                         <span class="text-blue-600">Nuevo Solicitado</span>
@@ -1144,7 +1775,7 @@
                         <div class="grid grid-cols-2 gap-2 p-2 border-b items-center">
                             <span class="font-bold text-gray-700">${mapaCampos[key]}:</span>
                             <div class="grid grid-cols-2 gap-1 font-semibold">
-                                <span class="text-gray-500 line-through">${ins[key] || '(Vacio)'}</span>
+                                <span class="text-gray-500 line-through">${ins[key] || '(Vacío)'}</span>
                                 <span class="text-blue-700 font-bold bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">${sol[key]}</span>
                             </div>
                         </div>
@@ -1165,7 +1796,208 @@
             document.getElementById('modalVerCambiosSolicitados').classList.add('hidden');
         }
 
-        // MÓDULO DE CAMPOS PERSONALIZADOS Y GENERACIÓN DE SCRIPTS SQL
+        // GENERADOR DE REPORTES MULTINIVEL CON GRUPOS, SUBGRUPOS Y TOTALES GRANULARES
+        async function generarReporteGrafico() {
+            const varPrincipal = document.getElementById('repVariableSelect').value;
+            const subGrupo = document.getElementById('repSubgrupoSelect').value;
+            const tipoGrafico = document.getElementById('repGraficoTipo').value;
+
+            const showPersons = document.getElementById('repColPersonas').checked;
+            const showPorcent = document.getElementById('repColPorcentaje').checked;
+            const showCostoTotal = document.getElementById('repColCostoTotal').checked;
+            const showMonto = document.getElementById('repColMonto').checked;
+            const showPromedio = document.getElementById('repColPromedio').checked;
+            const showSaldo = document.getElementById('repColSaldo').checked;
+
+            const { data: inscritos } = await db.from('inscritos').select('*, tipos_inscripcion(*)');
+            const { data: pagos } = await db.from('pagos').select('*').eq('estado', 'Aprobado');
+
+            const divTabla = document.getElementById('contenedorTablaEstadisticas');
+
+            function obtenerValorCampo(i, campo) {
+                if (campo === 'tipo_inscripcion') return i.tipos_inscripcion?.nombre || 'Estándar';
+                if (campo === 'es_staff') return i.es_staff ? 'STAFF' : 'Campamentista';
+                if (campo === 'es_menor') return i.es_menor ? 'Menor de Edad' : 'Mayor de Edad';
+                if (campo === 'estado_financiero') {
+                    let costo = i.tipos_inscripcion?.es_manual ? (i.precio_personalizado || 0) : (i.tipos_inscripcion?.precio || 140);
+                    let misPagos = pagos ? pagos.filter(p => p.inscrito_id === i.id) : [];
+                    let abonado = misPagos.reduce((sum, p) => sum + Number(p.monto), 0);
+
+                    if (abonado >= costo) return 'Totalmente Pagado';
+                    if (abonado > 0) return 'Abono Parcial';
+                    return 'Sin Abonos (Pendiente)';
+                }
+                return i[campo] || 'Sin Especificar';
+            }
+
+            if (varPrincipal === 'lista_personas_saldos') {
+                let listaSaldos = [];
+                let totalCostoGlobal = 0, totalAbonadoGlobal = 0, totalSaldoGlobal = 0;
+
+                (inscritos || []).forEach(i => {
+                    let costo = i.tipos_inscripcion?.es_manual ? (i.precio_personalizado || 0) : (i.tipos_inscripcion?.precio || 140);
+                    let misPagos = pagos ? pagos.filter(p => p.inscrito_id === i.id) : [];
+                    let abonado = misPagos.reduce((sum, p) => sum + Number(p.monto), 0);
+                    let saldo = Math.max(0, costo - abonado);
+
+                    totalCostoGlobal += costo;
+                    totalAbonadoGlobal += abonado;
+                    totalSaldoGlobal += saldo;
+
+                    listaSaldos.push({ nombre: i.nombre_completo, ci: i.ci, costo, abonado, saldo });
+                });
+
+                listaSaldos.sort((a, b) => b.saldo - a.saldo);
+
+                let html = `
+                <div class="mb-3 p-3 bg-indigo-50 rounded-xl border border-indigo-200">
+                    <p class="text-[10px] uppercase font-bold text-indigo-700 mb-1">Estado Financiero Nominal de Personas</p>
+                    <div class="grid grid-cols-3 gap-2 text-center">
+                        <div class="bg-white p-2 rounded-lg shadow-sm border"><span class="block text-[10px] text-gray-400 uppercase">Costo Total</span><span class="text-xs font-black text-indigo-900">Bs ${totalCostoGlobal}</span></div>
+                        <div class="bg-white p-2 rounded-lg shadow-sm border"><span class="block text-[10px] text-gray-400 uppercase">Cobrado</span><span class="text-xs font-black text-green-600">Bs ${totalAbonadoGlobal}</span></div>
+                        <div class="bg-white p-2 rounded-lg shadow-sm border"><span class="block text-[10px] text-gray-400 uppercase">Saldo Pendiente</span><span class="text-xs font-black text-red-600">Bs ${totalSaldoGlobal}</span></div>
+                    </div>
+                </div>
+                <table class="w-full text-left border-collapse my-2 text-[11px]">
+                    <thead class="bg-gray-200 font-bold">
+                        <tr><th class="p-2 border">C.I.</th><th class="p-2 border">Nombre Completo</th><th class="p-2 border">Costo</th><th class="p-2 border">Abonado</th><th class="p-2 border">Saldo</th></tr>
+                    </thead><tbody>`;
+
+                listaSaldos.forEach(item => {
+                    let colorSaldo = item.saldo > 0 ? 'text-red-600 font-bold' : 'text-green-600 font-semibold';
+                    html += `<tr><td class="p-2 border text-gray-600">${item.ci}</td><td class="p-2 border font-bold">${item.nombre}</td><td class="p-2 border">Bs ${item.costo}</td><td class="p-2 border text-green-600 font-bold">Bs ${item.abonado}</td><td class="p-2 border ${colorSaldo}">Bs ${item.saldo}</td></tr>`;
+                });
+                html += `</tbody></table>`;
+                divTabla.innerHTML = html;
+
+                const ctx = document.getElementById('canvasGraficoReporte').getContext('2d');
+                if (instanciaGrafico) instanciaGrafico.destroy();
+
+                let alDia = listaSaldos.filter(x => x.saldo === 0).length;
+                let pendientes = listaSaldos.filter(x => x.saldo > 0).length;
+
+                instanciaGrafico = new Chart(ctx, {
+                    type: tipoGrafico,
+                    data: { labels: ['Al Día (Sin Deuda)', 'Con Saldo Pendiente'], datasets: [{ data: [alDia, pendientes], backgroundColor: ['#10b981', '#ef4444'] }] },
+                    options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+                });
+
+                return;
+            }
+
+            // ESTRUCTURA DE AGRUPACIÓN Y SUBGRUPOS
+            let datosAgrupados = {};
+            let totalPersonasGlobal = 0, totalCostoGlobal = 0, totalAbonadoGlobal = 0, totalSaldoGlobal = 0;
+
+            (inscritos || []).forEach(i => {
+                let g1 = obtenerValorCampo(i, varPrincipal);
+                let g2 = subGrupo !== 'ninguno' ? obtenerValorCampo(i, subGrupo) : null;
+
+                if (!datosAgrupados[g1]) datosAgrupados[g1] = { personas: 0, costo: 0, abonado: 0, saldo: 0, sub: {} };
+
+                let costo = i.tipos_inscripcion?.es_manual ? (i.precio_personalizado || 0) : (i.tipos_inscripcion?.precio || 140);
+                let misPagos = pagos ? pagos.filter(p => p.inscrito_id === i.id) : [];
+                let abonado = misPagos.reduce((sum, p) => sum + Number(p.monto), 0);
+                let saldo = Math.max(0, costo - abonado);
+
+                datosAgrupados[g1].personas++;
+                datosAgrupados[g1].costo += costo;
+                datosAgrupados[g1].abonado += abonado;
+                datosAgrupados[g1].saldo += saldo;
+
+                totalPersonasGlobal++;
+                totalCostoGlobal += costo;
+                totalAbonadoGlobal += abonado;
+                totalSaldoGlobal += saldo;
+
+                if (g2) {
+                    if (!datosAgrupados[g1].sub[g2]) datosAgrupados[g1].sub[g2] = { personas: 0, costo: 0, abonado: 0, saldo: 0 };
+                    datosAgrupados[g1].sub[g2].personas++;
+                    datosAgrupados[g1].sub[g2].costo += costo;
+                    datosAgrupados[g1].sub[g2].abonado += abonado;
+                    datosAgrupados[g1].sub[g2].saldo += saldo;
+                }
+            });
+
+            let html = `
+            <div class="mb-3 p-3 bg-indigo-50 rounded-xl border border-indigo-200">
+                <p class="text-[10px] uppercase font-bold text-indigo-700 mb-1">Totales Globales de la Categoría</p>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+                    <div class="bg-white p-2 rounded-lg shadow-sm border"><span class="block text-[10px] text-gray-400 uppercase">Personas</span><span class="text-xs font-black text-indigo-900">${totalPersonasGlobal}</span></div>
+                    <div class="bg-white p-2 rounded-lg shadow-sm border"><span class="block text-[10px] text-gray-400 uppercase">Cobrado</span><span class="text-xs font-black text-green-600">Bs ${totalAbonadoGlobal}</span></div>
+                    <div class="bg-white p-2 rounded-lg shadow-sm border"><span class="block text-[10px] text-gray-400 uppercase">Deuda</span><span class="text-xs font-black text-red-600">Bs ${totalSaldoGlobal}</span></div>
+                    <div class="bg-white p-2 rounded-lg shadow-sm border"><span class="block text-[10px] text-gray-400 uppercase">Promedio/Pers</span><span class="text-xs font-black text-blue-600">Bs ${totalPersonasGlobal > 0 ? (totalAbonadoGlobal / totalPersonasGlobal).toFixed(1) : 0}</span></div>
+                </div>
+            </div>
+
+            <table class="w-full text-left border-collapse my-2 text-[11px]">
+                <thead class="bg-gray-200 font-bold">
+                    <tr>
+                        <th class="p-2 border">GRUPO / SUBGRUPO</th>
+                        ${showPersons ? '<th class="p-2 border">Personas</th>' : ''}
+                        ${showPorcent ? '<th class="p-2 border">% Total</th>' : ''}
+                        ${showCostoTotal ? '<th class="p-2 border">Costo Total</th>' : ''}
+                        ${showMonto ? '<th class="p-2 border">Abonado Bs</th>' : ''}
+                        ${showPromedio ? '<th class="p-2 border">Prom/Pers</th>' : ''}
+                        ${showSaldo ? '<th class="p-2 border">Saldo Deuda</th>' : ''}
+                    </tr>
+                </thead>
+                <tbody>`;
+
+            Object.keys(datosAgrupados).forEach(g1 => {
+                let d = datosAgrupados[g1];
+                let pct = totalPersonasGlobal > 0 ? ((d.personas / totalPersonasGlobal) * 100).toFixed(1) : 0;
+                let prom = d.personas > 0 ? (d.abonado / d.personas).toFixed(1) : 0;
+
+                html += `<tr class="bg-slate-100 font-bold border-t">
+                    <td class="p-2 border text-indigo-900">${g1}</td>
+                    ${showPersons ? `<td class="p-2 border">${d.personas}</td>` : ''}
+                    ${showPorcent ? `<td class="p-2 border text-indigo-700">${pct}%</td>` : ''}
+                    ${showCostoTotal ? `<td class="p-2 border">Bs ${d.costo}</td>` : ''}
+                    ${showMonto ? `<td class="p-2 border text-green-600">Bs ${d.abonado}</td>` : ''}
+                    ${showPromedio ? `<td class="p-2 border">Bs ${prom}</td>` : ''}
+                    ${showSaldo ? `<td class="p-2 border text-red-600">Bs ${d.saldo}</td>` : ''}
+                </tr>`;
+
+                if (subGrupo !== 'ninguno') {
+                    Object.keys(d.sub).forEach(g2 => {
+                        let sd = d.sub[g2];
+                        let spct = totalPersonasGlobal > 0 ? ((sd.personas / totalPersonasGlobal) * 100).toFixed(1) : 0;
+                        let sprom = sd.personas > 0 ? (sd.abonado / sd.personas).toFixed(1) : 0;
+
+                        html += `<tr class="text-gray-600">
+                            <td class="p-2 border pl-6 font-medium">↳ ${g2}</td>
+                            ${showPersons ? `<td class="p-2 border">${sd.personas}</td>` : ''}
+                            ${showPorcent ? `<td class="p-2 border">${spct}%</td>` : ''}
+                            ${showCostoTotal ? `<td class="p-2 border">Bs ${sd.costo}</td>` : ''}
+                            ${showMonto ? `<td class="p-2 border text-green-600">Bs ${sd.abonado}</td>` : ''}
+                            ${showPromedio ? `<td class="p-2 border">Bs ${sprom}</td>` : ''}
+                            ${showSaldo ? `<td class="p-2 border text-red-600">Bs ${sd.saldo}</td>` : ''}
+                        </tr>`;
+                    });
+                }
+            });
+
+            html += `</tbody></table>`;
+            divTabla.innerHTML = html;
+
+            // DIBUJAR GRÁFICO
+            const ctx = document.getElementById('canvasGraficoReporte').getContext('2d');
+            if (instanciaGrafico) instanciaGrafico.destroy();
+
+            const colores = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#6366f1', '#14b8a6', '#f97316'];
+
+            instanciaGrafico = new Chart(ctx, {
+                type: tipoGrafico,
+                data: {
+                    labels: Object.keys(datosAgrupados),
+                    datasets: [{ label: 'Personas', data: Object.keys(datosAgrupados).map(k => datosAgrupados[k].personas), backgroundColor: colores }]
+                },
+                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+            });
+        }
+
+        // CONTROLADORES DE RESTO DE FUNCIONALIDADES
         function crearNuevoCampoPersonalizado(e) {
             e.preventDefault();
             const sqlName = document.getElementById('campoSqlName').value.trim().toLowerCase().replace(/\s+/g, '_');
@@ -1177,8 +2009,7 @@
             else if (tipo === 'boolean') tipoSql = 'BOOLEAN DEFAULT FALSE';
             else if (tipo === 'date') tipoSql = 'DATE';
 
-            const scriptSql = `-- Ejecutar este comando en Supabase -> SQL Editor:\nALTER TABLE inscritos ADD COLUMN IF NOT EXISTS ${sqlName} ${tipoSql};`;
-
+            const scriptSql = `-- Ejecutar en Supabase -> SQL Editor:\nALTER TABLE inscritos ADD COLUMN IF NOT EXISTS ${sqlName} ${tipoSql};`;
             document.getElementById('codeSqlOutput').innerText = scriptSql;
 
             alert(`Campo "${labelName}" configurado. Copia y ejecuta el script generado en Supabase SQL Editor.`);
@@ -1186,8 +2017,7 @@
         }
 
         function copiarScriptSql() {
-            const code = document.getElementById('codeSqlOutput').innerText;
-            navigator.clipboard.writeText(code);
+            navigator.clipboard.writeText(document.getElementById('codeSqlOutput').innerText);
             alert('Script SQL copiado al portapapeles.');
         }
 
@@ -1203,7 +2033,6 @@
 
             let comprobanteUrl = null;
 
-            // Exigir archivo de comprobante si es un pago nuevo o si se selecciona un archivo
             if (fileInput.files.length > 0) {
                 const file = fileInput.files[0];
                 const fileName = `admin_cobro_${Date.now()}_${file.name}`;
@@ -1213,30 +2042,182 @@
                 const { data: urlData } = db.storage.from('comprobantes').getPublicUrl(fileName);
                 comprobanteUrl = urlData.publicUrl;
             } else if (!editId) {
-                return alert('⚠️ Para aprobar o guardar un ingreso es obligatorio adjuntar la foto o archivo del comprobante.');
+                return alert('⚠️ Para aprobar un ingreso es obligatorio adjuntar el comprobante.');
             }
 
-            const payload = {
-                inscrito_id: inscritoId,
-                monto: monto,
-                estado: 'Aprobado',
-                observaciones: obs || `Cobro registrado por ${adminSesion.nombre}`
-            };
-
+            const payload = { inscrito_id: inscritoId, monto: monto, estado: 'Aprobado', observaciones: obs || `Cobro por ${adminSesion.nombre}` };
             if (comprobanteUrl) payload.comprobante_url = comprobanteUrl;
 
             if (editId) {
                 await db.from('pagos').update(payload).eq('id', editId);
-                await registrarLogAuditoria('Edición Pago', 'Ingresos', `Actualizó pago ID: ${editId} a Bs ${monto}`);
-                alert('Pago actualizado correctamente.');
+                await registrarLogAuditoria('Edición Pago', 'Ingresos', `Actualizó pago ID: ${editId}`);
             } else {
                 await db.from('pagos').insert([payload]);
                 await registrarLogAuditoria('Cobro Directo', 'Ingresos', `Registró pago de Bs ${monto}`);
-                alert('Cobro registrado y aprobado correctamente.');
             }
 
             e.target.reset();
             toggleFormulario('formContenedorPagoDirecto');
+            cargarTodoElDashboard();
+        }
+
+        async function iniciarSesionAdmin(e) {
+            e.preventDefault();
+            const user = document.getElementById('loginUser').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+            const hashHex = await calcularSHA256(pass);
+
+            const { data: admin } = await db.from('administradores').select('*, roles(*)').eq('usuario', user).eq('password_hash', hashHex).maybeSingle();
+
+            if (!admin) return alert('Credenciales incorrectas');
+
+            adminSesion = admin;
+            permisosAdmin = admin.roles?.permisos || {};
+
+            document.getElementById('secLogin').classList.add('hidden');
+            document.getElementById('secDashboard').classList.remove('hidden');
+            document.getElementById('txtAdminInfo').innerText = `${admin.nombre}`;
+
+            await cargarTiposInscripcion();
+            aplicarPermisosVisuales();
+            cargarTodoElDashboard();
+            await registrarLogAuditoria('Inicio de Sesión', 'Acceso', 'El administrador ingresó al sistema.');
+        }
+
+        async function calcularSHA256(texto) {
+            const msgUint8 = new TextEncoder().encode(texto);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+            return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        function aplicarPermisosVisuales() {
+            const esSuper = !adminSesion.rol_id || adminSesion.roles?.nombre === 'SuperAdmin';
+            document.getElementById('contTarjetasFinanzas').style.display = (esSuper || permisosAdmin.verFinanzas) ? 'grid' : 'none';
+        }
+
+        async function cargarTodoElDashboard() {
+            const { data: inscritos } = await db.from('inscritos').select('*, tipos_inscripcion(*)');
+            listaInscritosGlobal = inscritos || [];
+
+            const { data: pagos } = await db.from('pagos').select('*, inscritos(nombre_completo)').eq('estado', 'Aprobado');
+            listaPagosGlobal = pagos || [];
+
+            const { data: egresos } = await db.from('egresos').select('*');
+
+            let cntStaff = 0, cntCampamentistas = 0;
+            listaInscritosGlobal.forEach(i => { if (i.es_staff) cntStaff++; else cntCampamentistas++; });
+
+            document.getElementById('stCampamentistas').innerText = cntCampamentistas;
+            document.getElementById('stStaff').innerText = cntStaff;
+            document.getElementById('stTotalGeneral').innerText = listaInscritosGlobal.length;
+
+            let ing = 0, eg = 0;
+            listaPagosGlobal.forEach(p => ing += Number(p.monto));
+            (egresos || []).forEach(e => eg += Number(e.monto));
+
+            document.getElementById('stIngresos').innerText = `Bs ${ing}`;
+            document.getElementById('stEgresos').innerText = `Bs ${eg}`;
+            document.getElementById('stBalance').innerText = `Bs ${ing - eg}`;
+
+            const selectPagoAdmin = document.getElementById('pagoAdminInscrito');
+            if (selectPagoAdmin) {
+                selectPagoAdmin.innerHTML = '<option value="">-- Seleccionar Campamentista --</option>';
+                listaInscritosGlobal.forEach(i => selectPagoAdmin.innerHTML += `<option value="${i.id}">${i.nombre_completo} (CI: ${i.ci})</option>`);
+            }
+
+            renderizarTablaInscritos();
+            cargarPendientes();
+            cargarRolesYAdmins();
+            cargarAuditoriaLogs();
+        }
+
+        function renderizarTablaInscritos() {
+            const showTel = document.getElementById('col_tel').checked;
+            const showCelula = document.getElementById('col_celula').checked;
+            const showTalla = document.getElementById('col_talla').checked;
+            const showActividad = document.getElementById('col_actividad').checked;
+            const showAlergias = document.getElementById('col_alergias').checked;
+            const showTutor = document.getElementById('col_tutor').checked;
+
+            const campoOrden = document.getElementById('selOrdenInscritos').value;
+
+            let listaOrdenada = [...listaInscritosGlobal].sort((a, b) => {
+                let valA = a[campoOrden] || '';
+                let valB = b[campoOrden] || '';
+                return valA.toString().localeCompare(valB.toString());
+            });
+
+            const thead = document.getElementById('theadInscritos');
+            thead.innerHTML = `
+            <tr>
+                <th class="p-2">C.I.</th><th class="p-2">Nombre Completo</th><th class="p-2">Tipo / Rol</th><th class="p-2">Inscripción</th><th class="p-2">Equipo</th>
+                ${showTel ? '<th class="p-2">Teléfono</th>' : ''}
+                ${showCelula ? '<th class="p-2">Célula</th>' : ''}
+                ${showTalla ? '<th class="p-2">Talla</th>' : ''}
+                ${showActividad ? '<th class="p-2">Actividad</th>' : ''}
+                ${showAlergias ? '<th class="p-2">Alergias</th>' : ''}
+                ${showTutor ? '<th class="p-2">Tutor</th>' : ''}
+                <th class="p-2">Carta</th><th class="p-2 text-center">Acciones</th>
+            </tr>`;
+
+            const tbodyIns = document.getElementById('tblTodosInscritos');
+            tbodyIns.innerHTML = '';
+
+            listaOrdenada.forEach(i => {
+                let estadoCarta = i.estado_carta || (i.carta_compromiso_url ? 'En Revisión' : 'Pendiente');
+                let colorBadge = estadoCarta === 'Aprobada' ? 'bg-green-100 text-green-700' : (estadoCarta === 'En Revisión' ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700');
+                let badgeRol = i.es_staff ? `<span class="bg-purple-100 text-purple-800 font-extrabold px-2 py-0.5 rounded-full border border-purple-300">⭐ STAFF</span>` : `<span class="bg-gray-100 text-gray-700 font-semibold px-2 py-0.5 rounded-full">Campamentista</span>`;
+
+                tbodyIns.innerHTML += `
+          <tr>
+            <td class="p-2 font-bold">${i.ci}</td>
+            <td class="p-2 font-semibold text-gray-800">${i.nombre_completo}</td>
+            <td class="p-2">${badgeRol}</td>
+            <td class="p-2 font-bold text-indigo-900">${i.tipos_inscripcion?.nombre || 'Estándar'}</td>
+            <td class="p-2 font-bold text-indigo-700">${i.equipo || 'Sin Asignar'}</td>
+            ${showTel ? `<td class="p-2">${i.telefono || '-'}</td>` : ''}
+            ${showCelula ? `<td class="p-2">${i.celula || '-'}</td>` : ''}
+            ${showTalla ? `<td class="p-2 font-bold">${i.talla_polera || '-'}</td>` : ''}
+            ${showActividad ? `<td class="p-2">${i.actividad_favorita || '-'}</td>` : ''}
+            ${showAlergias ? `<td class="p-2 text-red-600 font-semibold">${i.alergias_medicina || '-'}</td>` : ''}
+            ${showTutor ? `<td class="p-2">${i.tutor_nombre ? `${i.tutor_nombre} (${i.tutor_telefono || ''})` : '-'}</td>` : ''}
+            <td class="p-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${colorBadge}">${estadoCarta}</span></td>
+            <td class="p-2 text-center">
+              <button onclick="abrirModalEditarCampamentista('${i.id}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 rounded-lg border border-amber-300" title="Editar">
+                <i class="fa-solid fa-pencil text-xs"></i>
+              </button>
+            </td>
+          </tr>`;
+            });
+        }
+
+        async function crearNuevoCampamentista(e) {
+            e.preventDefault();
+            const nom = document.getElementById('newNombre').value.trim();
+            await db.from('inscritos').insert([{
+                ci: document.getElementById('newCi').value.trim(),
+                nombre_completo: nom,
+                telefono: document.getElementById('newTel').value.trim(),
+                celula: document.getElementById('newCelula').value.trim(),
+                equipo: document.getElementById('newEquipo').value,
+                talla_polera: document.getElementById('newTalla').value,
+                tipo_inscripcion_id: document.getElementById('newTipoInscripcion').value,
+                precio_personalizado: document.getElementById('newPrecioManual').value || null,
+                es_staff: document.getElementById('newEsStaff').checked,
+                actividad_favorita: document.getElementById('newActividad').value,
+                habilidad_especial: document.getElementById('newHabilidad').value.trim(),
+                es_menor: document.getElementById('newEsMenor').checked,
+                tutor_nombre: document.getElementById('newTutorNombre').value.trim(),
+                tutor_telefono: document.getElementById('newTutorTel').value.trim(),
+                contacto_emergencia: document.getElementById('newEmergencia').value.trim(),
+                alergias_medicina: document.getElementById('newAlergias').value.trim(),
+                estado_carta: 'Pendiente'
+            }]);
+
+            await registrarLogAuditoria('Nuevo Registro', 'Inscritos', `Inscribió a: ${nom}`);
+            alert('Campamentista registrado exitosamente.');
+            e.target.reset();
+            toggleFormulario('formContenedorCampamentista');
             cargarTodoElDashboard();
         }
 
@@ -1322,87 +2303,17 @@
             cargarTodoElDashboard();
         }
 
-        // CONTROL PESTAÑAS
-        function cambiarPestana(tab) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-            document.querySelectorAll('.tab-btn').forEach(b => {
-                b.classList.remove('bg-gray-900', 'text-white');
-                b.classList.add('bg-white', 'text-gray-600');
-            });
-
-            const btnActivo = document.getElementById(`nav${tab.charAt(0).toUpperCase() + tab.slice(1)}`);
-            if (btnActivo) {
-                btnActivo.classList.remove('bg-white', 'text-gray-600');
-                btnActivo.classList.add('bg-gray-900', 'text-white');
-            }
-
-            document.getElementById(`tab${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.remove('hidden');
+        async function procesarCarta(id, nuevoEstado, nombre) {
+            await db.from('inscritos').update({ estado_carta: nuevoEstado }).eq('id', id);
+            await registrarLogAuditoria('Revisión Carta', 'Pendientes', `Marcó la carta de ${nombre} como: ${nuevoEstado}`);
+            alert(`Carta marcada como: ${nuevoEstado}`);
+            cargarTodoElDashboard();
         }
 
-        // RESTO DE FUNCIONALIDADES EXISTENTES
-        function cambiarPestanaModal(pestana) {
-            document.getElementById('tabModalGen').classList.add('hidden');
-            document.getElementById('tabModalAsig').classList.add('hidden');
-            document.getElementById('tabModalSalud').classList.add('hidden');
-
-            document.getElementById('btnTabModal1').className = "px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200";
-            document.getElementById('btnTabModal2').className = "px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200";
-            document.getElementById('btnTabModal3').className = "px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200";
-
-            if (pestana === 'gen') {
-                document.getElementById('tabModalGen').classList.remove('hidden');
-                document.getElementById('btnTabModal1').className = "px-3 py-1.5 rounded-lg bg-gray-900 text-white";
-            } else if (pestana === 'asig') {
-                document.getElementById('tabModalAsig').classList.remove('hidden');
-                document.getElementById('btnTabModal2').className = "px-3 py-1.5 rounded-lg bg-gray-900 text-white";
-            } else if (pestana === 'salud') {
-                document.getElementById('tabModalSalud').classList.remove('hidden');
-                document.getElementById('btnTabModal3').className = "px-3 py-1.5 rounded-lg bg-gray-900 text-white";
-            }
-        }
-
-        function prepararCrearCategoria() {
-            document.getElementById('catIdEdit').value = '';
-            document.getElementById('catNombre').value = '';
-            document.getElementById('catPrecio').value = '';
-            document.getElementById('catEsManual').checked = false;
-            document.getElementById('catEsVisible').checked = true;
-            document.getElementById('formContenedorCategoria').classList.remove('hidden');
-        }
-
-        function editarCategoria(id) {
-            const cat = tiposInscripcionGlobal.find(t => t.id === id);
-            if (!cat) return;
-
-            document.getElementById('catIdEdit').value = cat.id;
-            document.getElementById('catNombre').value = cat.nombre;
-            document.getElementById('catPrecio').value = cat.precio;
-            document.getElementById('catEsManual').checked = !!cat.es_manual;
-            document.getElementById('catEsVisible').checked = !!cat.es_visible;
-            document.getElementById('formContenedorCategoria').classList.remove('hidden');
-        }
-
-        async function guardarTipoInscripcion(e) {
-            e.preventDefault();
-            const id = document.getElementById('catIdEdit').value;
-            const nombre = document.getElementById('catNombre').value.trim();
-            const precio = parseFloat(document.getElementById('catPrecio').value) || 0;
-            const esManual = document.getElementById('catEsManual').checked;
-            const esVisible = document.getElementById('catEsVisible').checked;
-
-            const payload = { nombre, precio, es_manual: esManual, es_visible: esVisible };
-
-            if (id) {
-                await db.from('tipos_inscripcion').update(payload).eq('id', id);
-                await registrarLogAuditoria('Editar Categoría', 'Categorías', `Modificó categoría: ${nombre}`);
-            } else {
-                await db.from('tipos_inscripcion').insert([payload]);
-                await registrarLogAuditoria('Nueva Categoría', 'Categorías', `Creó categoría: ${nombre}`);
-            }
-
-            alert('Tipo de inscripción guardado correctamente.');
-            toggleFormulario('formContenedorCategoria');
-            cargarTiposInscripcion();
+        async function procesarPago(id, estado, nombre, monto) {
+            await db.from('pagos').update({ estado: estado }).eq('id', id);
+            await registrarLogAuditoria('Revisión Pago', 'Pendientes', `Marcó abono de Bs ${monto} de ${nombre} como: ${estado}`);
+            cargarTodoElDashboard();
         }
 
         async function cargarTiposInscripcion() {
@@ -1421,156 +2332,6 @@
                 selectNew.innerHTML += `<option value="${t.id}">${label}</option>`;
                 selectEdit.innerHTML += `<option value="${t.id}">${label}</option>`;
             });
-
-            const tbody = document.getElementById('tblTiposInscripcion');
-            if (tbody) {
-                tbody.innerHTML = '';
-                tiposInscripcionGlobal.forEach(t => {
-                    let badgeVisib = t.es_visible 
-                        ? `<span class="bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded-full text-[10px]">👁️ Visible Público</span>`
-                        : `<span class="bg-gray-100 text-gray-600 font-bold px-2 py-0.5 rounded-full text-[10px]">🔒 Solo Admin</span>`;
-
-                    tbody.innerHTML += `
-            <tr>
-              <td class="p-2 font-bold text-indigo-900">${t.nombre}</td>
-              <td class="p-2 font-semibold">Bs ${t.precio}</td>
-              <td class="p-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${t.es_manual ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'}">${t.es_manual ? 'Precio Personalizado' : 'Fijo'}</span></td>
-              <td class="p-2">${badgeVisib}</td>
-              <td class="p-2 text-center flex justify-center gap-1">
-                <button onclick="editarCategoria('${t.id}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 rounded-lg border border-amber-300" title="Editar">
-                  <i class="fa-solid fa-pencil text-xs"></i>
-                </button>
-                <button onclick="solicitarSeguridad('borrarCategoria', '${t.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200" title="Eliminar">
-                  <i class="fa-solid fa-trash text-xs"></i>
-                </button>
-              </td>
-            </tr>`;
-                });
-            }
-        }
-
-        function prepararCrearCobroDirecto() {
-            document.getElementById('pagoAdminIdEdit').value = '';
-            document.getElementById('lblTituloPagoForm').innerText = 'Registrar Pago Manual a Campamentista';
-            document.getElementById('pagoAdminInscrito').value = '';
-            document.getElementById('pagoAdminMonto').value = '';
-            document.getElementById('pagoAdminObs').value = '';
-            document.getElementById('pagoAdminFile').value = '';
-            document.getElementById('formContenedorPagoDirecto').classList.remove('hidden');
-        }
-
-        function abrirModalEditarIngreso(pagoId) {
-            const pago = listaPagosGlobal.find(p => p.id === pagoId);
-            if (!pago) return;
-
-            document.getElementById('pagoAdminIdEdit').value = pago.id;
-            document.getElementById('lblTituloPagoForm').innerText = 'Editar Pago / Ingreso Registrado';
-            document.getElementById('pagoAdminInscrito').value = pago.inscrito_id || '';
-            document.getElementById('pagoAdminMonto').value = pago.monto;
-            document.getElementById('pagoAdminObs').value = pago.observaciones || '';
-            document.getElementById('formContenedorPagoDirecto').classList.remove('hidden');
-        }
-
-        function prepararCrearEgreso() {
-            document.getElementById('egIdEdit').value = '';
-            document.getElementById('egConcepto').value = '';
-            document.getElementById('egCategoria').value = 'Alimentación';
-            document.getElementById('egMonto').value = '';
-            document.getElementById('formContenedorEgreso').classList.remove('hidden');
-        }
-
-        function abrirModalEditarEgreso(id, concepto, categoria, monto) {
-            document.getElementById('egIdEdit').value = id;
-            document.getElementById('egConcepto').value = concepto;
-            document.getElementById('egCategoria').value = categoria;
-            document.getElementById('egMonto').value = monto;
-            document.getElementById('formContenedorEgreso').classList.remove('hidden');
-        }
-
-        async function registrarNuevoEgreso(e) {
-            e.preventDefault();
-            const id = document.getElementById('egIdEdit').value;
-            const concepto = document.getElementById('egConcepto').value.trim();
-            const categoria = document.getElementById('egCategoria').value;
-            const monto = parseFloat(document.getElementById('egMonto').value) || 0;
-
-            const payload = { concepto, categoria, monto, registrado_por: adminSesion?.nombre || 'Admin' };
-
-            if (id) {
-                await db.from('egresos').update(payload).eq('id', id);
-                await registrarLogAuditoria('Editar Egreso', 'Egresos', `Modificó egreso: ${concepto}`);
-            } else {
-                await db.from('egresos').insert([payload]);
-                await registrarLogAuditoria('Nuevo Egreso', 'Egresos', `Registró egreso por Bs ${monto}`);
-            }
-
-            alert('Egreso guardado correctamente.');
-            toggleFormulario('formContenedorEgreso');
-            cargarTodoElDashboard();
-        }
-
-        async function guardarAdmin(e) {
-            e.preventDefault();
-            const nombre = document.getElementById('adminNewNombre').value.trim();
-            const user = document.getElementById('adminNewUser').value.trim();
-            const pass = document.getElementById('adminNewPass').value.trim();
-            const rolId = document.getElementById('adminRolSelect').value;
-
-            const hashHex = await calcularSHA256(pass);
-
-            await db.from('administradores').insert([{ nombre, usuario: user, password_hash: hashHex, rol_id: rolId || null }]);
-            await registrarLogAuditoria('Nuevo Admin', 'Administradores', `Creó usuario admin: ${user}`);
-            alert('Administrador registrado.');
-            e.target.reset();
-            toggleFormulario('formContenedorAdmin');
-            cargarRolesYAdmins();
-        }
-
-        function prepararCrearRol() {
-            document.getElementById('rolIdEdit').value = '';
-            document.getElementById('rolNombre').value = '';
-            document.querySelectorAll('#formContenedorRol input[type="checkbox"]').forEach(c => c.checked = false);
-            document.getElementById('formContenedorRol').classList.remove('hidden');
-        }
-
-        async function guardarRol(e) {
-            e.preventDefault();
-            const id = document.getElementById('rolIdEdit').value;
-            const nombre = document.getElementById('rolNombre').value.trim();
-
-            const permisos = {
-                verFinanzas: document.getElementById('permVerFinanzas').checked,
-                solicitudes: document.getElementById('permSolicitudes').checked,
-                inscritosVer: document.getElementById('permInscritosVer').checked,
-                inscritosCrear: document.getElementById('permInscritosCrear').checked,
-                inscritosEditar: document.getElementById('permInscritosEditar').checked,
-                inscritosEliminar: document.getElementById('permInscritosEliminar').checked,
-                categorias: document.getElementById('permCategorias').checked,
-                ingresosVer: document.getElementById('permIngresosVer').checked,
-                ingresosEliminar: document.getElementById('permIngresosEliminar').checked,
-                egresosVer: document.getElementById('permEgresosVer').checked,
-                egresosCrear: document.getElementById('permEgresosCrear').checked,
-                egresosEditar: document.getElementById('permEgresosEditar').checked,
-                egresosEliminar: document.getElementById('permEgresosEliminar').checked,
-                reportesVer: document.getElementById('permReportesVer').checked,
-                reportesCrear: document.getElementById('permReportesCrear').checked,
-                usuarios: document.getElementById('permUsuarios').checked,
-                roles: document.getElementById('permRoles').checked
-            };
-
-            const payload = { nombre, permisos };
-
-            if (id) {
-                await db.from('roles').update(payload).eq('id', id);
-                await registrarLogAuditoria('Editar Rol', 'Roles', `Actualizó permisos del rol: ${nombre}`);
-            } else {
-                await db.from('roles').insert([payload]);
-                await registrarLogAuditoria('Nuevo Rol', 'Roles', `Creó rol: ${nombre}`);
-            }
-
-            alert('Rol guardado correctamente.');
-            toggleFormulario('formContenedorRol');
-            cargarRolesYAdmins();
         }
 
         function evaluarPrecioManual(tipoId, idDivTarget) {
@@ -1580,646 +2341,22 @@
             else divTarget.classList.add('hidden');
         }
 
-        async function iniciarSesionAdmin(e) {
-            e.preventDefault();
-            const user = document.getElementById('loginUser').value.trim();
-            const pass = document.getElementById('loginPass').value.trim();
+        async function cargarAuditoriaLogs() {
+            const { data: logs } = await db.from('auditoria_logs').select('*').order('created_at', { ascending: false }).limit(100);
+            const tbody = document.getElementById('tblLogsAuditoria');
+            if (!tbody) return;
 
-            const hashHex = await calcularSHA256(pass);
-
-            const { data: admin } = await db.from('administradores').select('*, roles(*)').eq('usuario', user).eq('password_hash', hashHex).maybeSingle();
-
-            if (!admin) return alert('Credenciales incorrectas');
-
-            adminSesion = admin;
-            permisosAdmin = admin.roles?.permisos || {};
-
-            document.getElementById('secLogin').classList.add('hidden');
-            document.getElementById('secDashboard').classList.remove('hidden');
-            document.getElementById('txtAdminInfo').innerText = `${admin.nombre}`;
-            document.getElementById('btnPerfilAdmin').classList.remove('hidden');
-            document.getElementById('btnCerrarSesion').classList.remove('hidden');
-
-            await cargarTiposInscripcion();
-            aplicarPermisosVisuales();
-            cargarTodoElDashboard();
-            cargarPlantillasSelect();
-            await registrarLogAuditoria('Inicio de Sesión', 'Acceso', 'El administrador ingresó al sistema.');
-        }
-
-        async function calcularSHA256(texto) {
-            const msgUint8 = new TextEncoder().encode(texto);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-            return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        function abrirModalPerfilAdmin() {
-            document.getElementById('perfilNombre').value = adminSesion.nombre;
-            document.getElementById('perfilUsuario').value = adminSesion.usuario;
-            document.getElementById('perfilNewPass').value = '';
-            document.getElementById('perfilConfirmPass').value = '';
-            document.getElementById('modalPerfilAdmin').classList.remove('hidden');
-        }
-
-        function cerrarModalPerfilAdmin() {
-            document.getElementById('modalPerfilAdmin').classList.add('hidden');
-        }
-
-        async function cambiarMiPassword(e) {
-            e.preventDefault();
-            const p1 = document.getElementById('perfilNewPass').value.trim();
-            const p2 = document.getElementById('perfilConfirmPass').value.trim();
-
-            if (p1 !== p2) return alert('Las contraseñas no coinciden.');
-            if (p1.length < 4) return alert('La contraseña debe tener al menos 4 caracteres.');
-
-            const hashHex = await calcularSHA256(p1);
-            await db.from('administradores').update({ password_hash: hashHex }).eq('id', adminSesion.id);
-            adminSesion.password_hash = hashHex;
-
-            await registrarLogAuditoria('Cambio de Contraseña', 'Perfil', 'El administrador actualizó su contraseña.');
-            alert('Contraseña actualizada correctamente.');
-            cerrarModalPerfilAdmin();
-        }
-
-        function aplicarPermisosVisuales() {
-            const esSuper = !adminSesion.rol_id || adminSesion.roles?.nombre === 'SuperAdmin';
-
-            const puedeVerFinanzas = esSuper || permisosAdmin.verFinanzas;
-            document.getElementById('contTarjetasFinanzas').style.display = puedeVerFinanzas ? 'grid' : 'none';
-
-            document.getElementById('navSolicitudes').style.display = (esSuper || permisosAdmin.solicitudes) ? 'block' : 'none';
-            document.getElementById('navInscritos').style.display = (esSuper || permisosAdmin.inscritosVer) ? 'block' : 'none';
-            document.getElementById('navCategorias').style.display = (esSuper || permisosAdmin.categorias) ? 'block' : 'none';
-            document.getElementById('navIngresos').style.display = (esSuper || permisosAdmin.ingresosVer) ? 'block' : 'none';
-            document.getElementById('navEgresos').style.display = (esSuper || permisosAdmin.egresosVer) ? 'block' : 'none';
-            document.getElementById('navReportes').style.display = (esSuper || permisosAdmin.reportesVer) ? 'block' : 'none';
-            document.getElementById('navUsuarios').style.display = (esSuper || permisosAdmin.usuarios) ? 'block' : 'none';
-            document.getElementById('navRoles').style.display = (esSuper || permisosAdmin.roles) ? 'block' : 'none';
-            document.getElementById('navAuditoria').style.display = esSuper ? 'block' : 'none';
-        }
-
-        async function cargarTodoElDashboard() {
-            const { data: inscritos } = await db.from('inscritos').select('*, tipos_inscripcion(*)');
-            listaInscritosGlobal = inscritos || [];
-
-            const { data: pagos } = await db.from('pagos').select('*, inscritos(nombre_completo)').eq('estado', 'Aprobado');
-            listaPagosGlobal = pagos || [];
-
-            const { data: egresos } = await db.from('egresos').select('*');
-
-            let cntStaff = 0;
-            let cntCampamentistas = 0;
-
-            listaInscritosGlobal.forEach(i => {
-                if (i.es_staff) cntStaff++;
-                else cntCampamentistas++;
-            });
-
-            document.getElementById('stCampamentistas').innerText = cntCampamentistas;
-            document.getElementById('stStaff').innerText = cntStaff;
-            document.getElementById('stTotalGeneral').innerText = listaInscritosGlobal.length;
-
-            let ing = 0, eg = 0;
-            listaPagosGlobal.forEach(p => ing += Number(p.monto));
-            (egresos || []).forEach(e => eg += Number(e.monto));
-
-            document.getElementById('stIngresos').innerText = `Bs ${ing}`;
-            document.getElementById('stEgresos').innerText = `Bs ${eg}`;
-            document.getElementById('stBalance').innerText = `Bs ${ing - eg}`;
-
-            const selectPagoAdmin = document.getElementById('pagoAdminInscrito');
-            if (selectPagoAdmin) {
-                selectPagoAdmin.innerHTML = '<option value="">-- Seleccionar Campamentista --</option>';
-                listaInscritosGlobal.forEach(i => {
-                    selectPagoAdmin.innerHTML += `<option value="${i.id}">${i.nombre_completo} (CI: ${i.ci})</option>`;
-                });
-            }
-
-            renderizarTablaInscritos();
-
-            const tbodyIng = document.getElementById('tblHistorialIngresos');
-            tbodyIng.innerHTML = '';
-            listaPagosGlobal.forEach(p => {
-                tbodyIng.innerHTML += `
+            tbody.innerHTML = '';
+            (logs || []).forEach(l => {
+                tbody.innerHTML += `
           <tr>
-            <td class="p-2">${new Date(p.fecha).toLocaleDateString()}</td>
-            <td class="p-2 font-semibold">${p.inscritos?.nombre_completo || 'Pago Directo'}</td>
-            <td class="p-2 font-bold text-green-600">Bs ${p.monto}</td>
-            <td class="p-2">${p.observaciones || '-'}</td>
-            <td class="p-2">${p.comprobante_url ? `<a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline font-bold">Ver Foto</a>` : 'Sin Foto'}</td>
-            <td class="p-2 text-center flex justify-center gap-1">
-              <button onclick="abrirModalEditarIngreso('${p.id}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 rounded-lg border border-amber-300" title="Editar Pago">
-                <i class="fa-solid fa-pencil text-xs"></i>
-              </button>
-              <button onclick="solicitarSeguridad('borrarIngreso', '${p.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200" title="Borrar">
-                <i class="fa-solid fa-trash text-xs"></i>
-              </button>
-            </td>
+            <td class="p-2 font-medium text-gray-500">${new Date(l.created_at).toLocaleString()}</td>
+            <td class="p-2 font-bold text-gray-800">${l.admin_nombre}</td>
+            <td class="p-2"><span class="bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded text-[10px]">${l.modulo}</span></td>
+            <td class="p-2 font-semibold text-gray-800">${l.accion}</td>
+            <td class="p-2 text-gray-500">${l.detalle || '-'}</td>
           </tr>`;
             });
-
-            const tbodyEg = document.getElementById('tblListaEgresos');
-            tbodyEg.innerHTML = '';
-            (egresos || []).forEach(e => {
-                tbodyEg.innerHTML += `
-          <tr>
-            <td class="p-2">${new Date(e.fecha).toLocaleDateString()}</td>
-            <td class="p-2 font-semibold text-gray-800">${e.concepto}</td>
-            <td class="p-2"><span class="bg-red-50 text-red-700 font-bold px-2 py-0.5 rounded text-[10px]">${e.categoria}</span></td>
-            <td class="p-2 font-bold text-red-600">Bs ${e.monto}</td>
-            <td class="p-2">${e.registrado_por || 'Admin'}</td>
-            <td class="p-2 text-center flex justify-center gap-1">
-              <button onclick="abrirModalEditarEgreso('${e.id}', '${e.concepto}', '${e.categoria}', '${e.monto}')" class="bg-amber-100 hover:bg-amber-200 text-amber-800 p-1.5 rounded-lg border border-amber-300">
-                <i class="fa-solid fa-pencil text-xs"></i>
-              </button>
-              <button onclick="solicitarSeguridad('borrarEgreso', '${e.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200">
-                <i class="fa-solid fa-trash text-xs"></i>
-              </button>
-            </td>
-          </tr>`;
-            });
-
-            cargarPendientes();
-            cargarRolesYAdmins();
-            cargarAuditoriaLogs();
-        }
-
-        function renderizarTablaInscritos() {
-            const showTel = document.getElementById('col_tel').checked;
-            const showCelula = document.getElementById('col_celula').checked;
-            const showTalla = document.getElementById('col_talla').checked;
-            const showActividad = document.getElementById('col_actividad').checked;
-            const showAlergias = document.getElementById('col_alergias').checked;
-            const showTutor = document.getElementById('col_tutor').checked;
-
-            const campoOrden = document.getElementById('selOrdenInscritos').value;
-
-            let listaOrdenada = [...listaInscritosGlobal].sort((a, b) => {
-                let valA = a[campoOrden] || '';
-                let valB = b[campoOrden] || '';
-                if (campoOrden === 'tipo_inscripcion') {
-                    valA = a.tipos_inscripcion?.nombre || '';
-                    valB = b.tipos_inscripcion?.nombre || '';
-                }
-                return valA.toString().localeCompare(valB.toString());
-            });
-
-            const thead = document.getElementById('theadInscritos');
-            thead.innerHTML = `
-            <tr>
-                <th class="p-2">C.I.</th>
-                <th class="p-2">Nombre Completo</th>
-                <th class="p-2">Tipo / Rol</th>
-                <th class="p-2">Inscripción</th>
-                <th class="p-2">Equipo</th>
-                ${showTel ? '<th class="p-2">Teléfono</th>' : ''}
-                ${showCelula ? '<th class="p-2">Célula</th>' : ''}
-                ${showTalla ? '<th class="p-2">Talla</th>' : ''}
-                ${showActividad ? '<th class="p-2">Actividad</th>' : ''}
-                ${showAlergias ? '<th class="p-2">Alergias</th>' : ''}
-                ${showTutor ? '<th class="p-2">Tutor</th>' : ''}
-                <th class="p-2">Carta</th>
-                <th class="p-2 text-center">Acciones</th>
-            </tr>`;
-
-            const tbodyIns = document.getElementById('tblTodosInscritos');
-            tbodyIns.innerHTML = '';
-
-            listaOrdenada.forEach(i => {
-                let estadoCarta = i.estado_carta || (i.carta_compromiso_url ? 'En Revisión' : 'Pendiente');
-                let colorBadge = estadoCarta === 'Aprobada' ? 'bg-green-100 text-green-700' : (estadoCarta === 'En Revisión' ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700');
-
-                let badgeRol = i.es_staff 
-                    ? `<span class="bg-purple-100 text-purple-800 font-extrabold px-2 py-0.5 rounded-full border border-purple-300">⭐ STAFF</span>` 
-                    : `<span class="bg-gray-100 text-gray-700 font-semibold px-2 py-0.5 rounded-full">Campamentista</span>`;
-
-                tbodyIns.innerHTML += `
-          <tr>
-            <td class="p-2 font-bold">${i.ci}</td>
-            <td class="p-2 font-semibold text-gray-800">${i.nombre_completo}</td>
-            <td class="p-2">${badgeRol}</td>
-            <td class="p-2 font-bold text-indigo-900">${i.tipos_inscripcion?.nombre || 'Estándar'}</td>
-            <td class="p-2 font-bold text-indigo-700">${i.equipo || 'Sin Asignar'}</td>
-            ${showTel ? `<td class="p-2">${i.telefono || '-'}</td>` : ''}
-            ${showCelula ? `<td class="p-2">${i.celula || '-'}</td>` : ''}
-            ${showTalla ? `<td class="p-2 font-bold">${i.talla_polera || '-'}</td>` : ''}
-            ${showActividad ? `<td class="p-2">${i.actividad_favorita || '-'}</td>` : ''}
-            ${showAlergias ? `<td class="p-2 text-red-600 font-semibold">${i.alergias_medicina || '-'}</td>` : ''}
-            ${showTutor ? `<td class="p-2">${i.tutor_nombre ? `${i.tutor_nombre} (${i.tutor_telefono || ''})` : '-'}</td>` : ''}
-            <td class="p-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${colorBadge}">${estadoCarta}</span></td>
-            <td class="p-2 text-center">
-              <button onclick="abrirModalEditarCampamentista('${i.id}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 rounded-lg border border-amber-300 transition" title="Editar">
-                <i class="fa-solid fa-pencil text-xs"></i>
-              </button>
-            </td>
-          </tr>`;
-            });
-        }
-
-        function guardarPlantillaReporte() {
-            const nombre = document.getElementById('txtNombrePlantilla').value.trim();
-            if (!nombre) return alert('Ingresa un nombre para identificar la plantilla.');
-
-            const config = {
-                variable: document.getElementById('repVariableSelect').value,
-                grafico: document.getElementById('repGraficoTipo').value,
-                colPersonas: document.getElementById('repColPersonas').checked,
-                colPorcentaje: document.getElementById('repColPorcentaje').checked,
-                colMonto: document.getElementById('repColMonto').checked,
-                colPromedio: document.getElementById('repColPromedio').checked,
-                colSaldo: document.getElementById('repColSaldo').checked
-            };
-
-            let plantillas = JSON.parse(localStorage.getItem('jc2027_plantillas_reportes') || '{}');
-            plantillas[nombre] = config;
-            localStorage.setItem('jc2027_plantillas_reportes', JSON.stringify(plantillas));
-
-            alert(`Plantilla "${nombre}" guardada con éxito.`);
-            document.getElementById('txtNombrePlantilla').value = '';
-            cargarPlantillasSelect();
-        }
-
-        function cargarPlantillasSelect() {
-            const select = document.getElementById('selReportePlantillas');
-            if (!select) return;
-
-            const plantillas = JSON.parse(localStorage.getItem('jc2027_plantillas_reportes') || '{}');
-            select.innerHTML = '<option value="">-- Cargar Plantilla --</option>';
-
-            Object.keys(plantillas).forEach(p => {
-                select.innerHTML += `<option value="${p}">${p}</option>`;
-            });
-        }
-
-        function cargarPlantillaReporte(nombre) {
-            if (!nombre) return;
-            const plantillas = JSON.parse(localStorage.getItem('jc2027_plantillas_reportes') || '{}');
-            const c = plantillas[nombre];
-            if (!c) return;
-
-            document.getElementById('repVariableSelect').value = c.variable;
-            document.getElementById('repGraficoTipo').value = c.grafico;
-            document.getElementById('repColPersonas').checked = c.colPersonas;
-            document.getElementById('repColPorcentaje').checked = c.colPorcentaje;
-            document.getElementById('repColMonto').checked = c.colMonto;
-            document.getElementById('repColPromedio').checked = c.colPromedio;
-            document.getElementById('repColSaldo').checked = c.colSaldo;
-
-            generarReporteGrafico();
-        }
-
-        async function generarReporteGrafico() {
-            const variable = document.getElementById('repVariableSelect').value;
-            const tipoGrafico = document.getElementById('repGraficoTipo').value;
-
-            const showPersons = document.getElementById('repColPersonas').checked;
-            const showPorcent = document.getElementById('repColPorcentaje').checked;
-            const showMonto = document.getElementById('repColMonto').checked;
-            const showPromedio = document.getElementById('repColPromedio').checked;
-            const showSaldo = document.getElementById('repColSaldo').checked;
-
-            const { data: inscritos } = await db.from('inscritos').select('*, tipos_inscripcion(*)');
-            const { data: pagos } = await db.from('pagos').select('*').eq('estado', 'Aprobado');
-
-            const divTabla = document.getElementById('contenedorTablaEstadisticas');
-
-            if (variable === 'lista_personas_saldos') {
-                let listaSaldos = [];
-                let totalCostoGlobal = 0;
-                let totalAbonadoGlobal = 0;
-                let totalSaldoGlobal = 0;
-
-                (inscritos || []).forEach(i => {
-                    let costo = i.tipos_inscripcion?.es_manual ? (i.precio_personalizado || 0) : (i.tipos_inscripcion?.precio || 140);
-                    let misPagos = pagos ? pagos.filter(p => p.inscrito_id === i.id) : [];
-                    let abonado = misPagos.reduce((sum, p) => sum + Number(p.monto), 0);
-                    let saldo = Math.max(0, costo - abonado);
-
-                    totalCostoGlobal += costo;
-                    totalAbonadoGlobal += abonado;
-                    totalSaldoGlobal += saldo;
-
-                    listaSaldos.push({ nombre: i.nombre_completo, ci: i.ci, costo, abonado, saldo });
-                });
-
-                listaSaldos.sort((a, b) => b.saldo - a.saldo);
-
-                let html = `
-                <div class="mb-3 p-3 bg-indigo-50 rounded-xl border border-indigo-200">
-                    <p class="text-[10px] uppercase font-bold text-indigo-700 mb-1">Totales de Estado Financiero por Persona</p>
-                    <div class="grid grid-cols-3 gap-2 text-center">
-                        <div class="bg-white p-2 rounded-lg shadow-sm border">
-                            <span class="block text-[10px] text-gray-400 font-semibold uppercase">Costo Total</span>
-                            <span class="text-sm font-black text-indigo-900">Bs ${totalCostoGlobal}</span>
-                        </div>
-                        <div class="bg-white p-2 rounded-lg shadow-sm border">
-                            <span class="block text-[10px] text-gray-400 font-semibold uppercase">Total Cobrado</span>
-                            <span class="text-sm font-black text-green-600">Bs ${totalAbonadoGlobal}</span>
-                        </div>
-                        <div class="bg-white p-2 rounded-lg shadow-sm border">
-                            <span class="block text-[10px] text-gray-400 font-semibold uppercase">Saldo Pendiente</span>
-                            <span class="text-sm font-black text-red-600">Bs ${totalSaldoGlobal}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <table class="w-full text-left border-collapse my-2">
-                    <thead class="bg-gray-200 font-bold">
-                        <tr>
-                            <th class="p-2 border">C.I.</th>
-                            <th class="p-2 border">Nombre Completo</th>
-                            <th class="p-2 border">Costo (Bs)</th>
-                            <th class="p-2 border">Abonado (Bs)</th>
-                            <th class="p-2 border">Saldo Deuda (Bs)</th>
-                        </tr>
-                    </thead>
-                    <tbody>`;
-
-                listaSaldos.forEach(item => {
-                    let colorSaldo = item.saldo > 0 ? 'text-red-600 font-bold' : 'text-green-600 font-semibold';
-                    html += `<tr>
-                        <td class="p-2 border text-gray-600">${item.ci}</td>
-                        <td class="p-2 border font-bold text-gray-800">${item.nombre}</td>
-                        <td class="p-2 border font-semibold">Bs ${item.costo}</td>
-                        <td class="p-2 border text-green-600 font-bold">Bs ${item.abonado}</td>
-                        <td class="p-2 border ${colorSaldo}">Bs ${item.saldo}</td>
-                    </tr>`;
-                });
-                html += `</tbody></table>`;
-                divTabla.innerHTML = html;
-
-                const ctx = document.getElementById('canvasGraficoReporte').getContext('2d');
-                if (instanciaGrafico) instanciaGrafico.destroy();
-
-                let alDia = listaSaldos.filter(x => x.saldo === 0).length;
-                let pendientes = listaSaldos.filter(x => x.saldo > 0).length;
-
-                instanciaGrafico = new Chart(ctx, {
-                    type: tipoGrafico,
-                    data: {
-                        labels: ['Al Día (Sin Deuda)', 'Con Saldo Pendiente'],
-                        datasets: [{ data: [alDia, pendientes], backgroundColor: ['#10b981', '#ef4444'] }]
-                    },
-                    options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-                });
-
-                return;
-            }
-
-            let conteo = {};
-            let montos = {};
-            let saldos = {};
-
-            (inscritos || []).forEach(i => {
-                let key = '-';
-                if (variable === 'tipo_inscripcion') key = i.tipos_inscripcion?.nombre || 'Estándar';
-                else if (variable === 'es_staff') key = i.es_staff ? 'STAFF' : 'Campamentista';
-                else if (variable === 'es_menor') key = i.es_menor ? 'Menor de Edad' : 'Mayor de Edad';
-                else if (variable === 'estado_financiero') {
-                    let costo = i.tipos_inscripcion?.es_manual ? (i.precio_personalizado || 0) : (i.tipos_inscripcion?.precio || 140);
-                    let misPagos = pagos ? pagos.filter(p => p.inscrito_id === i.id) : [];
-                    let totalAbonado = misPagos.reduce((sum, p) => sum + Number(p.monto), 0);
-
-                    if (totalAbonado >= costo) key = 'Totalmente Pagado';
-                    else if (totalAbonado > 0) key = 'Abono Parcial';
-                    else key = 'Sin Abonos (Pendiente)';
-                } else key = i[variable] || 'Sin Especificar';
-
-                if (!conteo[key]) {
-                    conteo[key] = 0;
-                    montos[key] = 0;
-                    saldos[key] = 0;
-                }
-
-                conteo[key]++;
-
-                let costoIndividual = i.tipos_inscripcion?.es_manual ? (i.precio_personalizado || 0) : (i.tipos_inscripcion?.precio || 140);
-                let misPagos = pagos ? pagos.filter(p => p.inscrito_id === i.id) : [];
-                let abonado = misPagos.reduce((sum, p) => sum + Number(p.monto), 0);
-
-                montos[key] += abonado;
-                saldos[key] += Math.max(0, costoIndividual - abonado);
-            });
-
-            let labels = Object.keys(conteo);
-            let totalPersonasGlobal = 0, totalMontoGlobal = 0, totalSaldoGlobal = 0;
-
-            labels.forEach(k => {
-                totalPersonasGlobal += conteo[k];
-                totalMontoGlobal += montos[k];
-                totalSaldoGlobal += saldos[k];
-            });
-
-            let promedioGlobal = totalPersonasGlobal > 0 ? (totalMontoGlobal / totalPersonasGlobal).toFixed(2) : 0;
-
-            let html = `
-            <div class="mb-3 p-3 bg-indigo-50 rounded-xl border border-indigo-200">
-                <p class="text-[10px] uppercase font-bold text-indigo-700 mb-1">Totales Globales de la Categoría</p>
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
-                    <div class="bg-white p-2 rounded-lg shadow-sm border">
-                        <span class="block text-[10px] text-gray-400 font-semibold uppercase">Total Personas</span>
-                        <span class="text-sm font-black text-indigo-900">${totalPersonasGlobal}</span>
-                    </div>
-                    <div class="bg-white p-2 rounded-lg shadow-sm border">
-                        <span class="block text-[10px] text-gray-400 font-semibold uppercase">Total Cobrado</span>
-                        <span class="text-sm font-black text-green-600">Bs ${totalMontoGlobal}</span>
-                    </div>
-                    <div class="bg-white p-2 rounded-lg shadow-sm border">
-                        <span class="block text-[10px] text-gray-400 font-semibold uppercase">Total Deuda / Saldo</span>
-                        <span class="text-sm font-black text-red-600">Bs ${totalSaldoGlobal}</span>
-                    </div>
-                    <div class="bg-white p-2 rounded-lg shadow-sm border">
-                        <span class="block text-[10px] text-gray-400 font-semibold uppercase">Promedio / Persona</span>
-                        <span class="text-sm font-black text-blue-600">Bs ${promedioGlobal}</span>
-                    </div>
-                </div>
-            </div>
-
-            <table class="w-full text-left border-collapse my-2">
-                <thead class="bg-gray-200 font-bold">
-                    <tr>
-                        <th class="p-2 border">${variable.replace('_', ' ').toUpperCase()}</th>
-                        ${showPersons ? '<th class="p-2 border">Personas</th>' : ''}
-                        ${showPorcent ? '<th class="p-2 border">% Total</th>' : ''}
-                        ${showMonto ? '<th class="p-2 border">Abonado Bs</th>' : ''}
-                        ${showPromedio ? '<th class="p-2 border">Promedio Bs</th>' : ''}
-                        ${showSaldo ? '<th class="p-2 border">Saldo Deuda</th>' : ''}
-                    </tr>
-                </thead>
-                <tbody>`;
-
-            labels.forEach(k => {
-                let pct = totalPersonasGlobal > 0 ? ((conteo[k] / totalPersonasGlobal) * 100).toFixed(1) : 0;
-                let prom = conteo[k] > 0 ? (montos[k] / conteo[k]).toFixed(2) : 0;
-
-                html += `<tr>
-                    <td class="p-2 border font-bold text-gray-800">${k}</td>
-                    ${showPersons ? `<td class="p-2 border font-semibold">${conteo[k]}</td>` : ''}
-                    ${showPorcent ? `<td class="p-2 border font-semibold text-indigo-700">${pct}%</td>` : ''}
-                    ${showMonto ? `<td class="p-2 border font-bold text-green-600">Bs ${montos[k]}</td>` : ''}
-                    ${showPromedio ? `<td class="p-2 border">Bs ${prom}</td>` : ''}
-                    ${showSaldo ? `<td class="p-2 border font-bold text-red-600">Bs ${saldos[k]}</td>` : ''}
-                </tr>`;
-            });
-            html += `</tbody></table>`;
-            divTabla.innerHTML = html;
-
-            const ctx = document.getElementById('canvasGraficoReporte').getContext('2d');
-            if (instanciaGrafico) instanciaGrafico.destroy();
-
-            const colores = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#6366f1', '#14b8a6', '#f97316'];
-
-            instanciaGrafico = new Chart(ctx, {
-                type: tipoGrafico,
-                data: {
-                    labels: labels,
-                    datasets: [{ label: 'Personas', data: labels.map(k => conteo[k]), backgroundColor: colores }]
-                },
-                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-            });
-        }
-
-        async function abrirModalEditarCampamentista(id) {
-            const { data: i } = await db.from('inscritos').select('*').eq('id', id).single();
-            if (!i) return;
-
-            document.getElementById('editInsId').value = i.id;
-            document.getElementById('editInsCi').value = i.ci;
-            document.getElementById('editInsNombre').value = i.nombre_completo;
-            document.getElementById('editInsTel').value = i.telefono || '';
-            document.getElementById('editInsCelula').value = i.celula || '';
-            document.getElementById('editInsEquipo').value = i.equipo || 'Sin Asignar';
-            document.getElementById('editInsTalla').value = i.talla_polera || 'M';
-            document.getElementById('editInsTipoInscripcion').value = i.tipo_inscripcion_id || '';
-            document.getElementById('editInsPrecioManual').value = i.precio_personalizado || '';
-            document.getElementById('editInsEsStaff').checked = !!i.es_staff;
-            document.getElementById('editInsActividad').value = i.actividad_favorita || 'Fútbol';
-            document.getElementById('editInsHabilidad').value = i.habilidad_especial || '';
-            document.getElementById('editInsEstadoCarta').value = i.estado_carta || 'Pendiente';
-            document.getElementById('editInsEmergencia').value = i.contacto_emergencia || '';
-            document.getElementById('editInsAlergias').value = i.alergias_medicina || '';
-            document.getElementById('editInsTutorNom').value = i.tutor_nombre || '';
-            document.getElementById('editInsTutorTel').value = i.tutor_telefono || '';
-
-            evaluarPrecioManual(i.tipo_inscripcion_id, 'editDivPrecioManual');
-            cambiarPestanaModal('gen');
-            document.getElementById('modalEditCampamentista').classList.remove('hidden');
-        }
-
-        function cerrarModalCampamentista() {
-            document.getElementById('modalEditCampamentista').classList.add('hidden');
-        }
-
-        function confirmarYGuardarInscrito(e) {
-            e.preventDefault();
-            solicitarSeguridad('guardarEdicionCompletaInscrito');
-        }
-
-        function solicitarSeguridad(tipoAccion, idParam = null) {
-            accionPendienteProtegida = { tipo: tipoAccion, id: idParam };
-            document.getElementById('inputPassConfirm').value = '';
-            document.getElementById('modalConfirmPass').classList.remove('hidden');
-        }
-
-        function cancelarVerificacionSeguridad() {
-            accionPendienteProtegida = null;
-            document.getElementById('modalConfirmPass').classList.add('hidden');
-        }
-
-        async function ejecutarAcciónProtegida() {
-            const passIngresada = document.getElementById('inputPassConfirm').value.trim();
-            const hashIngresado = await calcularSHA256(passIngresada);
-
-            if (hashIngresado !== adminSesion.password_hash) return alert('Contraseña incorrecta.');
-
-            document.getElementById('modalConfirmPass').classList.add('hidden');
-
-            if (accionPendienteProtegida.tipo === 'guardarEdicionCompletaInscrito') {
-                const id = document.getElementById('editInsId').value;
-                const nom = document.getElementById('editInsNombre').value;
-                await db.from('inscritos').update({
-                    ci: document.getElementById('editInsCi').value,
-                    nombre_completo: nom,
-                    telefono: document.getElementById('editInsTel').value,
-                    celula: document.getElementById('editInsCelula').value,
-                    equipo: document.getElementById('editInsEquipo').value,
-                    talla_polera: document.getElementById('editInsTalla').value,
-                    tipo_inscripcion_id: document.getElementById('editInsTipoInscripcion').value,
-                    precio_personalizado: document.getElementById('editInsPrecioManual').value || null,
-                    es_staff: document.getElementById('editInsEsStaff').checked,
-                    actividad_favorita: document.getElementById('editInsActividad').value,
-                    habilidad_especial: document.getElementById('editInsHabilidad').value,
-                    estado_carta: document.getElementById('editInsEstadoCarta').value,
-                    contacto_emergencia: document.getElementById('editInsEmergencia').value,
-                    alergias_medicina: document.getElementById('editInsAlergias').value,
-                    tutor_nombre: document.getElementById('editInsTutorNom').value,
-                    tutor_telefono: document.getElementById('editInsTutorTel').value
-                }).eq('id', id);
-
-                await registrarLogAuditoria('Edición Completa', 'Inscritos', `Actualizó datos personales de: ${nom}`);
-                cerrarModalCampamentista();
-                alert('Campamentista / Staff actualizado con éxito.');
-            } else if (accionPendienteProtegida.tipo === 'borrarCampamentista') {
-                await db.from('inscritos').delete().eq('id', accionPendienteProtegida.id);
-                await registrarLogAuditoria('Eliminación', 'Inscritos', `Eliminó el registro ID: ${accionPendienteProtegida.id}`);
-                cerrarModalCampamentista();
-                alert('Registro eliminado.');
-            } else if (accionPendienteProtegida.tipo === 'borrarIngreso') {
-                await db.from('pagos').delete().eq('id', accionPendienteProtegida.id);
-                await registrarLogAuditoria('Borrar Ingreso', 'Ingresos', `Eliminó pago ID: ${accionPendienteProtegida.id}`);
-                alert('Ingreso eliminado.');
-            } else if (accionPendienteProtegida.tipo === 'borrarEgreso') {
-                await db.from('egresos').delete().eq('id', accionPendienteProtegida.id);
-                await registrarLogAuditoria('Borrar Egreso', 'Egresos', `Eliminó egreso ID: ${accionPendienteProtegida.id}`);
-                alert('Egreso eliminado.');
-            } else if (accionPendienteProtegida.tipo === 'borrarAdmin') {
-                await db.from('administradores').delete().eq('id', accionPendienteProtegida.id);
-                await registrarLogAuditoria('Eliminar Admin', 'Administradores', `Eliminó admin ID: ${accionPendienteProtegida.id}`);
-                alert('Administrador eliminado.');
-            } else if (accionPendienteProtegida.tipo === 'borrarRol') {
-                await db.from('roles').delete().eq('id', accionPendienteProtegida.id);
-                await registrarLogAuditoria('Eliminar Rol', 'Roles', `Eliminó rol ID: ${accionPendienteProtegida.id}`);
-                alert('Rol eliminado.');
-            } else if (accionPendienteProtegida.tipo === 'borrarCategoria') {
-                await db.from('tipos_inscripcion').delete().eq('id', accionPendienteProtegida.id);
-                await registrarLogAuditoria('Eliminar Tipo Inscripción', 'Categorías', `Eliminó tipo ID: ${accionPendienteProtegida.id}`);
-                alert('Categoría eliminada.');
-                cargarTiposInscripcion();
-            }
-
-            accionPendienteProtegida = null;
-            cargarTodoElDashboard();
-        }
-
-        async function crearNuevoCampamentista(e) {
-            e.preventDefault();
-            const nom = document.getElementById('newNombre').value.trim();
-            await db.from('inscritos').insert([{
-                ci: document.getElementById('newCi').value.trim(),
-                nombre_completo: nom,
-                telefono: document.getElementById('newTel').value.trim(),
-                celula: document.getElementById('newCelula').value.trim(),
-                equipo: document.getElementById('newEquipo').value,
-                talla_polera: document.getElementById('newTalla').value,
-                tipo_inscripcion_id: document.getElementById('newTipoInscripcion').value,
-                precio_personalizado: document.getElementById('newPrecioManual').value || null,
-                es_staff: document.getElementById('newEsStaff').checked,
-                actividad_favorita: document.getElementById('newActividad').value,
-                habilidad_especial: document.getElementById('newHabilidad').value.trim(),
-                es_menor: document.getElementById('newEsMenor').checked,
-                tutor_nombre: document.getElementById('newTutorNombre').value.trim(),
-                tutor_telefono: document.getElementById('newTutorTel').value.trim(),
-                contacto_emergencia: document.getElementById('newEmergencia').value.trim(),
-                alergias_medicina: document.getElementById('newAlergias').value.trim(),
-                estado_carta: 'Pendiente'
-            }]);
-
-            await registrarLogAuditoria('Nuevo Registro', 'Inscritos', `Inscribió a: ${nom}`);
-            alert('Registro guardado exitosamente.');
-            e.target.reset();
-            toggleFormulario('formContenedorCampamentista');
-            cargarTodoElDashboard();
         }
 
         async function cargarRolesYAdmins() {
@@ -2231,89 +2368,6 @@
                 selectRol.innerHTML = '';
                 listaRolesGlobal.forEach(r => selectRol.innerHTML += `<option value="${r.id}">${r.nombre}</option>`);
             }
-
-            const { data: admins } = await db.from('administradores').select('*, roles(*)');
-            const tbodyA = document.getElementById('tblListaAdmins');
-            if (tbodyA) {
-                tbodyA.innerHTML = '';
-                (admins || []).forEach(a => {
-                    tbodyA.innerHTML += `
-              <tr>
-                <td class="p-2 font-semibold">${a.nombre}</td>
-                <td class="p-2">${a.usuario}</td>
-                <td class="p-2 font-bold text-indigo-700">${a.roles?.nombre || 'SuperAdmin'}</td>
-                <td class="p-2 text-center flex justify-center gap-1">
-                  <button onclick="solicitarSeguridad('borrarAdmin', '${a.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200">
-                    <i class="fa-solid fa-trash text-xs"></i>
-                  </button>
-                </td>
-              </tr>`;
-                });
-            }
-
-            const tbodyR = document.getElementById('tblListaRolesExistentes');
-            if (tbodyR) {
-                tbodyR.innerHTML = '';
-                (roles || []).forEach(r => {
-                    let permisosTxt = Object.keys(r.permisos || {}).filter(k => r.permisos[k]).join(', ');
-                    const permisosEncoded = encodeURIComponent(JSON.stringify(r.permisos || {}));
-
-                    tbodyR.innerHTML += `
-              <tr>
-                <td class="p-2 font-bold text-indigo-900">${r.nombre}</td>
-                <td class="p-2 text-[10px] text-gray-500">${permisosTxt || 'Sin permisos'}</td>
-                <td class="p-2 text-center flex justify-center gap-1">
-                  <button onclick="cargarRolParaEditar('${r.id}', '${r.nombre}', '${permisosEncoded}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 rounded-lg border border-amber-300">
-                    <i class="fa-solid fa-pencil text-xs"></i>
-                  </button>
-                  <button onclick="solicitarSeguridad('borrarRol', '${r.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200">
-                    <i class="fa-solid fa-trash text-xs"></i>
-                  </button>
-                </td>
-              </tr>`;
-                });
-            }
-        }
-
-        function cargarRolParaEditar(id, nombre, permisosEncoded) {
-            document.getElementById('rolIdEdit').value = id;
-            document.getElementById('rolNombre').value = nombre;
-
-            let permisos = {};
-            try { permisos = JSON.parse(decodeURIComponent(permisosEncoded)); } catch (e) {}
-
-            document.getElementById('permVerFinanzas').checked = !!permisos.verFinanzas;
-            document.getElementById('permSolicitudes').checked = !!permisos.solicitudes;
-            document.getElementById('permInscritosVer').checked = !!permisos.inscritosVer;
-            document.getElementById('permInscritosCrear').checked = !!permisos.inscritosCrear;
-            document.getElementById('permInscritosEditar').checked = !!permisos.inscritosEditar;
-            document.getElementById('permInscritosEliminar').checked = !!permisos.inscritosEliminar;
-            document.getElementById('permCategorias').checked = !!permisos.categorias;
-            document.getElementById('permIngresosVer').checked = !!permisos.ingresosVer;
-            document.getElementById('permIngresosEliminar').checked = !!permisos.ingresosEliminar;
-            document.getElementById('permEgresosVer').checked = !!permisos.egresosVer;
-            document.getElementById('permEgresosCrear').checked = !!permisos.egresosCrear;
-            document.getElementById('permEgresosEditar').checked = !!permisos.egresosEditar;
-            document.getElementById('permEgresosEliminar').checked = !!permisos.egresosEliminar;
-            document.getElementById('permReportesVer').checked = !!permisos.reportesVer;
-            document.getElementById('permReportesCrear').checked = !!permisos.reportesCrear;
-            document.getElementById('permUsuarios').checked = !!permisos.usuarios;
-            document.getElementById('permRoles').checked = !!permisos.roles;
-
-            document.getElementById('formContenedorRol').classList.remove('hidden');
-        }
-
-        async function procesarCarta(id, nuevoEstado, nombre) {
-            await db.from('inscritos').update({ estado_carta: nuevoEstado }).eq('id', id);
-            await registrarLogAuditoria('Revisión Carta', 'Pendientes', `Marcó la carta de ${nombre} como: ${nuevoEstado}`);
-            alert(`Carta marcada como: ${nuevoEstado}`);
-            cargarTodoElDashboard();
-        }
-
-        async function procesarPago(id, estado, nombre, monto) {
-            await db.from('pagos').update({ estado: estado }).eq('id', id);
-            await registrarLogAuditoria('Revisión Pago', 'Pendientes', `Marcó abono de Bs ${monto} de ${nombre} como: ${estado}`);
-            cargarTodoElDashboard();
         }
 
         function cerrarSesion() { location.reload(); }
