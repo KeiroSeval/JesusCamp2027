@@ -1,451 +1,511 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jesus Camp 2027 - Administrador Avanzado</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jesus Camp 2027 - Panel de Control Admin</title>
 
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0f172a">
-    <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛺</text></svg>">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛺</text></svg>">
 
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-
 <body class="bg-slate-100 min-h-screen text-gray-800 font-sans">
 
-    <!-- NAVBAR -->
-    <nav class="bg-gray-900 text-white p-4 shadow-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <span class="font-bold text-lg tracking-wide flex items-center gap-2">
-                <i class="fa-solid fa-shield-halved text-amber-400"></i> TESORERÍA & ADMIN JC2027
-            </span>
-            <div class="flex items-center gap-3">
-                <span id="txtAdminInfo"
-                    class="hidden text-xs text-amber-400 font-bold bg-gray-800 px-3 py-1 rounded-full border border-gray-700"></span>
-                <button id="btnCerrarSesion" onclick="cerrarSesion()"
-                    class="hidden text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg transition">
-                    <i class="fa-solid fa-right-from-bracket"></i> Salir
-                </button>
-                <a href="index.html"
-                    class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg border border-gray-700 transition">
-                    Portal Público
-                </a>
-            </div>
-        </div>
-    </nav>
+  <!-- NAVBAR -->
+  <nav class="bg-gray-900 text-white p-4 shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <span class="font-bold text-lg tracking-wide flex items-center gap-2">
+        <i class="fa-solid fa-shield-halved text-amber-400"></i> TESORERÍA & ADMIN JC2027
+      </span>
+      <div class="flex items-center gap-3">
+        <span id="txtAdminInfo" class="hidden text-xs text-amber-400 font-bold bg-gray-800 px-3 py-1 rounded-full border border-gray-700"></span>
+        <button id="btnCerrarSesion" onclick="cerrarSesion()" class="hidden text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg transition">
+          <i class="fa-solid fa-right-from-bracket"></i> Salir
+        </button>
+        <a href="index.html" class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg border border-gray-700 transition">
+          Portal Público
+        </a>
+      </div>
+    </div>
+  </nav>
 
-    <!-- PANTALLA DE LOGIN -->
-    <section id="secLogin" class="max-w-md mx-auto mt-16 p-6 bg-white rounded-2xl shadow-xl border border-gray-200">
-        <div class="text-center mb-6">
-            <div
-                class="w-16 h-16 bg-gray-900 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl shadow-lg">
-                <i class="fa-solid fa-lock"></i>
-            </div>
-            <h2 class="text-xl font-bold text-gray-900">Acceso Administrativo</h2>
-            <p class="text-xs text-gray-500">Ingresa tus credenciales autorizadas</p>
-        </div>
-
-        <form onsubmit="iniciarSesionAdmin(event)" class="space-y-4">
-            <div>
-                <label class="text-xs font-bold text-gray-600">Usuario</label>
-                <input type="text" id="loginUser" required placeholder="admin"
-                    class="w-full mt-1 p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-gray-900 outline-none">
-            </div>
-            <div>
-                <label class="text-xs font-bold text-gray-600">Contraseña</label>
-                <input type="password" id="loginPass" required placeholder="••••••••"
-                    class="w-full mt-1 p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-gray-900 outline-none">
-            </div>
-            <button type="submit"
-                class="w-full bg-gray-900 hover:bg-gray-800 text-amber-400 font-bold py-3 rounded-xl shadow-lg transition text-sm">
-                Iniciar Sesión
-            </button>
-            <p id="msgLoginError" class="text-red-500 text-xs text-center hidden font-semibold"></p>
-        </form>
-    </section>
-
-    <!-- DASHBOARD PRINCIPAL -->
-    <div id="secDashboard" class="hidden max-w-7xl mx-auto p-4 space-y-6">
-
-        <!-- METRICAS DE FINANZAS -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-blue-600">
-                <p class="text-xs font-bold text-gray-400 uppercase">Total Inscritos</p>
-                <h3 class="text-3xl font-black text-gray-900 mt-1" id="stInscritos">0</h3>
-            </div>
-            <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-green-600">
-                <p class="text-xs font-bold text-gray-400 uppercase">Total Ingresos</p>
-                <h3 class="text-3xl font-black text-green-600 mt-1" id="stIngresos">Bs 0</h3>
-            </div>
-            <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-red-600">
-                <p class="text-xs font-bold text-gray-400 uppercase">Total Egresos</p>
-                <h3 class="text-3xl font-black text-red-600 mt-1" id="stEgresos">Bs 0</h3>
-            </div>
-            <div
-                class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-amber-500 bg-amber-50/30">
-                <p class="text-xs font-bold text-amber-800 uppercase">Balance Neto</p>
-                <h3 class="text-3xl font-black text-amber-600 mt-1" id="stBalance">Bs 0</h3>
-            </div>
-        </div>
-
-        <!-- PESTAÑAS DE NAVEGACIÓN DINÁMICAS SEGUNDO PERMISOS -->
-        <div class="flex flex-wrap gap-2 border-b border-gray-200 pb-2">
-            <button id="navSolicitudes" onclick="cambiarPestana('solicitudes')"
-                class="tab-btn active bg-gray-900 text-white text-xs font-bold px-4 py-2 rounded-xl transition">
-                <i class="fa-solid fa-clock-rotate-left mr-1"></i> Pendientes
-            </button>
-            <button id="navInscritos" onclick="cambiarPestana('inscritos')"
-                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-users mr-1"></i> Lista de Inscritos
-            </button>
-            <button id="navIngresos" onclick="cambiarPestana('ingresos')"
-                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-file-invoice-dollar mr-1"></i> Ingresos
-            </button>
-            <button id="navEgresos" onclick="cambiarPestana('egresos')"
-                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-arrow-down-short-wide mr-1"></i> Egresos
-            </button>
-            <button id="navUsuarios" onclick="cambiarPestana('usuarios')"
-                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-user-shield mr-1"></i> Administradores
-            </button>
-            <button id="navRoles" onclick="cambiarPestana('roles')"
-                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-key mr-1"></i> Permisos y Roles
-            </button>
-        </div>
-
-        <!-- PESTAÑA 1: PENDIENTES -->
-        <div id="tabSolicitudes" class="tab-content grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-receipt text-amber-500"></i> Comprobantes Pendientes
-                </h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-gray-600">
-                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                            <tr>
-                                <th class="p-2">Inscrito</th>
-                                <th class="p-2">Monto</th>
-                                <th class="p-2">Recibo</th>
-                                <th class="p-2">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tblPagosPendientes" class="divide-y divide-gray-100"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-user-pen text-blue-500"></i> Cambios Pendientes
-                </h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-gray-600">
-                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                            <tr>
-                                <th class="p-2">Inscrito</th>
-                                <th class="p-2">Nuevos Datos</th>
-                                <th class="p-2">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tblEdicionesPendientes" class="divide-y divide-gray-100"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- PESTAÑA 2: INSCRITOS CON EDICIÓN EN LÍNEA -->
-        <div id="tabInscritos" class="tab-content hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4">Directorio y Edición Directa de Campamentistas</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-gray-600">
-                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                            <tr>
-                                <th class="p-2">C.I.</th>
-                                <th class="p-2">Nombre Completo</th>
-                                <th class="p-2">Teléfono</th>
-                                <th class="p-2">Célula</th>
-                                <th class="p-2">Talla</th>
-                                <th class="p-2">Hospedaje</th>
-                                <th class="p-2">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tblTodosInscritos" class="divide-y divide-gray-100"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- PESTAÑA 3: INGRESOS -->
-        <div id="tabIngresos" class="tab-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-            <h3 class="font-bold text-gray-800 text-base mb-4">Historial de Ingresos</h3>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs text-gray-600">
-                    <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                        <tr>
-                            <th class="p-2">Fecha</th>
-                            <th class="p-2">Inscrito</th>
-                            <th class="p-2">Monto</th>
-                            <th class="p-2">Comprobante</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tblHistorialIngresos" class="divide-y divide-gray-100"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- PESTAÑA 4: EGRESOS -->
-        <div id="tabEgresos" class="tab-content hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4">Registrar Egreso</h3>
-                <form onsubmit="registrarNuevoEgreso(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <input type="text" id="egConcepto" placeholder="Concepto" required
-                        class="p-2.5 border rounded-xl text-xs">
-                    <select id="egCategoria" class="p-2.5 border rounded-xl text-xs">
-                        <option value="Alimentación">Alimentación</option>
-                        <option value="Logística">Logística</option>
-                        <option value="Sonido">Sonido</option>
-                        <option value="Transporte">Transporte</option>
-                        <option value="Otros">Otros</option>
-                    </select>
-                    <input type="number" step="0.01" id="egMonto" placeholder="Monto" required
-                        class="p-2.5 border rounded-xl text-xs">
-                    <button type="submit" class="bg-red-600 text-white font-bold text-xs py-2 rounded-xl col-span-3">-
-                        Registrar Gasto</button>
-                </form>
-            </div>
-
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-gray-600">
-                        <thead class="bg-gray-50 text-gray-400 uppercase">
-                            <tr>
-                                <th class="p-2">Fecha</th>
-                                <th class="p-2">Concepto</th>
-                                <th class="p-2">Categoría</th>
-                                <th class="p-2">Monto</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tblListaEgresos" class="divide-y divide-gray-100"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- PESTAÑA 5: ADMINISTRADORES Y SUS ROLES -->
-        <div id="tabUsuarios" class="tab-content hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4">Crear / Modificar Administrador</h3>
-                <form onsubmit="guardarAdmin(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <input type="hidden" id="adminIdEdit">
-                    <input type="text" id="adminNewNombre" placeholder="Nombre" required
-                        class="p-2.5 border rounded-xl text-xs">
-                    <input type="text" id="adminNewUser" placeholder="Usuario" required
-                        class="p-2.5 border rounded-xl text-xs">
-                    <input type="password" id="adminNewPass" placeholder="Contraseña (vacío para mantener)"
-                        class="p-2.5 border rounded-xl text-xs">
-                    <select id="adminRolSelect" class="p-2.5 border rounded-xl text-xs"></select>
-                    <button type="submit"
-                        class="bg-gray-900 text-amber-400 font-bold text-xs py-2.5 rounded-xl col-span-4">Guardar
-                        Administrador</button>
-                </form>
-            </div>
-
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-gray-600">
-                        <thead class="bg-gray-50 text-gray-400 uppercase">
-                            <tr>
-                                <th class="p-2">Nombre</th>
-                                <th class="p-2">Usuario</th>
-                                <th class="p-2">Rol</th>
-                                <th class="p-2">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tblListaAdmins" class="divide-y divide-gray-100"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- PESTAÑA 6: CREACIÓN DE ROLES Y PERMISOS SELECCIONABLES -->
-        <div id="tabRoles" class="tab-content hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4">Configurador de Roles y Permisos Granulares</h3>
-                <form onsubmit="guardarRol(event)" class="space-y-4">
-                    <input type="text" id="rolNombre" placeholder="Nombre del Rol (ej. Tesorero, Supervisor)" required
-                        class="p-2.5 border rounded-xl text-xs w-full max-w-md">
-
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-gray-50 p-4 rounded-xl">
-                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                id="permSolicitudes"> Ver Pendientes</label>
-                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                id="permInscritos"> Ver Inscritos</label>
-                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                id="permIngresos"> Ver Ingresos</label>
-                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                id="permEgresos"> Ver Egresos</label>
-                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                id="permUsuarios"> Gestionar Admins</label>
-                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                id="permRoles"> Crear Roles</label>
-                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                id="permEditInscritos"> Editar Inscritos</label>
-                    </div>
-                    <button type="submit"
-                        class="bg-indigo-600 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-md">+ Crear /
-                        Guardar Rol</button>
-                </form>
-            </div>
-        </div>
-
+  <!-- PANTALLA DE LOGIN CON BOTÓN CORREGIDO -->
+  <section id="secLogin" class="max-w-md mx-auto mt-16 p-6 bg-white rounded-2xl shadow-xl border border-gray-200">
+    <div class="text-center mb-6">
+      <div class="w-16 h-16 bg-gray-900 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl shadow-lg">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <h2 class="text-xl font-bold text-gray-900">Acceso Administrativo</h2>
+      <p class="text-xs text-gray-500">Ingresa tus credenciales autorizadas</p>
     </div>
 
-    <script>
-        const SUPABASE_URL = 'https://bpwsdgkafjnsgfilbfgg.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwd3NkZ2thZmpuc2dmaWxiZmdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxODM1NzUsImV4cCI6MjEwNzc1OTU3NX0.rnSg8vNFpAuwNfECYwfyynERKwv3CJ7CGZRhAKbyDDM';
+    <form onsubmit="iniciarSesionAdmin(event)" class="space-y-4">
+      <div>
+        <label class="text-xs font-bold text-gray-600">Usuario</label>
+        <input type="text" id="loginUser" required placeholder="admin" class="w-full mt-1 p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-gray-900 outline-none">
+      </div>
+      <div>
+        <label class="text-xs font-bold text-gray-600">Contraseña</label>
+        <input type="password" id="loginPass" required placeholder="••••••••" class="w-full mt-1 p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-gray-900 outline-none">
+      </div>
+      <!-- Botón con legibilidad corregida (Texto Blanco Brillante) -->
+      <button type="submit" class="w-full bg-gray-900 hover:bg-black text-white font-extrabold py-3 rounded-xl shadow-lg transition text-sm flex items-center justify-center gap-2">
+        <i class="fa-solid fa-right-to-bracket text-amber-400"></i> Ingresar al Panel
+      </button>
+      <p id="msgLoginError" class="text-red-500 text-xs text-center hidden font-semibold"></p>
+    </form>
+  </section>
 
-        const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  <!-- DASHBOARD PRINCIPAL -->
+  <div id="secDashboard" class="hidden max-w-7xl mx-auto p-4 space-y-6">
 
-        let adminSesion = null;
-        let permisosAdmin = {};
+    <!-- METRICAS DE FINANZAS GENERALES -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-blue-600">
+        <p class="text-xs font-bold text-gray-400 uppercase">Total Inscritos</p>
+        <h3 class="text-3xl font-black text-gray-900 mt-1" id="stInscritos">0</h3>
+      </div>
+      <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-green-600">
+        <p class="text-xs font-bold text-gray-400 uppercase">Total Ingresos</p>
+        <h3 class="text-3xl font-black text-green-600 mt-1" id="stIngresos">Bs 0</h3>
+      </div>
+      <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-red-600">
+        <p class="text-xs font-bold text-gray-400 uppercase">Total Egresos</p>
+        <h3 class="text-3xl font-black text-red-600 mt-1" id="stEgresos">Bs 0</h3>
+      </div>
+      <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-amber-500 bg-amber-50/30">
+        <p class="text-xs font-bold text-amber-800 uppercase">Balance Neto</p>
+        <h3 class="text-3xl font-black text-amber-600 mt-1" id="stBalance">Bs 0</h3>
+      </div>
+    </div>
 
-        async function iniciarSesionAdmin(e) {
-            e.preventDefault();
-            const user = document.getElementById('loginUser').value.trim();
-            const pass = document.getElementById('loginPass').value.trim();
+    <!-- PESTAÑAS DE NAVEGACIÓN -->
+    <div class="flex flex-wrap gap-2 border-b border-gray-200 pb-2">
+      <button id="navSolicitudes" onclick="cambiarPestana('solicitudes')" class="tab-btn bg-gray-900 text-white text-xs font-bold px-4 py-2 rounded-xl transition">
+        <i class="fa-solid fa-clock-rotate-left mr-1"></i> Pendientes
+      </button>
+      <button id="navInscritos" onclick="cambiarPestana('inscritos')" class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+        <i class="fa-solid fa-users mr-1"></i> Lista de Inscritos
+      </button>
+      <button id="navIngresos" onclick="cambiarPestana('ingresos')" class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+        <i class="fa-solid fa-file-invoice-dollar mr-1"></i> Ingresos
+      </button>
+      <button id="navEgresos" onclick="cambiarPestana('egresos')" class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+        <i class="fa-solid fa-arrow-down-short-wide mr-1"></i> Egresos
+      </button>
+      <button id="navUsuarios" onclick="cambiarPestana('usuarios')" class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+        <i class="fa-solid fa-user-shield mr-1"></i> Administradores
+      </button>
+      <button id="navRoles" onclick="cambiarPestana('roles')" class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+        <i class="fa-solid fa-key mr-1"></i> Permisos y Roles
+      </button>
+    </div>
 
-            const msgUint8 = new TextEncoder().encode(pass);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-            const hashHex = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+    <!-- PESTAÑA 1: PENDIENTES -->
+    <div id="tabSolicitudes" class="tab-content grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+        <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-receipt text-amber-500"></i> Comprobantes Pendientes
+        </h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-gray-600">
+            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+              <tr><th class="p-2">Inscrito</th><th class="p-2">Monto</th><th class="p-2">Recibo</th><th class="p-2">Acción</th></tr>
+            </thead>
+            <tbody id="tblPagosPendientes" class="divide-y divide-gray-100"></tbody>
+          </table>
+        </div>
+      </div>
 
-            const { data: admin } = await db.from('administradores').select('*, roles(*)').eq('usuario', user).eq('password_hash', hashHex).maybeSingle();
+      <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+        <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-user-pen text-blue-500"></i> Cambios Pendientes
+        </h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-gray-600">
+            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+              <tr><th class="p-2">Inscrito</th><th class="p-2">Nuevos Datos</th><th class="p-2">Acción</th></tr>
+            </thead>
+            <tbody id="tblEdicionesPendientes" class="divide-y divide-gray-100"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
-            if (!admin) return alert('Credenciales incorrectas');
+    <!-- PESTAÑA 2: INSCRITOS (CON EDICIÓN POR BOTÓN DE LÁPIZ) -->
+    <div id="tabInscritos" class="tab-content hidden space-y-6">
+      <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+        <h3 class="font-bold text-gray-800 text-base mb-4">Directorio de Campamentistas</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-gray-600">
+            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+              <tr>
+                <th class="p-2">C.I.</th>
+                <th class="p-2">Nombre Completo</th>
+                <th class="p-2">Teléfono</th>
+                <th class="p-2">Célula</th>
+                <th class="p-2">Talla</th>
+                <th class="p-2">Hospedaje</th>
+                <th class="p-2 text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tblTodosInscritos" class="divide-y divide-gray-100"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
-            adminSesion = admin;
-            permisosAdmin = admin.roles?.permisos || {};
+    <!-- PESTAÑA 3: INGRESOS CORREGIDOS -->
+    <div id="tabIngresos" class="tab-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+      <h3 class="font-bold text-gray-800 text-base mb-4">Historial de Ingresos Confirmados</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs text-gray-600">
+          <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+            <tr><th class="p-2">Fecha</th><th class="p-2">Inscrito</th><th class="p-2">Monto</th><th class="p-2">Observaciones</th><th class="p-2">Comprobante</th></tr>
+          </thead>
+          <tbody id="tblHistorialIngresos" class="divide-y divide-gray-100"></tbody>
+        </table>
+      </div>
+    </div>
 
-            document.getElementById('secLogin').classList.add('hidden');
-            document.getElementById('secDashboard').classList.remove('hidden');
-            document.getElementById('txtAdminInfo').innerText = `👤 ${admin.nombre} (${admin.roles?.nombre || 'Sin Rol'})`;
-            document.getElementById('txtAdminInfo').classList.remove('hidden');
-            document.getElementById('btnCerrarSesion').classList.remove('hidden');
+    <!-- PESTAÑA 4: EGRESOS CORREGIDOS -->
+    <div id="tabEgresos" class="tab-content hidden space-y-6">
+      <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+        <h3 class="font-bold text-gray-800 text-base mb-4">Registrar Nuevo Egreso</h3>
+        <form onsubmit="registrarNuevoEgreso(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <input type="text" id="egConcepto" placeholder="Concepto de Gasto" required class="p-2.5 border rounded-xl text-xs outline-none">
+          <select id="egCategoria" class="p-2.5 border rounded-xl text-xs outline-none">
+            <option value="Alimentación">Alimentación</option>
+            <option value="Logística">Logística</option>
+            <option value="Sonido">Sonido / Iluminación</option>
+            <option value="Transporte">Transporte</option>
+            <option value="Otros">Otros Gastos</option>
+          </select>
+          <input type="number" step="0.01" id="egMonto" placeholder="Monto (Bs)" required class="p-2.5 border rounded-xl text-xs outline-none">
+          <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs py-2.5 rounded-xl col-span-3 transition shadow">- Registrar Gasto</button>
+        </form>
+      </div>
 
-            aplicarPermisosVisuales();
-            cargarTodoElDashboard();
-        }
+      <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-gray-600">
+            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+              <tr><th class="p-2">Fecha</th><th class="p-2">Concepto</th><th class="p-2">Categoría</th><th class="p-2">Monto</th><th class="p-2">Registrado por</th></tr>
+            </thead>
+            <tbody id="tblListaEgresos" class="divide-y divide-gray-100"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
-        function aplicarPermisosVisuales() {
-            // Ocultar o mostrar botones según el Rol
-            document.getElementById('navSolicitudes').style.display = permisosAdmin.solicitudes ? 'block' : 'none';
-            document.getElementById('navInscritos').style.display = permisosAdmin.inscritos ? 'block' : 'none';
-            document.getElementById('navIngresos').style.display = permisosAdmin.ingresos ? 'block' : 'none';
-            document.getElementById('navEgresos').style.display = permisosAdmin.egresos ? 'block' : 'none';
-            document.getElementById('navUsuarios').style.display = permisosAdmin.usuarios ? 'block' : 'none';
-            document.getElementById('navRoles').style.display = permisosAdmin.roles ? 'block' : 'none';
-        }
+    <!-- PESTAÑA 5: ADMINISTRADORES -->
+    <div id="tabUsuarios" class="tab-content hidden space-y-6">
+      <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+        <h3 class="font-bold text-gray-800 text-base mb-4">Crear / Modificar Administrador</h3>
+        <form onsubmit="guardarAdmin(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <input type="hidden" id="adminIdEdit">
+          <input type="text" id="adminNewNombre" placeholder="Nombre Completo" required class="p-2.5 border rounded-xl text-xs outline-none">
+          <input type="text" id="adminNewUser" placeholder="Usuario" required class="p-2.5 border rounded-xl text-xs outline-none">
+          <input type="password" id="adminNewPass" placeholder="Contraseña (dejar vacío si no cambia)" class="p-2.5 border rounded-xl text-xs outline-none">
+          <select id="adminRolSelect" class="p-2.5 border rounded-xl text-xs outline-none"></select>
+          <button type="submit" class="bg-gray-900 text-amber-400 font-bold text-xs py-2.5 rounded-xl col-span-4 transition hover:bg-black">+ Guardar Administrador</button>
+        </form>
+      </div>
 
-        async function cargarTodoElDashboard() {
-            const { data: inscritos } = await db.from('inscritos').select('*');
-            const { data: pagos } = await db.from('pagos').select('*, inscritos(nombre_completo)').eq('estado', 'Aprobado');
-            const { data: egresos } = await db.from('egresos').select('*');
+      <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-gray-600">
+            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+              <tr><th class="p-2">Nombre</th><th class="p-2">Usuario</th><th class="p-2">Rol</th><th class="p-2">Acción</th></tr>
+            </thead>
+            <tbody id="tblListaAdmins" class="divide-y divide-gray-100"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
-            document.getElementById('stInscritos').innerText = (inscritos || []).length;
+    <!-- PESTAÑA 6: CREACIÓN DE ROLES -->
+    <div id="tabRoles" class="tab-content hidden space-y-6">
+      <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+        <h3 class="font-bold text-gray-800 text-base mb-4">Configurador de Roles y Permisos Granulares</h3>
+        <form onsubmit="guardarRol(event)" class="space-y-4">
+          <input type="text" id="rolNombre" placeholder="Nombre del Rol (ej. Tesorero)" required class="p-2.5 border rounded-xl text-xs w-full max-w-md">
+          
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-gray-50 p-4 rounded-xl border border-gray-200">
+            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permSolicitudes"> Ver Pendientes</label>
+            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permInscritos"> Ver Inscritos</label>
+            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permIngresos"> Ver Ingresos</label>
+            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEgresos"> Ver Egresos</label>
+            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permUsuarios"> Gestionar Admins</label>
+            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permRoles"> Crear Roles</label>
+            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEditInscritos"> Editar Inscritos</label>
+          </div>
+          <button type="submit" class="bg-indigo-600 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-md hover:bg-indigo-700 transition">+ Crear / Guardar Rol</button>
+        </form>
+      </div>
+    </div>
 
-            let ing = 0, eg = 0;
-            (pagos || []).forEach(p => ing += Number(p.monto));
-            (egresos || []).forEach(e => eg += Number(e.monto));
+  </div>
 
-            document.getElementById('stIngresos').innerText = `Bs ${ing}`;
-            document.getElementById('stEgresos').innerText = `Bs ${eg}`;
-            document.getElementById('stBalance').innerText = `Bs ${ing - eg}`;
+  <script>
+    const SUPABASE_URL = 'https://bpwsdgkafjnsgfilbfgg.supabase.co';
+    const SUPABASE_KEY = 'TU_CLAVE_ANON_PUBLIC';
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-            // Renderizar Inscritos con Edición directa
-            const tbodyIns = document.getElementById('tblTodosInscritos');
-            tbodyIns.innerHTML = '';
-            (inscritos || []).forEach(i => {
-                tbodyIns.innerHTML += `
-          <tr>
+    let adminSesion = null;
+    let permisosAdmin = {};
+
+    async function iniciarSesionAdmin(e) {
+      e.preventDefault();
+      const user = document.getElementById('loginUser').value.trim();
+      const pass = document.getElementById('loginPass').value.trim();
+
+      const msgUint8 = new TextEncoder().encode(pass);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+      const { data: admin } = await db.from('administradores').select('*, roles(*)').eq('usuario', user).eq('password_hash', hashHex).maybeSingle();
+
+      if (!admin) return alert('Credenciales incorrectas');
+
+      adminSesion = admin;
+      permisosAdmin = admin.roles?.permisos || {};
+
+      document.getElementById('secLogin').classList.add('hidden');
+      document.getElementById('secDashboard').classList.remove('hidden');
+      document.getElementById('txtAdminInfo').innerText = `👤 ${admin.nombre} (${admin.roles?.nombre || 'SuperAdmin'})`;
+      document.getElementById('txtAdminInfo').classList.remove('hidden');
+      document.getElementById('btnCerrarSesion').classList.remove('hidden');
+
+      aplicarPermisosVisuales();
+      cargarTodoElDashboard();
+    }
+
+    function aplicarPermisosVisuales() {
+      // Si el rol no tiene restricciones, asignamos permisos totales por defecto
+      const esSuper = !adminSesion.rol_id || adminSesion.roles?.nombre === 'SuperAdmin';
+
+      document.getElementById('navSolicitudes').style.display = (esSuper || permisosAdmin.solicitudes) ? 'block' : 'none';
+      document.getElementById('navInscritos').style.display = (esSuper || permisosAdmin.inscritos) ? 'block' : 'none';
+      document.getElementById('navIngresos').style.display = (esSuper || permisosAdmin.ingresos) ? 'block' : 'none';
+      document.getElementById('navEgresos').style.display = (esSuper || permisosAdmin.egresos) ? 'block' : 'none';
+      document.getElementById('navUsuarios').style.display = (esSuper || permisosAdmin.usuarios) ? 'block' : 'none';
+      document.getElementById('navRoles').style.display = (esSuper || permisosAdmin.roles) ? 'block' : 'none';
+    }
+
+    async function cargarTodoElDashboard() {
+      // Consultas directas sin filtros restrictivos
+      const { data: inscritos } = await db.from('inscritos').select('*');
+      const { data: pagos } = await db.from('pagos').select('*, inscritos(nombre_completo)').eq('estado', 'Aprobado');
+      const { data: egresos } = await db.from('egresos').select('*');
+
+      document.getElementById('stInscritos').innerText = (inscritos || []).length;
+      
+      let ing = 0, eg = 0;
+      (pagos || []).forEach(p => ing += Number(p.monto));
+      (egresos || []).forEach(e => eg += Number(e.monto));
+
+      document.getElementById('stIngresos').innerText = `Bs ${ing}`;
+      document.getElementById('stEgresos').innerText = `Bs ${eg}`;
+      document.getElementById('stBalance').innerText = `Bs ${ing - eg}`;
+
+      // Renderizar Inscritos con modo lectura por defecto y Botón Lápiz ✏️
+      const tbodyIns = document.getElementById('tblTodosInscritos');
+      tbodyIns.innerHTML = '';
+      (inscritos || []).forEach(i => {
+        tbodyIns.innerHTML += `
+          <tr id="row_ins_${i.id}">
             <td class="p-2 font-bold">${i.ci}</td>
-            <td class="p-2"><input type="text" id="ins_nom_${i.id}" value="${i.nombre_completo}" class="border rounded p-1 text-xs w-full"></td>
-            <td class="p-2"><input type="text" id="ins_tel_${i.id}" value="${i.telefono || ''}" class="border rounded p-1 text-xs w-24"></td>
-            <td class="p-2"><input type="text" id="ins_cel_${i.id}" value="${i.celula || ''}" class="border rounded p-1 text-xs w-24"></td>
-            <td class="p-2"><input type="text" id="ins_tal_${i.id}" value="${i.talla_polera || ''}" class="border rounded p-1 text-xs w-12"></td>
+            <td class="p-2 font-semibold text-gray-800"><span id="val_nom_${i.id}">${i.nombre_completo}</span></td>
+            <td class="p-2"><span id="val_tel_${i.id}">${i.telefono || '-'}</span></td>
+            <td class="p-2"><span id="val_cel_${i.id}">${i.celula || '-'}</span></td>
+            <td class="p-2"><span id="val_tal_${i.id}">${i.talla_polera || '-'}</span></td>
             <td class="p-2">${i.tipo_hospedaje}</td>
-            <td class="p-2">
-              <button onclick="guardarEdicionInscrito('${i.id}')" class="bg-blue-600 text-white px-2 py-1 rounded text-xs">Guardar</button>
+            <td class="p-2 text-center" id="action_ins_${i.id}">
+              <button onclick="activarModoEdicion('${i.id}', '${i.nombre_completo}', '${i.telefono || ''}', '${i.celula || ''}', '${i.talla_polera || ''}')" class="bg-amber-100 hover:bg-amber-200 text-amber-800 p-1.5 rounded-lg border border-amber-300 transition" title="Editar Campamentista">
+                <i class="fa-solid fa-pencil text-xs"></i>
+              </button>
             </td>
           </tr>`;
-            });
+      });
 
-            cargarRolesYAdmins();
-        }
+      // Renderizar Ingresos
+      const tbodyIng = document.getElementById('tblHistorialIngresos');
+      tbodyIng.innerHTML = '';
+      (pagos || []).forEach(p => {
+        tbodyIng.innerHTML += `
+          <tr>
+            <td class="p-2">${new Date(p.fecha).toLocaleDateString()}</td>
+            <td class="p-2 font-semibold">${p.inscritos?.nombre_completo || 'Pago Directo'}</td>
+            <td class="p-2 font-bold text-green-600">Bs ${p.monto}</td>
+            <td class="p-2">${p.observaciones || '-'}</td>
+            <td class="p-2"><a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline">Ver Foto</a></td>
+          </tr>`;
+      });
 
-        async function guardarEdicionInscrito(id) {
-            await db.from('inscritos').update({
-                nombre_completo: document.getElementById(`ins_nom_${id}`).value,
-                telefono: document.getElementById(`ins_tel_${id}`).value,
-                celula: document.getElementById(`ins_cel_${id}`).value,
-                talla_polera: document.getElementById(`ins_tal_${id}`).value
-            }).eq('id', id);
-            alert('Información del campamentista actualizada.');
-        }
+      // Renderizar Egresos
+      const tbodyEg = document.getElementById('tblListaEgresos');
+      tbodyEg.innerHTML = '';
+      (egresos || []).forEach(e => {
+        tbodyEg.innerHTML += `
+          <tr>
+            <td class="p-2">${new Date(e.fecha).toLocaleDateString()}</td>
+            <td class="p-2 font-semibold text-gray-800">${e.concepto}</td>
+            <td class="p-2"><span class="bg-red-50 text-red-700 font-bold px-2 py-0.5 rounded text-[10px]">${e.categoria}</span></td>
+            <td class="p-2 font-bold text-red-600">Bs ${e.monto}</td>
+            <td class="p-2">${e.registrado_por || 'Admin'}</td>
+          </tr>`;
+      });
 
-        async function cargarRolesYAdmins() {
-            const { data: roles } = await db.from('roles').select('*');
-            const selectRol = document.getElementById('adminRolSelect');
-            selectRol.innerHTML = '';
-            (roles || []).forEach(r => selectRol.innerHTML += `<option value="${r.id}">${r.nombre}</option>`);
+      cargarPendientes();
+      cargarRolesYAdmins();
+    }
 
-            const { data: admins } = await db.from('administradores').select('*, roles(*)');
-            const tbodyA = document.getElementById('tblListaAdmins');
-            tbodyA.innerHTML = '';
-            (admins || []).forEach(a => {
-                tbodyA.innerHTML += `
+    // Activa los inputs sólo cuando se presiona el lápiz ✏️
+    function activarModoEdicion(id, nom, tel, cel, tal) {
+      document.getElementById(`val_nom_${id}`).innerHTML = `<input type="text" id="ins_nom_${id}" value="${nom}" class="border rounded p-1 text-xs w-full bg-amber-50">`;
+      document.getElementById(`val_tel_${id}`).innerHTML = `<input type="text" id="ins_tel_${id}" value="${tel}" class="border rounded p-1 text-xs w-24 bg-amber-50">`;
+      document.getElementById(`val_cel_${id}`).innerHTML = `<input type="text" id="ins_cel_${id}" value="${cel}" class="border rounded p-1 text-xs w-24 bg-amber-50">`;
+      document.getElementById(`val_tal_${id}`).innerHTML = `<input type="text" id="ins_tal_${id}" value="${tal}" class="border rounded p-1 text-xs w-12 bg-amber-50">`;
+
+      document.getElementById(`action_ins_${id}`).innerHTML = `
+        <button onclick="guardarEdicionInscrito('${id}')" class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs font-bold mr-1">✓ Guardar</button>
+        <button onclick="cargarTodoElDashboard()" class="bg-gray-400 text-white px-2 py-1 rounded text-xs">✕</button>
+      `;
+    }
+
+    async function guardarEdicionInscrito(id) {
+      await db.from('inscritos').update({
+        nombre_completo: document.getElementById(`ins_nom_${id}`).value,
+        telefono: document.getElementById(`ins_tel_${id}`).value,
+        celula: document.getElementById(`ins_cel_${id}`).value,
+        talla_polera: document.getElementById(`ins_tal_${id}`).value
+      }).eq('id', id);
+
+      alert('Campamentista actualizado con éxito.');
+      cargarTodoElDashboard();
+    }
+
+    async function registrarNuevoEgreso(e) {
+      e.preventDefault();
+      await db.from('egresos').insert([{
+        concepto: document.getElementById('egConcepto').value.trim(),
+        categoria: document.getElementById('egCategoria').value,
+        monto: document.getElementById('egMonto').value,
+        registrado_por: adminSesion?.nombre || 'Administración'
+      }]);
+      alert('Egreso registrado correctamente.');
+      e.target.reset();
+      cargarTodoElDashboard();
+    }
+
+    async function cargarPendientes() {
+      const { data: pagosPend } = await db.from('pagos').select('*, inscritos(nombre_completo)').eq('estado', 'Pendiente');
+      const tbodyP = document.getElementById('tblPagosPendientes');
+      tbodyP.innerHTML = '';
+      (pagosPend || []).forEach(p => {
+        tbodyP.innerHTML += `
+          <tr>
+            <td class="p-2 font-semibold">${p.inscritos?.nombre_completo || 'Usuario'}</td>
+            <td class="p-2 font-bold text-green-600">Bs ${p.monto}</td>
+            <td class="p-2"><a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline">Ver</a></td>
+            <td class="p-2 flex gap-1">
+              <button onclick="procesarPago('${p.id}', 'Aprobado')" class="bg-green-600 text-white px-2 py-1 rounded text-xs font-bold">✓</button>
+              <button onclick="procesarPago('${p.id}', 'Rechazado')" class="bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">✕</button>
+            </td>
+          </tr>`;
+      });
+
+      const { data: edicPend } = await db.from('solicitudes_edicion').select('*, inscritos(nombre_completo)').eq('estado', 'Pendiente');
+      const tbodyE = document.getElementById('tblEdicionesPendientes');
+      tbodyE.innerHTML = '';
+      (edicPend || []).forEach(e => {
+        tbodyE.innerHTML += `
+          <tr>
+            <td class="p-2 font-semibold">${e.inscritos?.nombre_completo}</td>
+            <td class="p-2 text-xs">Talla: ${e.talla_polera}, Hosp: ${e.tipo_hospedaje}</td>
+            <td class="p-2 flex gap-1">
+              <button onclick="procesarEdicion('${e.id}', '${e.inscrito_id}', '${e.telefono}', '${e.celula}', '${e.talla_polera}', '${e.tipo_hospedaje}', 'Aprobado')" class="bg-green-600 text-white px-2 py-1 rounded text-xs font-bold">✓</button>
+              <button onclick="procesarEdicion('${e.id}', null, null, null, null, null, 'Rechazado')" class="bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">✕</button>
+            </td>
+          </tr>`;
+      });
+    }
+
+    async function cargarRolesYAdmins() {
+      const { data: roles } = await db.from('roles').select('*');
+      const selectRol = document.getElementById('adminRolSelect');
+      selectRol.innerHTML = '';
+      (roles || []).forEach(r => selectRol.innerHTML += `<option value="${r.id}">${r.nombre}</option>`);
+
+      const { data: admins } = await db.from('administradores').select('*, roles(*)');
+      const tbodyA = document.getElementById('tblListaAdmins');
+      tbodyA.innerHTML = '';
+      (admins || []).forEach(a => {
+        tbodyA.innerHTML += `
           <tr>
             <td class="p-2 font-semibold">${a.nombre}</td>
             <td class="p-2">${a.usuario}</td>
-            <td class="p-2 font-bold text-indigo-600">${a.roles?.nombre || 'Sin Rol'}</td>
+            <td class="p-2 font-bold text-indigo-600">${a.roles?.nombre || 'SuperAdmin'}</td>
             <td class="p-2">
               <button onclick="eliminarAdmin('${a.id}')" class="bg-red-600 text-white px-2 py-1 rounded text-xs">Eliminar</button>
             </td>
           </tr>`;
-            });
-        }
+      });
+    }
 
-        async function guardarRol(e) {
-            e.preventDefault();
-            const permisos = {
-                solicitudes: document.getElementById('permSolicitudes').checked,
-                inscritos: document.getElementById('permInscritos').checked,
-                ingresos: document.getElementById('permIngresos').checked,
-                egresos: document.getElementById('permEgresos').checked,
-                usuarios: document.getElementById('permUsuarios').checked,
-                roles: document.getElementById('permRoles').checked,
-                editar_inscritos: document.getElementById('permEditInscritos').checked
-            };
+    async function guardarRol(e) {
+      e.preventDefault();
+      const permisos = {
+        solicitudes: document.getElementById('permSolicitudes').checked,
+        inscritos: document.getElementById('permInscritos').checked,
+        ingresos: document.getElementById('permIngresos').checked,
+        egresos: document.getElementById('permEgresos').checked,
+        usuarios: document.getElementById('permUsuarios').checked,
+        roles: document.getElementById('permRoles').checked,
+        editar_inscritos: document.getElementById('permEditInscritos').checked
+      };
 
-            await db.from('roles').insert([{ nombre: document.getElementById('rolNombre').value, permisos }]);
-            alert('Rol configurado con éxito.');
-            cargarRolesYAdmins();
-        }
+      await db.from('roles').insert([{ nombre: document.getElementById('rolNombre').value, permisos }]);
+      alert('Rol guardado exitosamente.');
+      cargarRolesYAdmins();
+    }
 
-        function cambiarPestana(tab) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-            document.getElementById(`tab${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.remove('hidden');
-        }
+    async function procesarPago(id, estado) {
+      await db.from('pagos').update({ estado: estado }).eq('id', id);
+      cargarTodoElDashboard();
+    }
 
-        function cerrarSesion() { location.reload(); }
-    </script>
+    async function procesarEdicion(idSol, idIns, tel, cel, talla, hosp, estado) {
+      await db.from('solicitudes_edicion').update({ estado: estado }).eq('id', idSol);
+      if (estado === 'Aprobado') {
+        await db.from('inscritos').update({ telefono: tel, celula: cel, talla_polera: talla, tipo_hospedaje: hosp }).eq('id', idIns);
+      }
+      cargarTodoElDashboard();
+    }
+
+    function cambiarPestana(tab) {
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('bg-gray-900', 'text-white');
+        b.classList.add('bg-white', 'text-gray-600');
+      });
+
+      const btnActivo = document.getElementById(`nav${tab.charAt(0).toUpperCase() + tab.slice(1)}`);
+      if (btnActivo) {
+        btnActivo.classList.remove('bg-white', 'text-gray-600');
+        btnActivo.classList.add('bg-gray-900', 'text-white');
+      }
+
+      document.getElementById(`tab${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.remove('hidden');
+    }
+
+    function cerrarSesion() { location.reload(); }
+  </script>
 </body>
-
 </html>
