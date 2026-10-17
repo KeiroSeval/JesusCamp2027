@@ -71,30 +71,51 @@
     <!-- DASHBOARD PRINCIPAL -->
     <div id="secDashboard" class="hidden max-w-7xl mx-auto p-4 space-y-6">
 
-        <!-- METRICAS CON PERMISO DE FINANZAS -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-blue-600">
-                <p class="text-xs font-bold text-gray-400 uppercase">Total Inscritos / Staff</p>
-                <h3 class="text-3xl font-black text-gray-900 mt-1" id="stInscritos">0</h3>
+        <!-- MÉTRICAS DE PARTICIPANTES SEPARADAS -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-blue-600 flex justify-between items-center">
+                <div>
+                    <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Campamentistas</p>
+                    <h3 class="text-2xl font-black text-gray-900 mt-0.5" id="stCampamentistas">0</h3>
+                </div>
+                <div class="p-3 bg-blue-50 text-blue-600 rounded-xl"><i class="fa-solid fa-person-hiking text-lg"></i></div>
             </div>
-            
-            <!-- Cards ocultables según permiso 'verFinanzas' -->
-            <div id="cardTotalIngresos" class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-green-600">
-                <p class="text-xs font-bold text-gray-400 uppercase">Total Ingresos</p>
-                <h3 class="text-3xl font-black text-green-600 mt-1" id="stIngresos">Bs 0</h3>
+
+            <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-purple-600 flex justify-between items-center">
+                <div>
+                    <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Staff Totales</p>
+                    <h3 class="text-2xl font-black text-purple-700 mt-0.5" id="stStaff">0</h3>
+                </div>
+                <div class="p-3 bg-purple-50 text-purple-600 rounded-xl"><i class="fa-solid fa-user-shield text-lg"></i></div>
             </div>
-            <div id="cardTotalEgresos" class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-red-600">
-                <p class="text-xs font-bold text-gray-400 uppercase">Total Egresos</p>
-                <h3 class="text-3xl font-black text-red-600 mt-1" id="stEgresos">Bs 0</h3>
-            </div>
-            <div id="cardBalanceNeto"
-                class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-amber-500 bg-amber-50/30">
-                <p class="text-xs font-bold text-amber-800 uppercase">Balance Neto</p>
-                <h3 class="text-3xl font-black text-amber-600 mt-1" id="stBalance">Bs 0</h3>
+
+            <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-emerald-600 flex justify-between items-center bg-emerald-50/20">
+                <div>
+                    <p class="text-[10px] font-extrabold text-emerald-800 uppercase tracking-wider">Total General Participantes</p>
+                    <h3 class="text-2xl font-black text-emerald-600 mt-0.5" id="stTotalGeneral">0</h3>
+                </div>
+                <div class="p-3 bg-emerald-100 text-emerald-700 rounded-xl"><i class="fa-solid fa-users text-lg"></i></div>
             </div>
         </div>
 
-        <!-- PESTAÑAS -->
+        <!-- METRICAS DE FINANZAS (OCULTABLES SEGÚN PERMISO 'verFinanzas') -->
+        <div id="contTarjetasFinanzas" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div id="cardTotalIngresos" class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-green-600">
+                <p class="text-xs font-bold text-gray-400 uppercase">Total Ingresos</p>
+                <h3 class="text-2xl font-black text-green-600 mt-1" id="stIngresos">Bs 0</h3>
+            </div>
+            <div id="cardTotalEgresos" class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-red-600">
+                <p class="text-xs font-bold text-gray-400 uppercase">Total Egresos</p>
+                <h3 class="text-2xl font-black text-red-600 mt-1" id="stEgresos">Bs 0</h3>
+            </div>
+            <div id="cardBalanceNeto"
+                class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-amber-500 bg-amber-50/30">
+                <p class="text-xs font-bold text-amber-800 uppercase">Balance Neto</p>
+                <h3 class="text-2xl font-black text-amber-600 mt-1" id="stBalance">Bs 0</h3>
+            </div>
+        </div>
+
+        <!-- PESTAÑAS DE NAVEGACIÓN -->
         <div class="flex flex-wrap gap-2 border-b border-gray-200 pb-2">
             <button id="navSolicitudes" onclick="cambiarPestana('solicitudes')"
                 class="tab-btn bg-gray-900 text-white text-xs font-bold px-4 py-2 rounded-xl transition">
@@ -127,6 +148,10 @@
             <button id="navRoles" onclick="cambiarPestana('roles')"
                 class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
                 <i class="fa-solid fa-key mr-1"></i> Permisos y Roles
+            </button>
+            <button id="navAuditoria" onclick="cambiarPestana('auditoria')"
+                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                <i class="fa-solid fa-clipboard-list mr-1"></i> Auditoría / Logs
             </button>
         </div>
 
@@ -299,30 +324,40 @@
         <div id="tabCategorias" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-gray-800 text-base">Gestión de Tipos de Inscripción (Precios)</h3>
-                    <button onclick="toggleFormulario('formContenedorCategoria')"
+                    <h3 class="font-bold text-gray-800 text-base">Gestión de Tipos de Inscripción (Precios y Visibilidad)</h3>
+                    <button onclick="prepararCrearCategoria()"
                         class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
                         <i class="fa-solid fa-plus"></i> Nueva Categoría
                     </button>
                 </div>
 
-                <!-- FORMULARIO OCULTO POR DEFECTO -->
+                <!-- FORMULARIO CREAR Y EDITAR CATEGORÍA -->
                 <div id="formContenedorCategoria" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
                     <form onsubmit="guardarTipoInscripcion(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <input type="hidden" id="catIdEdit">
-                        <input type="text" id="catNombre" placeholder="Nombre (Ej. Completo, Staff, Pases)" required class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="number" step="0.01" id="catPrecio" placeholder="Precio Oficial (Bs)" required class="p-2.5 border rounded-xl text-xs bg-white">
-                        
-                        <div class="flex items-center gap-2 bg-white p-2.5 rounded-xl border">
+                        <div>
+                            <label class="text-[10px] font-bold text-gray-500 uppercase">Nombre Categoría:</label>
+                            <input type="text" id="catNombre" placeholder="Nombre (Ej. Completo Adulto, Niño)" required class="p-2.5 border rounded-xl text-xs bg-white w-full">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-gray-500 uppercase">Precio Oficial (Bs):</label>
+                            <input type="number" step="0.01" id="catPrecio" placeholder="Precio (Bs)" required class="p-2.5 border rounded-xl text-xs bg-white w-full">
+                        </div>
+
+                        <div class="flex flex-col gap-2 justify-center bg-white p-3 rounded-xl border">
                             <label class="text-xs font-bold text-gray-700 flex items-center gap-2">
                                 <input type="checkbox" id="catEsManual" class="rounded text-indigo-600">
                                 ¿Precio Manual / Especial?
+                            </label>
+                            <label class="text-xs font-bold text-green-700 flex items-center gap-2">
+                                <input type="checkbox" id="catEsVisible" checked class="rounded text-green-600">
+                                👁️ Visible para las personas en el Portal
                             </label>
                         </div>
 
                         <div class="col-span-3 flex justify-end gap-2">
                             <button type="button" onclick="toggleFormulario('formContenedorCategoria')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
-                            <button type="submit" class="bg-indigo-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">+ Guardar Tipo</button>
+                            <button type="submit" class="bg-indigo-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">Guardar Tipo de Inscripción</button>
                         </div>
                     </form>
                 </div>
@@ -334,6 +369,7 @@
                                 <th class="p-2">Nombre de Categoría</th>
                                 <th class="p-2">Precio Estándar</th>
                                 <th class="p-2">Modalidad</th>
+                                <th class="p-2">Visibilidad Portal</th>
                                 <th class="p-2 text-center">Acciones</th>
                             </tr>
                         </thead>
@@ -410,7 +446,7 @@
             </div>
         </div>
 
-        <!-- PESTAÑA REPORTES CON BOTÓN 'VER' CORREGIDO -->
+        <!-- PESTAÑA REPORTES -->
         <div id="tabReportes" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
                 <div class="flex justify-between items-center border-b pb-3">
@@ -588,6 +624,35 @@
             </div>
         </div>
 
+        <!-- PESTAÑA AUDITORÍA Y LOGS DE ACTIVIDAD -->
+        <div id="tabAuditoria" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
+                        <i class="fa-solid fa-clipboard-check text-indigo-600"></i> Historial de Auditoría y Revisiones
+                    </h3>
+                    <button onclick="cargarAuditoriaLogs()" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-3 py-1.5 rounded-lg border transition">
+                        <i class="fa-solid fa-arrows-rotate mr-1"></i> Actualizar
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-gray-600">
+                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                            <tr>
+                                <th class="p-2">Fecha y Hora</th>
+                                <th class="p-2">Administrador</th>
+                                <th class="p-2">Módulo</th>
+                                <th class="p-2">Acción / Revisión</th>
+                                <th class="p-2">Detalles</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblLogsAuditoria" class="divide-y divide-gray-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- MODAL COMPARACIÓN DE CAMBIOS PENDIENTES -->
@@ -608,18 +673,18 @@
         </div>
     </div>
 
-    <!-- MODAL EDITAR CAMPAMENTISTA / STAFF (TOTALMENTE SCROLLEABLE Y ADAPTATIVO) -->
+    <!-- MODAL EDITAR CAMPAMENTISTA / STAFF (TOTALMENTE SCROLLEABLE Y ADAPTATIVO AL TAMAÑO DE PANTALLA) -->
     <div id="modalEditCampamentista" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-2 sm:p-4">
-        <div class="bg-white rounded-2xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl flex flex-col max-h-[92vh]">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl flex flex-col max-h-[90vh]">
             
-            <div class="flex justify-between items-center mb-3 border-b pb-2">
+            <div class="flex justify-between items-center mb-3 border-b pb-2 flex-shrink-0">
                 <h3 class="font-bold text-gray-800 text-base sm:text-lg flex items-center gap-2">
                     <i class="fa-solid fa-user-gear text-amber-500"></i> Editar Datos de Campamentista / Staff
                 </h3>
                 <button onclick="cerrarModalCampamentista()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
-            <form onsubmit="confirmarYGuardarInscrito(event)" class="overflow-y-auto flex-1 pr-1 space-y-4">
+            <form onsubmit="confirmarYGuardarInscrito(event)" class="overflow-y-auto flex-1 pr-2 space-y-4">
                 <input type="hidden" id="editInsId">
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -834,6 +899,38 @@
             if (container) container.classList.toggle('hidden');
         }
 
+        // REGISTRO DE AUDITORÍA Y LOGS
+        async function registrarLogAuditoria(accion, modulo, detalle) {
+            try {
+                await db.from('auditoria_logs').insert([{
+                    admin_nombre: adminSesion?.nombre || 'Administración',
+                    accion: accion,
+                    modulo: modulo,
+                    detalle: detalle
+                }]);
+            } catch (err) {
+                console.error('Error registrando log:', err);
+            }
+        }
+
+        async function cargarAuditoriaLogs() {
+            const { data: logs } = await db.from('auditoria_logs').select('*').order('created_at', { ascending: false }).limit(100);
+            const tbody = document.getElementById('tblLogsAuditoria');
+            if (!tbody) return;
+
+            tbody.innerHTML = '';
+            (logs || []).forEach(l => {
+                tbody.innerHTML += `
+          <tr>
+            <td class="p-2 text-gray-500 font-medium">${new Date(l.created_at).toLocaleString()}</td>
+            <td class="p-2 font-bold text-gray-800">${l.admin_nombre}</td>
+            <td class="p-2"><span class="bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded text-[10px]">${l.modulo}</span></td>
+            <td class="p-2 font-semibold text-gray-800">${l.accion}</td>
+            <td class="p-2 text-gray-500">${l.detalle || '-'}</td>
+          </tr>`;
+            });
+        }
+
         async function cargarTiposInscripcion() {
             const { data } = await db.from('tipos_inscripcion').select('*').order('precio', { ascending: false });
             tiposInscripcionGlobal = data || [];
@@ -845,29 +942,60 @@
             selectEdit.innerHTML = '';
 
             tiposInscripcionGlobal.forEach(t => {
-                let label = t.es_manual ? `${t.nombre} (Precio manual)` : `${t.nombre} (Bs ${t.precio})`;
+                let visibTag = t.es_visible ? '' : ' (Oculto en portal)';
+                let label = t.es_manual ? `${t.nombre} (Precio manual)${visibTag}` : `${t.nombre} (Bs ${t.precio})${visibTag}`;
                 selectNew.innerHTML += `<option value="${t.id}">${label}</option>`;
                 selectEdit.innerHTML += `<option value="${t.id}">${label}</option>`;
             });
 
-            // Renderizar Tabla de Categorías
+            // Renderizar Tabla de Categorías con Visibilidad y Edición
             const tbody = document.getElementById('tblTiposInscripcion');
             if (tbody) {
                 tbody.innerHTML = '';
                 tiposInscripcionGlobal.forEach(t => {
+                    let badgeVisib = t.es_visible 
+                        ? `<span class="bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded-full text-[10px]">👁️ Visible Publico</span>`
+                        : `<span class="bg-gray-100 text-gray-600 font-bold px-2 py-0.5 rounded-full text-[10px]">🔒 Solo Admin</span>`;
+
                     tbody.innerHTML += `
             <tr>
               <td class="p-2 font-bold text-indigo-900">${t.nombre}</td>
               <td class="p-2 font-semibold">Bs ${t.precio}</td>
-              <td class="p-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${t.es_manual ? 'bg-amber-100 text-amber-800' : 'bg-green-100 text-green-800'}">${t.es_manual ? 'Precio Personalizado' : 'Fijo'}</span></td>
-              <td class="p-2 text-center">
-                <button onclick="solicitarSeguridad('borrarCategoria', '${t.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1 rounded-lg border border-red-200">
+              <td class="p-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${t.es_manual ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'}">${t.es_manual ? 'Precio Personalizado' : 'Fijo'}</span></td>
+              <td class="p-2">${badgeVisib}</td>
+              <td class="p-2 text-center flex justify-center gap-1">
+                <button onclick="editarCategoria('${t.id}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1 rounded-lg border border-amber-300" title="Editar">
+                  <i class="fa-solid fa-pencil text-xs"></i>
+                </button>
+                <button onclick="solicitarSeguridad('borrarCategoria', '${t.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1 rounded-lg border border-red-200" title="Eliminar">
                   <i class="fa-solid fa-trash text-xs"></i>
                 </button>
               </td>
             </tr>`;
                 });
             }
+        }
+
+        function prepararCrearCategoria() {
+            document.getElementById('catIdEdit').value = '';
+            document.getElementById('catNombre').value = '';
+            document.getElementById('catPrecio').value = '';
+            document.getElementById('catEsManual').checked = false;
+            document.getElementById('catEsVisible').checked = true;
+            document.getElementById('formContenedorCategoria').classList.remove('hidden');
+        }
+
+        function editarCategoria(id) {
+            const cat = tiposInscripcionGlobal.find(t => t.id === id);
+            if (!cat) return;
+
+            document.getElementById('catIdEdit').value = cat.id;
+            document.getElementById('catNombre').value = cat.nombre;
+            document.getElementById('catPrecio').value = cat.precio;
+            document.getElementById('catEsManual').checked = !!cat.es_manual;
+            document.getElementById('catEsVisible').checked = !!cat.es_visible;
+
+            document.getElementById('formContenedorCategoria').classList.remove('hidden');
         }
 
         function evaluarPrecioManual(tipoId, idDivTarget) {
@@ -900,6 +1028,7 @@
             await cargarTiposInscripcion();
             aplicarPermisosVisuales();
             cargarTodoElDashboard();
+            await registrarLogAuditoria('Inicio de Sesión', 'Acceso', 'El administrador ingresó al sistema.');
         }
 
         async function calcularSHA256(texto) {
@@ -913,9 +1042,7 @@
 
             // Control de Visibilidad de Totales Financieros
             const puedeVerFinanzas = esSuper || permisosAdmin.verFinanzas;
-            document.getElementById('cardTotalIngresos').style.display = puedeVerFinanzas ? 'block' : 'none';
-            document.getElementById('cardTotalEgresos').style.display = puedeVerFinanzas ? 'block' : 'none';
-            document.getElementById('cardBalanceNeto').style.display = puedeVerFinanzas ? 'block' : 'none';
+            document.getElementById('contTarjetasFinanzas').style.display = puedeVerFinanzas ? 'grid' : 'none';
 
             // Módulos
             document.getElementById('navSolicitudes').style.display = (esSuper || permisosAdmin.solicitudes) ? 'block' : 'none';
@@ -926,6 +1053,7 @@
             document.getElementById('navReportes').style.display = (esSuper || permisosAdmin.reportesVer) ? 'block' : 'none';
             document.getElementById('navUsuarios').style.display = (esSuper || permisosAdmin.usuarios) ? 'block' : 'none';
             document.getElementById('navRoles').style.display = (esSuper || permisosAdmin.roles) ? 'block' : 'none';
+            document.getElementById('navAuditoria').style.display = esSuper ? 'block' : 'none';
         }
 
         function toggleFormMenor(checked) {
@@ -938,7 +1066,18 @@
             const { data: pagos } = await db.from('pagos').select('*, inscritos(nombre_completo)').eq('estado', 'Aprobado');
             const { data: egresos } = await db.from('egresos').select('*');
 
-            document.getElementById('stInscritos').innerText = (inscritos || []).length;
+            // Métricas de Participantes Desglosadas
+            let cntStaff = 0;
+            let cntCampamentistas = 0;
+
+            (inscritos || []).forEach(i => {
+                if (i.es_staff) cntStaff++;
+                else cntCampamentistas++;
+            });
+
+            document.getElementById('stCampamentistas').innerText = cntCampamentistas;
+            document.getElementById('stStaff').innerText = cntStaff;
+            document.getElementById('stTotalGeneral').innerText = (inscritos || []).length;
 
             let ing = 0, eg = 0;
             (pagos || []).forEach(p => ing += Number(p.monto));
@@ -1019,6 +1158,7 @@
             cargarPendientes();
             cargarReportesGuardados();
             cargarRolesYAdmins();
+            cargarAuditoriaLogs();
         }
 
         async function abrirModalEditarCampamentista(id) {
@@ -1103,9 +1243,10 @@
 
             if (accionPendienteProtegida.tipo === 'guardarEdicionCompletaInscrito') {
                 const id = document.getElementById('editInsId').value;
+                const nom = document.getElementById('editInsNombre').value;
                 await db.from('inscritos').update({
                     ci: document.getElementById('editInsCi').value,
-                    nombre_completo: document.getElementById('editInsNombre').value,
+                    nombre_completo: nom,
                     telefono: document.getElementById('editInsTel').value,
                     celula: document.getElementById('editInsCelula').value,
                     equipo: document.getElementById('editInsEquipo').value,
@@ -1122,48 +1263,62 @@
                     tutor_telefono: document.getElementById('editInsTutorTel').value
                 }).eq('id', id);
 
+                await registrarLogAuditoria('Edición Completa', 'Inscritos', `Actualizó datos personales de: ${nom}`);
                 cerrarModalCampamentista();
                 alert('Campamentista / Staff actualizado con éxito.');
             } else if (accionPendienteProtegida.tipo === 'borrarCampamentista') {
                 await db.from('inscritos').delete().eq('id', accionPendienteProtegida.id);
+                await registrarLogAuditoria('Eliminación', 'Inscritos', `Eliminó el registro ID: ${accionPendienteProtegida.id}`);
                 cerrarModalCampamentista();
                 alert('Registro eliminado.');
             } else if (accionPendienteProtegida.tipo === 'guardarEdicionEgreso') {
                 const id = document.getElementById('editEgId').value;
+                const conc = document.getElementById('editEgConcepto').value;
                 await db.from('egresos').update({
-                    concepto: document.getElementById('editEgConcepto').value,
+                    concepto: conc,
                     categoria: document.getElementById('editEgCategoria').value,
                     monto: document.getElementById('editEgMonto').value
                 }).eq('id', id);
+
+                await registrarLogAuditoria('Edición Egreso', 'Egresos', `Modificó egreso: ${conc}`);
                 cerrarModalEgreso();
                 alert('Egreso modificado.');
             } else if (accionPendienteProtegida.tipo === 'guardarEdicionAdminCompleto') {
                 const id = document.getElementById('editAdminId').value;
+                const user = document.getElementById('editAdminUser').value.trim();
                 await db.from('administradores').update({
                     nombre: document.getElementById('editAdminNombre').value.trim(),
-                    usuario: document.getElementById('editAdminUser').value.trim(),
+                    usuario: user,
                     rol_id: document.getElementById('editAdminRolSelect').value
                 }).eq('id', id);
+
+                await registrarLogAuditoria('Modificación Admin', 'Administradores', `Modificó permisos del admin: ${user}`);
                 cerrarModalAdmin();
                 alert('Administrador actualizado.');
             } else if (accionPendienteProtegida.tipo === 'borrarIngreso') {
                 await db.from('pagos').delete().eq('id', accionPendienteProtegida.id);
+                await registrarLogAuditoria('Borrar Ingreso', 'Ingresos', `Eliminó pago ID: ${accionPendienteProtegida.id}`);
                 alert('Ingreso eliminado.');
             } else if (accionPendienteProtegida.tipo === 'borrarEgreso') {
                 await db.from('egresos').delete().eq('id', accionPendienteProtegida.id);
+                await registrarLogAuditoria('Borrar Egreso', 'Egresos', `Eliminó egreso ID: ${accionPendienteProtegida.id}`);
                 alert('Egreso eliminado.');
             } else if (accionPendienteProtegida.tipo === 'borrarAdmin') {
                 await db.from('administradores').delete().eq('id', accionPendienteProtegida.id);
+                await registrarLogAuditoria('Eliminar Admin', 'Administradores', `Eliminó admin ID: ${accionPendienteProtegida.id}`);
                 alert('Administrador eliminado.');
             } else if (accionPendienteProtegida.tipo === 'borrarRol') {
                 await db.from('roles').delete().eq('id', accionPendienteProtegida.id);
+                await registrarLogAuditoria('Eliminar Rol', 'Roles', `Eliminó rol ID: ${accionPendienteProtegida.id}`);
                 alert('Rol eliminado.');
             } else if (accionPendienteProtegida.tipo === 'borrarCategoria') {
                 await db.from('tipos_inscripcion').delete().eq('id', accionPendienteProtegida.id);
+                await registrarLogAuditoria('Eliminar Tipo Inscripción', 'Categorías', `Eliminó tipo ID: ${accionPendienteProtegida.id}`);
                 alert('Categoría eliminada.');
                 cargarTiposInscripcion();
             } else if (accionPendienteProtegida.tipo === 'borrarReporte') {
                 await db.from('reportes_guardados').delete().eq('id', accionPendienteProtegida.id);
+                await registrarLogAuditoria('Eliminar Reporte', 'Reportes', `Eliminó reporte ID: ${accionPendienteProtegida.id}`);
                 alert('Reporte eliminado.');
             }
 
@@ -1173,14 +1328,24 @@
 
         async function guardarTipoInscripcion(e) {
             e.preventDefault();
-            await db.from('tipos_inscripcion').insert([{
-                nombre: document.getElementById('catNombre').value.trim(),
-                precio: document.getElementById('catPrecio').value,
-                es_manual: document.getElementById('catEsManual').checked
-            }]);
+            const idEdit = document.getElementById('catIdEdit').value;
+            const nombre = document.getElementById('catNombre').value.trim();
+            const precio = document.getElementById('catPrecio').value;
+            const es_manual = document.getElementById('catEsManual').checked;
+            const es_visible = document.getElementById('catEsVisible').checked;
 
-            alert('Categoría de inscripción registrada.');
+            if (idEdit) {
+                await db.from('tipos_inscripcion').update({ nombre, precio, es_manual, es_visible }).eq('id', idEdit);
+                await registrarLogAuditoria('Edición Categoría', 'Categorías', `Modificó categoría: ${nombre} (Visibilidad: ${es_visible})`);
+                alert('Categoría de inscripción actualizada.');
+            } else {
+                await db.from('tipos_inscripcion').insert([{ nombre, precio, es_manual, es_visible }]);
+                await registrarLogAuditoria('Crear Categoría', 'Categorías', `Creó categoría: ${nombre}`);
+                alert('Categoría de inscripción registrada.');
+            }
+
             e.target.reset();
+            document.getElementById('catIdEdit').value = '';
             toggleFormulario('formContenedorCategoria');
             cargarTiposInscripcion();
         }
@@ -1207,6 +1372,7 @@
                 creado_por: adminSesion?.nombre || 'Admin'
             }]);
 
+            await registrarLogAuditoria('Crear Reporte', 'Reportes', `Diseñó reporte: ${nombre}`);
             alert('Reporte guardado.');
             toggleFormulario('formContenedorReporte');
             cargarReportesGuardados();
@@ -1225,7 +1391,6 @@
               <p class="text-[10px] text-gray-400">Grupo: ${r.filtros?.grupoPrincipal || 'Plano'}</p>
             </div>
             <div class="flex gap-1">
-                <!-- BOTÓN CORREGIDO CON TEXTO BLANCO SOBRE BG NEGRO -->
                 <button onclick="ejecutarReporteGuardado('${r.id}')" class="bg-gray-900 hover:bg-black text-white font-bold px-3 py-1.5 rounded-lg text-xs shadow">
                   <i class="fa-solid fa-eye mr-1"></i> Ver
                 </button>
@@ -1302,9 +1467,10 @@
 
         async function crearNuevoCampamentista(e) {
             e.preventDefault();
+            const nom = document.getElementById('newNombre').value.trim();
             await db.from('inscritos').insert([{
                 ci: document.getElementById('newCi').value.trim(),
-                nombre_completo: document.getElementById('newNombre').value.trim(),
+                nombre_completo: nom,
                 telefono: document.getElementById('newTel').value.trim(),
                 celula: document.getElementById('newCelula').value.trim(),
                 equipo: document.getElementById('newEquipo').value,
@@ -1322,6 +1488,7 @@
                 estado_carta: 'Pendiente'
             }]);
 
+            await registrarLogAuditoria('Nuevo Registro', 'Inscritos', `Inscribió a: ${nom}`);
             alert('Registro guardado exitosamente.');
             e.target.reset();
             toggleFormulario('formContenedorCampamentista');
@@ -1418,6 +1585,7 @@
                 rol_id: rolId
             }]);
 
+            await registrarLogAuditoria('Crear Admin', 'Administradores', `Creó cuenta admin para: ${user}`);
             alert('Nuevo administrador registrado.');
             e.target.reset();
             toggleFormulario('formContenedorAdmin');
@@ -1451,9 +1619,11 @@
 
             if (id) {
                 await db.from('roles').update({ nombre, permisos }).eq('id', id);
+                await registrarLogAuditoria('Editar Rol', 'Roles', `Actualizó permisos del rol: ${nombre}`);
                 alert('Rol actualizado con éxito.');
             } else {
                 await db.from('roles').insert([{ nombre, permisos }]);
+                await registrarLogAuditoria('Crear Rol', 'Roles', `Creó el rol: ${nombre}`);
                 alert('Rol creado con éxito.');
             }
 
@@ -1465,12 +1635,16 @@
 
         async function registrarNuevoEgreso(e) {
             e.preventDefault();
+            const conc = document.getElementById('egConcepto').value.trim();
+            const monto = document.getElementById('egMonto').value;
             await db.from('egresos').insert([{
-                concepto: document.getElementById('egConcepto').value.trim(),
+                concepto: conc,
                 categoria: document.getElementById('egCategoria').value,
-                monto: document.getElementById('egMonto').value,
+                monto: monto,
                 registrado_por: adminSesion?.nombre || 'Administración'
             }]);
+
+            await registrarLogAuditoria('Nuevo Egreso', 'Egresos', `Registró egreso por Bs ${monto}: ${conc}`);
             alert('Egreso registrado.');
             e.target.reset();
             toggleFormulario('formContenedorEgreso');
@@ -1487,10 +1661,10 @@
           <tr>
             <td class="p-2 font-semibold">${p.inscritos?.nombre_completo || 'Usuario'}</td>
             <td class="p-2 font-bold text-green-600">Bs ${p.monto}</td>
-            <td class="p-2"><a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline">Ver</a></td>
+            <td class="p-2"><a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline font-bold">Ver Foto</a></td>
             <td class="p-2 flex gap-1">
-              <button onclick="procesarPago('${p.id}', 'Aprobado')" class="bg-green-600 text-white px-2 py-1 rounded text-xs font-bold">✓</button>
-              <button onclick="procesarPago('${p.id}', 'Rechazado')" class="bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">✕</button>
+              <button onclick="procesarPago('${p.id}', 'Aprobado', '${p.inscritos?.nombre_completo}', '${p.monto}')" class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs font-bold" title="Aprobar">✓</button>
+              <button onclick="procesarPago('${p.id}', 'Rechazado', '${p.inscritos?.nombre_completo}', '${p.monto}')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs font-bold" title="Rechazar">✕</button>
             </td>
           </tr>`;
             });
@@ -1511,8 +1685,8 @@
               </button>
             </td>
             <td class="p-2 text-center flex justify-center gap-1">
-              <button onclick="procesarEdicion('${e.id}', 'Aprobado')" class="bg-green-600 text-white px-2 py-1 rounded text-xs font-bold">Aprobar ✓</button>
-              <button onclick="procesarEdicion('${e.id}', 'Rechazado')" class="bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">Rechazar ✕</button>
+              <button onclick="procesarEdicion('${e.id}', 'Aprobado')" class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs font-bold">Aprobar ✓</button>
+              <button onclick="procesarEdicion('${e.id}', 'Rechazado')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs font-bold">Rechazar ✕</button>
             </td>
           </tr>`;
             });
@@ -1529,8 +1703,8 @@
             <td class="p-2">${c.celula || '-'}</td>
             <td class="p-2"><a href="${c.carta_compromiso_url}" target="_blank" class="text-indigo-600 font-bold underline"><i class="fa-solid fa-file-pdf"></i> Ver Carta</a></td>
             <td class="p-2 text-center flex justify-center gap-1">
-              <button onclick="procesarCarta('${c.id}', 'Aprobada')" class="bg-green-600 text-white px-3 py-1 rounded text-xs font-bold">Aprobar ✓</button>
-              <button onclick="procesarCarta('${c.id}', 'Rechazada')" class="bg-red-600 text-white px-3 py-1 rounded text-xs font-bold">Rechazar ✕</button>
+              <button onclick="procesarCarta('${c.id}', 'Aprobada', '${c.nombre_completo}')" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs font-bold">Aprobar ✓</button>
+              <button onclick="procesarCarta('${c.id}', 'Rechazada', '${c.nombre_completo}')" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs font-bold">Rechazar ✕</button>
             </td>
           </tr>`;
             });
@@ -1548,6 +1722,7 @@
                 { label: 'Teléfono', actual: ins.telefono, nuevo: sol.telefono },
                 { label: 'Célula', actual: ins.celula, nuevo: sol.celula },
                 { label: 'Talla Polera', actual: ins.talla_polera, nuevo: sol.talla_polera },
+                { label: 'Tipo Inscripción', actual: ins.tipo_inscripcion_id, nuevo: sol.tipo_inscripcion_id },
                 { label: 'Actividad Favorita', actual: ins.actividad_favorita, nuevo: sol.actividad_favorita },
                 { label: 'Habilidad / Talento', actual: ins.habilidad_especial, nuevo: sol.habilidad_especial },
                 { label: 'Contacto Emergencia', actual: ins.contacto_emergencia, nuevo: sol.contacto_emergencia },
@@ -1562,10 +1737,21 @@
             campos.forEach(c => {
                 let cambio = (c.actual || '') !== (c.nuevo || '');
                 let bgClass = cambio ? 'bg-amber-50 font-bold' : '';
+                
+                let valActual = c.actual;
+                let valNuevo = c.nuevo;
+
+                if (c.label === 'Tipo Inscripción') {
+                    let catA = tiposInscripcionGlobal.find(t => t.id === c.actual);
+                    let catN = tiposInscripcionGlobal.find(t => t.id === c.nuevo);
+                    valActual = catA ? catA.nombre : (c.actual || '-');
+                    valNuevo = catN ? catN.nombre : (c.nuevo || '-');
+                }
+
                 html += `<tr class="${bgClass}">
                     <td class="p-2 border">${c.label}</td>
-                    <td class="p-2 border text-gray-500">${c.actual || '-'}</td>
-                    <td class="p-2 border text-indigo-900">${c.nuevo || '-'} ${cambio ? '✏️' : ''}</td>
+                    <td class="p-2 border text-gray-500">${valActual || '-'}</td>
+                    <td class="p-2 border text-indigo-900">${valNuevo || '-'} ${cambio ? '✏️' : ''}</td>
                 </tr>`;
             });
 
@@ -1576,35 +1762,43 @@
 
         function cerrarModalCambios() { document.getElementById('modalVerCambios').classList.add('hidden'); }
 
-        async function procesarCarta(id, nuevoEstado) {
+        async function procesarCarta(id, nuevoEstado, nombre) {
             await db.from('inscritos').update({ estado_carta: nuevoEstado }).eq('id', id);
+            await registrarLogAuditoria('Revisión Carta', 'Pendientes', `Marcó la carta de ${nombre || 'Inscrito'} como: ${nuevoEstado}`);
             alert(`Carta marcada como: ${nuevoEstado}`);
             cargarTodoElDashboard();
         }
 
-        async function procesarPago(id, estado) {
+        async function procesarPago(id, estado, nombre, monto) {
             await db.from('pagos').update({ estado: estado }).eq('id', id);
+            await registrarLogAuditoria('Revisión Pago', 'Pendientes', `Marcó el abono de Bs ${monto} de ${nombre || 'Inscrito'} como: ${estado}`);
             cargarTodoElDashboard();
         }
 
+        // APROBACIÓN COMPLETA DE TODOS LOS CAMPOS SOLICITADOS
         async function procesarEdicion(idSol, estado) {
             const sol = solicitudesEdicionGlobal.find(s => s.id === idSol);
             await db.from('solicitudes_edicion').update({ estado: estado }).eq('id', idSol);
             
             if (estado === 'Aprobado' && sol) {
-                await db.from('inscritos').update({ 
-                    telefono: sol.telefono,
-                    celula: sol.celula,
-                    talla_polera: sol.talla_polera,
-                    tipo_inscripcion_id: sol.tipo_inscripcion_id,
-                    actividad_favorita: sol.actividad_favorita,
-                    habilidad_especial: sol.habilidad_especial,
-                    contacto_emergencia: sol.contacto_emergencia,
-                    alergias_medicina: sol.alergias_medicina,
-                    tutor_nombre: sol.tutor_nombre,
-                    tutor_telefono: sol.tutor_telefono
-                }).eq('id', sol.inscrito_id);
+                const updatePayload = {};
+                if (sol.telefono !== undefined) updatePayload.telefono = sol.telefono;
+                if (sol.celula !== undefined) updatePayload.celula = sol.celula;
+                if (sol.talla_polera !== undefined) updatePayload.talla_polera = sol.talla_polera;
+                if (sol.tipo_inscripcion_id !== undefined && sol.tipo_inscripcion_id !== null) updatePayload.tipo_inscripcion_id = sol.tipo_inscripcion_id;
+                if (sol.actividad_favorita !== undefined) updatePayload.actividad_favorita = sol.actividad_favorita;
+                if (sol.habilidad_especial !== undefined) updatePayload.habilidad_especial = sol.habilidad_especial;
+                if (sol.contacto_emergencia !== undefined) updatePayload.contacto_emergencia = sol.contacto_emergencia;
+                if (sol.alergias_medicina !== undefined) updatePayload.alergias_medicina = sol.alergias_medicina;
+                if (sol.tutor_nombre !== undefined) updatePayload.tutor_nombre = sol.tutor_nombre;
+                if (sol.tutor_telefono !== undefined) updatePayload.tutor_telefono = sol.tutor_telefono;
+
+                await db.from('inscritos').update(updatePayload).eq('id', sol.inscrito_id);
+                await registrarLogAuditoria('Aprobación de Cambios', 'Pendientes', `Aprobó solicitud de cambios para: ${sol.inscritos?.nombre_completo}`);
+            } else if (sol) {
+                await registrarLogAuditoria('Rechazo de Cambios', 'Pendientes', `Rechazó solicitud de cambios para: ${sol.inscritos?.nombre_completo}`);
             }
+
             alert(`Solicitud ${estado}.`);
             cargarTodoElDashboard();
         }
