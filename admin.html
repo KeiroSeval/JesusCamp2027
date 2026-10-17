@@ -4,18 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jesus Camp 2027 - Dashboard Admin</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Favicon para evitar error 404 -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛺</text></svg>">
+
+  <!-- Tailwind CSS Nivel Producción CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+  <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- FontAwesome Icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-slate-100 min-h-screen text-slate-800 font-sans">
+<body class="bg-slate-100 min-h-screen text-gray-800 font-sans">
 
-  <nav class="bg-slate-900 text-white p-4 shadow-md sticky top-0 z-50">
+  <nav class="bg-gray-900 text-white p-4 shadow-md sticky top-0 z-50">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
       <span class="font-bold text-lg tracking-wide flex items-center gap-2">
         <i class="fa-solid fa-shield-halved text-amber-400"></i> PANEL DE ADMINISTRACIÓN
       </span>
-      <a href="index.html" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2 rounded-lg border border-slate-700 transition">
+      <a href="index.html" class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg border border-gray-700 transition">
         Volver al Portal público
       </a>
     </div>
@@ -25,21 +34,21 @@
 
     <!-- METRICAS DE ESTADÍSTICAS -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-blue-600">
-        <p class="text-xs font-bold text-slate-400 uppercase">Total Inscritos</p>
-        <h3 class="text-3xl font-black text-slate-900 mt-1" id="stInscritos">0</h3>
+      <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-blue-600">
+        <p class="text-xs font-bold text-gray-400 uppercase">Total Inscritos</p>
+        <h3 class="text-3xl font-black text-gray-900 mt-1" id="stInscritos">0</h3>
       </div>
-      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-emerald-600">
-        <p class="text-xs font-bold text-slate-400 uppercase">Recaudado Confirmado</p>
-        <h3 class="text-3xl font-black text-emerald-600 mt-1" id="stRecaudado">Bs 0</h3>
+      <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-green-600">
+        <p class="text-xs font-bold text-gray-400 uppercase">Recaudado Confirmado</p>
+        <h3 class="text-3xl font-black text-green-600 mt-1" id="stRecaudado">Bs 0</h3>
       </div>
-      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-purple-600">
-        <p class="text-xs font-bold text-slate-400 uppercase">Hospedaje</p>
-        <p class="text-xs font-bold text-slate-700 mt-2" id="stHospedaje">Colchón: 0 | Camping: 0</p>
+      <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-purple-600">
+        <p class="text-xs font-bold text-gray-400 uppercase">Hospedaje</p>
+        <p class="text-xs font-bold text-gray-700 mt-2" id="stHospedaje">Colchón: 0 | Camping: 0</p>
       </div>
-      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-amber-500">
-        <p class="text-xs font-bold text-slate-400 uppercase">Equipos</p>
-        <p class="text-[10px] text-slate-600 mt-1" id="stEquipos">Águilas: 0 | Búfalos: 0<br>Ciervos: 0 | Leones: 0</p>
+      <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-amber-500">
+        <p class="text-xs font-bold text-gray-400 uppercase">Equipos</p>
+        <p class="text-xs text-gray-600 mt-1" id="stEquipos">Águilas: 0 | Búfalos: 0<br>Ciervos: 0 | Leones: 0</p>
       </div>
     </div>
 
@@ -47,13 +56,13 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
       <!-- Pagos por Aprobar -->
-      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-        <h3 class="font-bold text-slate-800 text-base mb-4 flex items-center gap-2">
+      <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+        <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
           <i class="fa-solid fa-clock text-amber-500"></i> Comprobantes Pendientes de Aprobación
         </h3>
         <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs text-slate-600">
-            <thead class="bg-slate-50 text-slate-400 uppercase font-semibold">
+          <table class="w-full text-left text-xs text-gray-600">
+            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
               <tr>
                 <th class="p-2">Inscrito</th>
                 <th class="p-2">Monto</th>
@@ -61,26 +70,26 @@
                 <th class="p-2">Acción</th>
               </tr>
             </thead>
-            <tbody id="tblPagosPendientes" class="divide-y divide-slate-100"></tbody>
+            <tbody id="tblPagosPendientes" class="divide-y divide-gray-100"></tbody>
           </table>
         </div>
       </div>
 
       <!-- Cambios de Perfil por Aprobar -->
-      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-        <h3 class="font-bold text-slate-800 text-base mb-4 flex items-center gap-2">
+      <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+        <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
           <i class="fa-solid fa-user-pen text-blue-500"></i> Solicitudes de Modificación de Datos
         </h3>
         <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs text-slate-600">
-            <thead class="bg-slate-50 text-slate-400 uppercase font-semibold">
+          <table class="w-full text-left text-xs text-gray-600">
+            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
               <tr>
                 <th class="p-2">Inscrito</th>
                 <th class="p-2">Nuevos Datos</th>
                 <th class="p-2">Acción</th>
               </tr>
             </thead>
-            <tbody id="tblEdicionesPendientes" class="divide-y divide-slate-100"></tbody>
+            <tbody id="tblEdicionesPendientes" class="divide-y divide-gray-100"></tbody>
           </table>
         </div>
       </div>
@@ -90,14 +99,17 @@
   </main>
 
   <script>
-    const SUPABASE_URL = 'https://bpwsdgkafjnsgfilbfgg.supabase.co';
+    // ⚠️ REEMPLAZA CON TUS CREDENCIALES EXACTAS DE SUPABASE ⚠️
+    const SUPABASE_URL = 'https://bpwsdgkafjnsgfilbfgg.supabase.co/rest/v1/';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwd3NkZ2thZmpuc2dmaWxiZmdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxODM1NzUsImV4cCI6MjEwNzc1OTU3NX0.rnSg8vNFpAuwNfECYwfyynERKwv3CJ7CGZRhAKbyDDM';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // Instancia limpia con variable 'db'
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     async function cargarDashboardAdmin() {
       // 1. Estadísticas
-      const { data: inscritos } = await supabase.from('inscritos').select('*');
-      const { data: pagos } = await supabase.from('pagos').select('*').eq('estado', 'Aprobado');
+      const { data: inscritos } = await db.from('inscritos').select('*');
+      const { data: pagos } = await db.from('pagos').select('*').eq('estado', 'Aprobado');
 
       document.getElementById('stInscritos').innerText = (inscritos || []).length;
 
@@ -110,7 +122,7 @@
       document.getElementById('stHospedaje').innerText = `Colchón: ${colchon} | Camping: ${camping}`;
 
       // 2. Pagos Pendientes
-      const { data: pagosPend } = await supabase
+      const { data: pagosPend } = await db
         .from('pagos')
         .select('*, inscritos(nombre_completo)')
         .eq('estado', 'Pendiente');
@@ -121,17 +133,17 @@
         tbodyP.innerHTML += `
           <tr>
             <td class="p-2 font-semibold">${p.inscritos?.nombre_completo || 'Desconocido'}</td>
-            <td class="p-2 font-bold text-emerald-600">Bs ${p.monto}</td>
+            <td class="p-2 font-bold text-green-600">Bs ${p.monto}</td>
             <td class="p-2"><a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline">Ver</a></td>
             <td class="p-2 flex gap-1">
-              <button onclick="procesarPago('${p.id}', 'Aprobado')" class="bg-emerald-600 text-white px-2 py-1 rounded text-[10px] font-bold">✓</button>
-              <button onclick="procesarPago('${p.id}', 'Rechazado')" class="bg-rose-600 text-white px-2 py-1 rounded text-[10px] font-bold">✕</button>
+              <button onclick="procesarPago('${p.id}', 'Aprobado')" class="bg-green-600 text-white px-2 py-1 rounded text-xs font-bold">✓</button>
+              <button onclick="procesarPago('${p.id}', 'Rechazado')" class="bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">✕</button>
             </td>
           </tr>`;
       });
 
       // 3. Ediciones Pendientes
-      const { data: edicPend } = await supabase
+      const { data: edicPend } = await db
         .from('solicitudes_edicion')
         .select('*, inscritos(nombre_completo)')
         .eq('estado', 'Pendiente');
@@ -142,25 +154,25 @@
         tbodyE.innerHTML += `
           <tr>
             <td class="p-2 font-semibold">${e.inscritos?.nombre_completo}</td>
-            <td class="p-2 text-[10px]">Talla: ${e.talla_polera}, Hosp: ${e.tipo_hospedaje}</td>
+            <td class="p-2 text-xs">Talla: ${e.talla_polera}, Hosp: ${e.tipo_hospedaje}</td>
             <td class="p-2 flex gap-1">
-              <button onclick="procesarEdicion('${e.id}', '${e.inscrito_id}', '${e.telefono}', '${e.celula}', '${e.talla_polera}', '${e.tipo_hospedaje}', 'Aprobado')" class="bg-emerald-600 text-white px-2 py-1 rounded text-[10px] font-bold">✓</button>
-              <button onclick="procesarEdicion('${e.id}', null, null, null, null, null, 'Rechazado')" class="bg-rose-600 text-white px-2 py-1 rounded text-[10px] font-bold">✕</button>
+              <button onclick="procesarEdicion('${e.id}', '${e.inscrito_id}', '${e.telefono}', '${e.celula}', '${e.talla_polera}', '${e.tipo_hospedaje}', 'Aprobado')" class="bg-green-600 text-white px-2 py-1 rounded text-xs font-bold">✓</button>
+              <button onclick="procesarEdicion('${e.id}', null, null, null, null, null, 'Rechazado')" class="bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">✕</button>
             </td>
           </tr>`;
       });
     }
 
     async function procesarPago(pagoId, estado) {
-      await supabase.from('pagos').update({ estado: estado }).eq('id', pagoId);
+      await db.from('pagos').update({ estado: estado }).eq('id', pagoId);
       cargarDashboardAdmin();
     }
 
     async function procesarEdicion(idSol, idInscrito, tel, cel, talla, hosp, estado) {
-      await supabase.from('solicitudes_edicion').update({ estado: estado }).eq('id', idSol);
+      await db.from('solicitudes_edicion').update({ estado: estado }).eq('id', idSol);
 
       if (estado === 'Aprobado') {
-        await supabase.from('inscritos').update({
+        await db.from('inscritos').update({
           telefono: tel,
           celula: cel,
           talla_polera: talla,
