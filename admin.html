@@ -4,21 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jesus Camp 2027 - Panel de Control Admin</title>
+    <title>Jesus Camp 2027 - Administrador Avanzado</title>
 
-    <!-- PWA Manifest & Favicon -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛺</text></svg>">
 
-    <!-- Tailwind CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-
-    <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- FontAwesome Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 
@@ -45,7 +39,7 @@
         </div>
     </nav>
 
-    <!-- MODAL/PANTALLA DE LOGIN -->
+    <!-- PANTALLA DE LOGIN -->
     <section id="secLogin" class="max-w-md mx-auto mt-16 p-6 bg-white rounded-2xl shadow-xl border border-gray-200">
         <div class="text-center mb-6">
             <div
@@ -75,59 +69,63 @@
         </form>
     </section>
 
-    <!-- CONTENIDO DASHBOARD PRINCIPAL (PROTEGIDO) -->
+    <!-- DASHBOARD PRINCIPAL -->
     <div id="secDashboard" class="hidden max-w-7xl mx-auto p-4 space-y-6">
 
-        <!-- BARRA SUPERIOR DE RESUMEN NETO -->
+        <!-- METRICAS DE FINANZAS -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-blue-600">
                 <p class="text-xs font-bold text-gray-400 uppercase">Total Inscritos</p>
                 <h3 class="text-3xl font-black text-gray-900 mt-1" id="stInscritos">0</h3>
             </div>
             <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-green-600">
-                <p class="text-xs font-bold text-gray-400 uppercase">Total Ingresos (Abonos)</p>
+                <p class="text-xs font-bold text-gray-400 uppercase">Total Ingresos</p>
                 <h3 class="text-3xl font-black text-green-600 mt-1" id="stIngresos">Bs 0</h3>
             </div>
             <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-red-600">
-                <p class="text-xs font-bold text-gray-400 uppercase">Total Egresos (Gastos)</p>
+                <p class="text-xs font-bold text-gray-400 uppercase">Total Egresos</p>
                 <h3 class="text-3xl font-black text-red-600 mt-1" id="stEgresos">Bs 0</h3>
             </div>
             <div
                 class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-amber-500 bg-amber-50/30">
-                <p class="text-xs font-bold text-amber-800 uppercase">Balance Neto en Caja</p>
+                <p class="text-xs font-bold text-amber-800 uppercase">Balance Neto</p>
                 <h3 class="text-3xl font-black text-amber-600 mt-1" id="stBalance">Bs 0</h3>
             </div>
         </div>
 
-        <!-- PESTAÑAS DE NAVEGACIÓN INTERNA -->
+        <!-- PESTAÑAS DE NAVEGACIÓN DINÁMICAS SEGUNDO PERMISOS -->
         <div class="flex flex-wrap gap-2 border-b border-gray-200 pb-2">
-            <button onclick="cambiarPestana('solicitudes')"
+            <button id="navSolicitudes" onclick="cambiarPestana('solicitudes')"
                 class="tab-btn active bg-gray-900 text-white text-xs font-bold px-4 py-2 rounded-xl transition">
                 <i class="fa-solid fa-clock-rotate-left mr-1"></i> Pendientes
             </button>
-            <button onclick="cambiarPestana('inscritos')"
+            <button id="navInscritos" onclick="cambiarPestana('inscritos')"
                 class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
                 <i class="fa-solid fa-users mr-1"></i> Lista de Inscritos
             </button>
-            <button onclick="cambiarPestana('ingresos')"
+            <button id="navIngresos" onclick="cambiarPestana('ingresos')"
                 class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-file-invoice-dollar mr-1"></i> Historial Ingresos
+                <i class="fa-solid fa-file-invoice-dollar mr-1"></i> Ingresos
             </button>
-            <button onclick="cambiarPestana('egresos')"
+            <button id="navEgresos" onclick="cambiarPestana('egresos')"
                 class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-arrow-down-short-wide mr-1"></i> Módulo Egresos
+                <i class="fa-solid fa-arrow-down-short-wide mr-1"></i> Egresos
             </button>
-            <button onclick="cambiarPestana('usuarios')"
+            <button id="navUsuarios" onclick="cambiarPestana('usuarios')"
                 class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
                 <i class="fa-solid fa-user-shield mr-1"></i> Administradores
             </button>
+            <button id="navRoles" onclick="cambiarPestana('roles')"
+                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                <i class="fa-solid fa-key mr-1"></i> Permisos y Roles
+            </button>
         </div>
 
-        <!-- PESTAÑA 1: BANDEJAS DE APROBACIÓN PENDIENTE -->
+        <!-- PESTAÑA 1: PENDIENTES -->
         <div id="tabSolicitudes" class="tab-content grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-receipt text-amber-500"></i> Comprobantes de Pago por Aprobar
+                    <i class="fa-solid fa-receipt text-amber-500"></i> Comprobantes Pendientes
                 </h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-gray-600">
@@ -146,7 +144,7 @@
 
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-user-pen text-blue-500"></i> Cambios de Datos por Aprobar
+                    <i class="fa-solid fa-user-pen text-blue-500"></i> Cambios Pendientes
                 </h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-gray-600">
@@ -163,57 +161,21 @@
             </div>
         </div>
 
-        <!-- PESTAÑA 2: LISTA GENERAL DE INSCRITOS Y REGISTRO DIRECTO -->
+        <!-- PESTAÑA 2: INSCRITOS CON EDICIÓN EN LÍNEA -->
         <div id="tabInscritos" class="tab-content hidden space-y-6">
-            <!-- Formulario para Registrar Nuevo Campamentista -->
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-user-plus text-green-600"></i> Registrar Nuevo Campamentista (Directo)
-                </h3>
-                <form onsubmit="crearNuevoCampamentista(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <input type="text" id="newCi" placeholder="C.I. (Obligatorio)" required
-                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
-                    <input type="text" id="newNombre" placeholder="Nombre Completo" required
-                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
-                    <input type="text" id="newTel" placeholder="Teléfono / WhatsApp"
-                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
-                    <input type="text" id="newCelula" placeholder="Célula"
-                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
-                    <select id="newTalla"
-                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
-                        <option value="XS">Talla XS</option>
-                        <option value="S">Talla S</option>
-                        <option value="M" selected>Talla M</option>
-                        <option value="L">Talla L</option>
-                        <option value="XL">Talla XL</option>
-                    </select>
-                    <select id="newHospedaje"
-                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
-                        <option value="Colchon">Colchón (Bs 230)</option>
-                        <option value="Camping">Camping (Bs 220)</option>
-                    </select>
-                    <div class="md:col-span-3">
-                        <button type="submit"
-                            class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-6 py-2.5 rounded-xl transition shadow-md">
-                            + Inscribir Campamentista
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Tabla Completa de Inscritos -->
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4">Directorio de Campamentistas Registrados</h3>
+                <h3 class="font-bold text-gray-800 text-base mb-4">Directorio y Edición Directa de Campamentistas</h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-gray-600">
                         <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
                             <tr>
                                 <th class="p-2">C.I.</th>
-                                <th class="p-2">Nombre</th>
+                                <th class="p-2">Nombre Completo</th>
                                 <th class="p-2">Teléfono</th>
                                 <th class="p-2">Célula</th>
                                 <th class="p-2">Talla</th>
                                 <th class="p-2">Hospedaje</th>
+                                <th class="p-2">Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="tblTodosInscritos" class="divide-y divide-gray-100"></tbody>
@@ -222,20 +184,16 @@
             </div>
         </div>
 
-        <!-- PESTAÑA 3: HISTORIAL DE INGRESOS -->
+        <!-- PESTAÑA 3: INGRESOS -->
         <div id="tabIngresos" class="tab-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-            <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-money-bill-trend-up text-green-600"></i> Registro Completo de Ingresos (Abonos
-                Confirmados)
-            </h3>
+            <h3 class="font-bold text-gray-800 text-base mb-4">Historial de Ingresos</h3>
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-xs text-gray-600">
                     <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
                         <tr>
                             <th class="p-2">Fecha</th>
-                            <th class="p-2">Campamentista</th>
+                            <th class="p-2">Inscrito</th>
                             <th class="p-2">Monto</th>
-                            <th class="p-2">Observaciones</th>
                             <th class="p-2">Comprobante</th>
                         </tr>
                     </thead>
@@ -244,48 +202,36 @@
             </div>
         </div>
 
-        <!-- PESTAÑA 4: MÓDULO DE EGRESOS (GASTOS) -->
+        <!-- PESTAÑA 4: EGRESOS -->
         <div id="tabEgresos" class="tab-content hidden space-y-6">
-            <!-- Formulario Nuevo Egreso -->
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-minus-circle text-red-600"></i> Registrar Nuevo Egreso / Gasto
-                </h3>
+                <h3 class="font-bold text-gray-800 text-base mb-4">Registrar Egreso</h3>
                 <form onsubmit="registrarNuevoEgreso(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <input type="text" id="egConcepto" placeholder="Concepto (ej. Alquiler de Sonido)" required
-                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
-                    <select id="egCategoria"
-                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
+                    <input type="text" id="egConcepto" placeholder="Concepto" required
+                        class="p-2.5 border rounded-xl text-xs">
+                    <select id="egCategoria" class="p-2.5 border rounded-xl text-xs">
                         <option value="Alimentación">Alimentación</option>
                         <option value="Logística">Logística</option>
-                        <option value="Sonido">Sonido / Iluminación</option>
+                        <option value="Sonido">Sonido</option>
                         <option value="Transporte">Transporte</option>
-                        <option value="Materiales">Materiales / Poleras</option>
-                        <option value="Otros">Otros Gastos</option>
+                        <option value="Otros">Otros</option>
                     </select>
-                    <input type="number" step="0.01" id="egMonto" placeholder="Monto (Bs)" required
-                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
-                    <div class="md:col-span-3">
-                        <button type="submit"
-                            class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-6 py-2.5 rounded-xl transition shadow-md">
-                            - Registrar Gasto
-                        </button>
-                    </div>
+                    <input type="number" step="0.01" id="egMonto" placeholder="Monto" required
+                        class="p-2.5 border rounded-xl text-xs">
+                    <button type="submit" class="bg-red-600 text-white font-bold text-xs py-2 rounded-xl col-span-3">-
+                        Registrar Gasto</button>
                 </form>
             </div>
 
-            <!-- Tabla de Egresos -->
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4">Lista de Gastos Registrados</h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-gray-600">
-                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                        <thead class="bg-gray-50 text-gray-400 uppercase">
                             <tr>
                                 <th class="p-2">Fecha</th>
                                 <th class="p-2">Concepto</th>
                                 <th class="p-2">Categoría</th>
                                 <th class="p-2">Monto</th>
-                                <th class="p-2">Registrado por</th>
                             </tr>
                         </thead>
                         <tbody id="tblListaEgresos" class="divide-y divide-gray-100"></tbody>
@@ -294,37 +240,34 @@
             </div>
         </div>
 
-        <!-- PESTAÑA 5: GESTIÓN DE ADMINISTRADORES -->
+        <!-- PESTAÑA 5: ADMINISTRADORES Y SUS ROLES -->
         <div id="tabUsuarios" class="tab-content hidden space-y-6">
-            <!-- Formulario Crear Nuevo Admin -->
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-user-shield text-indigo-600"></i> Crear Nuevo Usuario Administrador
-                </h3>
-                <form onsubmit="crearNuevoAdmin(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <input type="text" id="adminNewNombre" placeholder="Nombre Completo" required
-                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
-                    <input type="text" id="adminNewUser" placeholder="Nombre de Usuario" required
-                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
-                    <input type="password" id="adminNewPass" placeholder="Contraseña" required
-                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
+                <h3 class="font-bold text-gray-800 text-base mb-4">Crear / Modificar Administrador</h3>
+                <form onsubmit="guardarAdmin(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <input type="hidden" id="adminIdEdit">
+                    <input type="text" id="adminNewNombre" placeholder="Nombre" required
+                        class="p-2.5 border rounded-xl text-xs">
+                    <input type="text" id="adminNewUser" placeholder="Usuario" required
+                        class="p-2.5 border rounded-xl text-xs">
+                    <input type="password" id="adminNewPass" placeholder="Contraseña (vacío para mantener)"
+                        class="p-2.5 border rounded-xl text-xs">
+                    <select id="adminRolSelect" class="p-2.5 border rounded-xl text-xs"></select>
                     <button type="submit"
-                        class="bg-gray-900 hover:bg-gray-800 text-amber-400 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow-md">
-                        + Crear Administrador
-                    </button>
+                        class="bg-gray-900 text-amber-400 font-bold text-xs py-2.5 rounded-xl col-span-4">Guardar
+                        Administrador</button>
                 </form>
             </div>
 
-            <!-- Tabla Administradores -->
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4">Administradores Autorizados</h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-gray-600">
-                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                        <thead class="bg-gray-50 text-gray-400 uppercase">
                             <tr>
                                 <th class="p-2">Nombre</th>
                                 <th class="p-2">Usuario</th>
                                 <th class="p-2">Rol</th>
+                                <th class="p-2">Acción</th>
                             </tr>
                         </thead>
                         <tbody id="tblListaAdmins" class="divide-y divide-gray-100"></tbody>
@@ -333,252 +276,175 @@
             </div>
         </div>
 
+        <!-- PESTAÑA 6: CREACIÓN DE ROLES Y PERMISOS SELECCIONABLES -->
+        <div id="tabRoles" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <h3 class="font-bold text-gray-800 text-base mb-4">Configurador de Roles y Permisos Granulares</h3>
+                <form onsubmit="guardarRol(event)" class="space-y-4">
+                    <input type="text" id="rolNombre" placeholder="Nombre del Rol (ej. Tesorero, Supervisor)" required
+                        class="p-2.5 border rounded-xl text-xs w-full max-w-md">
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-gray-50 p-4 rounded-xl">
+                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                id="permSolicitudes"> Ver Pendientes</label>
+                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                id="permInscritos"> Ver Inscritos</label>
+                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                id="permIngresos"> Ver Ingresos</label>
+                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                id="permEgresos"> Ver Egresos</label>
+                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                id="permUsuarios"> Gestionar Admins</label>
+                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                id="permRoles"> Crear Roles</label>
+                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                id="permEditInscritos"> Editar Inscritos</label>
+                    </div>
+                    <button type="submit"
+                        class="bg-indigo-600 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-md">+ Crear /
+                        Guardar Rol</button>
+                </form>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        // CREDENCIALES DE SUPABASE
         const SUPABASE_URL = 'https://bpwsdgkafjnsgfilbfgg.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwd3NkZ2thZmpuc2dmaWxiZmdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxODM1NzUsImV4cCI6MjEwNzc1OTU3NX0.rnSg8vNFpAuwNfECYwfyynERKwv3CJ7CGZRhAKbyDDM';
 
-
         const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        let adminSesionActual = null;
+        let adminSesion = null;
+        let permisosAdmin = {};
 
-        // 1. INICIO DE SESIÓN CON HASH SHA-256
         async function iniciarSesionAdmin(e) {
             e.preventDefault();
             const user = document.getElementById('loginUser').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
 
-            // Convertir contraseña a SHA-256
             const msgUint8 = new TextEncoder().encode(pass);
             const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            const hashHex = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
 
-            const { data: admin, error } = await db
-                .from('administradores')
-                .select('*')
-                .eq('usuario', user)
-                .eq('password_hash', hashHex)
-                .maybeSingle();
+            const { data: admin } = await db.from('administradores').select('*, roles(*)').eq('usuario', user).eq('password_hash', hashHex).maybeSingle();
 
-            if (error || !admin) {
-                document.getElementById('msgLoginError').innerText = 'Usuario o contraseña incorrectos.';
-                document.getElementById('msgLoginError').classList.remove('hidden');
-                return;
-            }
+            if (!admin) return alert('Credenciales incorrectas');
 
-            adminSesionActual = admin;
+            adminSesion = admin;
+            permisosAdmin = admin.roles?.permisos || {};
+
             document.getElementById('secLogin').classList.add('hidden');
             document.getElementById('secDashboard').classList.remove('hidden');
-            document.getElementById('txtAdminInfo').innerText = `👤 ${admin.nombre} (${admin.rol})`;
+            document.getElementById('txtAdminInfo').innerText = `👤 ${admin.nombre} (${admin.roles?.nombre || 'Sin Rol'})`;
             document.getElementById('txtAdminInfo').classList.remove('hidden');
             document.getElementById('btnCerrarSesion').classList.remove('hidden');
 
+            aplicarPermisosVisuales();
             cargarTodoElDashboard();
         }
 
-        function cerrarSesion() {
-            adminSesionActual = null;
-            document.getElementById('secDashboard').classList.add('hidden');
-            document.getElementById('secLogin').classList.remove('hidden');
-            document.getElementById('txtAdminInfo').classList.add('hidden');
-            document.getElementById('btnCerrarSesion').classList.add('hidden');
+        function aplicarPermisosVisuales() {
+            // Ocultar o mostrar botones según el Rol
+            document.getElementById('navSolicitudes').style.display = permisosAdmin.solicitudes ? 'block' : 'none';
+            document.getElementById('navInscritos').style.display = permisosAdmin.inscritos ? 'block' : 'none';
+            document.getElementById('navIngresos').style.display = permisosAdmin.ingresos ? 'block' : 'none';
+            document.getElementById('navEgresos').style.display = permisosAdmin.egresos ? 'block' : 'none';
+            document.getElementById('navUsuarios').style.display = permisosAdmin.usuarios ? 'block' : 'none';
+            document.getElementById('navRoles').style.display = permisosAdmin.roles ? 'block' : 'none';
         }
 
-        // 2. NAVEGACIÓN ENTRE PESTAÑAS
-        function cambiarPestana(tabName) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('bg-gray-900', 'text-white');
-                btn.classList.add('bg-white', 'text-gray-600');
-            });
-
-            if (tabName === 'solicitudes') document.getElementById('tabSolicitudes').classList.remove('hidden');
-            if (tabName === 'inscritos') document.getElementById('tabInscritos').classList.remove('hidden');
-            if (tabName === 'ingresos') document.getElementById('tabIngresos').classList.remove('hidden');
-            if (tabName === 'egresos') document.getElementById('tabEgresos').classList.remove('hidden');
-            if (tabName === 'usuarios') document.getElementById('tabUsuarios').classList.remove('hidden');
-
-            event.currentTarget.classList.remove('bg-white', 'text-gray-600');
-            event.currentTarget.classList.add('bg-gray-900', 'text-white');
-        }
-
-        // 3. CARGAR DATOS GENERALES Y CALCULOS FINANCIEROS
         async function cargarTodoElDashboard() {
             const { data: inscritos } = await db.from('inscritos').select('*');
-            const { data: pagosAprobados } = await db.from('pagos').select('*, inscritos(nombre_completo)').eq('estado', 'Aprobado');
-            const { data: listaEgresos } = await db.from('egresos').select('*').order('fecha', { ascending: false });
+            const { data: pagos } = await db.from('pagos').select('*, inscritos(nombre_completo)').eq('estado', 'Aprobado');
+            const { data: egresos } = await db.from('egresos').select('*');
 
-            // Métricas Principales
             document.getElementById('stInscritos').innerText = (inscritos || []).length;
 
-            let totalIngresos = 0;
-            (pagosAprobados || []).forEach(p => totalIngresos += Number(p.monto));
-            document.getElementById('stIngresos').innerText = `Bs ${totalIngresos}`;
+            let ing = 0, eg = 0;
+            (pagos || []).forEach(p => ing += Number(p.monto));
+            (egresos || []).forEach(e => eg += Number(e.monto));
 
-            let totalEgresos = 0;
-            (listaEgresos || []).forEach(e => totalEgresos += Number(e.monto));
-            document.getElementById('stEgresos').innerText = `Bs ${totalEgresos}`;
+            document.getElementById('stIngresos').innerText = `Bs ${ing}`;
+            document.getElementById('stEgresos').innerText = `Bs ${eg}`;
+            document.getElementById('stBalance').innerText = `Bs ${ing - eg}`;
 
-            const balanceNeto = totalIngresos - totalEgresos;
-            document.getElementById('stBalance').innerText = `Bs ${balanceNeto}`;
-
-            // Tabla Inscritos
+            // Renderizar Inscritos con Edición directa
             const tbodyIns = document.getElementById('tblTodosInscritos');
             tbodyIns.innerHTML = '';
             (inscritos || []).forEach(i => {
                 tbodyIns.innerHTML += `
           <tr>
             <td class="p-2 font-bold">${i.ci}</td>
-            <td class="p-2 font-semibold text-gray-800">${i.nombre_completo}</td>
-            <td class="p-2">${i.telefono || '-'}</td>
-            <td class="p-2">${i.celula || '-'}</td>
-            <td class="p-2"><span class="bg-gray-100 px-2 py-0.5 rounded font-bold">${i.talla_polera}</span></td>
+            <td class="p-2"><input type="text" id="ins_nom_${i.id}" value="${i.nombre_completo}" class="border rounded p-1 text-xs w-full"></td>
+            <td class="p-2"><input type="text" id="ins_tel_${i.id}" value="${i.telefono || ''}" class="border rounded p-1 text-xs w-24"></td>
+            <td class="p-2"><input type="text" id="ins_cel_${i.id}" value="${i.celula || ''}" class="border rounded p-1 text-xs w-24"></td>
+            <td class="p-2"><input type="text" id="ins_tal_${i.id}" value="${i.talla_polera || ''}" class="border rounded p-1 text-xs w-12"></td>
             <td class="p-2">${i.tipo_hospedaje}</td>
-          </tr>`;
-            });
-
-            // Tabla Historial Ingresos
-            const tbodyIng = document.getElementById('tblHistorialIngresos');
-            tbodyIng.innerHTML = '';
-            (pagosAprobados || []).forEach(p => {
-                tbodyIng.innerHTML += `
-          <tr>
-            <td class="p-2">${new Date(p.fecha).toLocaleDateString()}</td>
-            <td class="p-2 font-semibold">${p.inscritos?.nombre_completo || 'Desconocido'}</td>
-            <td class="p-2 font-bold text-green-600">Bs ${p.monto}</td>
-            <td class="p-2">${p.observaciones || '-'}</td>
-            <td class="p-2"><a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline">Ver</a></td>
-          </tr>`;
-            });
-
-            // Tabla Egresos
-            const tbodyEg = document.getElementById('tblListaEgresos');
-            tbodyEg.innerHTML = '';
-            (listaEgresos || []).forEach(e => {
-                tbodyEg.innerHTML += `
-          <tr>
-            <td class="p-2">${new Date(e.fecha).toLocaleDateString()}</td>
-            <td class="p-2 font-semibold text-gray-800">${e.concepto}</td>
-            <td class="p-2"><span class="bg-red-50 text-red-700 font-bold px-2 py-0.5 rounded">${e.categoria}</span></td>
-            <td class="p-2 font-bold text-red-600">Bs ${e.monto}</td>
-            <td class="p-2">${e.registrado_por}</td>
-          </tr>`;
-            });
-
-            // Cargar Pendientes y Admins
-            cargarPendientes();
-            cargarAdministradores();
-        }
-
-        async function cargarPendientes() {
-            const { data: pagosPend } = await db.from('pagos').select('*, inscritos(nombre_completo)').eq('estado', 'Pendiente');
-            const tbodyP = document.getElementById('tblPagosPendientes');
-            tbodyP.innerHTML = '';
-            (pagosPend || []).forEach(p => {
-                tbodyP.innerHTML += `
-          <tr>
-            <td class="p-2 font-semibold">${p.inscritos?.nombre_completo}</td>
-            <td class="p-2 font-bold text-green-600">Bs ${p.monto}</td>
-            <td class="p-2"><a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline">Ver</a></td>
-            <td class="p-2 flex gap-1">
-              <button onclick="procesarPago('${p.id}', 'Aprobado')" class="bg-green-600 text-white px-2 py-1 rounded text-xs font-bold">✓</button>
-              <button onclick="procesarPago('${p.id}', 'Rechazado')" class="bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">✕</button>
+            <td class="p-2">
+              <button onclick="guardarEdicionInscrito('${i.id}')" class="bg-blue-600 text-white px-2 py-1 rounded text-xs">Guardar</button>
             </td>
           </tr>`;
             });
 
-            const { data: edicPend } = await db.from('solicitudes_edicion').select('*, inscritos(nombre_completo)').eq('estado', 'Pendiente');
-            const tbodyE = document.getElementById('tblEdicionesPendientes');
-            tbodyE.innerHTML = '';
-            (edicPend || []).forEach(e => {
-                tbodyE.innerHTML += `
-          <tr>
-            <td class="p-2 font-semibold">${e.inscritos?.nombre_completo}</td>
-            <td class="p-2 text-xs">Talla: ${e.talla_polera}, Hosp: ${e.tipo_hospedaje}</td>
-            <td class="p-2 flex gap-1">
-              <button onclick="procesarEdicion('${e.id}', '${e.inscrito_id}', '${e.telefono}', '${e.celula}', '${e.talla_polera}', '${e.tipo_hospedaje}', 'Aprobado')" class="bg-green-600 text-white px-2 py-1 rounded text-xs font-bold">✓</button>
-              <button onclick="procesarEdicion('${e.id}', null, null, null, null, null, 'Rechazado')" class="bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">✕</button>
-            </td>
-          </tr>`;
-            });
+            cargarRolesYAdmins();
         }
 
-        async function cargarAdministradores() {
-            const { data: admins } = await db.from('administradores').select('*');
+        async function guardarEdicionInscrito(id) {
+            await db.from('inscritos').update({
+                nombre_completo: document.getElementById(`ins_nom_${id}`).value,
+                telefono: document.getElementById(`ins_tel_${id}`).value,
+                celula: document.getElementById(`ins_cel_${id}`).value,
+                talla_polera: document.getElementById(`ins_tal_${id}`).value
+            }).eq('id', id);
+            alert('Información del campamentista actualizada.');
+        }
+
+        async function cargarRolesYAdmins() {
+            const { data: roles } = await db.from('roles').select('*');
+            const selectRol = document.getElementById('adminRolSelect');
+            selectRol.innerHTML = '';
+            (roles || []).forEach(r => selectRol.innerHTML += `<option value="${r.id}">${r.nombre}</option>`);
+
+            const { data: admins } = await db.from('administradores').select('*, roles(*)');
             const tbodyA = document.getElementById('tblListaAdmins');
             tbodyA.innerHTML = '';
             (admins || []).forEach(a => {
                 tbodyA.innerHTML += `
           <tr>
             <td class="p-2 font-semibold">${a.nombre}</td>
-            <td class="p-2 font-bold text-gray-700">${a.usuario}</td>
-            <td class="p-2"><span class="bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded">${a.rol}</span></td>
+            <td class="p-2">${a.usuario}</td>
+            <td class="p-2 font-bold text-indigo-600">${a.roles?.nombre || 'Sin Rol'}</td>
+            <td class="p-2">
+              <button onclick="eliminarAdmin('${a.id}')" class="bg-red-600 text-white px-2 py-1 rounded text-xs">Eliminar</button>
+            </td>
           </tr>`;
             });
         }
 
-        // 4. ACCIONES DE MÓDULOS
-        async function crearNuevoCampamentista(e) {
+        async function guardarRol(e) {
             e.preventDefault();
-            await db.from('inscritos').insert([{
-                ci: document.getElementById('newCi').value.trim(),
-                nombre_completo: document.getElementById('newNombre').value.trim(),
-                telefono: document.getElementById('newTel').value.trim(),
-                celula: document.getElementById('newCelula').value.trim(),
-                talla_polera: document.getElementById('newTalla').value,
-                tipo_hospedaje: document.getElementById('newHospedaje').value
-            }]);
-            alert('Campamentista inscrito con éxito.');
-            e.target.reset();
-            cargarTodoElDashboard();
+            const permisos = {
+                solicitudes: document.getElementById('permSolicitudes').checked,
+                inscritos: document.getElementById('permInscritos').checked,
+                ingresos: document.getElementById('permIngresos').checked,
+                egresos: document.getElementById('permEgresos').checked,
+                usuarios: document.getElementById('permUsuarios').checked,
+                roles: document.getElementById('permRoles').checked,
+                editar_inscritos: document.getElementById('permEditInscritos').checked
+            };
+
+            await db.from('roles').insert([{ nombre: document.getElementById('rolNombre').value, permisos }]);
+            alert('Rol configurado con éxito.');
+            cargarRolesYAdmins();
         }
 
-        async function registrarNuevoEgreso(e) {
-            e.preventDefault();
-            await db.from('egresos').insert([{
-                concepto: document.getElementById('egConcepto').value.trim(),
-                categoria: document.getElementById('egCategoria').value,
-                monto: document.getElementById('egMonto').value,
-                registrado_por: adminSesionActual?.nombre || 'Admin'
-            }]);
-            alert('Gasto registrado con éxito.');
-            e.target.reset();
-            cargarTodoElDashboard();
+        function cambiarPestana(tab) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById(`tab${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.remove('hidden');
         }
 
-        async function crearNuevoAdmin(e) {
-            e.preventDefault();
-            const pass = document.getElementById('adminNewPass').value.trim();
-            const msgUint8 = new TextEncoder().encode(pass);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-            const hashHex = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
-
-            await db.from('administradores').insert([{
-                nombre: document.getElementById('adminNewNombre').value.trim(),
-                usuario: document.getElementById('adminNewUser').value.trim(),
-                password_hash: hashHex
-            }]);
-            alert('Nuevo administrador creado exitosamente.');
-            e.target.reset();
-            cargarAdministradores();
-        }
-
-        async function procesarPago(id, estado) {
-            await db.from('pagos').update({ estado: estado }).eq('id', id);
-            cargarTodoElDashboard();
-        }
-
-        async function procesarEdicion(idSol, idIns, tel, cel, talla, hosp, estado) {
-            await db.from('solicitudes_edicion').update({ estado: estado }).eq('id', idSol);
-            if (estado === 'Aprobado') {
-                await db.from('inscritos').update({ telefono: tel, celula: cel, talla_polera: talla, tipo_hospedaje: hosp }).eq('id', idIns);
-            }
-            cargarTodoElDashboard();
-        }
+        function cerrarSesion() { location.reload(); }
     </script>
 </body>
 
