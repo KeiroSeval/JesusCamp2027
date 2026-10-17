@@ -71,7 +71,7 @@
     <!-- DASHBOARD PRINCIPAL -->
     <div id="secDashboard" class="hidden max-w-7xl mx-auto p-4 space-y-6">
 
-        <!-- MÉTRICAS DE PARTICIPANTES SEPARADAS -->
+        <!-- MÉTRICAS DE PARTICIPANTES -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-blue-600 flex justify-between items-center">
                 <div>
@@ -98,7 +98,7 @@
             </div>
         </div>
 
-        <!-- METRICAS DE FINANZAS (OCULTABLES SEGÚN PERMISO 'verFinanzas') -->
+        <!-- METRICAS DE FINANZAS -->
         <div id="contTarjetasFinanzas" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div id="cardTotalIngresos" class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-green-600">
                 <p class="text-xs font-bold text-gray-400 uppercase">Total Ingresos</p>
@@ -230,7 +230,6 @@
                     </button>
                 </div>
 
-                <!-- FORMULARIO CREAR OCULTO POR DEFECTO -->
                 <div id="formContenedorCampamentista" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
                     <h4 class="font-bold text-gray-700 text-xs uppercase mb-3 border-b pb-1">Nuevo Registro</h4>
                     <form onsubmit="crearNuevoCampamentista(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -247,7 +246,6 @@
                             <option value="XL">Talla XL</option>
                         </select>
 
-                        <!-- TIPO DE INSCRIPCIÓN / CATEGORÍA DINÁMICA -->
                         <select id="newTipoInscripcion" onchange="evaluarPrecioManual(this.value, 'newDivPrecioManual')" class="p-2.5 border rounded-xl text-xs bg-white font-bold text-indigo-900"></select>
 
                         <div id="newDivPrecioManual" class="hidden">
@@ -320,24 +318,23 @@
             </div>
         </div>
 
-        <!-- PESTAÑA CATEGORÍAS / TIPOS DE INSCRIPCIÓN -->
+        <!-- PESTAÑA CATEGORÍAS -->
         <div id="tabCategorias" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-gray-800 text-base">Gestión de Tipos de Inscripción (Precios y Visibilidad)</h3>
+                    <h3 class="font-bold text-gray-800 text-base">Gestión de Tipos de Inscripción</h3>
                     <button onclick="prepararCrearCategoria()"
                         class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
                         <i class="fa-solid fa-plus"></i> Nueva Categoría
                     </button>
                 </div>
 
-                <!-- FORMULARIO CREAR Y EDITAR CATEGORÍA -->
                 <div id="formContenedorCategoria" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
                     <form onsubmit="guardarTipoInscripcion(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <input type="hidden" id="catIdEdit">
                         <div>
                             <label class="text-[10px] font-bold text-gray-500 uppercase">Nombre Categoría:</label>
-                            <input type="text" id="catNombre" placeholder="Nombre (Ej. Completo Adulto, Niño)" required class="p-2.5 border rounded-xl text-xs bg-white w-full">
+                            <input type="text" id="catNombre" placeholder="Nombre" required class="p-2.5 border rounded-xl text-xs bg-white w-full">
                         </div>
                         <div>
                             <label class="text-[10px] font-bold text-gray-500 uppercase">Precio Oficial (Bs):</label>
@@ -580,7 +577,6 @@
 
                         <label class="text-xs font-bold text-gray-700 block">Matriz de Permisos:</label>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-white p-4 rounded-xl border border-gray-200">
-                            <!-- PERMISO DE FINANZAS TOTALES -->
                             <label class="flex items-center gap-2 text-xs font-bold text-green-700 col-span-2 md:col-span-4 bg-green-50 p-2 rounded-lg border border-green-200">
                                 <input type="checkbox" id="permVerFinanzas"> 💰 Permitir ver Totales de Ingresos, Egresos y Balance Neto
                             </label>
@@ -673,7 +669,7 @@
         </div>
     </div>
 
-    <!-- MODAL EDITAR CAMPAMENTISTA / STAFF (TOTALMENTE SCROLLEABLE Y ADAPTATIVO AL TAMAÑO DE PANTALLA) -->
+    <!-- MODAL EDITAR CAMPAMENTISTA / STAFF -->
     <div id="modalEditCampamentista" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-2 sm:p-4">
         <div class="bg-white rounded-2xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl flex flex-col max-h-[90vh]">
             
@@ -899,7 +895,6 @@
             if (container) container.classList.toggle('hidden');
         }
 
-        // REGISTRO DE AUDITORÍA Y LOGS
         async function registrarLogAuditoria(accion, modulo, detalle) {
             try {
                 await db.from('auditoria_logs').insert([{
@@ -948,7 +943,6 @@
                 selectEdit.innerHTML += `<option value="${t.id}">${label}</option>`;
             });
 
-            // Renderizar Tabla de Categorías con Visibilidad y Edición
             const tbody = document.getElementById('tblTiposInscripcion');
             if (tbody) {
                 tbody.innerHTML = '';
@@ -1040,11 +1034,9 @@
         function aplicarPermisosVisuales() {
             const esSuper = !adminSesion.rol_id || adminSesion.roles?.nombre === 'SuperAdmin';
 
-            // Control de Visibilidad de Totales Financieros
             const puedeVerFinanzas = esSuper || permisosAdmin.verFinanzas;
             document.getElementById('contTarjetasFinanzas').style.display = puedeVerFinanzas ? 'grid' : 'none';
 
-            // Módulos
             document.getElementById('navSolicitudes').style.display = (esSuper || permisosAdmin.solicitudes) ? 'block' : 'none';
             document.getElementById('navInscritos').style.display = (esSuper || permisosAdmin.inscritosVer) ? 'block' : 'none';
             document.getElementById('navCategorias').style.display = (esSuper || permisosAdmin.categorias) ? 'block' : 'none';
@@ -1066,7 +1058,6 @@
             const { data: pagos } = await db.from('pagos').select('*, inscritos(nombre_completo)').eq('estado', 'Aprobado');
             const { data: egresos } = await db.from('egresos').select('*');
 
-            // Métricas de Participantes Desglosadas
             let cntStaff = 0;
             let cntCampamentistas = 0;
 
@@ -1087,7 +1078,6 @@
             document.getElementById('stEgresos').innerText = `Bs ${eg}`;
             document.getElementById('stBalance').innerText = `Bs ${ing - eg}`;
 
-            // Renderizar Directorio Inscritos y Staff
             const tbodyIns = document.getElementById('tblTodosInscritos');
             tbodyIns.innerHTML = '';
             (inscritos || []).forEach(i => {
@@ -1114,7 +1104,6 @@
           </tr>`;
             });
 
-            // Ingresos
             const tbodyIng = document.getElementById('tblHistorialIngresos');
             tbodyIng.innerHTML = '';
             (pagos || []).forEach(p => {
@@ -1133,7 +1122,6 @@
           </tr>`;
             });
 
-            // Egresos
             const tbodyEg = document.getElementById('tblListaEgresos');
             tbodyEg.innerHTML = '';
             (egresos || []).forEach(e => {
@@ -1652,7 +1640,6 @@
         }
 
         async function cargarPendientes() {
-            // Pagos
             const { data: pagosPend } = await db.from('pagos').select('*, inscritos(nombre_completo)').eq('estado', 'Pendiente');
             const tbodyP = document.getElementById('tblPagosPendientes');
             tbodyP.innerHTML = '';
@@ -1669,7 +1656,6 @@
           </tr>`;
             });
 
-            // Cambios de Perfil con Botón Ver Comparación
             const { data: edicPend } = await db.from('solicitudes_edicion').select('*, inscritos(*)').eq('estado', 'Pendiente');
             solicitudesEdicionGlobal = edicPend || [];
             const tbodyE = document.getElementById('tblEdicionesPendientes');
@@ -1691,7 +1677,6 @@
           </tr>`;
             });
 
-            // Cartas
             const { data: cartasPend } = await db.from('inscritos').select('*').eq('estado_carta', 'En Revisión');
             const tbodyC = document.getElementById('tblCartasPendientes');
             tbodyC.innerHTML = '';
@@ -1710,7 +1695,6 @@
             });
         }
 
-        // VER COMPARACIÓN CLARA DE CAMBIOS SOLICITADOS
         function verComparacionCambios(solicitudId) {
             const sol = solicitudesEdicionGlobal.find(s => s.id === solicitudId);
             if (!sol || !sol.inscritos) return;
@@ -1775,7 +1759,6 @@
             cargarTodoElDashboard();
         }
 
-        // APROBACIÓN COMPLETA DE TODOS LOS CAMPOS SOLICITADOS
         async function procesarEdicion(idSol, estado) {
             const sol = solicitudesEdicionGlobal.find(s => s.id === idSol);
             await db.from('solicitudes_edicion').update({ estado: estado }).eq('id', idSol);
