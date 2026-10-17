@@ -1,138 +1,487 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jesus Camp 2027 - Dashboard Admin</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jesus Camp 2027 - Panel de Control Admin</title>
 
-  <!-- Favicon para evitar error 404 -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛺</text></svg>">
+    <!-- PWA Manifest & Favicon -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛺</text></svg>">
 
-  <!-- Tailwind CSS Nivel Producción CDN -->
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
-  <!-- Supabase JS Client -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- FontAwesome Icons -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
+
 <body class="bg-slate-100 min-h-screen text-gray-800 font-sans">
 
-  <nav class="bg-gray-900 text-white p-4 shadow-md sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto flex justify-between items-center">
-      <span class="font-bold text-lg tracking-wide flex items-center gap-2">
-        <i class="fa-solid fa-shield-halved text-amber-400"></i> PANEL DE ADMINISTRACIÓN
-      </span>
-      <a href="index.html" class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg border border-gray-700 transition">
-        Volver al Portal público
-      </a>
-    </div>
-  </nav>
-
-  <main class="max-w-6xl mx-auto p-4 space-y-6">
-
-    <!-- METRICAS DE ESTADÍSTICAS -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-blue-600">
-        <p class="text-xs font-bold text-gray-400 uppercase">Total Inscritos</p>
-        <h3 class="text-3xl font-black text-gray-900 mt-1" id="stInscritos">0</h3>
-      </div>
-      <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-green-600">
-        <p class="text-xs font-bold text-gray-400 uppercase">Recaudado Confirmado</p>
-        <h3 class="text-3xl font-black text-green-600 mt-1" id="stRecaudado">Bs 0</h3>
-      </div>
-      <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-purple-600">
-        <p class="text-xs font-bold text-gray-400 uppercase">Hospedaje</p>
-        <p class="text-xs font-bold text-gray-700 mt-2" id="stHospedaje">Colchón: 0 | Camping: 0</p>
-      </div>
-      <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-amber-500">
-        <p class="text-xs font-bold text-gray-400 uppercase">Equipos</p>
-        <p class="text-xs text-gray-600 mt-1" id="stEquipos">Águilas: 0 | Búfalos: 0<br>Ciervos: 0 | Leones: 0</p>
-      </div>
-    </div>
-
-    <!-- BANDEJAS DE PENDIENTES -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-      <!-- Pagos por Aprobar -->
-      <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-        <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-          <i class="fa-solid fa-clock text-amber-500"></i> Comprobantes Pendientes de Aprobación
-        </h3>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs text-gray-600">
-            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-              <tr>
-                <th class="p-2">Inscrito</th>
-                <th class="p-2">Monto</th>
-                <th class="p-2">Recibo</th>
-                <th class="p-2">Acción</th>
-              </tr>
-            </thead>
-            <tbody id="tblPagosPendientes" class="divide-y divide-gray-100"></tbody>
-          </table>
+    <!-- NAVBAR -->
+    <nav class="bg-gray-900 text-white p-4 shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <span class="font-bold text-lg tracking-wide flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-amber-400"></i> TESORERÍA & ADMIN JC2027
+            </span>
+            <div class="flex items-center gap-3">
+                <span id="txtAdminInfo"
+                    class="hidden text-xs text-amber-400 font-bold bg-gray-800 px-3 py-1 rounded-full border border-gray-700"></span>
+                <button id="btnCerrarSesion" onclick="cerrarSesion()"
+                    class="hidden text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg transition">
+                    <i class="fa-solid fa-right-from-bracket"></i> Salir
+                </button>
+                <a href="index.html"
+                    class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg border border-gray-700 transition">
+                    Portal Público
+                </a>
+            </div>
         </div>
-      </div>
+    </nav>
 
-      <!-- Cambios de Perfil por Aprobar -->
-      <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-        <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-          <i class="fa-solid fa-user-pen text-blue-500"></i> Solicitudes de Modificación de Datos
-        </h3>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs text-gray-600">
-            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-              <tr>
-                <th class="p-2">Inscrito</th>
-                <th class="p-2">Nuevos Datos</th>
-                <th class="p-2">Acción</th>
-              </tr>
-            </thead>
-            <tbody id="tblEdicionesPendientes" class="divide-y divide-gray-100"></tbody>
-          </table>
+    <!-- MODAL/PANTALLA DE LOGIN -->
+    <section id="secLogin" class="max-w-md mx-auto mt-16 p-6 bg-white rounded-2xl shadow-xl border border-gray-200">
+        <div class="text-center mb-6">
+            <div
+                class="w-16 h-16 bg-gray-900 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl shadow-lg">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h2 class="text-xl font-bold text-gray-900">Acceso Administrativo</h2>
+            <p class="text-xs text-gray-500">Ingresa tus credenciales autorizadas</p>
         </div>
-      </div>
+
+        <form onsubmit="iniciarSesionAdmin(event)" class="space-y-4">
+            <div>
+                <label class="text-xs font-bold text-gray-600">Usuario</label>
+                <input type="text" id="loginUser" required placeholder="admin"
+                    class="w-full mt-1 p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-gray-900 outline-none">
+            </div>
+            <div>
+                <label class="text-xs font-bold text-gray-600">Contraseña</label>
+                <input type="password" id="loginPass" required placeholder="••••••••"
+                    class="w-full mt-1 p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-gray-900 outline-none">
+            </div>
+            <button type="submit"
+                class="w-full bg-gray-900 hover:bg-gray-800 text-amber-400 font-bold py-3 rounded-xl shadow-lg transition text-sm">
+                Iniciar Sesión
+            </button>
+            <p id="msgLoginError" class="text-red-500 text-xs text-center hidden font-semibold"></p>
+        </form>
+    </section>
+
+    <!-- CONTENIDO DASHBOARD PRINCIPAL (PROTEGIDO) -->
+    <div id="secDashboard" class="hidden max-w-7xl mx-auto p-4 space-y-6">
+
+        <!-- BARRA SUPERIOR DE RESUMEN NETO -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-blue-600">
+                <p class="text-xs font-bold text-gray-400 uppercase">Total Inscritos</p>
+                <h3 class="text-3xl font-black text-gray-900 mt-1" id="stInscritos">0</h3>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-green-600">
+                <p class="text-xs font-bold text-gray-400 uppercase">Total Ingresos (Abonos)</p>
+                <h3 class="text-3xl font-black text-green-600 mt-1" id="stIngresos">Bs 0</h3>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-red-600">
+                <p class="text-xs font-bold text-gray-400 uppercase">Total Egresos (Gastos)</p>
+                <h3 class="text-3xl font-black text-red-600 mt-1" id="stEgresos">Bs 0</h3>
+            </div>
+            <div
+                class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-amber-500 bg-amber-50/30">
+                <p class="text-xs font-bold text-amber-800 uppercase">Balance Neto en Caja</p>
+                <h3 class="text-3xl font-black text-amber-600 mt-1" id="stBalance">Bs 0</h3>
+            </div>
+        </div>
+
+        <!-- PESTAÑAS DE NAVEGACIÓN INTERNA -->
+        <div class="flex flex-wrap gap-2 border-b border-gray-200 pb-2">
+            <button onclick="cambiarPestana('solicitudes')"
+                class="tab-btn active bg-gray-900 text-white text-xs font-bold px-4 py-2 rounded-xl transition">
+                <i class="fa-solid fa-clock-rotate-left mr-1"></i> Pendientes
+            </button>
+            <button onclick="cambiarPestana('inscritos')"
+                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                <i class="fa-solid fa-users mr-1"></i> Lista de Inscritos
+            </button>
+            <button onclick="cambiarPestana('ingresos')"
+                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                <i class="fa-solid fa-file-invoice-dollar mr-1"></i> Historial Ingresos
+            </button>
+            <button onclick="cambiarPestana('egresos')"
+                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                <i class="fa-solid fa-arrow-down-short-wide mr-1"></i> Módulo Egresos
+            </button>
+            <button onclick="cambiarPestana('usuarios')"
+                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                <i class="fa-solid fa-user-shield mr-1"></i> Administradores
+            </button>
+        </div>
+
+        <!-- PESTAÑA 1: BANDEJAS DE APROBACIÓN PENDIENTE -->
+        <div id="tabSolicitudes" class="tab-content grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-receipt text-amber-500"></i> Comprobantes de Pago por Aprobar
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-gray-600">
+                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                            <tr>
+                                <th class="p-2">Inscrito</th>
+                                <th class="p-2">Monto</th>
+                                <th class="p-2">Recibo</th>
+                                <th class="p-2">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblPagosPendientes" class="divide-y divide-gray-100"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-user-pen text-blue-500"></i> Cambios de Datos por Aprobar
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-gray-600">
+                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                            <tr>
+                                <th class="p-2">Inscrito</th>
+                                <th class="p-2">Nuevos Datos</th>
+                                <th class="p-2">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblEdicionesPendientes" class="divide-y divide-gray-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PESTAÑA 2: LISTA GENERAL DE INSCRITOS Y REGISTRO DIRECTO -->
+        <div id="tabInscritos" class="tab-content hidden space-y-6">
+            <!-- Formulario para Registrar Nuevo Campamentista -->
+            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-user-plus text-green-600"></i> Registrar Nuevo Campamentista (Directo)
+                </h3>
+                <form onsubmit="crearNuevoCampamentista(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <input type="text" id="newCi" placeholder="C.I. (Obligatorio)" required
+                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
+                    <input type="text" id="newNombre" placeholder="Nombre Completo" required
+                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
+                    <input type="text" id="newTel" placeholder="Teléfono / WhatsApp"
+                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
+                    <input type="text" id="newCelula" placeholder="Célula"
+                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
+                    <select id="newTalla"
+                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
+                        <option value="XS">Talla XS</option>
+                        <option value="S">Talla S</option>
+                        <option value="M" selected>Talla M</option>
+                        <option value="L">Talla L</option>
+                        <option value="XL">Talla XL</option>
+                    </select>
+                    <select id="newHospedaje"
+                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
+                        <option value="Colchon">Colchón (Bs 230)</option>
+                        <option value="Camping">Camping (Bs 220)</option>
+                    </select>
+                    <div class="md:col-span-3">
+                        <button type="submit"
+                            class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-6 py-2.5 rounded-xl transition shadow-md">
+                            + Inscribir Campamentista
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tabla Completa de Inscritos -->
+            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <h3 class="font-bold text-gray-800 text-base mb-4">Directorio de Campamentistas Registrados</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-gray-600">
+                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                            <tr>
+                                <th class="p-2">C.I.</th>
+                                <th class="p-2">Nombre</th>
+                                <th class="p-2">Teléfono</th>
+                                <th class="p-2">Célula</th>
+                                <th class="p-2">Talla</th>
+                                <th class="p-2">Hospedaje</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblTodosInscritos" class="divide-y divide-gray-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PESTAÑA 3: HISTORIAL DE INGRESOS -->
+        <div id="tabIngresos" class="tab-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+            <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-money-bill-trend-up text-green-600"></i> Registro Completo de Ingresos (Abonos
+                Confirmados)
+            </h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs text-gray-600">
+                    <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                        <tr>
+                            <th class="p-2">Fecha</th>
+                            <th class="p-2">Campamentista</th>
+                            <th class="p-2">Monto</th>
+                            <th class="p-2">Observaciones</th>
+                            <th class="p-2">Comprobante</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tblHistorialIngresos" class="divide-y divide-gray-100"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PESTAÑA 4: MÓDULO DE EGRESOS (GASTOS) -->
+        <div id="tabEgresos" class="tab-content hidden space-y-6">
+            <!-- Formulario Nuevo Egreso -->
+            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-minus-circle text-red-600"></i> Registrar Nuevo Egreso / Gasto
+                </h3>
+                <form onsubmit="registrarNuevoEgreso(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <input type="text" id="egConcepto" placeholder="Concepto (ej. Alquiler de Sonido)" required
+                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
+                    <select id="egCategoria"
+                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
+                        <option value="Alimentación">Alimentación</option>
+                        <option value="Logística">Logística</option>
+                        <option value="Sonido">Sonido / Iluminación</option>
+                        <option value="Transporte">Transporte</option>
+                        <option value="Materiales">Materiales / Poleras</option>
+                        <option value="Otros">Otros Gastos</option>
+                    </select>
+                    <input type="number" step="0.01" id="egMonto" placeholder="Monto (Bs)" required
+                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
+                    <div class="md:col-span-3">
+                        <button type="submit"
+                            class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-6 py-2.5 rounded-xl transition shadow-md">
+                            - Registrar Gasto
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tabla de Egresos -->
+            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <h3 class="font-bold text-gray-800 text-base mb-4">Lista de Gastos Registrados</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-gray-600">
+                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                            <tr>
+                                <th class="p-2">Fecha</th>
+                                <th class="p-2">Concepto</th>
+                                <th class="p-2">Categoría</th>
+                                <th class="p-2">Monto</th>
+                                <th class="p-2">Registrado por</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblListaEgresos" class="divide-y divide-gray-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PESTAÑA 5: GESTIÓN DE ADMINISTRADORES -->
+        <div id="tabUsuarios" class="tab-content hidden space-y-6">
+            <!-- Formulario Crear Nuevo Admin -->
+            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-user-shield text-indigo-600"></i> Crear Nuevo Usuario Administrador
+                </h3>
+                <form onsubmit="crearNuevoAdmin(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <input type="text" id="adminNewNombre" placeholder="Nombre Completo" required
+                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
+                    <input type="text" id="adminNewUser" placeholder="Nombre de Usuario" required
+                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
+                    <input type="password" id="adminNewPass" placeholder="Contraseña" required
+                        class="p-2.5 border border-gray-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-gray-900">
+                    <button type="submit"
+                        class="bg-gray-900 hover:bg-gray-800 text-amber-400 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow-md">
+                        + Crear Administrador
+                    </button>
+                </form>
+            </div>
+
+            <!-- Tabla Administradores -->
+            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <h3 class="font-bold text-gray-800 text-base mb-4">Administradores Autorizados</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-gray-600">
+                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                            <tr>
+                                <th class="p-2">Nombre</th>
+                                <th class="p-2">Usuario</th>
+                                <th class="p-2">Rol</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblListaAdmins" class="divide-y divide-gray-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
     </div>
 
-  </main>
+    <script>
+        // CREDENCIALES DE SUPABASE
+        const SUPABASE_URL = 'https://bpwsdgkafjnsgfilbfgg.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwd3NkZ2thZmpuc2dmaWxiZmdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxODM1NzUsImV4cCI6MjEwNzc1OTU3NX0.rnSg8vNFpAuwNfECYwfyynERKwv3CJ7CGZRhAKbyDDM';
 
-  <script>
-    // ⚠️ REEMPLAZA CON TUS CREDENCIALES EXACTAS DE SUPABASE ⚠️
-    const SUPABASE_URL = 'https://bpwsdgkafjnsgfilbfgg.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwd3NkZ2thZmpuc2dmaWxiZmdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxODM1NzUsImV4cCI6MjEwNzc1OTU3NX0.rnSg8vNFpAuwNfECYwfyynERKwv3CJ7CGZRhAKbyDDM';
 
-    // Instancia limpia con variable 'db'
-    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    async function cargarDashboardAdmin() {
-      // 1. Estadísticas
-      const { data: inscritos } = await db.from('inscritos').select('*');
-      const { data: pagos } = await db.from('pagos').select('*').eq('estado', 'Aprobado');
+        let adminSesionActual = null;
 
-      document.getElementById('stInscritos').innerText = (inscritos || []).length;
+        // 1. INICIO DE SESIÓN CON HASH SHA-256
+        async function iniciarSesionAdmin(e) {
+            e.preventDefault();
+            const user = document.getElementById('loginUser').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
 
-      let total = 0;
-      (pagos || []).forEach(p => total += Number(p.monto));
-      document.getElementById('stRecaudado').innerText = `Bs ${total}`;
+            // Convertir contraseña a SHA-256
+            const msgUint8 = new TextEncoder().encode(pass);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
-      let colchon = 0, camping = 0;
-      (inscritos || []).forEach(i => i.tipo_hospedaje === 'Camping' ? camping++ : colchon++);
-      document.getElementById('stHospedaje').innerText = `Colchón: ${colchon} | Camping: ${camping}`;
+            const { data: admin, error } = await db
+                .from('administradores')
+                .select('*')
+                .eq('usuario', user)
+                .eq('password_hash', hashHex)
+                .maybeSingle();
 
-      // 2. Pagos Pendientes
-      const { data: pagosPend } = await db
-        .from('pagos')
-        .select('*, inscritos(nombre_completo)')
-        .eq('estado', 'Pendiente');
+            if (error || !admin) {
+                document.getElementById('msgLoginError').innerText = 'Usuario o contraseña incorrectos.';
+                document.getElementById('msgLoginError').classList.remove('hidden');
+                return;
+            }
 
-      const tbodyP = document.getElementById('tblPagosPendientes');
-      tbodyP.innerHTML = '';
-      (pagosPend || []).forEach(p => {
-        tbodyP.innerHTML += `
+            adminSesionActual = admin;
+            document.getElementById('secLogin').classList.add('hidden');
+            document.getElementById('secDashboard').classList.remove('hidden');
+            document.getElementById('txtAdminInfo').innerText = `👤 ${admin.nombre} (${admin.rol})`;
+            document.getElementById('txtAdminInfo').classList.remove('hidden');
+            document.getElementById('btnCerrarSesion').classList.remove('hidden');
+
+            cargarTodoElDashboard();
+        }
+
+        function cerrarSesion() {
+            adminSesionActual = null;
+            document.getElementById('secDashboard').classList.add('hidden');
+            document.getElementById('secLogin').classList.remove('hidden');
+            document.getElementById('txtAdminInfo').classList.add('hidden');
+            document.getElementById('btnCerrarSesion').classList.add('hidden');
+        }
+
+        // 2. NAVEGACIÓN ENTRE PESTAÑAS
+        function cambiarPestana(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-gray-900', 'text-white');
+                btn.classList.add('bg-white', 'text-gray-600');
+            });
+
+            if (tabName === 'solicitudes') document.getElementById('tabSolicitudes').classList.remove('hidden');
+            if (tabName === 'inscritos') document.getElementById('tabInscritos').classList.remove('hidden');
+            if (tabName === 'ingresos') document.getElementById('tabIngresos').classList.remove('hidden');
+            if (tabName === 'egresos') document.getElementById('tabEgresos').classList.remove('hidden');
+            if (tabName === 'usuarios') document.getElementById('tabUsuarios').classList.remove('hidden');
+
+            event.currentTarget.classList.remove('bg-white', 'text-gray-600');
+            event.currentTarget.classList.add('bg-gray-900', 'text-white');
+        }
+
+        // 3. CARGAR DATOS GENERALES Y CALCULOS FINANCIEROS
+        async function cargarTodoElDashboard() {
+            const { data: inscritos } = await db.from('inscritos').select('*');
+            const { data: pagosAprobados } = await db.from('pagos').select('*, inscritos(nombre_completo)').eq('estado', 'Aprobado');
+            const { data: listaEgresos } = await db.from('egresos').select('*').order('fecha', { ascending: false });
+
+            // Métricas Principales
+            document.getElementById('stInscritos').innerText = (inscritos || []).length;
+
+            let totalIngresos = 0;
+            (pagosAprobados || []).forEach(p => totalIngresos += Number(p.monto));
+            document.getElementById('stIngresos').innerText = `Bs ${totalIngresos}`;
+
+            let totalEgresos = 0;
+            (listaEgresos || []).forEach(e => totalEgresos += Number(e.monto));
+            document.getElementById('stEgresos').innerText = `Bs ${totalEgresos}`;
+
+            const balanceNeto = totalIngresos - totalEgresos;
+            document.getElementById('stBalance').innerText = `Bs ${balanceNeto}`;
+
+            // Tabla Inscritos
+            const tbodyIns = document.getElementById('tblTodosInscritos');
+            tbodyIns.innerHTML = '';
+            (inscritos || []).forEach(i => {
+                tbodyIns.innerHTML += `
           <tr>
+            <td class="p-2 font-bold">${i.ci}</td>
+            <td class="p-2 font-semibold text-gray-800">${i.nombre_completo}</td>
+            <td class="p-2">${i.telefono || '-'}</td>
+            <td class="p-2">${i.celula || '-'}</td>
+            <td class="p-2"><span class="bg-gray-100 px-2 py-0.5 rounded font-bold">${i.talla_polera}</span></td>
+            <td class="p-2">${i.tipo_hospedaje}</td>
+          </tr>`;
+            });
+
+            // Tabla Historial Ingresos
+            const tbodyIng = document.getElementById('tblHistorialIngresos');
+            tbodyIng.innerHTML = '';
+            (pagosAprobados || []).forEach(p => {
+                tbodyIng.innerHTML += `
+          <tr>
+            <td class="p-2">${new Date(p.fecha).toLocaleDateString()}</td>
             <td class="p-2 font-semibold">${p.inscritos?.nombre_completo || 'Desconocido'}</td>
+            <td class="p-2 font-bold text-green-600">Bs ${p.monto}</td>
+            <td class="p-2">${p.observaciones || '-'}</td>
+            <td class="p-2"><a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline">Ver</a></td>
+          </tr>`;
+            });
+
+            // Tabla Egresos
+            const tbodyEg = document.getElementById('tblListaEgresos');
+            tbodyEg.innerHTML = '';
+            (listaEgresos || []).forEach(e => {
+                tbodyEg.innerHTML += `
+          <tr>
+            <td class="p-2">${new Date(e.fecha).toLocaleDateString()}</td>
+            <td class="p-2 font-semibold text-gray-800">${e.concepto}</td>
+            <td class="p-2"><span class="bg-red-50 text-red-700 font-bold px-2 py-0.5 rounded">${e.categoria}</span></td>
+            <td class="p-2 font-bold text-red-600">Bs ${e.monto}</td>
+            <td class="p-2">${e.registrado_por}</td>
+          </tr>`;
+            });
+
+            // Cargar Pendientes y Admins
+            cargarPendientes();
+            cargarAdministradores();
+        }
+
+        async function cargarPendientes() {
+            const { data: pagosPend } = await db.from('pagos').select('*, inscritos(nombre_completo)').eq('estado', 'Pendiente');
+            const tbodyP = document.getElementById('tblPagosPendientes');
+            tbodyP.innerHTML = '';
+            (pagosPend || []).forEach(p => {
+                tbodyP.innerHTML += `
+          <tr>
+            <td class="p-2 font-semibold">${p.inscritos?.nombre_completo}</td>
             <td class="p-2 font-bold text-green-600">Bs ${p.monto}</td>
             <td class="p-2"><a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline">Ver</a></td>
             <td class="p-2 flex gap-1">
@@ -140,18 +489,13 @@
               <button onclick="procesarPago('${p.id}', 'Rechazado')" class="bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">✕</button>
             </td>
           </tr>`;
-      });
+            });
 
-      // 3. Ediciones Pendientes
-      const { data: edicPend } = await db
-        .from('solicitudes_edicion')
-        .select('*, inscritos(nombre_completo)')
-        .eq('estado', 'Pendiente');
-
-      const tbodyE = document.getElementById('tblEdicionesPendientes');
-      tbodyE.innerHTML = '';
-      (edicPend || []).forEach(e => {
-        tbodyE.innerHTML += `
+            const { data: edicPend } = await db.from('solicitudes_edicion').select('*, inscritos(nombre_completo)').eq('estado', 'Pendiente');
+            const tbodyE = document.getElementById('tblEdicionesPendientes');
+            tbodyE.innerHTML = '';
+            (edicPend || []).forEach(e => {
+                tbodyE.innerHTML += `
           <tr>
             <td class="p-2 font-semibold">${e.inscritos?.nombre_completo}</td>
             <td class="p-2 text-xs">Talla: ${e.talla_polera}, Hosp: ${e.tipo_hospedaje}</td>
@@ -160,29 +504,82 @@
               <button onclick="procesarEdicion('${e.id}', null, null, null, null, null, 'Rechazado')" class="bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">✕</button>
             </td>
           </tr>`;
-      });
-    }
+            });
+        }
 
-    async function procesarPago(pagoId, estado) {
-      await db.from('pagos').update({ estado: estado }).eq('id', pagoId);
-      cargarDashboardAdmin();
-    }
+        async function cargarAdministradores() {
+            const { data: admins } = await db.from('administradores').select('*');
+            const tbodyA = document.getElementById('tblListaAdmins');
+            tbodyA.innerHTML = '';
+            (admins || []).forEach(a => {
+                tbodyA.innerHTML += `
+          <tr>
+            <td class="p-2 font-semibold">${a.nombre}</td>
+            <td class="p-2 font-bold text-gray-700">${a.usuario}</td>
+            <td class="p-2"><span class="bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded">${a.rol}</span></td>
+          </tr>`;
+            });
+        }
 
-    async function procesarEdicion(idSol, idInscrito, tel, cel, talla, hosp, estado) {
-      await db.from('solicitudes_edicion').update({ estado: estado }).eq('id', idSol);
+        // 4. ACCIONES DE MÓDULOS
+        async function crearNuevoCampamentista(e) {
+            e.preventDefault();
+            await db.from('inscritos').insert([{
+                ci: document.getElementById('newCi').value.trim(),
+                nombre_completo: document.getElementById('newNombre').value.trim(),
+                telefono: document.getElementById('newTel').value.trim(),
+                celula: document.getElementById('newCelula').value.trim(),
+                talla_polera: document.getElementById('newTalla').value,
+                tipo_hospedaje: document.getElementById('newHospedaje').value
+            }]);
+            alert('Campamentista inscrito con éxito.');
+            e.target.reset();
+            cargarTodoElDashboard();
+        }
 
-      if (estado === 'Aprobado') {
-        await db.from('inscritos').update({
-          telefono: tel,
-          celula: cel,
-          talla_polera: talla,
-          tipo_hospedaje: hosp
-        }).eq('id', idInscrito);
-      }
-      cargarDashboardAdmin();
-    }
+        async function registrarNuevoEgreso(e) {
+            e.preventDefault();
+            await db.from('egresos').insert([{
+                concepto: document.getElementById('egConcepto').value.trim(),
+                categoria: document.getElementById('egCategoria').value,
+                monto: document.getElementById('egMonto').value,
+                registrado_por: adminSesionActual?.nombre || 'Admin'
+            }]);
+            alert('Gasto registrado con éxito.');
+            e.target.reset();
+            cargarTodoElDashboard();
+        }
 
-    cargarDashboardAdmin();
-  </script>
+        async function crearNuevoAdmin(e) {
+            e.preventDefault();
+            const pass = document.getElementById('adminNewPass').value.trim();
+            const msgUint8 = new TextEncoder().encode(pass);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+            const hashHex = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+
+            await db.from('administradores').insert([{
+                nombre: document.getElementById('adminNewNombre').value.trim(),
+                usuario: document.getElementById('adminNewUser').value.trim(),
+                password_hash: hashHex
+            }]);
+            alert('Nuevo administrador creado exitosamente.');
+            e.target.reset();
+            cargarAdministradores();
+        }
+
+        async function procesarPago(id, estado) {
+            await db.from('pagos').update({ estado: estado }).eq('id', id);
+            cargarTodoElDashboard();
+        }
+
+        async function procesarEdicion(idSol, idIns, tel, cel, talla, hosp, estado) {
+            await db.from('solicitudes_edicion').update({ estado: estado }).eq('id', idSol);
+            if (estado === 'Aprobado') {
+                await db.from('inscritos').update({ telefono: tel, celula: cel, talla_polera: talla, tipo_hospedaje: hosp }).eq('id', idIns);
+            }
+            cargarTodoElDashboard();
+        }
+    </script>
 </body>
+
 </html>
