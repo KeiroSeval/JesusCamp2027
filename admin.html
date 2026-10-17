@@ -223,14 +223,46 @@
         <!-- PESTAÑA 2: INSCRITOS Y STAFF -->
         <div id="tabInscritos" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <div class="flex justify-between items-center mb-4">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
                     <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
                         <i class="fa-solid fa-users text-green-600"></i> Directorio de Campamentistas y Staff
                     </h3>
-                    <button onclick="toggleFormulario('formContenedorCampamentista')"
-                        class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
-                        <i class="fa-solid fa-plus"></i> Inscribir Campamentista / Staff
-                    </button>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="toggleFormulario('panelConfigColumnas')"
+                            class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-3 py-2 rounded-xl border transition flex items-center gap-1">
+                            <i class="fa-solid fa-sliders"></i> Personalizar Columnas
+                        </button>
+                        <button onclick="toggleFormulario('formContenedorCampamentista')"
+                            class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
+                            <i class="fa-solid fa-plus"></i> Inscribir Campamentista / Staff
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CONTROLES DE COLUMNAS Y ORDENAMIENTO -->
+                <div id="panelConfigColumnas" class="hidden bg-slate-50 p-4 rounded-xl border border-slate-200 mb-4 text-xs space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-2">
+                        <span class="font-bold text-gray-700 uppercase">Personalización de Tabla</span>
+                        <div class="flex items-center gap-2">
+                            <label class="font-bold text-gray-600">Ordenar Por:</label>
+                            <select id="selOrdenInscritos" onchange="renderizarTablaInscritos()" class="p-1.5 border rounded-lg bg-white font-semibold">
+                                <option value="nombre_completo">Nombre Completo</option>
+                                <option value="ci">C.I.</option>
+                                <option value="equipo">Equipo</option>
+                                <option value="tipo_inscripcion">Tipo de Inscripción</option>
+                                <option value="talla_polera">Talla de Polera</option>
+                                <option value="estado_carta">Estado de Carta</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_tel" onchange="renderizarTablaInscritos()" checked> Teléfono</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_celula" onchange="renderizarTablaInscritos()" checked> Célula</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_talla" onchange="renderizarTablaInscritos()" checked> Talla Polera</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_actividad" onchange="renderizarTablaInscritos()"> Actividad</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_alergias" onchange="renderizarTablaInscritos()"> Alergias</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_tutor" onchange="renderizarTablaInscritos()"> Tutor Legal</label>
+                    </div>
                 </div>
 
                 <div id="formContenedorCampamentista" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
@@ -282,7 +314,7 @@
                                 ⭐ Pertenece a la Categoría/Rol de STAFF
                             </label>
                             <label class="text-xs font-bold text-gray-700 flex items-center gap-2">
-                                <input type="checkbox" id="newEsMenor" onchange="toggleFormMenor(this.checked)" class="rounded text-blue-600">
+                                <input type="checkbox" id="newEsMenor" class="rounded text-blue-600">
                                 ¿Es Menor de Edad?
                             </label>
                         </div>
@@ -304,17 +336,7 @@
 
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-gray-600">
-                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                            <tr>
-                                <th class="p-2">C.I.</th>
-                                <th class="p-2">Nombre Completo</th>
-                                <th class="p-2">Tipo / Rol</th>
-                                <th class="p-2">Inscripción</th>
-                                <th class="p-2">Equipo</th>
-                                <th class="p-2">Carta</th>
-                                <th class="p-2 text-center">Acciones</th>
-                            </tr>
-                        </thead>
+                        <thead id="theadInscritos" class="bg-gray-50 text-gray-400 uppercase font-semibold"></thead>
                         <tbody id="tblTodosInscritos" class="divide-y divide-gray-100"></tbody>
                     </table>
                 </div>
@@ -379,25 +401,26 @@
             </div>
         </div>
 
-        <!-- PESTAÑA INGRESOS Y REGISTRAR PAGO DIRECTO -->
+        <!-- PESTAÑA INGRESOS Y REGISTRAR PAGO DIRECTO / EDITAR PAGO -->
         <div id="tabIngresos" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
                 <div class="flex justify-between items-center border-b pb-3">
                     <h3 class="font-bold text-gray-800 text-base">Historial de Ingresos Confirmados</h3>
-                    <button onclick="toggleFormulario('formContenedorPagoDirecto')"
+                    <button onclick="prepararCrearCobroDirecto()"
                         class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
                         <i class="fa-solid fa-cash-register"></i> + Registrar Cobro Directo
                     </button>
                 </div>
 
-                <!-- FORMULARIO DE COBRO DIRECTO DESDE ADMIN -->
+                <!-- FORMULARIO DE COBRO DIRECTO / EDICIÓN DESDE ADMIN -->
                 <div id="formContenedorPagoDirecto" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-3">
-                    <h4 class="font-bold text-xs text-gray-700 uppercase border-b pb-1">Registrar Pago Manual a Campamentista</h4>
-                    <form onsubmit="registrarCobroDirecto(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <h4 id="lblTituloPagoForm" class="font-bold text-xs text-gray-700 uppercase border-b pb-1">Registrar Pago Manual a Campamentista</h4>
+                    <form onsubmit="guardarCobroDirecto(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <input type="hidden" id="pagoAdminIdEdit">
                         <select id="pagoAdminInscrito" required class="p-2.5 border rounded-xl text-xs bg-white font-bold">
                             <option value="">-- Seleccionar Campamentista --</option>
                         </select>
-                        <input type="number" id="pagoAdminMonto" placeholder="Monto Recibido (Bs)" required class="p-2.5 border rounded-xl text-xs bg-white font-bold">
+                        <input type="number" step="0.01" id="pagoAdminMonto" placeholder="Monto Recibido (Bs)" required class="p-2.5 border rounded-xl text-xs bg-white font-bold">
                         <input type="text" id="pagoAdminObs" placeholder="Observaciones (Ej. Efectivo entregado en mano)" class="p-2.5 border rounded-xl text-xs bg-white">
                         <div class="md:col-span-3 flex justify-end gap-2">
                             <button type="button" onclick="toggleFormulario('formContenedorPagoDirecto')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
@@ -472,53 +495,71 @@
             </div>
         </div>
 
-        <!-- PESTAÑA REPORTES AVANZADOS CON GRÁFICOS -->
+        <!-- PESTAÑA REPORTES AVANZADOS DIVERSIFICADOS Y CON PLANTILLAS -->
         <div id="tabReportes" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
                 <div class="flex justify-between items-center border-b pb-3">
                     <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
-                        <i class="fa-solid fa-chart-line text-blue-600"></i> Generador de Reportes y Estadísticas
+                        <i class="fa-solid fa-chart-line text-blue-600"></i> Generador de Reportes Personalizados
                     </h3>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 bg-gray-50 p-4 rounded-xl border border-gray-200">
-                    <div>
-                        <label class="text-[10px] font-bold text-gray-500 uppercase block">Variable de Análisis:</label>
-                        <select id="repVariableSelect" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold text-indigo-900">
-                            <option value="equipo">Equipo Asignado</option>
-                            <option value="celula">Célula</option>
-                            <option value="talla_polera">Talla de Polera</option>
-                            <option value="actividad_favorita">Actividad Favorita</option>
-                            <option value="estado_carta">Estado de Carta de Compromiso</option>
-                            <option value="es_staff">Rol (Staff vs Campamentista)</option>
-                            <option value="tipo_inscripcion">Tipo de Inscripción</option>
-                            <option value="es_menor">Rango de Edad (Mayores / Menores)</option>
-                            <option value="estado_financiero">Estado Financiero (Saldos de Cuotas)</option>
-                        </select>
+                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="text-[10px] font-bold text-gray-500 uppercase block">Variable de Agrupación:</label>
+                            <select id="repVariableSelect" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold text-indigo-900">
+                                <option value="equipo">Equipo Asignado</option>
+                                <option value="celula">Célula</option>
+                                <option value="talla_polera">Talla de Polera</option>
+                                <option value="actividad_favorita">Actividad Favorita</option>
+                                <option value="estado_carta">Estado de Carta de Compromiso</option>
+                                <option value="es_staff">Rol (Staff vs Campamentista)</option>
+                                <option value="tipo_inscripcion">Tipo de Inscripción</option>
+                                <option value="es_menor">Rango de Edad (Menores / Mayores)</option>
+                                <option value="estado_financiero">Estado Financiero (Saldos de Cuotas)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="text-[10px] font-bold text-gray-500 uppercase block">Tipo de Gráfico Principal:</label>
+                            <select id="repGraficoTipo" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold">
+                                <option value="pie">Gráfico de Torta (Pie)</option>
+                                <option value="bar">Gráfico de Barras (Bar)</option>
+                                <option value="doughnut">Dona (Doughnut)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="text-[10px] font-bold text-gray-500 uppercase block">Plantilla Personalizada Guardada:</label>
+                            <div class="flex gap-2">
+                                <select id="selReportePlantillas" onchange="cargarPlantillaReporte(this.value)" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold text-emerald-800">
+                                    <option value="">-- Cargar Plantilla --</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
-                    <div>
-                        <label class="text-[10px] font-bold text-gray-500 uppercase block">Operación / Estadística:</label>
-                        <select id="repOperacionSelect" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold">
-                            <option value="conteo">Conteo de Personas</option>
-                            <option value="suma_pagos">Suma de Pagos Aprobados (Bs)</option>
-                            <option value="promedio_pagos">Promedio Abonado por Persona (Bs)</option>
-                        </select>
+                    <div class="border-t pt-3">
+                        <label class="text-[10px] font-bold text-gray-500 uppercase block mb-2">Columnas y Métricas a incluir en la tabla:</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs bg-white p-3 rounded-xl border">
+                            <label class="flex items-center gap-1 font-semibold"><input type="checkbox" id="repColPersonas" checked> Personas (#)</label>
+                            <label class="flex items-center gap-1 font-semibold"><input type="checkbox" id="repColPorcentaje" checked> Porcentaje (%)</label>
+                            <label class="flex items-center gap-1 font-semibold"><input type="checkbox" id="repColMonto" checked> Total Abonado (Bs)</label>
+                            <label class="flex items-center gap-1 font-semibold"><input type="checkbox" id="repColPromedio" checked> Promedio / Pers (Bs)</label>
+                            <label class="flex items-center gap-1 font-semibold"><input type="checkbox" id="repColSaldo" checked> Saldo Deuda (Bs)</label>
+                        </div>
                     </div>
 
-                    <div>
-                        <label class="text-[10px] font-bold text-gray-500 uppercase block">Tipo de Gráfico:</label>
-                        <select id="repGraficoTipo" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold">
-                            <option value="pie">Gráfico de Torta (Pie)</option>
-                            <option value="bar">Gráfico de Barras (Bar)</option>
-                            <option value="doughnut">Dona (Doughnut)</option>
-                        </select>
-                    </div>
-
-                    <div class="flex items-end">
-                        <button onclick="generarReporteGrafico()"
-                            class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs shadow transition">
-                            <i class="fa-solid fa-chart-pie mr-1"></i> Generar Estadísticas
+                    <div class="flex flex-col sm:flex-row justify-between items-center gap-2 pt-2">
+                        <div class="flex items-center gap-2 w-full sm:w-auto">
+                            <input type="text" id="txtNombrePlantilla" placeholder="Nombre de plantilla (Ej. Deudas Por Equipo)" class="p-2 border rounded-xl text-xs w-full sm:w-64">
+                            <button onclick="guardarPlantillaReporte()" class="bg-slate-800 hover:bg-slate-900 text-amber-400 font-bold px-4 py-2 rounded-xl text-xs transition whitespace-nowrap">
+                                <i class="fa-solid fa-bookmark mr-1"></i> Guardar Plantilla
+                            </button>
+                        </div>
+                        <button onclick="generarReporteGrafico()" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow transition">
+                            <i class="fa-solid fa-chart-pie mr-1"></i> Generar Reporte
                         </button>
                     </div>
                 </div>
@@ -528,7 +569,7 @@
                     <div class="bg-slate-50 p-4 rounded-xl border border-gray-200">
                         <h4 class="font-bold text-gray-800 text-xs uppercase mb-3 border-b pb-1">Resumen Numérico</h4>
                         <div id="contenedorTablaEstadisticas" class="overflow-x-auto text-xs">
-                            <p class="text-gray-400 italic">Haz clic en "Generar Estadísticas" para procesar los datos.</p>
+                            <p class="text-gray-400 italic">Haz clic en "Generar Reporte" para procesar la información.</p>
                         </div>
                     </div>
 
@@ -709,7 +750,7 @@
         </div>
     </div>
 
-    <!-- MODAL EDITAR CAMPAMENTISTA / STAFF -->
+    <!-- MODAL EDITAR CAMPAMENTISTA / STAFF (CON NAVEGACIÓN DE PESTAÑAS Y DISEÑO TOTALMENTE ADAPTATIVO) -->
     <div id="modalEditCampamentista" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-2 sm:p-4">
         <div class="bg-white rounded-2xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl flex flex-col max-h-[90vh]">
             
@@ -720,118 +761,130 @@
                 <button onclick="cerrarModalCampamentista()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
-            <form onsubmit="confirmarYGuardarInscrito(event)" class="overflow-y-auto flex-1 pr-2 space-y-4">
+            <!-- NAVEGACIÓN INTERNA DE PESTAÑAS PARA MODAL -->
+            <div class="flex gap-2 border-b mb-3 pb-2 flex-shrink-0 text-xs font-bold">
+                <button id="btnTabModal1" type="button" onclick="cambiarPestanaModal('gen')" class="px-3 py-1.5 rounded-lg bg-gray-900 text-white">1. Datos Generales</button>
+                <button id="btnTabModal2" type="button" onclick="cambiarPestanaModal('asig')" class="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200">2. Asignación y Plan</button>
+                <button id="btnTabModal3" type="button" onclick="cambiarPestanaModal('salud')" class="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200">3. Tutor y Salud</button>
+            </div>
+
+            <form onsubmit="confirmarYGuardarInscrito(event)" class="flex-1 overflow-y-auto pr-1 flex flex-col justify-between">
                 <input type="hidden" id="editInsId">
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="text-xs font-bold text-gray-600">C.I.</label>
-                        <input type="text" id="editInsCi" required class="w-full p-2.5 border rounded-xl text-xs outline-none">
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-gray-600">Nombre Completo</label>
-                        <input type="text" id="editInsNombre" required class="w-full p-2.5 border rounded-xl text-xs outline-none">
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-gray-600">Teléfono / WhatsApp</label>
-                        <input type="text" id="editInsTel" class="w-full p-2.5 border rounded-xl text-xs outline-none">
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-gray-600">Célula</label>
-                        <input type="text" id="editInsCelula" class="w-full p-2.5 border rounded-xl text-xs outline-none">
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-gray-600">Equipo Asignado</label>
-                        <select id="editInsEquipo" class="w-full p-2.5 border rounded-xl text-xs outline-none bg-indigo-50 font-bold">
-                            <option value="Sin Asignar">Sin Asignar</option>
-                            <option value="Búfalos">Búfalos 🦬</option>
-                            <option value="Águilas">Águilas 🦅</option>
-                            <option value="Leones">Leones 🦁</option>
-                            <option value="Ciervos">Ciervos 🦌</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-gray-600">Talla de Polera</label>
-                        <select id="editInsTalla" class="w-full p-2.5 border rounded-xl text-xs outline-none">
-                            <option value="XS">XS</option>
-                            <option value="S">S</option>
-                            <option value="M">M</option>
-                            <option value="L">L</option>
-                            <option value="XL">XL</option>
-                        </select>
-                    </div>
 
-                    <div>
-                        <label class="text-xs font-bold text-gray-600">Tipo de Inscripción / Categoría</label>
-                        <select id="editInsTipoInscripcion" onchange="evaluarPrecioManual(this.value, 'editDivPrecioManual')" class="w-full p-2.5 border rounded-xl text-xs outline-none font-bold text-indigo-900 bg-white"></select>
+                <!-- CONTENIDO PESTAÑA 1 -->
+                <div id="tabModalGen" class="space-y-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs font-bold text-gray-600">C.I.</label>
+                            <input type="text" id="editInsCi" required class="w-full p-2 border rounded-xl text-xs outline-none">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-600">Nombre Completo</label>
+                            <input type="text" id="editInsNombre" required class="w-full p-2 border rounded-xl text-xs outline-none">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-600">Teléfono / WhatsApp</label>
+                            <input type="text" id="editInsTel" class="w-full p-2 border rounded-xl text-xs outline-none">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-600">Célula</label>
+                            <input type="text" id="editInsCelula" class="w-full p-2 border rounded-xl text-xs outline-none">
+                        </div>
                     </div>
+                </div>
 
-                    <div id="editDivPrecioManual" class="hidden">
-                        <label class="text-xs font-bold text-amber-800">Precio Personalizado (Bs)</label>
-                        <input type="number" id="editInsPrecioManual" class="w-full p-2.5 border rounded-xl text-xs outline-none bg-amber-50 font-bold">
+                <!-- CONTENIDO PESTAÑA 2 -->
+                <div id="tabModalAsig" class="space-y-3 hidden">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs font-bold text-gray-600">Equipo Asignado</label>
+                            <select id="editInsEquipo" class="w-full p-2 border rounded-xl text-xs bg-indigo-50 font-bold">
+                                <option value="Sin Asignar">Sin Asignar</option>
+                                <option value="Búfalos">Búfalos 🦬</option>
+                                <option value="Águilas">Águilas 🦅</option>
+                                <option value="Leones">Leones 🦁</option>
+                                <option value="Ciervos">Ciervos 🦌</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-600">Talla de Polera</label>
+                            <select id="editInsTalla" class="w-full p-2 border rounded-xl text-xs">
+                                <option value="XS">XS</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-600">Tipo de Inscripción</label>
+                            <select id="editInsTipoInscripcion" onchange="evaluarPrecioManual(this.value, 'editDivPrecioManual')" class="w-full p-2 border rounded-xl text-xs font-bold text-indigo-900 bg-white"></select>
+                        </div>
+                        <div id="editDivPrecioManual" class="hidden">
+                            <label class="text-xs font-bold text-amber-800">Precio Personalizado (Bs)</label>
+                            <input type="number" id="editInsPrecioManual" class="w-full p-2 border rounded-xl text-xs bg-amber-50 font-bold">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-600">Estado Carta de Compromiso</label>
+                            <select id="editInsEstadoCarta" class="w-full p-2 border rounded-xl text-xs font-bold">
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="En Revisión">En Revisión</option>
+                                <option value="Aprobada">Aprobada</option>
+                                <option value="Rechazada">Rechazada</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-600">Actividad Favorita</label>
+                            <select id="editInsActividad" class="w-full p-2 border rounded-xl text-xs">
+                                <option value="Fútbol">Fútbol</option>
+                                <option value="Vóley">Vóley</option>
+                                <option value="Memorizar Versículos">Memorizar Versículos</option>
+                                <option value="Canto y Alabanza">Canto y Alabanza</option>
+                                <option value="Coreografía / Baile">Coreografía / Baile</option>
+                                <option value="Teatro / Dramatización">Teatro / Dramatización</option>
+                                <option value="Atletismo / Carreras">Atletismo / Carreras</option>
+                                <option value="Juegos de Mesa">Juegos de Mesa</option>
+                            </select>
+                        </div>
                     </div>
-
-                    <div>
-                        <label class="text-xs font-bold text-gray-600">Actividad Favorita</label>
-                        <select id="editInsActividad" class="w-full p-2.5 border rounded-xl text-xs outline-none">
-                            <option value="Fútbol">Fútbol</option>
-                            <option value="Vóley">Vóley</option>
-                            <option value="Memorizar Versículos">Memorizar Versículos</option>
-                            <option value="Canto y Alabanza">Canto y Alabanza</option>
-                            <option value="Coreografía / Baile">Coreografía / Baile</option>
-                            <option value="Teatro / Dramatización">Teatro / Dramatización</option>
-                            <option value="Atletismo / Carreras">Atletismo / Carreras</option>
-                            <option value="Juegos de Mesa">Juegos de Mesa</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="text-xs font-bold text-gray-600">Estado Carta de Compromiso</label>
-                        <select id="editInsEstadoCarta" class="w-full p-2.5 border rounded-xl text-xs outline-none font-bold">
-                            <option value="Pendiente">Pendiente</option>
-                            <option value="En Revisión">En Revisión</option>
-                            <option value="Aprobada">Aprobada</option>
-                            <option value="Rechazada">Rechazada</option>
-                        </select>
-                    </div>
-
-                    <div class="md:col-span-2 flex items-center gap-4 bg-purple-50 p-3 rounded-xl border border-purple-200">
+                    <div class="bg-purple-50 p-2.5 rounded-xl border border-purple-200">
                         <label class="text-xs font-bold text-purple-900 flex items-center gap-2">
                             <input type="checkbox" id="editInsEsStaff" class="rounded text-purple-600">
                             ⭐ Pertenece a la Categoría / Rol Especial de STAFF
                         </label>
                     </div>
+                </div>
 
-                    <div>
-                        <label class="text-xs font-bold text-gray-600">Habilidad / Talento</label>
-                        <input type="text" id="editInsHabilidad" class="w-full p-2.5 border rounded-xl text-xs outline-none">
-                    </div>
-
-                    <div>
-                        <label class="text-xs font-bold text-gray-600">Contacto Emergencia</label>
-                        <input type="text" id="editInsEmergencia" class="w-full p-2.5 border rounded-xl text-xs outline-none">
-                    </div>
-
-                    <div class="md:col-span-2">
-                        <label class="text-xs font-bold text-gray-600">Alergias o Medicamentos</label>
-                        <input type="text" id="editInsAlergias" class="w-full p-2.5 border rounded-xl text-xs outline-none">
-                    </div>
-
-                    <div class="md:col-span-2 border-t pt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- CONTENIDO PESTAÑA 3 -->
+                <div id="tabModalSalud" class="space-y-3 hidden">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs font-bold text-gray-600">Habilidad / Talento</label>
+                            <input type="text" id="editInsHabilidad" class="w-full p-2 border rounded-xl text-xs outline-none">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-600">Contacto Emergencia</label>
+                            <input type="text" id="editInsEmergencia" class="w-full p-2 border rounded-xl text-xs outline-none">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="text-xs font-bold text-gray-600">Alergias o Medicamentos</label>
+                            <input type="text" id="editInsAlergias" class="w-full p-2 border rounded-xl text-xs outline-none">
+                        </div>
                         <div>
                             <label class="text-xs font-bold text-gray-600">Nombre del Tutor</label>
-                            <input type="text" id="editInsTutorNom" class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                            <input type="text" id="editInsTutorNom" class="w-full p-2 border rounded-xl text-xs outline-none">
                         </div>
                         <div>
                             <label class="text-xs font-bold text-gray-600">Teléfono del Tutor</label>
-                            <input type="text" id="editInsTutorTel" class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                            <input type="text" id="editInsTutorTel" class="w-full p-2 border rounded-xl text-xs outline-none">
                         </div>
                     </div>
                 </div>
 
-                <div class="flex justify-between gap-2 pt-4 border-t sticky bottom-0 bg-white">
+                <!-- BOTONES SIEMPRE VISIBLES EN EL PIE DEL MODAL -->
+                <div class="flex justify-between items-center gap-2 pt-4 border-t mt-4 flex-shrink-0 bg-white">
                     <button type="button" onclick="solicitarSeguridad('borrarCampamentista', document.getElementById('editInsId').value)"
-                        class="bg-red-100 text-red-700 hover:bg-red-200 text-xs font-bold px-4 py-2 rounded-xl border border-red-300">
+                        class="bg-red-100 text-red-700 hover:bg-red-200 text-xs font-bold px-3 py-2 rounded-xl border border-red-300">
                         <i class="fa-solid fa-trash mr-1"></i> Eliminar
                     </button>
                     <div class="flex gap-2">
@@ -875,6 +928,7 @@
         let listaRolesGlobal = [];
         let tiposInscripcionGlobal = [];
         let listaInscritosGlobal = [];
+        let listaPagosGlobal = [];
         let accionPendienteProtegida = null;
         let instanciaGrafico = null;
 
@@ -914,7 +968,29 @@
             });
         }
 
-        // FUNCIONES DE TIPOS DE INSCRIPCIÓN / CATEGORÍAS
+        // CONTROL PESTAÑAS DENTRO DEL MODAL EDITAR CAMPAMENTISTA
+        function cambiarPestanaModal(pestana) {
+            document.getElementById('tabModalGen').classList.add('hidden');
+            document.getElementById('tabModalAsig').classList.add('hidden');
+            document.getElementById('tabModalSalud').classList.add('hidden');
+
+            document.getElementById('btnTabModal1').className = "px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200";
+            document.getElementById('btnTabModal2').className = "px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200";
+            document.getElementById('btnTabModal3').className = "px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200";
+
+            if (pestana === 'gen') {
+                document.getElementById('tabModalGen').classList.remove('hidden');
+                document.getElementById('btnTabModal1').className = "px-3 py-1.5 rounded-lg bg-gray-900 text-white";
+            } else if (pestana === 'asig') {
+                document.getElementById('tabModalAsig').classList.remove('hidden');
+                document.getElementById('btnTabModal2').className = "px-3 py-1.5 rounded-lg bg-gray-900 text-white";
+            } else if (pestana === 'salud') {
+                document.getElementById('tabModalSalud').classList.remove('hidden');
+                document.getElementById('btnTabModal3').className = "px-3 py-1.5 rounded-lg bg-gray-900 text-white";
+            }
+        }
+
+        // FUNCIONES DE CATEGORÍAS
         function prepararCrearCategoria() {
             document.getElementById('catIdEdit').value = '';
             document.getElementById('catNombre').value = '';
@@ -1003,6 +1079,59 @@
             }
         }
 
+        // FUNCIONES DE INGRESOS (COBROS) EDITABLES
+        function prepararCrearCobroDirecto() {
+            document.getElementById('pagoAdminIdEdit').value = '';
+            document.getElementById('lblTituloPagoForm').innerText = 'Registrar Pago Manual a Campamentista';
+            document.getElementById('pagoAdminInscrito').value = '';
+            document.getElementById('pagoAdminMonto').value = '';
+            document.getElementById('pagoAdminObs').value = '';
+            document.getElementById('formContenedorPagoDirecto').classList.remove('hidden');
+        }
+
+        function abrirModalEditarIngreso(pagoId) {
+            const pago = listaPagosGlobal.find(p => p.id === pagoId);
+            if (!pago) return;
+
+            document.getElementById('pagoAdminIdEdit').value = pago.id;
+            document.getElementById('lblTituloPagoForm').innerText = 'Editar Pago / Ingreso Registrado';
+            document.getElementById('pagoAdminInscrito').value = pago.inscrito_id || '';
+            document.getElementById('pagoAdminMonto').value = pago.monto;
+            document.getElementById('pagoAdminObs').value = pago.observaciones || '';
+            document.getElementById('formContenedorPagoDirecto').classList.remove('hidden');
+        }
+
+        async function guardarCobroDirecto(e) {
+            e.preventDefault();
+            const editId = document.getElementById('pagoAdminIdEdit').value;
+            const inscritoId = document.getElementById('pagoAdminInscrito').value;
+            const monto = document.getElementById('pagoAdminMonto').value;
+            const obs = document.getElementById('pagoAdminObs').value.trim();
+
+            if (!inscritoId || !monto) return alert('Selecciona un campamentista e ingresa el monto.');
+
+            const payload = {
+                inscrito_id: inscritoId,
+                monto: monto,
+                estado: 'Aprobado',
+                observaciones: obs || `Cobro registrado por ${adminSesion.nombre}`
+            };
+
+            if (editId) {
+                await db.from('pagos').update(payload).eq('id', editId);
+                await registrarLogAuditoria('Edición Pago', 'Ingresos', `Actualizó pago ID: ${editId} a Bs ${monto}`);
+                alert('Pago actualizado correctamente.');
+            } else {
+                await db.from('pagos').insert([payload]);
+                await registrarLogAuditoria('Cobro Directo', 'Ingresos', `Registró pago de Bs ${monto}`);
+                alert('Cobro registrado y aprobado correctamente.');
+            }
+
+            e.target.reset();
+            toggleFormulario('formContenedorPagoDirecto');
+            cargarTodoElDashboard();
+        }
+
         // FUNCIONES DE EGRESOS
         function prepararCrearEgreso() {
             document.getElementById('egIdEdit').value = '';
@@ -1047,7 +1176,7 @@
             cargarTodoElDashboard();
         }
 
-        // FUNCIONES DE ADMINISTRADORES Y ROLES
+        // ADMINISTRADORES Y ROLES
         async function guardarAdmin(e) {
             e.preventDefault();
             const nombre = document.getElementById('adminNewNombre').value.trim();
@@ -1148,6 +1277,7 @@
             await cargarTiposInscripcion();
             aplicarPermisosVisuales();
             cargarTodoElDashboard();
+            cargarPlantillasSelect();
             await registrarLogAuditoria('Inicio de Sesión', 'Acceso', 'El administrador ingresó al sistema.');
         }
 
@@ -1208,6 +1338,8 @@
             listaInscritosGlobal = inscritos || [];
 
             const { data: pagos } = await db.from('pagos').select('*, inscritos(nombre_completo)').eq('estado', 'Aprobado');
+            listaPagosGlobal = pagos || [];
+
             const { data: egresos } = await db.from('egresos').select('*');
 
             let cntStaff = 0;
@@ -1223,7 +1355,7 @@
             document.getElementById('stTotalGeneral').innerText = listaInscritosGlobal.length;
 
             let ing = 0, eg = 0;
-            (pagos || []).forEach(p => ing += Number(p.monto));
+            listaPagosGlobal.forEach(p => ing += Number(p.monto));
             (egresos || []).forEach(e => eg += Number(e.monto));
 
             document.getElementById('stIngresos').innerText = `Bs ${ing}`;
@@ -1238,35 +1370,11 @@
                 });
             }
 
-            const tbodyIns = document.getElementById('tblTodosInscritos');
-            tbodyIns.innerHTML = '';
-            listaInscritosGlobal.forEach(i => {
-                let estadoCarta = i.estado_carta || (i.carta_compromiso_url ? 'En Revisión' : 'Pendiente');
-                let colorBadge = estadoCarta === 'Aprobada' ? 'bg-green-100 text-green-700' : (estadoCarta === 'En Revisión' ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700');
-
-                let badgeRol = i.es_staff 
-                    ? `<span class="bg-purple-100 text-purple-800 font-extrabold px-2 py-0.5 rounded-full border border-purple-300">⭐ STAFF</span>` 
-                    : `<span class="bg-gray-100 text-gray-700 font-semibold px-2 py-0.5 rounded-full">Campamentista</span>`;
-
-                tbodyIns.innerHTML += `
-          <tr>
-            <td class="p-2 font-bold">${i.ci}</td>
-            <td class="p-2 font-semibold text-gray-800">${i.nombre_completo}</td>
-            <td class="p-2">${badgeRol}</td>
-            <td class="p-2 font-bold text-indigo-900">${i.tipos_inscripcion?.nombre || 'Estándar'}</td>
-            <td class="p-2 font-bold text-indigo-700">${i.equipo || 'Sin Asignar'}</td>
-            <td class="p-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${colorBadge}">${estadoCarta}</span></td>
-            <td class="p-2 text-center">
-              <button onclick="abrirModalEditarCampamentista('${i.id}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 rounded-lg border border-amber-300 transition" title="Editar">
-                <i class="fa-solid fa-pencil text-xs"></i>
-              </button>
-            </td>
-          </tr>`;
-            });
+            renderizarTablaInscritos();
 
             const tbodyIng = document.getElementById('tblHistorialIngresos');
             tbodyIng.innerHTML = '';
-            (pagos || []).forEach(p => {
+            listaPagosGlobal.forEach(p => {
                 tbodyIng.innerHTML += `
           <tr>
             <td class="p-2">${new Date(p.fecha).toLocaleDateString()}</td>
@@ -1274,7 +1382,10 @@
             <td class="p-2 font-bold text-green-600">Bs ${p.monto}</td>
             <td class="p-2">${p.observaciones || '-'}</td>
             <td class="p-2">${p.comprobante_url ? `<a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline">Ver Foto</a>` : 'Efectivo / Directo'}</td>
-            <td class="p-2 text-center">
+            <td class="p-2 text-center flex justify-center gap-1">
+              <button onclick="abrirModalEditarIngreso('${p.id}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 rounded-lg border border-amber-300" title="Editar Pago">
+                <i class="fa-solid fa-pencil text-xs"></i>
+              </button>
               <button onclick="solicitarSeguridad('borrarIngreso', '${p.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200" title="Borrar">
                 <i class="fa-solid fa-trash text-xs"></i>
               </button>
@@ -1308,49 +1419,157 @@
             cargarAuditoriaLogs();
         }
 
-        async function registrarCobroDirecto(e) {
-            e.preventDefault();
-            const inscritoId = document.getElementById('pagoAdminInscrito').value;
-            const monto = document.getElementById('pagoAdminMonto').value;
-            const obs = document.getElementById('pagoAdminObs').value.trim();
+        // RENDERIZADO DINÁMICO DE TABLA DE INSCRITOS SEGÚN COLUMNAS SELECCIONADAS Y ORDEN
+        function renderizarTablaInscritos() {
+            const showTel = document.getElementById('col_tel').checked;
+            const showCelula = document.getElementById('col_celula').checked;
+            const showTalla = document.getElementById('col_talla').checked;
+            const showActividad = document.getElementById('col_actividad').checked;
+            const showAlergias = document.getElementById('col_alergias').checked;
+            const showTutor = document.getElementById('col_tutor').checked;
 
-            if (!inscritoId || !monto) return alert('Selecciona un campamentista e ingresa el monto.');
+            const campoOrden = document.getElementById('selOrdenInscritos').value;
 
-            await db.from('pagos').insert([{
-                inscrito_id: inscritoId,
-                monto: monto,
-                estado: 'Aprobado',
-                observaciones: obs || `Cobro directo registrado por ${adminSesion.nombre}`
-            }]);
+            let listaOrdenada = [...listaInscritosGlobal].sort((a, b) => {
+                let valA = a[campoOrden] || '';
+                let valB = b[campoOrden] || '';
+                if (campoOrden === 'tipo_inscripcion') {
+                    valA = a.tipos_inscripcion?.nombre || '';
+                    valB = b.tipos_inscripcion?.nombre || '';
+                }
+                return valA.toString().localeCompare(valB.toString());
+            });
 
-            await registrarLogAuditoria('Cobro Directo', 'Ingresos', `Registró pago de Bs ${monto}`);
-            alert('Cobro registrado y aprobado correctamente.');
-            e.target.reset();
-            toggleFormulario('formContenedorPagoDirecto');
-            cargarTodoElDashboard();
+            // Renderizar Thead
+            const thead = document.getElementById('theadInscritos');
+            thead.innerHTML = `
+            <tr>
+                <th class="p-2">C.I.</th>
+                <th class="p-2">Nombre Completo</th>
+                <th class="p-2">Tipo / Rol</th>
+                <th class="p-2">Inscripción</th>
+                <th class="p-2">Equipo</th>
+                ${showTel ? '<th class="p-2">Teléfono</th>' : ''}
+                ${showCelula ? '<th class="p-2">Célula</th>' : ''}
+                ${showTalla ? '<th class="p-2">Talla</th>' : ''}
+                ${showActividad ? '<th class="p-2">Actividad</th>' : ''}
+                ${showAlergias ? '<th class="p-2">Alergias</th>' : ''}
+                ${showTutor ? '<th class="p-2">Tutor</th>' : ''}
+                <th class="p-2">Carta</th>
+                <th class="p-2 text-center">Acciones</th>
+            </tr>`;
+
+            // Renderizar Tbody
+            const tbodyIns = document.getElementById('tblTodosInscritos');
+            tbodyIns.innerHTML = '';
+
+            listaOrdenada.forEach(i => {
+                let estadoCarta = i.estado_carta || (i.carta_compromiso_url ? 'En Revisión' : 'Pendiente');
+                let colorBadge = estadoCarta === 'Aprobada' ? 'bg-green-100 text-green-700' : (estadoCarta === 'En Revisión' ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700');
+
+                let badgeRol = i.es_staff 
+                    ? `<span class="bg-purple-100 text-purple-800 font-extrabold px-2 py-0.5 rounded-full border border-purple-300">⭐ STAFF</span>` 
+                    : `<span class="bg-gray-100 text-gray-700 font-semibold px-2 py-0.5 rounded-full">Campamentista</span>`;
+
+                tbodyIns.innerHTML += `
+          <tr>
+            <td class="p-2 font-bold">${i.ci}</td>
+            <td class="p-2 font-semibold text-gray-800">${i.nombre_completo}</td>
+            <td class="p-2">${badgeRol}</td>
+            <td class="p-2 font-bold text-indigo-900">${i.tipos_inscripcion?.nombre || 'Estándar'}</td>
+            <td class="p-2 font-bold text-indigo-700">${i.equipo || 'Sin Asignar'}</td>
+            ${showTel ? `<td class="p-2">${i.telefono || '-'}</td>` : ''}
+            ${showCelula ? `<td class="p-2">${i.celula || '-'}</td>` : ''}
+            ${showTalla ? `<td class="p-2 font-bold">${i.talla_polera || '-'}</td>` : ''}
+            ${showActividad ? `<td class="p-2">${i.actividad_favorita || '-'}</td>` : ''}
+            ${showAlergias ? `<td class="p-2 text-red-600 font-semibold">${i.alergias_medicina || '-'}</td>` : ''}
+            ${showTutor ? `<td class="p-2">${i.tutor_nombre ? `${i.tutor_nombre} (${i.tutor_telefono || ''})` : '-'}</td>` : ''}
+            <td class="p-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${colorBadge}">${estadoCarta}</span></td>
+            <td class="p-2 text-center">
+              <button onclick="abrirModalEditarCampamentista('${i.id}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 rounded-lg border border-amber-300 transition" title="Editar">
+                <i class="fa-solid fa-pencil text-xs"></i>
+              </button>
+            </td>
+          </tr>`;
+            });
         }
 
-        // GENERADOR DE REPORTES Y ESTADÍSTICAS GRANULARES CON TOTALES ARRIBA
+        // REPORTES AVANZADOS GRANULARES CON PLANTILLAS PERSONALIZADAS
+        function guardarPlantillaReporte() {
+            const nombre = document.getElementById('txtNombrePlantilla').value.trim();
+            if (!nombre) return alert('Ingresa un nombre para identificar la plantilla.');
+
+            const config = {
+                variable: document.getElementById('repVariableSelect').value,
+                grafico: document.getElementById('repGraficoTipo').value,
+                colPersonas: document.getElementById('repColPersonas').checked,
+                colPorcentaje: document.getElementById('repColPorcentaje').checked,
+                colMonto: document.getElementById('repColMonto').checked,
+                colPromedio: document.getElementById('repColPromedio').checked,
+                colSaldo: document.getElementById('repColSaldo').checked
+            };
+
+            let plantillas = JSON.parse(localStorage.getItem('jc2027_plantillas_reportes') || '{}');
+            plantillas[nombre] = config;
+            localStorage.setItem('jc2027_plantillas_reportes', JSON.stringify(plantillas));
+
+            alert(`Plantilla "${nombre}" guardada con éxito.`);
+            document.getElementById('txtNombrePlantilla').value = '';
+            cargarPlantillasSelect();
+        }
+
+        function cargarPlantillasSelect() {
+            const select = document.getElementById('selReportePlantillas');
+            if (!select) return;
+
+            const plantillas = JSON.parse(localStorage.getItem('jc2027_plantillas_reportes') || '{}');
+            select.innerHTML = '<option value="">-- Cargar Plantilla --</option>';
+
+            Object.keys(plantillas).forEach(p => {
+                select.innerHTML += `<option value="${p}">${p}</option>`;
+            });
+        }
+
+        function cargarPlantillaReporte(nombre) {
+            if (!nombre) return;
+            const plantillas = JSON.parse(localStorage.getItem('jc2027_plantillas_reportes') || '{}');
+            const c = plantillas[nombre];
+            if (!c) return;
+
+            document.getElementById('repVariableSelect').value = c.variable;
+            document.getElementById('repGraficoTipo').value = c.grafico;
+            document.getElementById('repColPersonas').checked = c.colPersonas;
+            document.getElementById('repColPorcentaje').checked = c.colPorcentaje;
+            document.getElementById('repColMonto').checked = c.colMonto;
+            document.getElementById('repColPromedio').checked = c.colPromedio;
+            document.getElementById('repColSaldo').checked = c.colSaldo;
+
+            generarReporteGrafico();
+        }
+
         async function generarReporteGrafico() {
             const variable = document.getElementById('repVariableSelect').value;
-            const operacion = document.getElementById('repOperacionSelect').value;
             const tipoGrafico = document.getElementById('repGraficoTipo').value;
+
+            const showPersons = document.getElementById('repColPersonas').checked;
+            const showPorcent = document.getElementById('repColPorcentaje').checked;
+            const showMonto = document.getElementById('repColMonto').checked;
+            const showPromedio = document.getElementById('repColPromedio').checked;
+            const showSaldo = document.getElementById('repColSaldo').checked;
 
             const { data: inscritos } = await db.from('inscritos').select('*, tipos_inscripcion(*)');
             const { data: pagos } = await db.from('pagos').select('*').eq('estado', 'Aprobado');
 
             let conteo = {};
             let montos = {};
+            let saldos = {};
 
             (inscritos || []).forEach(i => {
                 let key = '-';
-                if (variable === 'tipo_inscripcion') {
-                    key = i.tipos_inscripcion?.nombre || 'Estándar';
-                } else if (variable === 'es_staff') {
-                    key = i.es_staff ? 'STAFF' : 'Campamentista';
-                } else if (variable === 'es_menor') {
-                    key = i.es_menor ? 'Menor de Edad' : 'Mayor de Edad';
-                } else if (variable === 'estado_financiero') {
+                if (variable === 'tipo_inscripcion') key = i.tipos_inscripcion?.nombre || 'Estándar';
+                else if (variable === 'es_staff') key = i.es_staff ? 'STAFF' : 'Campamentista';
+                else if (variable === 'es_menor') key = i.es_menor ? 'Menor de Edad' : 'Mayor de Edad';
+                else if (variable === 'estado_financiero') {
                     let costo = i.tipos_inscripcion?.es_manual ? (i.precio_personalizado || 0) : (i.tipos_inscripcion?.precio || 140);
                     let misPagos = pagos ? pagos.filter(p => p.inscrito_id === i.id) : [];
                     let totalAbonado = misPagos.reduce((sum, p) => sum + Number(p.monto), 0);
@@ -1358,47 +1577,44 @@
                     if (totalAbonado >= costo) key = 'Totalmente Pagado';
                     else if (totalAbonado > 0) key = 'Abono Parcial';
                     else key = 'Sin Abonos (Pendiente)';
-                } else {
-                    key = i[variable] || 'Sin Especificar';
-                }
+                } else key = i[variable] || 'Sin Especificar';
 
                 if (!conteo[key]) {
                     conteo[key] = 0;
                     montos[key] = 0;
+                    saldos[key] = 0;
                 }
 
                 conteo[key]++;
 
-                if (pagos) {
-                    let misPagos = pagos.filter(p => p.inscrito_id === i.id);
-                    misPagos.forEach(p => montos[key] += Number(p.monto));
-                }
+                let costoIndividual = i.tipos_inscripcion?.es_manual ? (i.precio_personalizado || 0) : (i.tipos_inscripcion?.precio || 140);
+                let misPagos = pagos ? pagos.filter(p => p.inscrito_id === i.id) : [];
+                let abonado = misPagos.reduce((sum, p) => sum + Number(p.monto), 0);
+
+                montos[key] += abonado;
+                saldos[key] += Math.max(0, costoIndividual - abonado);
             });
 
             let labels = Object.keys(conteo);
-            let valores = [];
 
-            // Cálculos de Totales Globales
             let totalPersonasGlobal = 0;
             let totalMontoGlobal = 0;
+            let totalSaldoGlobal = 0;
 
             labels.forEach(k => {
                 totalPersonasGlobal += conteo[k];
                 totalMontoGlobal += montos[k];
-
-                if (operacion === 'conteo') valores.push(conteo[k]);
-                else if (operacion === 'suma_pagos') valores.push(montos[k]);
-                else if (operacion === 'promedio_pagos') valores.push(conteo[k] > 0 ? (montos[k] / conteo[k]).toFixed(2) : 0);
+                totalSaldoGlobal += saldos[k];
             });
 
             let promedioGlobal = totalPersonasGlobal > 0 ? (totalMontoGlobal / totalPersonasGlobal).toFixed(2) : 0;
 
-            // Renderizar Tabla con Fila de TOTALES ARRIBA de los encabezados
+            // Renderizar Tabla con Totales Arriba
             const divTabla = document.getElementById('contenedorTablaEstadisticas');
             let html = `
             <div class="mb-3 p-3 bg-indigo-50 rounded-xl border border-indigo-200">
-                <p class="text-[10px] uppercase font-bold text-indigo-700 mb-1">Resumen Global de la Columna</p>
-                <div class="grid grid-cols-3 gap-2 text-center">
+                <p class="text-[10px] uppercase font-bold text-indigo-700 mb-1">Totales Globales de la Categoría</p>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
                     <div class="bg-white p-2 rounded-lg shadow-sm border">
                         <span class="block text-[10px] text-gray-400 font-semibold uppercase">Total Personas</span>
                         <span class="text-sm font-black text-indigo-900">${totalPersonasGlobal}</span>
@@ -1408,7 +1624,11 @@
                         <span class="text-sm font-black text-green-600">Bs ${totalMontoGlobal}</span>
                     </div>
                     <div class="bg-white p-2 rounded-lg shadow-sm border">
-                        <span class="block text-[10px] text-gray-400 font-semibold uppercase">Promedio General</span>
+                        <span class="block text-[10px] text-gray-400 font-semibold uppercase">Total Deuda / Saldo</span>
+                        <span class="text-sm font-black text-red-600">Bs ${totalSaldoGlobal}</span>
+                    </div>
+                    <div class="bg-white p-2 rounded-lg shadow-sm border">
+                        <span class="block text-[10px] text-gray-400 font-semibold uppercase">Promedio / Persona</span>
                         <span class="text-sm font-black text-blue-600">Bs ${promedioGlobal}</span>
                     </div>
                 </div>
@@ -1418,16 +1638,27 @@
                 <thead class="bg-gray-200 font-bold">
                     <tr>
                         <th class="p-2 border">${variable.replace('_', ' ').toUpperCase()}</th>
-                        <th class="p-2 border">Personas</th>
-                        <th class="p-2 border">Total Bs</th>
-                        <th class="p-2 border">Promedio Bs</th>
+                        ${showPersons ? '<th class="p-2 border">Personas</th>' : ''}
+                        ${showPorcent ? '<th class="p-2 border">% Total</th>' : ''}
+                        ${showMonto ? '<th class="p-2 border">Abonado Bs</th>' : ''}
+                        ${showPromedio ? '<th class="p-2 border">Promedio Bs</th>' : ''}
+                        ${showSaldo ? '<th class="p-2 border">Saldo Deuda</th>' : ''}
                     </tr>
                 </thead>
                 <tbody>`;
 
             labels.forEach(k => {
+                let pct = totalPersonasGlobal > 0 ? ((conteo[k] / totalPersonasGlobal) * 100).toFixed(1) : 0;
                 let prom = conteo[k] > 0 ? (montos[k] / conteo[k]).toFixed(2) : 0;
-                html += `<tr><td class="p-2 border font-bold text-gray-800">${k}</td><td class="p-2 border font-semibold">${conteo[k]}</td><td class="p-2 border font-bold text-green-600">Bs ${montos[k]}</td><td class="p-2 border">Bs ${prom}</td></tr>`;
+
+                html += `<tr>
+                    <td class="p-2 border font-bold text-gray-800">${k}</td>
+                    ${showPersons ? `<td class="p-2 border font-semibold">${conteo[k]}</td>` : ''}
+                    ${showPorcent ? `<td class="p-2 border font-semibold text-indigo-700">${pct}%</td>` : ''}
+                    ${showMonto ? `<td class="p-2 border font-bold text-green-600">Bs ${montos[k]}</td>` : ''}
+                    ${showPromedio ? `<td class="p-2 border">Bs ${prom}</td>` : ''}
+                    ${showSaldo ? `<td class="p-2 border font-bold text-red-600">Bs ${saldos[k]}</td>` : ''}
+                </tr>`;
             });
             html += `</tbody></table>`;
             divTabla.innerHTML = html;
@@ -1443,8 +1674,8 @@
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: operacion.replace('_', ' ').toUpperCase(),
-                        data: valores,
+                        label: 'Personas',
+                        data: labels.map(k => conteo[k]),
                         backgroundColor: colores
                     }]
                 },
@@ -1480,6 +1711,7 @@
             document.getElementById('editInsTutorTel').value = i.tutor_telefono || '';
 
             evaluarPrecioManual(i.tipo_inscripcion_id, 'editDivPrecioManual');
+            cambiarPestanaModal('gen');
             document.getElementById('modalEditCampamentista').classList.remove('hidden');
         }
 
