@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jesus Camp 2027 - Panel Admin Profesional</title>
+    <title>ADMIN JC2027 - Panel de Control</title>
 
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
@@ -13,6 +13,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 
@@ -22,11 +23,13 @@
     <nav class="bg-gray-900 text-white p-4 shadow-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <span class="font-bold text-lg tracking-wide flex items-center gap-2">
-                <i class="fa-solid fa-shield-halved text-amber-400"></i> TESORERÍA & ADMIN JC2027
+                <i class="fa-solid fa-shield-halved text-amber-400"></i> ADMIN JC2027
             </span>
             <div class="flex items-center gap-3">
-                <span id="txtAdminInfo"
-                    class="hidden text-xs text-amber-400 font-bold bg-gray-800 px-3 py-1 rounded-full border border-gray-700"></span>
+                <button id="btnPerfilAdmin" onclick="abrirModalPerfilAdmin()"
+                    class="hidden text-xs bg-gray-800 hover:bg-gray-700 text-amber-400 font-bold px-3 py-1.5 rounded-lg border border-gray-700 transition flex items-center gap-1">
+                    <i class="fa-solid fa-user-gear"></i> <span id="txtAdminInfo">Mi Perfil</span>
+                </button>
                 <button id="btnCerrarSesion" onclick="cerrarSesion()"
                     class="hidden text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg transition">
                     <i class="fa-solid fa-right-from-bracket"></i> Salir
@@ -47,7 +50,7 @@
                 <i class="fa-solid fa-lock"></i>
             </div>
             <h2 class="text-xl font-bold text-gray-900">Acceso Administrativo</h2>
-            <p class="text-xs text-gray-500">Ingresa tus credenciales autorizadas</p>
+            <p class="text-xs text-gray-500">ADMIN JC2027</p>
         </div>
 
         <form onsubmit="iniciarSesionAdmin(event)" class="space-y-4">
@@ -73,47 +76,38 @@
 
         <!-- MÉTRICAS DE PARTICIPANTES -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div
-                class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-blue-600 flex justify-between items-center">
+            <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-blue-600 flex justify-between items-center">
                 <div>
                     <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Campamentistas</p>
                     <h3 class="text-2xl font-black text-gray-900 mt-0.5" id="stCampamentistas">0</h3>
                 </div>
-                <div class="p-3 bg-blue-50 text-blue-600 rounded-xl"><i class="fa-solid fa-person-hiking text-lg"></i>
-                </div>
+                <div class="p-3 bg-blue-50 text-blue-600 rounded-xl"><i class="fa-solid fa-person-hiking text-lg"></i></div>
             </div>
 
-            <div
-                class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-purple-600 flex justify-between items-center">
+            <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-purple-600 flex justify-between items-center">
                 <div>
                     <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Staff Totales</p>
                     <h3 class="text-2xl font-black text-purple-700 mt-0.5" id="stStaff">0</h3>
                 </div>
-                <div class="p-3 bg-purple-50 text-purple-600 rounded-xl"><i class="fa-solid fa-user-shield text-lg"></i>
-                </div>
+                <div class="p-3 bg-purple-50 text-purple-600 rounded-xl"><i class="fa-solid fa-user-shield text-lg"></i></div>
             </div>
 
-            <div
-                class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-emerald-600 flex justify-between items-center bg-emerald-50/20">
+            <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-emerald-600 flex justify-between items-center bg-emerald-50/20">
                 <div>
-                    <p class="text-[10px] font-extrabold text-emerald-800 uppercase tracking-wider">Total General
-                        Participantes</p>
+                    <p class="text-[10px] font-extrabold text-emerald-800 uppercase tracking-wider">Total General Participantes</p>
                     <h3 class="text-2xl font-black text-emerald-600 mt-0.5" id="stTotalGeneral">0</h3>
                 </div>
-                <div class="p-3 bg-emerald-100 text-emerald-700 rounded-xl"><i class="fa-solid fa-users text-lg"></i>
-                </div>
+                <div class="p-3 bg-emerald-100 text-emerald-700 rounded-xl"><i class="fa-solid fa-users text-lg"></i></div>
             </div>
         </div>
 
         <!-- METRICAS DE FINANZAS -->
         <div id="contTarjetasFinanzas" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div id="cardTotalIngresos"
-                class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-green-600">
+            <div id="cardTotalIngresos" class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-green-600">
                 <p class="text-xs font-bold text-gray-400 uppercase">Total Ingresos</p>
                 <h3 class="text-2xl font-black text-green-600 mt-1" id="stIngresos">Bs 0</h3>
             </div>
-            <div id="cardTotalEgresos"
-                class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-red-600">
+            <div id="cardTotalEgresos" class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-red-600">
                 <p class="text-xs font-bold text-gray-400 uppercase">Total Egresos</p>
                 <h3 class="text-2xl font-black text-red-600 mt-1" id="stEgresos">Bs 0</h3>
             </div>
@@ -148,7 +142,7 @@
             </button>
             <button id="navReportes" onclick="cambiarPestana('reportes')"
                 class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-chart-pie mr-1"></i> Reportes
+                <i class="fa-solid fa-chart-pie mr-1"></i> Reportes Avanzados
             </button>
             <button id="navUsuarios" onclick="cambiarPestana('usuarios')"
                 class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
@@ -239,19 +233,14 @@
                     </button>
                 </div>
 
-                <div id="formContenedorCampamentista"
-                    class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
+                <div id="formContenedorCampamentista" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
                     <h4 class="font-bold text-gray-700 text-xs uppercase mb-3 border-b pb-1">Nuevo Registro</h4>
                     <form onsubmit="crearNuevoCampamentista(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <input type="text" id="newCi" placeholder="C.I. (Obligatorio)" required
-                            class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="text" id="newNombre" placeholder="Nombre Completo" required
-                            class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="text" id="newTel" placeholder="Teléfono / WhatsApp"
-                            class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="text" id="newCelula" placeholder="Célula"
-                            class="p-2.5 border rounded-xl text-xs bg-white">
-
+                        <input type="text" id="newCi" placeholder="C.I. (Obligatorio)" required class="p-2.5 border rounded-xl text-xs bg-white">
+                        <input type="text" id="newNombre" placeholder="Nombre Completo" required class="p-2.5 border rounded-xl text-xs bg-white">
+                        <input type="text" id="newTel" placeholder="Teléfono / WhatsApp" class="p-2.5 border rounded-xl text-xs bg-white">
+                        <input type="text" id="newCelula" placeholder="Célula" class="p-2.5 border rounded-xl text-xs bg-white">
+                        
                         <select id="newTalla" class="p-2.5 border rounded-xl text-xs bg-white">
                             <option value="XS">Talla XS</option>
                             <option value="S">Talla S</option>
@@ -260,12 +249,10 @@
                             <option value="XL">Talla XL</option>
                         </select>
 
-                        <select id="newTipoInscripcion" onchange="evaluarPrecioManual(this.value, 'newDivPrecioManual')"
-                            class="p-2.5 border rounded-xl text-xs bg-white font-bold text-indigo-900"></select>
+                        <select id="newTipoInscripcion" onchange="evaluarPrecioManual(this.value, 'newDivPrecioManual')" class="p-2.5 border rounded-xl text-xs bg-white font-bold text-indigo-900"></select>
 
                         <div id="newDivPrecioManual" class="hidden">
-                            <input type="number" id="newPrecioManual" placeholder="Precio Especial (Bs)"
-                                class="p-2.5 border rounded-xl text-xs bg-amber-50 w-full font-bold">
+                            <input type="number" id="newPrecioManual" placeholder="Precio Especial (Bs)" class="p-2.5 border rounded-xl text-xs bg-amber-50 w-full font-bold">
                         </div>
 
                         <select id="newEquipo" class="p-2.5 border rounded-xl text-xs bg-white">
@@ -287,41 +274,30 @@
                             <option value="Juegos de Mesa">Juegos de Mesa</option>
                         </select>
 
-                        <input type="text" id="newHabilidad" placeholder="Habilidad o Talento"
-                            class="p-2.5 border rounded-xl text-xs bg-white">
+                        <input type="text" id="newHabilidad" placeholder="Habilidad o Talento" class="p-2.5 border rounded-xl text-xs bg-white">
 
-                        <div
-                            class="md:col-span-3 flex items-center gap-6 bg-white p-3 rounded-xl border border-gray-200">
+                        <div class="md:col-span-3 flex items-center gap-6 bg-white p-3 rounded-xl border border-gray-200">
                             <label class="text-xs font-bold text-gray-700 flex items-center gap-2">
                                 <input type="checkbox" id="newEsStaff" class="rounded text-purple-600">
                                 ⭐ Pertenece a la Categoría/Rol de STAFF
                             </label>
                             <label class="text-xs font-bold text-gray-700 flex items-center gap-2">
-                                <input type="checkbox" id="newEsMenor" onchange="toggleFormMenor(this.checked)"
-                                    class="rounded text-blue-600">
+                                <input type="checkbox" id="newEsMenor" onchange="toggleFormMenor(this.checked)" class="rounded text-blue-600">
                                 ¿Es Menor de Edad?
                             </label>
                         </div>
 
-                        <div id="newSecTutor"
-                            class="hidden md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-4 bg-amber-50/50 p-3 rounded-xl border border-amber-200">
-                            <input type="text" id="newTutorNombre" placeholder="Nombre del Tutor"
-                                class="p-2.5 border rounded-xl text-xs bg-white">
-                            <input type="text" id="newTutorTel" placeholder="Teléfono del Tutor"
-                                class="p-2.5 border rounded-xl text-xs bg-white">
+                        <div id="newSecTutor" class="hidden md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-4 bg-amber-50/50 p-3 rounded-xl border border-amber-200">
+                            <input type="text" id="newTutorNombre" placeholder="Nombre del Tutor" class="p-2.5 border rounded-xl text-xs bg-white">
+                            <input type="text" id="newTutorTel" placeholder="Teléfono del Tutor" class="p-2.5 border rounded-xl text-xs bg-white">
                         </div>
 
-                        <input type="text" id="newEmergencia" placeholder="Contacto de Emergencia"
-                            class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="text" id="newAlergias" placeholder="Alergias o Medicamentos"
-                            class="p-2.5 border rounded-xl text-xs bg-white md:col-span-2">
+                        <input type="text" id="newEmergencia" placeholder="Contacto de Emergencia" class="p-2.5 border rounded-xl text-xs bg-white">
+                        <input type="text" id="newAlergias" placeholder="Alergias o Medicamentos" class="p-2.5 border rounded-xl text-xs bg-white md:col-span-2">
 
                         <div class="md:col-span-3 flex justify-end gap-2">
-                            <button type="button" onclick="toggleFormulario('formContenedorCampamentista')"
-                                class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
-                            <button type="submit"
-                                class="bg-green-600 text-white font-bold text-xs px-6 py-2 rounded-xl transition shadow">+
-                                Guardar Registro</button>
+                            <button type="button" onclick="toggleFormulario('formContenedorCampamentista')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                            <button type="submit" class="bg-green-600 text-white font-bold text-xs px-6 py-2 rounded-xl transition shadow">+ Guardar Registro</button>
                         </div>
                     </form>
                 </div>
@@ -361,13 +337,11 @@
                         <input type="hidden" id="catIdEdit">
                         <div>
                             <label class="text-[10px] font-bold text-gray-500 uppercase">Nombre Categoría:</label>
-                            <input type="text" id="catNombre" placeholder="Nombre" required
-                                class="p-2.5 border rounded-xl text-xs bg-white w-full">
+                            <input type="text" id="catNombre" placeholder="Nombre" required class="p-2.5 border rounded-xl text-xs bg-white w-full">
                         </div>
                         <div>
                             <label class="text-[10px] font-bold text-gray-500 uppercase">Precio Oficial (Bs):</label>
-                            <input type="number" step="0.01" id="catPrecio" placeholder="Precio (Bs)" required
-                                class="p-2.5 border rounded-xl text-xs bg-white w-full">
+                            <input type="number" step="0.01" id="catPrecio" placeholder="Precio (Bs)" required class="p-2.5 border rounded-xl text-xs bg-white w-full">
                         </div>
 
                         <div class="flex flex-col gap-2 justify-center bg-white p-3 rounded-xl border">
@@ -382,11 +356,8 @@
                         </div>
 
                         <div class="col-span-3 flex justify-end gap-2">
-                            <button type="button" onclick="toggleFormulario('formContenedorCategoria')"
-                                class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
-                            <button type="submit"
-                                class="bg-indigo-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">Guardar
-                                Tipo de Inscripción</button>
+                            <button type="button" onclick="toggleFormulario('formContenedorCategoria')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                            <button type="submit" class="bg-indigo-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">Guardar Tipo de Inscripción</button>
                         </div>
                     </form>
                 </div>
@@ -408,23 +379,48 @@
             </div>
         </div>
 
-        <!-- PESTAÑA INGRESOS -->
-        <div id="tabIngresos" class="tab-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-            <h3 class="font-bold text-gray-800 text-base mb-4">Historial de Ingresos Confirmados</h3>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs text-gray-600">
-                    <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                        <tr>
-                            <th class="p-2">Fecha</th>
-                            <th class="p-2">Inscrito</th>
-                            <th class="p-2">Monto</th>
-                            <th class="p-2">Observaciones</th>
-                            <th class="p-2">Comprobante</th>
-                            <th class="p-2 text-center">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tblHistorialIngresos" class="divide-y divide-gray-100"></tbody>
-                </table>
+        <!-- PESTAÑA INGRESOS Y REGISTRAR PAGO DIRECTO -->
+        <div id="tabIngresos" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
+                <div class="flex justify-between items-center border-b pb-3">
+                    <h3 class="font-bold text-gray-800 text-base">Historial de Ingresos Confirmados</h3>
+                    <button onclick="toggleFormulario('formContenedorPagoDirecto')"
+                        class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
+                        <i class="fa-solid fa-cash-register"></i> + Registrar Cobro Directo
+                    </button>
+                </div>
+
+                <!-- FORMULARIO DE COBRO DIRECTO DESDE ADMIN -->
+                <div id="formContenedorPagoDirecto" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-3">
+                    <h4 class="font-bold text-xs text-gray-700 uppercase border-b pb-1">Registrar Pago Manual a Campamentista</h4>
+                    <form onsubmit="registrarCobroDirecto(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <select id="pagoAdminInscrito" required class="p-2.5 border rounded-xl text-xs bg-white font-bold">
+                            <option value="">-- Seleccionar Campamentista --</option>
+                        </select>
+                        <input type="number" id="pagoAdminMonto" placeholder="Monto Recibido (Bs)" required class="p-2.5 border rounded-xl text-xs bg-white font-bold">
+                        <input type="text" id="pagoAdminObs" placeholder="Observaciones (Ej. Efectivo entregado en mano)" class="p-2.5 border rounded-xl text-xs bg-white">
+                        <div class="md:col-span-3 flex justify-end gap-2">
+                            <button type="button" onclick="toggleFormulario('formContenedorPagoDirecto')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                            <button type="submit" class="bg-green-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">Confirmar y Guardar Ingreso</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-gray-600">
+                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                            <tr>
+                                <th class="p-2">Fecha</th>
+                                <th class="p-2">Inscrito</th>
+                                <th class="p-2">Monto</th>
+                                <th class="p-2">Observaciones</th>
+                                <th class="p-2">Comprobante</th>
+                                <th class="p-2 text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblHistorialIngresos" class="divide-y divide-gray-100"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -441,8 +437,7 @@
 
                 <div id="formContenedorEgreso" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
                     <form onsubmit="registrarNuevoEgreso(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <input type="text" id="egConcepto" placeholder="Concepto de Gasto" required
-                            class="p-2.5 border rounded-xl text-xs bg-white">
+                        <input type="text" id="egConcepto" placeholder="Concepto de Gasto" required class="p-2.5 border rounded-xl text-xs bg-white">
                         <select id="egCategoria" class="p-2.5 border rounded-xl text-xs bg-white">
                             <option value="Alimentación">Alimentación</option>
                             <option value="Logística">Logística</option>
@@ -450,14 +445,10 @@
                             <option value="Transporte">Transporte</option>
                             <option value="Otros">Otros Gastos</option>
                         </select>
-                        <input type="number" step="0.01" id="egMonto" placeholder="Monto (Bs)" required
-                            class="p-2.5 border rounded-xl text-xs bg-white">
+                        <input type="number" step="0.01" id="egMonto" placeholder="Monto (Bs)" required class="p-2.5 border rounded-xl text-xs bg-white">
                         <div class="col-span-3 flex justify-end gap-2">
-                            <button type="button" onclick="toggleFormulario('formContenedorEgreso')"
-                                class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
-                            <button type="submit"
-                                class="bg-red-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">- Guardar
-                                Egreso</button>
+                            <button type="button" onclick="toggleFormulario('formContenedorEgreso')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                            <button type="submit" class="bg-red-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">- Guardar Egreso</button>
                         </div>
                     </form>
                 </div>
@@ -480,92 +471,69 @@
             </div>
         </div>
 
-        <!-- PESTAÑA REPORTES -->
+        <!-- PESTAÑA REPORTES AVANZADOS CON GRÁFICOS -->
         <div id="tabReportes" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
                 <div class="flex justify-between items-center border-b pb-3">
                     <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
-                        <i class="fa-solid fa-sitemap text-blue-600"></i> Diseñador de Reportes Agrupados
+                        <i class="fa-solid fa-chart-line text-blue-600"></i> Generador de Reportes y Estadísticas
                     </h3>
-                    <button onclick="toggleFormulario('formContenedorReporte')"
-                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
-                        <i class="fa-solid fa-sliders"></i> Diseñar Nuevo Reporte
-                    </button>
                 </div>
 
-                <div id="formContenedorReporte"
-                    class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-4">
-                    <form onsubmit="guardarNuevoReporteAvanzado(event)" class="space-y-4">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <input type="text" id="repNombre" placeholder="Nombre del Reporte" required
-                                class="p-2.5 border rounded-xl text-xs bg-white">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-500 uppercase block">Variable de Análisis:</label>
+                        <select id="repVariableSelect" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold text-indigo-900">
+                            <option value="equipo">Equipo Asignado</option>
+                            <option value="celula">Célula</option>
+                            <option value="talla_polera">Talla de Polera</option>
+                            <option value="actividad_favorita">Actividad Favorita</option>
+                            <option value="estado_carta">Estado de Carta de Compromiso</option>
+                            <option value="es_staff">Rol (Staff vs Campamentista)</option>
+                            <option value="tipo_inscripcion">Tipo de Inscripción</option>
+                        </select>
+                    </div>
 
-                            <div>
-                                <label class="text-[10px] font-bold text-gray-500 uppercase block">Grupo
-                                    Principal:</label>
-                                <select id="repGrupoPrincipal" class="p-2 border rounded-xl text-xs w-full bg-white">
-                                    <option value="ninguno">Sin Agrupación</option>
-                                    <option value="celula" selected>Agrupar por Célula</option>
-                                    <option value="equipo">Agrupar por Equipo</option>
-                                    <option value="es_staff">Agrupar por Rol (Staff / Campamentista)</option>
-                                    <option value="talla_polera">Agrupar por Talla</option>
-                                    <option value="actividad_favorita">Agrupar por Actividad</option>
-                                </select>
-                            </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-500 uppercase block">Operación / Estadística:</label>
+                        <select id="repOperacionSelect" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold">
+                            <option value="conteo">Conteo de Personas</option>
+                            <option value="suma_pagos">Suma de Pagos Aprobados (Bs)</option>
+                            <option value="promedio_pagos">Promedio Abonado por Persona (Bs)</option>
+                        </select>
+                    </div>
 
-                            <div>
-                                <label class="text-[10px] font-bold text-gray-500 uppercase block">Subgrupo
-                                    Secundario:</label>
-                                <select id="repGrupoSecundario" class="p-2 border rounded-xl text-xs w-full bg-white">
-                                    <option value="ninguno" selected>Sin Subgrupo</option>
-                                    <option value="equipo">Subagrupar por Equipo</option>
-                                    <option value="celula">Subagrupar por Célula</option>
-                                    <option value="es_staff">Subagrupar por Staff</option>
-                                </select>
-                            </div>
-                        </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-500 uppercase block">Tipo de Gráfico:</label>
+                        <select id="repGraficoTipo" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold">
+                            <option value="pie">Gráfico de Torta (Pie)</option>
+                            <option value="bar">Gráfico de Barras (Bar)</option>
+                            <option value="doughnut">Dona (Doughnut)</option>
+                        </select>
+                    </div>
 
-                        <div>
-                            <label class="text-xs font-bold text-gray-600 block mb-2">Columnas Visibles:</label>
-                            <div
-                                class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 bg-white p-3 rounded-xl border border-gray-200 text-xs">
-                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_ci" checked>
-                                    C.I.</label>
-                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_nombre" checked>
-                                    Nombre</label>
-                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_tel" checked>
-                                    Teléfono</label>
-                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_celula" checked>
-                                    Célula</label>
-                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_equipo" checked>
-                                    Equipo</label>
-                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_actividad"
-                                        checked> Actividad</label>
-                            </div>
-                        </div>
-
-                        <div class="flex justify-end gap-2">
-                            <button type="button" onclick="toggleFormulario('formContenedorReporte')"
-                                class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
-                            <button type="submit"
-                                class="bg-blue-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">+ Guardar
-                                Reporte</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm col-span-1">
-                    <h4 class="font-bold text-gray-800 text-sm mb-3">Mis Reportes Guardados</h4>
-                    <div id="listaReportesGuardados" class="space-y-2"></div>
+                    <div class="flex items-end">
+                        <button onclick="generarReporteGrafico()"
+                            class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs shadow transition">
+                            <i class="fa-solid fa-chart-pie mr-1"></i> Generar Estadísticas
+                        </button>
+                    </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm col-span-2">
-                    <h4 class="font-bold text-gray-800 text-sm mb-3" id="lblTituloResultadoReporte">Resultados del
-                        Reporte</h4>
-                    <div id="contenedorResultadoReporte" class="overflow-x-auto text-xs text-gray-600">
-                        <p class="text-gray-400 italic">Selecciona un reporte para ejecutarlo.</p>
+                <!-- RESULTADO DE ESTADÍSTICAS Y GRÁFICO -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-gray-200">
+                        <h4 class="font-bold text-gray-800 text-xs uppercase mb-3 border-b pb-1">Resumen Numérico</h4>
+                        <div id="contenedorTablaEstadisticas" class="overflow-x-auto text-xs">
+                            <p class="text-gray-400 italic">Haz clic en "Generar Estadísticas" para procesar los datos.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-gray-200 flex flex-col items-center justify-center min-h-[300px]">
+                        <h4 class="font-bold text-gray-800 text-xs uppercase mb-3 border-b pb-1 w-full text-left">Visualización Gráfica</h4>
+                        <div class="w-full max-w-xs mx-auto">
+                            <canvas id="canvasGraficoReporte"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -584,19 +552,13 @@
 
                 <div id="formContenedorAdmin" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
                     <form onsubmit="guardarAdmin(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <input type="text" id="adminNewNombre" placeholder="Nombre Completo" required
-                            class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="text" id="adminNewUser" placeholder="Usuario" required
-                            class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="password" id="adminNewPass" placeholder="Contraseña" required
-                            class="p-2.5 border rounded-xl text-xs bg-white">
+                        <input type="text" id="adminNewNombre" placeholder="Nombre Completo" required class="p-2.5 border rounded-xl text-xs bg-white">
+                        <input type="text" id="adminNewUser" placeholder="Usuario" required class="p-2.5 border rounded-xl text-xs bg-white">
+                        <input type="password" id="adminNewPass" placeholder="Contraseña" required class="p-2.5 border rounded-xl text-xs bg-white">
                         <select id="adminRolSelect" class="p-2.5 border rounded-xl text-xs bg-white"></select>
                         <div class="col-span-4 flex justify-end gap-2">
-                            <button type="button" onclick="toggleFormulario('formContenedorAdmin')"
-                                class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
-                            <button type="submit"
-                                class="bg-gray-900 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">+ Crear
-                                Admin</button>
+                            <button type="button" onclick="toggleFormulario('formContenedorAdmin')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                            <button type="submit" class="bg-gray-900 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">+ Crear Admin</button>
                         </div>
                     </form>
                 </div>
@@ -617,7 +579,7 @@
             </div>
         </div>
 
-        <!-- PESTAÑA ROLES Y PERMISOS GRANULARES -->
+        <!-- PESTAÑA ROLES -->
         <div id="tabRoles" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <div class="flex justify-between items-center mb-4">
@@ -631,57 +593,34 @@
                 <div id="formContenedorRol" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
                     <form onsubmit="guardarRol(event)" class="space-y-4">
                         <input type="hidden" id="rolIdEdit">
-                        <input type="text" id="rolNombre" placeholder="Nombre del Rol (ej. Staff, Tesorero)" required
-                            class="p-2.5 border rounded-xl text-xs w-full max-w-md bg-white">
+                        <input type="text" id="rolNombre" placeholder="Nombre del Rol (ej. Staff, Tesorero)" required class="p-2.5 border rounded-xl text-xs w-full max-w-md bg-white">
 
                         <label class="text-xs font-bold text-gray-700 block">Matriz de Permisos:</label>
-                        <div
-                            class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-white p-4 rounded-xl border border-gray-200">
-                            <label
-                                class="flex items-center gap-2 text-xs font-bold text-green-700 col-span-2 md:col-span-4 bg-green-50 p-2 rounded-lg border border-green-200">
-                                <input type="checkbox" id="permVerFinanzas"> 💰 Permitir ver Totales de Ingresos,
-                                Egresos y Balance Neto
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-white p-4 rounded-xl border border-gray-200">
+                            <label class="flex items-center gap-2 text-xs font-bold text-green-700 col-span-2 md:col-span-4 bg-green-50 p-2 rounded-lg border border-green-200">
+                                <input type="checkbox" id="permVerFinanzas"> 💰 Permitir ver Totales de Ingresos, Egresos y Balance Neto
                             </label>
 
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permSolicitudes"> Mod. Pendientes</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permInscritosVer"> Ver Inscritos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permInscritosCrear"> Crear Inscritos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permInscritosEditar"> Editar Inscritos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permInscritosEliminar"> Eliminar Inscritos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permCategorias"> Gestionar Categorías</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permIngresosVer"> Ver Ingresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permIngresosEliminar"> Eliminar Ingresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permEgresosVer"> Ver Egresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permEgresosCrear"> Crear Egresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permEgresosEditar"> Editar Egresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permEgresosEliminar"> Eliminar Egresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permReportesVer"> Ver Reportes</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permReportesCrear"> Crear Reportes</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permUsuarios"> Mod. Administradores</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permRoles"> Mod. Permisos y Roles</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permSolicitudes"> Mod. Pendientes</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permInscritosVer"> Ver Inscritos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permInscritosCrear"> Crear Inscritos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permInscritosEditar"> Editar Inscritos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permInscritosEliminar"> Eliminar Inscritos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permCategorias"> Gestionar Categorías</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permIngresosVer"> Ver Ingresos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permIngresosEliminar"> Eliminar Ingresos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEgresosVer"> Ver Egresos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEgresosCrear"> Crear Egresos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEgresosEditar"> Editar Egresos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEgresosEliminar"> Eliminar Egresos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permReportesVer"> Ver Reportes</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permReportesCrear"> Crear Reportes</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permUsuarios"> Mod. Administradores</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permRoles"> Mod. Permisos y Roles</label>
                         </div>
                         <div class="flex justify-end gap-2">
-                            <button type="button" onclick="toggleFormulario('formContenedorRol')"
-                                class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
-                            <button type="submit"
-                                class="bg-indigo-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">+ Guardar
-                                Rol</button>
+                            <button type="button" onclick="toggleFormulario('formContenedorRol')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                            <button type="submit" class="bg-indigo-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">+ Guardar Rol</button>
                         </div>
                     </form>
                 </div>
@@ -701,15 +640,14 @@
             </div>
         </div>
 
-        <!-- PESTAÑA AUDITORÍA Y LOGS DE ACTIVIDAD -->
+        <!-- PESTAÑA AUDITORÍA -->
         <div id="tabAuditoria" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
                         <i class="fa-solid fa-clipboard-check text-indigo-600"></i> Historial de Auditoría y Revisiones
                     </h3>
-                    <button onclick="cargarAuditoriaLogs()"
-                        class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-3 py-1.5 rounded-lg border transition">
+                    <button onclick="cargarAuditoriaLogs()" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-3 py-1.5 rounded-lg border transition">
                         <i class="fa-solid fa-arrows-rotate mr-1"></i> Actualizar
                     </button>
                 </div>
@@ -733,53 +671,64 @@
 
     </div>
 
-    <!-- MODAL COMPARACIÓN DE CAMBIOS PENDIENTES -->
-    <div id="modalVerCambios"
-        class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[85vh] overflow-y-auto">
+    <!-- MODAL PERFIL ADMIN / CAMBIAR CONTRASEÑA -->
+    <div id="modalPerfilAdmin" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
             <div class="flex justify-between items-center border-b pb-2">
                 <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
-                    <i class="fa-solid fa-code-compare text-blue-600"></i> Detalle de Solicitud de Cambio
+                    <i class="fa-solid fa-user-gear text-indigo-600"></i> Mi Perfil de Administrador
                 </h3>
-                <button onclick="cerrarModalCambios()" class="text-gray-400 hover:text-gray-600"><i
-                        class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="cerrarModalPerfilAdmin()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
-            <div id="contenidoComparacionCambios" class="space-y-3 text-xs"></div>
-
-            <div class="flex justify-end gap-2 pt-2 border-t">
-                <button onclick="cerrarModalCambios()"
-                    class="bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2 rounded-xl">Cerrar</button>
-            </div>
+            <form onsubmit="cambiarMiPassword(event)" class="space-y-3">
+                <div>
+                    <label class="text-xs font-bold text-gray-500">Nombre</label>
+                    <input type="text" id="perfilNombre" disabled class="w-full p-2.5 bg-gray-100 border rounded-xl text-xs font-bold">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500">Usuario</label>
+                    <input type="text" id="perfilUsuario" disabled class="w-full p-2.5 bg-gray-100 border rounded-xl text-xs font-bold">
+                </div>
+                <div class="border-t pt-2">
+                    <label class="text-xs font-bold text-gray-700">Nueva Contraseña</label>
+                    <input type="password" id="perfilNewPass" required placeholder="••••••••" class="w-full mt-1 p-2.5 border rounded-xl text-xs outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-700">Confirmar Nueva Contraseña</label>
+                    <input type="password" id="perfilConfirmPass" required placeholder="••••••••" class="w-full mt-1 p-2.5 border rounded-xl text-xs outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="cerrarModalPerfilAdmin()" class="bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2 rounded-xl">Cancelar</button>
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-5 py-2 rounded-xl shadow">Actualizar Contraseña</button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <!-- MODAL EDITAR CAMPAMENTISTA / STAFF -->
-    <div id="modalEditCampamentista"
-        class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-2 sm:p-4">
+    <!-- MODAL EDITAR CAMPAMENTISTA / STAFF (TOTALMENTE SCROLLEABLE Y ADAPTATIVO AL TAMAÑO DE PANTALLA) -->
+    <div id="modalEditCampamentista" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-2 sm:p-4">
         <div class="bg-white rounded-2xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl flex flex-col max-h-[90vh]">
-
+            
             <div class="flex justify-between items-center mb-3 border-b pb-2 flex-shrink-0">
                 <h3 class="font-bold text-gray-800 text-base sm:text-lg flex items-center gap-2">
                     <i class="fa-solid fa-user-gear text-amber-500"></i> Editar Datos de Campamentista / Staff
                 </h3>
-                <button onclick="cerrarModalCampamentista()" class="text-gray-400 hover:text-gray-600"><i
-                        class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="cerrarModalCampamentista()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
+            <!-- CONTENEDOR CON CONEXIÓN DE SCROLL INTERNO QUE GARANTIZA LA VISIBILIDAD DE LOS BOTONES DE GUARDAR Y ELIMINAR -->
             <form onsubmit="confirmarYGuardarInscrito(event)" class="overflow-y-auto flex-1 pr-2 space-y-4">
                 <input type="hidden" id="editInsId">
-
+                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="text-xs font-bold text-gray-600">C.I.</label>
-                        <input type="text" id="editInsCi" required
-                            class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                        <input type="text" id="editInsCi" required class="w-full p-2.5 border rounded-xl text-xs outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-600">Nombre Completo</label>
-                        <input type="text" id="editInsNombre" required
-                            class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                        <input type="text" id="editInsNombre" required class="w-full p-2.5 border rounded-xl text-xs outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-600">Teléfono / WhatsApp</label>
@@ -787,13 +736,11 @@
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-600">Célula</label>
-                        <input type="text" id="editInsCelula"
-                            class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                        <input type="text" id="editInsCelula" class="w-full p-2.5 border rounded-xl text-xs outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-600">Equipo Asignado</label>
-                        <select id="editInsEquipo"
-                            class="w-full p-2.5 border rounded-xl text-xs outline-none bg-indigo-50 font-bold">
+                        <select id="editInsEquipo" class="w-full p-2.5 border rounded-xl text-xs outline-none bg-indigo-50 font-bold">
                             <option value="Sin Asignar">Sin Asignar</option>
                             <option value="Búfalos">Búfalos 🦬</option>
                             <option value="Águilas">Águilas 🦅</option>
@@ -814,15 +761,12 @@
 
                     <div>
                         <label class="text-xs font-bold text-gray-600">Tipo de Inscripción / Categoría</label>
-                        <select id="editInsTipoInscripcion"
-                            onchange="evaluarPrecioManual(this.value, 'editDivPrecioManual')"
-                            class="w-full p-2.5 border rounded-xl text-xs outline-none font-bold text-indigo-900 bg-white"></select>
+                        <select id="editInsTipoInscripcion" onchange="evaluarPrecioManual(this.value, 'editDivPrecioManual')" class="w-full p-2.5 border rounded-xl text-xs outline-none font-bold text-indigo-900 bg-white"></select>
                     </div>
 
                     <div id="editDivPrecioManual" class="hidden">
                         <label class="text-xs font-bold text-amber-800">Precio Personalizado (Bs)</label>
-                        <input type="number" id="editInsPrecioManual"
-                            class="w-full p-2.5 border rounded-xl text-xs outline-none bg-amber-50 font-bold">
+                        <input type="number" id="editInsPrecioManual" class="w-full p-2.5 border rounded-xl text-xs outline-none bg-amber-50 font-bold">
                     </div>
 
                     <div>
@@ -841,8 +785,7 @@
 
                     <div>
                         <label class="text-xs font-bold text-gray-600">Estado Carta de Compromiso</label>
-                        <select id="editInsEstadoCarta"
-                            class="w-full p-2.5 border rounded-xl text-xs outline-none font-bold">
+                        <select id="editInsEstadoCarta" class="w-full p-2.5 border rounded-xl text-xs outline-none font-bold">
                             <option value="Pendiente">Pendiente</option>
                             <option value="En Revisión">En Revisión</option>
                             <option value="Aprobada">Aprobada</option>
@@ -850,8 +793,7 @@
                         </select>
                     </div>
 
-                    <div
-                        class="md:col-span-2 flex items-center gap-4 bg-purple-50 p-3 rounded-xl border border-purple-200">
+                    <div class="md:col-span-2 flex items-center gap-4 bg-purple-50 p-3 rounded-xl border border-purple-200">
                         <label class="text-xs font-bold text-purple-900 flex items-center gap-2">
                             <input type="checkbox" id="editInsEsStaff" class="rounded text-purple-600">
                             ⭐ Pertenece a la Categoría / Rol Especial de STAFF
@@ -860,142 +802,61 @@
 
                     <div>
                         <label class="text-xs font-bold text-gray-600">Habilidad / Talento</label>
-                        <input type="text" id="editInsHabilidad"
-                            class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                        <input type="text" id="editInsHabilidad" class="w-full p-2.5 border rounded-xl text-xs outline-none">
                     </div>
 
                     <div>
                         <label class="text-xs font-bold text-gray-600">Contacto Emergencia</label>
-                        <input type="text" id="editInsEmergencia"
-                            class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                        <input type="text" id="editInsEmergencia" class="w-full p-2.5 border rounded-xl text-xs outline-none">
                     </div>
 
                     <div class="md:col-span-2">
                         <label class="text-xs font-bold text-gray-600">Alergias o Medicamentos</label>
-                        <input type="text" id="editInsAlergias"
-                            class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                        <input type="text" id="editInsAlergias" class="w-full p-2.5 border rounded-xl text-xs outline-none">
                     </div>
 
                     <div class="md:col-span-2 border-t pt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="text-xs font-bold text-gray-600">Nombre del Tutor</label>
-                            <input type="text" id="editInsTutorNom"
-                                class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                            <input type="text" id="editInsTutorNom" class="w-full p-2.5 border rounded-xl text-xs outline-none">
                         </div>
                         <div>
                             <label class="text-xs font-bold text-gray-600">Teléfono del Tutor</label>
-                            <input type="text" id="editInsTutorTel"
-                                class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                            <input type="text" id="editInsTutorTel" class="w-full p-2.5 border rounded-xl text-xs outline-none">
                         </div>
                     </div>
                 </div>
 
                 <div class="flex justify-between gap-2 pt-4 border-t sticky bottom-0 bg-white">
-                    <button type="button"
-                        onclick="solicitarSeguridad('borrarCampamentista', document.getElementById('editInsId').value)"
+                    <button type="button" onclick="solicitarSeguridad('borrarCampamentista', document.getElementById('editInsId').value)"
                         class="bg-red-100 text-red-700 hover:bg-red-200 text-xs font-bold px-4 py-2 rounded-xl border border-red-300">
                         <i class="fa-solid fa-trash mr-1"></i> Eliminar
                     </button>
                     <div class="flex gap-2">
-                        <button type="button" onclick="cerrarModalCampamentista()"
-                            class="bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2 rounded-xl">Cancelar</button>
-                        <button type="submit"
-                            class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs px-5 py-2 rounded-xl shadow">Guardar
-                            Cambios</button>
+                        <button type="button" onclick="cerrarModalCampamentista()" class="bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2 rounded-xl">Cancelar</button>
+                        <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs px-5 py-2 rounded-xl shadow">Guardar Cambios</button>
                     </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL EDITAR ADMIN -->
-    <div id="modalEditAdmin"
-        class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
-            <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-user-pen text-indigo-600"></i> Editar Administrador
-            </h3>
-            <form onsubmit="confirmarYGuardarAdmin(event)" class="space-y-3">
-                <input type="hidden" id="editAdminId">
-                <div>
-                    <label class="text-xs font-bold text-gray-600">Nombre Completo</label>
-                    <input type="text" id="editAdminNombre" required
-                        class="w-full p-2.5 border rounded-xl text-xs outline-none">
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-600">Nombre de Usuario</label>
-                    <input type="text" id="editAdminUser" required
-                        class="w-full p-2.5 border rounded-xl text-xs outline-none">
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-600">Rol Asignado</label>
-                    <select id="editAdminRolSelect"
-                        class="w-full p-2.5 border rounded-xl text-xs outline-none"></select>
-                </div>
-                <div class="flex justify-end gap-2 pt-3">
-                    <button type="button" onclick="cerrarModalAdmin()"
-                        class="bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2 rounded-xl">Cancelar</button>
-                    <button type="submit"
-                        class="bg-indigo-600 text-white font-bold text-xs px-5 py-2 rounded-xl shadow">Guardar
-                        Cambios</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL EDITAR EGRESO -->
-    <div id="modalEditEgreso"
-        class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
-            <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-pencil text-red-600"></i> Modificar Egreso
-            </h3>
-            <form onsubmit="confirmarYGuardarEgreso(event)" class="space-y-3">
-                <input type="hidden" id="editEgId">
-                <input type="text" id="editEgConcepto" placeholder="Concepto" required
-                    class="w-full p-2.5 border rounded-xl text-xs outline-none">
-                <select id="editEgCategoria" class="w-full p-2.5 border rounded-xl text-xs outline-none">
-                    <option value="Alimentación">Alimentación</option>
-                    <option value="Logística">Logística</option>
-                    <option value="Sonido">Sonido / Iluminación</option>
-                    <option value="Transporte">Transporte</option>
-                    <option value="Otros">Otros Gastos</option>
-                </select>
-                <input type="number" step="0.01" id="editEgMonto" placeholder="Monto" required
-                    class="w-full p-2.5 border rounded-xl text-xs outline-none">
-                <div class="flex justify-end gap-2 pt-3">
-                    <button type="button" onclick="cerrarModalEgreso()"
-                        class="bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2 rounded-xl">Cancelar</button>
-                    <button type="submit"
-                        class="bg-red-600 text-white font-bold text-xs px-5 py-2 rounded-xl shadow">Guardar
-                        Egreso</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- MODAL CONFIRMACIÓN DE SEGURIDAD -->
-    <div id="modalConfirmPass"
-        class="fixed inset-0 bg-gray-900/70 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div id="modalConfirmPass" class="fixed inset-0 bg-gray-900/70 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
             <div class="text-center mb-4">
-                <div
-                    class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-2 text-xl">
+                <div class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-2 text-xl">
                     <i class="fa-solid fa-user-shield"></i>
                 </div>
                 <h3 class="font-bold text-gray-900 text-base">Verificación de Seguridad</h3>
-                <p class="text-xs text-gray-500 mt-1">Ingresa tu contraseña de administrador para confirmar esta acción
-                    sensible.</p>
+                <p class="text-xs text-gray-500 mt-1">Ingresa tu contraseña de administrador para confirmar esta acción sensible.</p>
             </div>
 
             <div class="space-y-4">
-                <input type="password" id="inputPassConfirm" placeholder="Tu Contraseña Admin"
-                    class="w-full p-3 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-red-500">
+                <input type="password" id="inputPassConfirm" placeholder="Tu Contraseña Admin" class="w-full p-3 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-red-500">
                 <div class="flex gap-2">
-                    <button onclick="cancelarVerificacionSeguridad()"
-                        class="w-1/2 bg-gray-200 text-gray-700 text-xs font-bold py-2.5 rounded-xl">Cancelar</button>
-                    <button onclick="ejecutarAcciónProtegida()"
-                        class="w-1/2 bg-red-600 text-white text-xs font-bold py-2.5 rounded-xl shadow">Confirmar</button>
+                    <button onclick="cancelarVerificacionSeguridad()" class="w-1/2 bg-gray-200 text-gray-700 text-xs font-bold py-2.5 rounded-xl">Cancelar</button>
+                    <button onclick="ejecutarAcciónProtegida()" class="w-1/2 bg-red-600 text-white text-xs font-bold py-2.5 rounded-xl shadow">Confirmar</button>
                 </div>
             </div>
         </div>
@@ -1011,8 +872,9 @@
         let permisosAdmin = {};
         let listaRolesGlobal = [];
         let tiposInscripcionGlobal = [];
-        let solicitudesEdicionGlobal = [];
+        let listaInscritosGlobal = [];
         let accionPendienteProtegida = null;
+        let instanciaGrafico = null;
 
         function toggleFormulario(idContainer) {
             const container = document.getElementById(idContainer);
@@ -1071,7 +933,7 @@
             if (tbody) {
                 tbody.innerHTML = '';
                 tiposInscripcionGlobal.forEach(t => {
-                    let badgeVisib = t.es_visible
+                    let badgeVisib = t.es_visible 
                         ? `<span class="bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded-full text-[10px]">👁️ Visible Publico</span>`
                         : `<span class="bg-gray-100 text-gray-600 font-bold px-2 py-0.5 rounded-full text-[10px]">🔒 Solo Admin</span>`;
 
@@ -1092,28 +954,6 @@
             </tr>`;
                 });
             }
-        }
-
-        function prepararCrearCategoria() {
-            document.getElementById('catIdEdit').value = '';
-            document.getElementById('catNombre').value = '';
-            document.getElementById('catPrecio').value = '';
-            document.getElementById('catEsManual').checked = false;
-            document.getElementById('catEsVisible').checked = true;
-            document.getElementById('formContenedorCategoria').classList.remove('hidden');
-        }
-
-        function editarCategoria(id) {
-            const cat = tiposInscripcionGlobal.find(t => t.id === id);
-            if (!cat) return;
-
-            document.getElementById('catIdEdit').value = cat.id;
-            document.getElementById('catNombre').value = cat.nombre;
-            document.getElementById('catPrecio').value = cat.precio;
-            document.getElementById('catEsManual').checked = !!cat.es_manual;
-            document.getElementById('catEsVisible').checked = !!cat.es_visible;
-
-            document.getElementById('formContenedorCategoria').classList.remove('hidden');
         }
 
         function evaluarPrecioManual(tipoId, idDivTarget) {
@@ -1139,8 +979,8 @@
 
             document.getElementById('secLogin').classList.add('hidden');
             document.getElementById('secDashboard').classList.remove('hidden');
-            document.getElementById('txtAdminInfo').innerText = `👤 ${admin.nombre} (${admin.roles?.nombre || 'SuperAdmin'})`;
-            document.getElementById('txtAdminInfo').classList.remove('hidden');
+            document.getElementById('txtAdminInfo').innerText = `${admin.nombre}`;
+            document.getElementById('btnPerfilAdmin').classList.remove('hidden');
             document.getElementById('btnCerrarSesion').classList.remove('hidden');
 
             await cargarTiposInscripcion();
@@ -1153,6 +993,35 @@
             const msgUint8 = new TextEncoder().encode(texto);
             const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
             return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        function abrirModalPerfilAdmin() {
+            document.getElementById('perfilNombre').value = adminSesion.nombre;
+            document.getElementById('perfilUsuario').value = adminSesion.usuario;
+            document.getElementById('perfilNewPass').value = '';
+            document.getElementById('perfilConfirmPass').value = '';
+            document.getElementById('modalPerfilAdmin').classList.remove('hidden');
+        }
+
+        function cerrarModalPerfilAdmin() {
+            document.getElementById('modalPerfilAdmin').classList.add('hidden');
+        }
+
+        async function cambiarMiPassword(e) {
+            e.preventDefault();
+            const p1 = document.getElementById('perfilNewPass').value.trim();
+            const p2 = document.getElementById('perfilConfirmPass').value.trim();
+
+            if (p1 !== p2) return alert('Las contraseñas no coinciden.');
+            if (p1.length < 4) return alert('La contraseña debe tener al menos 4 caracteres.');
+
+            const hashHex = await calcularSHA256(p1);
+            await db.from('administradores').update({ password_hash: hashHex }).eq('id', adminSesion.id);
+            adminSesion.password_hash = hashHex;
+
+            await registrarLogAuditoria('Cambio de Contraseña', 'Perfil', 'El administrador actualizó su contraseña.');
+            alert('Contraseña actualizada correctamente.');
+            cerrarModalPerfilAdmin();
         }
 
         function aplicarPermisosVisuales() {
@@ -1172,27 +1041,24 @@
             document.getElementById('navAuditoria').style.display = esSuper ? 'block' : 'none';
         }
 
-        function toggleFormMenor(checked) {
-            if (checked) document.getElementById('newSecTutor').classList.remove('hidden');
-            else document.getElementById('newSecTutor').classList.add('hidden');
-        }
-
         async function cargarTodoElDashboard() {
             const { data: inscritos } = await db.from('inscritos').select('*, tipos_inscripcion(*)');
+            listaInscritosGlobal = inscritos || [];
+
             const { data: pagos } = await db.from('pagos').select('*, inscritos(nombre_completo)').eq('estado', 'Aprobado');
             const { data: egresos } = await db.from('egresos').select('*');
 
             let cntStaff = 0;
             let cntCampamentistas = 0;
 
-            (inscritos || []).forEach(i => {
+            listaInscritosGlobal.forEach(i => {
                 if (i.es_staff) cntStaff++;
                 else cntCampamentistas++;
             });
 
             document.getElementById('stCampamentistas').innerText = cntCampamentistas;
             document.getElementById('stStaff').innerText = cntStaff;
-            document.getElementById('stTotalGeneral').innerText = (inscritos || []).length;
+            document.getElementById('stTotalGeneral').innerText = listaInscritosGlobal.length;
 
             let ing = 0, eg = 0;
             (pagos || []).forEach(p => ing += Number(p.monto));
@@ -1202,14 +1068,23 @@
             document.getElementById('stEgresos').innerText = `Bs ${eg}`;
             document.getElementById('stBalance').innerText = `Bs ${ing - eg}`;
 
+            // Cargar combo de cobro directo
+            const selectPagoAdmin = document.getElementById('pagoAdminInscrito');
+            if (selectPagoAdmin) {
+                selectPagoAdmin.innerHTML = '<option value="">-- Seleccionar Campamentista --</option>';
+                listaInscritosGlobal.forEach(i => {
+                    selectPagoAdmin.innerHTML += `<option value="${i.id}">${i.nombre_completo} (CI: ${i.ci})</option>`;
+                });
+            }
+
             const tbodyIns = document.getElementById('tblTodosInscritos');
             tbodyIns.innerHTML = '';
-            (inscritos || []).forEach(i => {
+            listaInscritosGlobal.forEach(i => {
                 let estadoCarta = i.estado_carta || (i.carta_compromiso_url ? 'En Revisión' : 'Pendiente');
                 let colorBadge = estadoCarta === 'Aprobada' ? 'bg-green-100 text-green-700' : (estadoCarta === 'En Revisión' ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700');
 
-                let badgeRol = i.es_staff
-                    ? `<span class="bg-purple-100 text-purple-800 font-extrabold px-2 py-0.5 rounded-full border border-purple-300">⭐ STAFF</span>`
+                let badgeRol = i.es_staff 
+                    ? `<span class="bg-purple-100 text-purple-800 font-extrabold px-2 py-0.5 rounded-full border border-purple-300">⭐ STAFF</span>` 
                     : `<span class="bg-gray-100 text-gray-700 font-semibold px-2 py-0.5 rounded-full">Campamentista</span>`;
 
                 tbodyIns.innerHTML += `
@@ -1237,7 +1112,7 @@
             <td class="p-2 font-semibold">${p.inscritos?.nombre_completo || 'Pago Directo'}</td>
             <td class="p-2 font-bold text-green-600">Bs ${p.monto}</td>
             <td class="p-2">${p.observaciones || '-'}</td>
-            <td class="p-2"><a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline">Ver Foto</a></td>
+            <td class="p-2">${p.comprobante_url ? `<a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline">Ver Foto</a>` : 'Efectivo / Directo'}</td>
             <td class="p-2 text-center">
               <button onclick="solicitarSeguridad('borrarIngreso', '${p.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200" title="Borrar">
                 <i class="fa-solid fa-trash text-xs"></i>
@@ -1268,9 +1143,106 @@
             });
 
             cargarPendientes();
-            cargarReportesGuardados();
             cargarRolesYAdmins();
             cargarAuditoriaLogs();
+        }
+
+        async function registrarCobroDirecto(e) {
+            e.preventDefault();
+            const inscritoId = document.getElementById('pagoAdminInscrito').value;
+            const monto = document.getElementById('pagoAdminMonto').value;
+            const obs = document.getElementById('pagoAdminObs').value.trim();
+
+            if (!inscritoId || !monto) return alert('Selecciona un campamentista e ingresa el monto.');
+
+            await db.from('pagos').insert([{
+                inscrito_id: inscritoId,
+                monto: monto,
+                estado: 'Aprobado',
+                observaciones: obs || `Cobro directo registrado por ${adminSesion.nombre}`
+            }]);
+
+            await registrarLogAuditoria('Cobro Directo', 'Ingresos', `Registró pago de Bs ${monto}`);
+            alert('Cobro registrado y aprobado correctamente.');
+            e.target.reset();
+            toggleFormulario('formContenedorPagoDirecto');
+            cargarTodoElDashboard();
+        }
+
+        // GENERADOR DE REPORTES Y ESTADÍSTICAS CON GRÁFICOS CHART.JS
+        async function generarReporteGrafico() {
+            const variable = document.getElementById('repVariableSelect').value;
+            const operacion = document.getElementById('repOperacionSelect').value;
+            const tipoGrafico = document.getElementById('repGraficoTipo').value;
+
+            const { data: inscritos } = await db.from('inscritos').select('*, tipos_inscripcion(*)');
+            const { data: pagos } = await db.from('pagos').select('*').eq('estado', 'Aprobado');
+
+            let conteo = {};
+            let montos = {};
+
+            (inscritos || []).forEach(i => {
+                let key = '-';
+                if (variable === 'tipo_inscripcion') key = i.tipos_inscripcion?.nombre || 'Estándar';
+                else if (variable === 'es_staff') key = i.es_staff ? 'STAFF' : 'Campamentista';
+                else key = i[variable] || 'Sin Especificar';
+
+                if (!conteo[key]) {
+                    conteo[key] = 0;
+                    montos[key] = 0;
+                }
+
+                conteo[key]++;
+
+                if (pagos) {
+                    let misPagos = pagos.filter(p => p.inscrito_id === i.id);
+                    misPagos.forEach(p => montos[key] += Number(p.monto));
+                }
+            });
+
+            let labels = Object.keys(conteo);
+            let valores = [];
+
+            labels.forEach(k => {
+                if (operacion === 'conteo') valores.push(conteo[k]);
+                else if (operacion === 'suma_pagos') valores.push(montos[k]);
+                else if (operacion === 'promedio_pagos') valores.push(conteo[k] > 0 ? (montos[k] / conteo[k]).toFixed(2) : 0);
+            });
+
+            // Renderizar Tabla Estadísticas
+            const divTabla = document.getElementById('contenedorTablaEstadisticas');
+            let html = `<table class="w-full text-left border-collapse my-2"><thead class="bg-gray-200 font-bold"><tr><th class="p-2 border">${variable.toUpperCase()}</th><th class="p-2 border">Personas</th><th class="p-2 border">Total Bs</th><th class="p-2 border">Promedio Bs</th></tr></thead><tbody>`;
+
+            labels.forEach(k => {
+                let prom = conteo[k] > 0 ? (montos[k] / conteo[k]).toFixed(2) : 0;
+                html += `<tr><td class="p-2 border font-bold">${k}</td><td class="p-2 border">${conteo[k]}</td><td class="p-2 border font-bold text-green-600">Bs ${montos[k]}</td><td class="p-2 border">Bs ${prom}</td></tr>`;
+            });
+            html += `</tbody></table>`;
+            divTabla.innerHTML = html;
+
+            // Renderizar Gráfico
+            const ctx = document.getElementById('canvasGraficoReporte').getContext('2d');
+            if (instanciaGrafico) instanciaGrafico.destroy();
+
+            const colores = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#6366f1', '#14b8a6'];
+
+            instanciaGrafico = new Chart(ctx, {
+                type: tipoGrafico,
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: operacion.replace('_', ' ').toUpperCase(),
+                        data: valores,
+                        backgroundColor: colores
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
         }
 
         async function abrirModalEditarCampamentista(id) {
@@ -1307,32 +1279,6 @@
             e.preventDefault();
             solicitarSeguridad('guardarEdicionCompletaInscrito');
         }
-
-        function abrirModalEditarEgreso(id, concepto, categoria, monto) {
-            document.getElementById('editEgId').value = id;
-            document.getElementById('editEgConcepto').value = concepto;
-            document.getElementById('editEgCategoria').value = categoria;
-            document.getElementById('editEgMonto').value = monto;
-            document.getElementById('modalEditEgreso').classList.remove('hidden');
-        }
-
-        function cerrarModalEgreso() { document.getElementById('modalEditEgreso').classList.add('hidden'); }
-        function confirmarYGuardarEgreso(e) { e.preventDefault(); solicitarSeguridad('guardarEdicionEgreso'); }
-
-        function abrirModalEditarAdmin(id, nombre, usuario, rolId) {
-            document.getElementById('editAdminId').value = id;
-            document.getElementById('editAdminNombre').value = nombre;
-            document.getElementById('editAdminUser').value = usuario;
-
-            const selectRol = document.getElementById('editAdminRolSelect');
-            selectRol.innerHTML = '';
-            listaRolesGlobal.forEach(r => selectRol.innerHTML += `<option value="${r.id}" ${r.id === rolId ? 'selected' : ''}>${r.nombre}</option>`);
-
-            document.getElementById('modalEditAdmin').classList.remove('hidden');
-        }
-
-        function cerrarModalAdmin() { document.getElementById('modalEditAdmin').classList.add('hidden'); }
-        function confirmarYGuardarAdmin(e) { e.preventDefault(); solicitarSeguridad('guardarEdicionAdminCompleto'); }
 
         function solicitarSeguridad(tipoAccion, idParam = null) {
             accionPendienteProtegida = { tipo: tipoAccion, id: idParam };
@@ -1383,30 +1329,6 @@
                 await registrarLogAuditoria('Eliminación', 'Inscritos', `Eliminó el registro ID: ${accionPendienteProtegida.id}`);
                 cerrarModalCampamentista();
                 alert('Registro eliminado.');
-            } else if (accionPendienteProtegida.tipo === 'guardarEdicionEgreso') {
-                const id = document.getElementById('editEgId').value;
-                const conc = document.getElementById('editEgConcepto').value;
-                await db.from('egresos').update({
-                    concepto: conc,
-                    categoria: document.getElementById('editEgCategoria').value,
-                    monto: document.getElementById('editEgMonto').value
-                }).eq('id', id);
-
-                await registrarLogAuditoria('Edición Egreso', 'Egresos', `Modificó egreso: ${conc}`);
-                cerrarModalEgreso();
-                alert('Egreso modificado.');
-            } else if (accionPendienteProtegida.tipo === 'guardarEdicionAdminCompleto') {
-                const id = document.getElementById('editAdminId').value;
-                const user = document.getElementById('editAdminUser').value.trim();
-                await db.from('administradores').update({
-                    nombre: document.getElementById('editAdminNombre').value.trim(),
-                    usuario: user,
-                    rol_id: document.getElementById('editAdminRolSelect').value
-                }).eq('id', id);
-
-                await registrarLogAuditoria('Modificación Admin', 'Administradores', `Modificó permisos del admin: ${user}`);
-                cerrarModalAdmin();
-                alert('Administrador actualizado.');
             } else if (accionPendienteProtegida.tipo === 'borrarIngreso') {
                 await db.from('pagos').delete().eq('id', accionPendienteProtegida.id);
                 await registrarLogAuditoria('Borrar Ingreso', 'Ingresos', `Eliminó pago ID: ${accionPendienteProtegida.id}`);
@@ -1428,153 +1350,10 @@
                 await registrarLogAuditoria('Eliminar Tipo Inscripción', 'Categorías', `Eliminó tipo ID: ${accionPendienteProtegida.id}`);
                 alert('Categoría eliminada.');
                 cargarTiposInscripcion();
-            } else if (accionPendienteProtegida.tipo === 'borrarReporte') {
-                await db.from('reportes_guardados').delete().eq('id', accionPendienteProtegida.id);
-                await registrarLogAuditoria('Eliminar Reporte', 'Reportes', `Eliminó reporte ID: ${accionPendienteProtegida.id}`);
-                alert('Reporte eliminado.');
             }
 
             accionPendienteProtegida = null;
             cargarTodoElDashboard();
-        }
-
-        async function guardarTipoInscripcion(e) {
-            e.preventDefault();
-            const idEdit = document.getElementById('catIdEdit').value;
-            const nombre = document.getElementById('catNombre').value.trim();
-            const precio = document.getElementById('catPrecio').value;
-            const es_manual = document.getElementById('catEsManual').checked;
-            const es_visible = document.getElementById('catEsVisible').checked;
-
-            if (idEdit) {
-                await db.from('tipos_inscripcion').update({ nombre, precio, es_manual, es_visible }).eq('id', idEdit);
-                await registrarLogAuditoria('Edición Categoría', 'Categorías', `Modificó categoría: ${nombre} (Visibilidad: ${es_visible})`);
-                alert('Categoría de inscripción actualizada.');
-            } else {
-                await db.from('tipos_inscripcion').insert([{ nombre, precio, es_manual, es_visible }]);
-                await registrarLogAuditoria('Crear Categoría', 'Categorías', `Creó categoría: ${nombre}`);
-                alert('Categoría de inscripción registrada.');
-            }
-
-            e.target.reset();
-            document.getElementById('catIdEdit').value = '';
-            toggleFormulario('formContenedorCategoria');
-            cargarTiposInscripcion();
-        }
-
-        async function guardarNuevoReporteAvanzado(e) {
-            e.preventDefault();
-            const nombre = document.getElementById('repNombre').value.trim();
-            const grupoP = document.getElementById('repGrupoPrincipal').value;
-            const grupoS = document.getElementById('repGrupoSecundario').value;
-
-            const columnasConfig = {
-                ci: document.getElementById('col_ci').checked,
-                nombre: document.getElementById('col_nombre').checked,
-                telefono: document.getElementById('col_tel').checked,
-                celula: document.getElementById('col_celula').checked,
-                equipo: document.getElementById('col_equipo').checked,
-                actividad: document.getElementById('col_actividad').checked
-            };
-
-            await db.from('reportes_guardados').insert([{
-                nombre: nombre,
-                tipo_reporte: 'agrupado',
-                filtros: { grupoPrincipal: grupoP, grupoSecundario: grupoS, columnas: columnasConfig },
-                creado_por: adminSesion?.nombre || 'Admin'
-            }]);
-
-            await registrarLogAuditoria('Crear Reporte', 'Reportes', `Diseñó reporte: ${nombre}`);
-            alert('Reporte guardado.');
-            toggleFormulario('formContenedorReporte');
-            cargarReportesGuardados();
-        }
-
-        async function cargarReportesGuardados() {
-            const { data: reps } = await db.from('reportes_guardados').select('*').order('created_at', { ascending: false });
-            const contenedor = document.getElementById('listaReportesGuardados');
-            contenedor.innerHTML = '';
-
-            (reps || []).forEach(r => {
-                contenedor.innerHTML += `
-          <div class="p-3 bg-gray-50 border rounded-xl flex justify-between items-center hover:bg-amber-50 transition">
-            <div>
-              <p class="font-bold text-xs text-gray-800">${r.nombre}</p>
-              <p class="text-[10px] text-gray-400">Grupo: ${r.filtros?.grupoPrincipal || 'Plano'}</p>
-            </div>
-            <div class="flex gap-1">
-                <button onclick="ejecutarReporteGuardado('${r.id}')" class="bg-gray-900 hover:bg-black text-white font-bold px-3 py-1.5 rounded-lg text-xs shadow">
-                  <i class="fa-solid fa-eye mr-1"></i> Ver
-                </button>
-                <button onclick="solicitarSeguridad('borrarReporte', '${r.id}')" class="bg-red-100 hover:bg-red-200 text-red-600 font-bold px-2 py-1 rounded-lg text-xs">
-                  <i class="fa-solid fa-trash"></i>
-                </button>
-            </div>
-          </div>`;
-            });
-        }
-
-        async function ejecutarReporteGuardado(reporteId) {
-            const { data: rep } = await db.from('reportes_guardados').select('*').eq('id', reporteId).single();
-            if (!rep) return;
-
-            document.getElementById('lblTituloResultadoReporte').innerText = `Reporte: ${rep.nombre}`;
-            const divRes = document.getElementById('contenedorResultadoReporte');
-
-            const { data: inscritos } = await db.from('inscritos').select('*, tipos_inscripcion(*)');
-            const cols = rep.filtros?.columnas || {};
-            const grupoP = rep.filtros?.grupoPrincipal || 'ninguno';
-            const grupoS = rep.filtros?.grupoSecundario || 'ninguno';
-
-            let grupos = {};
-
-            (inscritos || []).forEach(i => {
-                i.es_staff_label = i.es_staff ? 'STAFF' : 'Campamentista';
-                let claveP = grupoP !== 'ninguno' ? (i[grupoP] || 'Sin Clasificar') : 'General';
-                let claveS = grupoS !== 'ninguno' ? (i[grupoS] || 'Sin Clasificar') : 'Todos';
-
-                if (!grupos[claveP]) grupos[claveP] = {};
-                if (!grupos[claveP][claveS]) grupos[claveP][claveS] = [];
-
-                grupos[claveP][claveS].push(i);
-            });
-
-            let htmlFull = '';
-
-            for (let gP in grupos) {
-                htmlFull += `<div class="mb-6 bg-slate-50 p-4 rounded-xl border border-gray-200">`;
-                if (grupoP !== 'ninguno') htmlFull += `<h4 class="font-black text-sm text-indigo-900 border-b pb-1 mb-2 uppercase"><i class="fa-solid fa-layer-group text-amber-500 mr-1"></i> ${grupoP.replace('_', ' ')}: ${gP}</h4>`;
-
-                for (let gS in grupos[gP]) {
-                    if (grupoS !== 'ninguno') htmlFull += `<h5 class="font-bold text-xs text-gray-700 mt-2 mb-1 pl-2 border-l-2 border-indigo-500">▶ Subgrupo (${grupoS.replace('_', ' ')}): ${gS}</h5>`;
-
-                    let lista = grupos[gP][gS];
-                    htmlFull += `<table class="w-full text-left border-collapse my-2"><thead class="bg-white font-bold border-b text-[10px] text-gray-500 uppercase"><tr>`;
-                    if (cols.ci) htmlFull += `<th class="p-2">C.I.</th>`;
-                    if (cols.nombre) htmlFull += `<th class="p-2">Nombre</th>`;
-                    if (cols.telefono) htmlFull += `<th class="p-2">Teléfono</th>`;
-                    if (cols.celula) htmlFull += `<th class="p-2">Célula</th>`;
-                    if (cols.equipo) htmlFull += `<th class="p-2">Equipo</th>`;
-                    if (cols.actividad) htmlFull += `<th class="p-2">Actividad</th>`;
-                    htmlFull += `</tr></thead><tbody>`;
-
-                    lista.forEach(i => {
-                        htmlFull += `<tr class="border-b bg-white">`;
-                        if (cols.ci) htmlFull += `<td class="p-2 font-bold">${i.ci}</td>`;
-                        if (cols.nombre) htmlFull += `<td class="p-2 font-semibold">${i.nombre_completo}</td>`;
-                        if (cols.telefono) htmlFull += `<td class="p-2">${i.telefono || '-'}</td>`;
-                        if (cols.celula) htmlFull += `<td class="p-2">${i.celula || '-'}</td>`;
-                        if (cols.equipo) htmlFull += `<td class="p-2 font-bold text-indigo-600">${i.equipo || '-'}</td>`;
-                        if (cols.actividad) htmlFull += `<td class="p-2">${i.actividad_favorita || '-'}</td>`;
-                        htmlFull += `</tr>`;
-                    });
-
-                    htmlFull += `</tbody></table>`;
-                }
-                htmlFull += `</div>`;
-            }
-
-            divRes.innerHTML = htmlFull;
         }
 
         async function crearNuevoCampamentista(e) {
@@ -1623,19 +1402,16 @@
                 tbodyA.innerHTML = '';
                 (admins || []).forEach(a => {
                     tbodyA.innerHTML += `
-      <tr>
-        <td class="p-2 font-semibold">${a.nombre}</td>
-        <td class="p-2">${a.usuario}</td>
-        <td class="p-2 font-bold text-indigo-700">${a.roles?.nombre || 'SuperAdmin'}</td>
-        <td class="p-2 text-center flex justify-center gap-1">
-          <button onclick="abrirModalEditarAdmin('${a.id}', '${a.nombre}', '${a.usuario}', '${a.rol_id}')" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-800 p-1.5 rounded-lg border border-indigo-300">
-            <i class="fa-solid fa-pencil text-xs"></i>
-          </button>
-          <button onclick="solicitarSeguridad('borrarAdmin', '${a.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200">
-            <i class="fa-solid fa-trash text-xs"></i>
-          </button>
-        </td>
-      </tr>`;
+              <tr>
+                <td class="p-2 font-semibold">${a.nombre}</td>
+                <td class="p-2">${a.usuario}</td>
+                <td class="p-2 font-bold text-indigo-700">${a.roles?.nombre || 'SuperAdmin'}</td>
+                <td class="p-2 text-center flex justify-center gap-1">
+                  <button onclick="solicitarSeguridad('borrarAdmin', '${a.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200">
+                    <i class="fa-solid fa-trash text-xs"></i>
+                  </button>
+                </td>
+              </tr>`;
                 });
             }
 
@@ -1644,22 +1420,21 @@
                 tbodyR.innerHTML = '';
                 (roles || []).forEach(r => {
                     let permisosTxt = Object.keys(r.permisos || {}).filter(k => r.permisos[k]).join(', ');
-                    // CODIFICACIÓN SEGURA PARA EVITAR EL ERROR DE SINTAXIS
                     const permisosEncoded = encodeURIComponent(JSON.stringify(r.permisos || {}));
 
                     tbodyR.innerHTML += `
-      <tr>
-        <td class="p-2 font-bold text-indigo-900">${r.nombre}</td>
-        <td class="p-2 text-[10px] text-gray-500">${permisosTxt || 'Sin permisos'}</td>
-        <td class="p-2 text-center flex justify-center gap-1">
-          <button onclick="cargarRolParaEditar('${r.id}', '${r.nombre}', '${permisosEncoded}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 rounded-lg border border-amber-300">
-            <i class="fa-solid fa-pencil text-xs"></i>
-          </button>
-          <button onclick="solicitarSeguridad('borrarRol', '${r.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200">
-            <i class="fa-solid fa-trash text-xs"></i>
-          </button>
-        </td>
-      </tr>`;
+              <tr>
+                <td class="p-2 font-bold text-indigo-900">${r.nombre}</td>
+                <td class="p-2 text-[10px] text-gray-500">${permisosTxt || 'Sin permisos'}</td>
+                <td class="p-2 text-center flex justify-center gap-1">
+                  <button onclick="cargarRolParaEditar('${r.id}', '${r.nombre}', '${permisosEncoded}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 rounded-lg border border-amber-300">
+                    <i class="fa-solid fa-pencil text-xs"></i>
+                  </button>
+                  <button onclick="solicitarSeguridad('borrarRol', '${r.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200">
+                    <i class="fa-solid fa-trash text-xs"></i>
+                  </button>
+                </td>
+              </tr>`;
                 });
             }
         }
@@ -1696,88 +1471,6 @@
             document.getElementById('formContenedorRol').classList.remove('hidden');
         }
 
-        async function guardarAdmin(e) {
-            e.preventDefault();
-            const user = document.getElementById('adminNewUser').value.trim();
-            const pass = document.getElementById('adminNewPass').value.trim();
-            const nombre = document.getElementById('adminNewNombre').value.trim();
-            const rolId = document.getElementById('adminRolSelect').value;
-
-            const hashHex = await calcularSHA256(pass);
-
-            await db.from('administradores').insert([{
-                nombre: nombre,
-                usuario: user,
-                password_hash: hashHex,
-                rol_id: rolId
-            }]);
-
-            await registrarLogAuditoria('Crear Admin', 'Administradores', `Creó cuenta admin para: ${user}`);
-            alert('Nuevo administrador registrado.');
-            e.target.reset();
-            toggleFormulario('formContenedorAdmin');
-            cargarRolesYAdmins();
-        }
-
-        async function guardarRol(e) {
-            e.preventDefault();
-            const id = document.getElementById('rolIdEdit').value;
-            const nombre = document.getElementById('rolNombre').value.trim();
-
-            const permisos = {
-                verFinanzas: document.getElementById('permVerFinanzas').checked,
-                solicitudes: document.getElementById('permSolicitudes').checked,
-                inscritosVer: document.getElementById('permInscritosVer').checked,
-                inscritosCrear: document.getElementById('permInscritosCrear').checked,
-                inscritosEditar: document.getElementById('permInscritosEditar').checked,
-                inscritosEliminar: document.getElementById('permInscritosEliminar').checked,
-                categorias: document.getElementById('permCategorias').checked,
-                ingresosVer: document.getElementById('permIngresosVer').checked,
-                ingresosEliminar: document.getElementById('permIngresosEliminar').checked,
-                egresosVer: document.getElementById('permEgresosVer').checked,
-                egresosCrear: document.getElementById('permEgresosCrear').checked,
-                egresosEditar: document.getElementById('permEgresosEditar').checked,
-                egresosEliminar: document.getElementById('permEgresosEliminar').checked,
-                reportesVer: document.getElementById('permReportesVer').checked,
-                reportesCrear: document.getElementById('permReportesCrear').checked,
-                usuarios: document.getElementById('permUsuarios').checked,
-                roles: document.getElementById('permRoles').checked
-            };
-
-            if (id) {
-                await db.from('roles').update({ nombre, permisos }).eq('id', id);
-                await registrarLogAuditoria('Editar Rol', 'Roles', `Actualizó permisos del rol: ${nombre}`);
-                alert('Rol actualizado con éxito.');
-            } else {
-                await db.from('roles').insert([{ nombre, permisos }]);
-                await registrarLogAuditoria('Crear Rol', 'Roles', `Creó el rol: ${nombre}`);
-                alert('Rol creado con éxito.');
-            }
-
-            e.target.reset();
-            document.getElementById('rolIdEdit').value = '';
-            toggleFormulario('formContenedorRol');
-            cargarRolesYAdmins();
-        }
-
-        async function registrarNuevoEgreso(e) {
-            e.preventDefault();
-            const conc = document.getElementById('egConcepto').value.trim();
-            const monto = document.getElementById('egMonto').value;
-            await db.from('egresos').insert([{
-                concepto: conc,
-                categoria: document.getElementById('egCategoria').value,
-                monto: monto,
-                registrado_por: adminSesion?.nombre || 'Administración'
-            }]);
-
-            await registrarLogAuditoria('Nuevo Egreso', 'Egresos', `Registró egreso por Bs ${monto}: ${conc}`);
-            alert('Egreso registrado.');
-            e.target.reset();
-            toggleFormulario('formContenedorEgreso');
-            cargarTodoElDashboard();
-        }
-
         async function cargarPendientes() {
             const { data: pagosPend } = await db.from('pagos').select('*, inscritos(nombre_completo)').eq('estado', 'Pendiente');
             const tbodyP = document.getElementById('tblPagosPendientes');
@@ -1789,26 +1482,21 @@
             <td class="p-2 font-bold text-green-600">Bs ${p.monto}</td>
             <td class="p-2"><a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline font-bold">Ver Foto</a></td>
             <td class="p-2 flex gap-1">
-              <button onclick="procesarPago('${p.id}', 'Aprobado', '${p.inscritos?.nombre_completo}', '${p.monto}')" class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs font-bold" title="Aprobar">✓</button>
-              <button onclick="procesarPago('${p.id}', 'Rechazado', '${p.inscritos?.nombre_completo}', '${p.monto}')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs font-bold" title="Rechazar">✕</button>
+              <button onclick="procesarPago('${p.id}', 'Aprobado', '${p.inscritos?.nombre_completo}', '${p.monto}')" class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs font-bold">✓</button>
+              <button onclick="procesarPago('${p.id}', 'Rechazado', '${p.inscritos?.nombre_completo}', '${p.monto}')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs font-bold">✕</button>
             </td>
           </tr>`;
             });
 
             const { data: edicPend } = await db.from('solicitudes_edicion').select('*, inscritos(*)').eq('estado', 'Pendiente');
-            solicitudesEdicionGlobal = edicPend || [];
             const tbodyE = document.getElementById('tblEdicionesPendientes');
             tbodyE.innerHTML = '';
 
-            solicitudesEdicionGlobal.forEach(e => {
+            (edicPend || []).forEach(e => {
                 tbodyE.innerHTML += `
           <tr>
             <td class="p-2 font-semibold">${e.inscritos?.nombre_completo}</td>
-            <td class="p-2">
-              <button onclick="verComparacionCambios('${e.id}')" class="bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold px-3 py-1 rounded-lg border border-blue-300 flex items-center gap-1">
-                <i class="fa-solid fa-eye"></i> Ver Cambios
-              </button>
-            </td>
+            <td class="p-2 text-xs text-indigo-900 font-semibold">Cambios solicitados</td>
             <td class="p-2 text-center flex justify-center gap-1">
               <button onclick="procesarEdicion('${e.id}', 'Aprobado')" class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs font-bold">Aprobar ✓</button>
               <button onclick="procesarEdicion('${e.id}', 'Rechazado')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs font-bold">Rechazar ✕</button>
@@ -1825,7 +1513,7 @@
             <td class="p-2 font-bold">${c.ci}</td>
             <td class="p-2 font-semibold">${c.nombre_completo}</td>
             <td class="p-2">${c.celula || '-'}</td>
-            <td class="p-2"><a href="${c.carta_compromiso_url}" target="_blank" class="text-indigo-600 font-bold underline"><i class="fa-solid fa-file-pdf"></i> Ver Carta</a></td>
+            <td class="p-2"><a href="${c.carta_compromiso_url}" target="_blank" class="text-indigo-600 font-bold underline">Ver Carta</a></td>
             <td class="p-2 text-center flex justify-center gap-1">
               <button onclick="procesarCarta('${c.id}', 'Aprobada', '${c.nombre_completo}')" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs font-bold">Aprobar ✓</button>
               <button onclick="procesarCarta('${c.id}', 'Rechazada', '${c.nombre_completo}')" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs font-bold">Rechazar ✕</button>
@@ -1834,72 +1522,21 @@
             });
         }
 
-        function verComparacionCambios(solicitudId) {
-            const sol = solicitudesEdicionGlobal.find(s => s.id === solicitudId);
-            if (!sol || !sol.inscritos) return;
-
-            const ins = sol.inscritos;
-            const modalBody = document.getElementById('contenidoComparacionCambios');
-
-            const campos = [
-                { label: 'Teléfono', actual: ins.telefono, nuevo: sol.telefono },
-                { label: 'Célula', actual: ins.celula, nuevo: sol.celula },
-                { label: 'Talla Polera', actual: ins.talla_polera, nuevo: sol.talla_polera },
-                { label: 'Tipo Inscripción', actual: ins.tipo_inscripcion_id, nuevo: sol.tipo_inscripcion_id },
-                { label: 'Actividad Favorita', actual: ins.actividad_favorita, nuevo: sol.actividad_favorita },
-                { label: 'Habilidad / Talento', actual: ins.habilidad_especial, nuevo: sol.habilidad_especial },
-                { label: 'Contacto Emergencia', actual: ins.contacto_emergencia, nuevo: sol.contacto_emergencia },
-                { label: 'Alergias', actual: ins.alergias_medicina, nuevo: sol.alergias_medicina },
-                { label: 'Nombre Tutor', actual: ins.tutor_nombre, nuevo: sol.tutor_nombre },
-                { label: 'Teléfono Tutor', actual: ins.tutor_telefono, nuevo: sol.tutor_telefono }
-            ];
-
-            let html = `<p class="font-bold text-gray-800 text-sm mb-2">Campamentista: ${ins.nombre_completo} (CI: ${ins.ci})</p>`;
-            html += `<table class="w-full text-left border"><thead class="bg-gray-100 font-bold"><tr><th class="p-2 border">Campo</th><th class="p-2 border">Dato Actual</th><th class="p-2 border">Dato Solicitado</th></tr></thead><tbody>`;
-
-            campos.forEach(c => {
-                let cambio = (c.actual || '') !== (c.nuevo || '');
-                let bgClass = cambio ? 'bg-amber-50 font-bold' : '';
-
-                let valActual = c.actual;
-                let valNuevo = c.nuevo;
-
-                if (c.label === 'Tipo Inscripción') {
-                    let catA = tiposInscripcionGlobal.find(t => t.id === c.actual);
-                    let catN = tiposInscripcionGlobal.find(t => t.id === c.nuevo);
-                    valActual = catA ? catA.nombre : (c.actual || '-');
-                    valNuevo = catN ? catN.nombre : (c.nuevo || '-');
-                }
-
-                html += `<tr class="${bgClass}">
-                    <td class="p-2 border">${c.label}</td>
-                    <td class="p-2 border text-gray-500">${valActual || '-'}</td>
-                    <td class="p-2 border text-indigo-900">${valNuevo || '-'} ${cambio ? '✏️' : ''}</td>
-                </tr>`;
-            });
-
-            html += `</tbody></table>`;
-            modalBody.innerHTML = html;
-            document.getElementById('modalVerCambios').classList.remove('hidden');
-        }
-
-        function cerrarModalCambios() { document.getElementById('modalVerCambios').classList.add('hidden'); }
-
         async function procesarCarta(id, nuevoEstado, nombre) {
             await db.from('inscritos').update({ estado_carta: nuevoEstado }).eq('id', id);
-            await registrarLogAuditoria('Revisión Carta', 'Pendientes', `Marcó la carta de ${nombre || 'Inscrito'} como: ${nuevoEstado}`);
+            await registrarLogAuditoria('Revisión Carta', 'Pendientes', `Marcó la carta de ${nombre} como: ${nuevoEstado}`);
             alert(`Carta marcada como: ${nuevoEstado}`);
             cargarTodoElDashboard();
         }
 
         async function procesarPago(id, estado, nombre, monto) {
             await db.from('pagos').update({ estado: estado }).eq('id', id);
-            await registrarLogAuditoria('Revisión Pago', 'Pendientes', `Marcó el abono de Bs ${monto} de ${nombre || 'Inscrito'} como: ${estado}`);
+            await registrarLogAuditoria('Revisión Pago', 'Pendientes', `Marcó abono de Bs ${monto} de ${nombre} como: ${estado}`);
             cargarTodoElDashboard();
         }
 
         async function procesarEdicion(idSol, estado) {
-            const sol = solicitudesEdicionGlobal.find(s => s.id === idSol);
+            const { data: sol } = await db.from('solicitudes_edicion').select('*').eq('id', idSol).single();
             await db.from('solicitudes_edicion').update({ estado: estado }).eq('id', idSol);
 
             if (estado === 'Aprobado' && sol) {
@@ -1916,9 +1553,7 @@
                 if (sol.tutor_telefono !== undefined) updatePayload.tutor_telefono = sol.tutor_telefono;
 
                 await db.from('inscritos').update(updatePayload).eq('id', sol.inscrito_id);
-                await registrarLogAuditoria('Aprobación de Cambios', 'Pendientes', `Aprobó solicitud de cambios para: ${sol.inscritos?.nombre_completo}`);
-            } else if (sol) {
-                await registrarLogAuditoria('Rechazo de Cambios', 'Pendientes', `Rechazó solicitud de cambios para: ${sol.inscritos?.nombre_completo}`);
+                await registrarLogAuditoria('Aprobación Cambios', 'Pendientes', `Aprobó cambios de datos.`);
             }
 
             alert(`Solicitud ${estado}.`);

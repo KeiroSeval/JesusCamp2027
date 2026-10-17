@@ -49,7 +49,7 @@
                 <i class="fa-solid fa-id-card"></i>
             </div>
             <h2 class="text-xl font-bold text-gray-900 mb-1">Ingreso de Campamentista</h2>
-            <p class="text-xs text-gray-500 mb-6">Ingresa tu C.I. para ver tu estado, subir tu Carta de Compromiso, abonar o editar tu ficha.</p>
+            <p class="text-xs text-gray-500 mb-6">Ingresa tu C.I. para gestionar tu perfil, pagos y carta.</p>
 
             <div class="space-y-3">
                 <input type="text" id="inputCI" placeholder="Tu C.I. (ej. 13489470)"
@@ -65,26 +65,8 @@
         <!-- VISTA DE PERFIL -->
         <div id="secPerfil" class="hidden space-y-6">
 
-            <!-- ALERTA CARTA DE COMPROMISO -->
-            <div id="alertaCartaContenedor" class="hidden rounded-xl p-4 border shadow-sm">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-3">
-                    <div class="flex items-center gap-3">
-                        <i id="iconoAlertaCarta" class="text-2xl"></i>
-                        <div>
-                            <h4 id="tituloAlertaCarta" class="font-bold text-sm"></h4>
-                            <p id="descAlertaCarta" class="text-xs"></p>
-                        </div>
-                    </div>
-                    <button id="btnScrollSubirCarta"
-                        onclick="document.getElementById('secSubirCarta').scrollIntoView({behavior: 'smooth'})"
-                        class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs px-4 py-2 rounded-lg transition whitespace-nowrap hidden">
-                        Subir Carta Ahora
-                    </button>
-                </div>
-            </div>
-
-            <!-- Cards Finanzas -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <!-- CARDS FINANZAS -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
                     <div>
                         <p class="text-[10px] font-semibold text-gray-400 uppercase">Costo Total</p>
@@ -115,9 +97,60 @@
                 </div>
             </div>
 
-            <!-- Datos Personales -->
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <div class="flex justify-between items-center mb-4">
+            <!-- NAVEGACIÓN DE PESTAÑAS DEL PERFIL -->
+            <div class="flex flex-wrap gap-2 border-b border-gray-200 pb-2">
+                <button id="btnTabCarta" onclick="cambiarPestanaPerfil('carta')"
+                    class="tab-usr-btn bg-blue-600 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition shadow">
+                    <i class="fa-solid fa-file-signature mr-1"></i> Carta de Compromiso
+                </button>
+                <button id="btnTabDatos" onclick="cambiarPestanaPerfil('datos')"
+                    class="tab-usr-btn bg-white text-gray-600 hover:bg-gray-100 font-bold text-xs px-4 py-2.5 rounded-xl transition border border-gray-200">
+                    <i class="fa-solid fa-user mr-1"></i> Datos Personales
+                </button>
+                <button id="btnTabPago" onclick="cambiarPestanaPerfil('pago')"
+                    class="tab-usr-btn bg-white text-gray-600 hover:bg-gray-100 font-bold text-xs px-4 py-2.5 rounded-xl transition border border-gray-200">
+                    <i class="fa-solid fa-cloud-arrow-up mr-1"></i> Subir Comprobante
+                </button>
+                <button id="btnTabHistorial" onclick="cambiarPestanaPerfil('historial')"
+                    class="tab-usr-btn bg-white text-gray-600 hover:bg-gray-100 font-bold text-xs px-4 py-2.5 rounded-xl transition border border-gray-200">
+                    <i class="fa-solid fa-receipt mr-1"></i> Historial de Cuotas
+                </button>
+            </div>
+
+            <!-- SECCIÓN 1: CARTA DE COMPROMISO -->
+            <div id="tabUsrCarta" class="tab-usr-content space-y-4">
+                <div id="alertaCartaContenedor" class="rounded-xl p-4 border shadow-sm">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <i id="iconoAlertaCarta" class="text-2xl"></i>
+                            <div>
+                                <h4 id="tituloAlertaCarta" class="font-bold text-sm"></h4>
+                                <p id="descAlertaCarta" class="text-xs"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-3">
+                    <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
+                        <i class="fa-solid fa-upload text-indigo-600"></i> Adjuntar o Actualizar Carta
+                    </h3>
+                    <p class="text-xs text-gray-500">Descarga la Carta de Compromiso, fírmala y sube una fotografía o documento PDF visible.</p>
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 pt-2">
+                        <input type="file" id="cartaArchivo" accept="image/*,.pdf"
+                            class="text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                        <button onclick="subirCartaCompromiso()"
+                            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-lg text-xs transition shadow">
+                            Subir para Revisión
+                        </button>
+                    </div>
+                    <div id="txtEstadoCarta" class="text-xs font-semibold mt-2"></div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 2: DATOS PERSONALES -->
+            <div id="tabUsrDatos" class="tab-usr-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
+                <div class="flex justify-between items-center mb-2">
                     <h3 class="font-bold text-gray-800 text-lg flex items-center gap-2">
                         <i class="fa-solid fa-user text-blue-600"></i> Información Inscrita
                     </h3>
@@ -195,7 +228,6 @@
                             class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
                     </div>
 
-                    <!-- Menores de Edad -->
                     <div id="secMenorEdad"
                         class="hidden md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 bg-amber-50/50 p-4 rounded-xl border border-amber-200">
                         <div class="md:col-span-2 font-bold text-xs text-amber-900 flex items-center gap-1">
@@ -213,81 +245,61 @@
                         </div>
                     </div>
 
+                    <!-- BOTÓN CORREGIDO CON TEXTO AMARILLO SOBRE FONDO OSCURO -->
                     <div id="secBotonGuardar" class="hidden md:col-span-2 pt-2">
                         <button type="button" id="btnSolicitarCambio" onclick="solicitarCambioDatos()"
-                            class="bg-gray-900 hover:bg-black text-amber-400 text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-md">
-                            Enviar Solicitud de Actualización
+                            class="w-full bg-gray-900 hover:bg-black text-amber-400 font-black text-sm px-5 py-3 rounded-xl transition shadow-lg border border-amber-400 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-paper-plane text-amber-400"></i> Enviar Solicitud de Actualización
                         </button>
                     </div>
                 </form>
             </div>
 
-            <!-- CARTA DE COMPROMISO -->
-            <div id="secSubirCarta" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-2 flex items-center gap-2">
-                    <i class="fa-solid fa-file-signature text-indigo-600"></i> Carta de Compromiso Firmada
+            <!-- SECCIÓN 3: SUBIR COMPROBANTE -->
+            <div id="tabUsrPago" class="tab-usr-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-cloud-arrow-up text-green-600"></i> Subir Comprobante de Pago
                 </h3>
-                <p class="text-xs text-gray-500 mb-4">Descarga el formato de Carta de Compromiso, imprímela, fírmala y sube una foto clara o archivo PDF.</p>
-
-                <div id="contenedorEstadoCarta" class="space-y-3">
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                        <input type="file" id="cartaArchivo" accept="image/*,.pdf"
-                            class="text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
-                        <button onclick="subirCartaCompromiso()"
-                            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-lg text-xs transition shadow">
-                            Subir para Revisión
-                        </button>
+                <div class="space-y-4 max-w-lg">
+                    <div>
+                        <label class="text-xs font-bold text-gray-500">Monto del Abono (Bs)</label>
+                        <input type="number" id="pagoMonto" placeholder="Ej. 50, 100"
+                            class="w-full mt-1 p-3 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-green-600 font-bold">
                     </div>
-                    <div id="txtEstadoCarta" class="text-xs font-semibold mt-2"></div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500">Foto o Recibo de Transferencia</label>
+                        <input type="file" id="pagoArchivo" accept="image/*,.pdf"
+                            class="w-full mt-1 text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500">Observaciones (Opcional)</label>
+                        <input type="text" id="pagoObs" placeholder="Ej. Transferencia Banco Unión"
+                            class="w-full mt-1 p-3 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-green-600">
+                    </div>
+                    <button onclick="subirComprobante()"
+                        class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl text-sm transition shadow-lg">
+                        Enviar Pago a Tesorería
+                    </button>
                 </div>
             </div>
 
-            <!-- Registrar Pago e Historial -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                    <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-cloud-arrow-up text-green-600"></i> Subir Comprobante de Pago
-                    </h3>
-                    <div class="space-y-3">
-                        <div>
-                            <label class="text-xs font-bold text-gray-500">Monto del Abono (Bs)</label>
-                            <input type="number" id="pagoMonto" placeholder="Ej. 50, 100"
-                                class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-green-600">
-                        </div>
-                        <div>
-                            <label class="text-xs font-bold text-gray-500">Foto o Recibo de Transferencia</label>
-                            <input type="file" id="pagoArchivo" accept="image/*,.pdf"
-                                class="w-full mt-1 text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
-                        </div>
-                        <div>
-                            <label class="text-xs font-bold text-gray-500">Observaciones (Opcional)</label>
-                            <input type="text" id="pagoObs" placeholder="Ej. Transferencia Banco Unión"
-                                class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-green-600">
-                        </div>
-                        <button onclick="subirComprobante()"
-                            class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-lg text-sm transition shadow-lg">
-                            Enviar Pago a Tesorería
-                        </button>
-                    </div>
-                </div>
-
-                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                    <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-receipt text-gray-600"></i> Historial de Cuotas
-                    </h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs text-gray-600">
-                            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                                <tr>
-                                    <th class="p-2">Fecha</th>
-                                    <th class="p-2">Monto</th>
-                                    <th class="p-2">Recibo</th>
-                                    <th class="p-2">Estado</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tblHistorialPagos" class="divide-y divide-gray-100"></tbody>
-                        </table>
-                    </div>
+            <!-- SECCIÓN 4: HISTORIAL DE CUOTAS -->
+            <div id="tabUsrHistorial" class="tab-usr-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-receipt text-gray-600"></i> Historial de Cuotas
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-gray-600">
+                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                            <tr>
+                                <th class="p-2">Fecha</th>
+                                <th class="p-2">Monto</th>
+                                <th class="p-2">Recibo</th>
+                                <th class="p-2">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblHistorialPagos" class="divide-y divide-gray-100"></tbody>
+                    </table>
                 </div>
             </div>
 
@@ -305,7 +317,6 @@
         let tiposInscripcionVisibles = [];
 
         async function cargarTiposInscripcionPublicos() {
-            // Filtrar únicamente los tipos de inscripción configurados como VISIBLES
             const { data } = await db.from('tipos_inscripcion')
                 .select('*')
                 .eq('es_visible', true)
@@ -321,6 +332,22 @@
                     selectUser.innerHTML += `<option value="${t.id}">${label}</option>`;
                 });
             }
+        }
+
+        function cambiarPestanaPerfil(tab) {
+            document.querySelectorAll('.tab-usr-content').forEach(c => c.classList.add('hidden'));
+            document.querySelectorAll('.tab-usr-btn').forEach(b => {
+                b.classList.remove('bg-blue-600', 'text-white', 'shadow');
+                b.classList.add('bg-white', 'text-gray-600');
+            });
+
+            const btn = document.getElementById(`btnTab${tab.charAt(0).toUpperCase() + tab.slice(1)}`);
+            if (btn) {
+                btn.classList.remove('bg-white', 'text-gray-600');
+                btn.classList.add('bg-blue-600', 'text-white', 'shadow');
+            }
+
+            document.getElementById(`tabUsr${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.remove('hidden');
         }
 
         function regresarInicio() {
@@ -367,7 +394,6 @@
             document.getElementById('usrCelula').value = usuarioActual.celula || '';
             document.getElementById('usrTalla').value = usuarioActual.talla_polera || 'S';
 
-            // Si el usuario ya tiene un tipo asignado que no es visible, agregarlo dinámicamente para que no quede en blanco
             const selectUser = document.getElementById('usrTipoInscripcion');
             if (usuarioActual.tipo_inscripcion_id) {
                 let existeEnSelect = Array.from(selectUser.options).some(opt => opt.value === usuarioActual.tipo_inscripcion_id);
@@ -397,7 +423,6 @@
             const iconoAlerta = document.getElementById('iconoAlertaCarta');
             const tituloAlerta = document.getElementById('tituloAlertaCarta');
             const descAlerta = document.getElementById('descAlertaCarta');
-            const btnScroll = document.getElementById('btnScrollSubirCarta');
             const txtEstado = document.getElementById('txtEstadoCarta');
 
             contAlerta.classList.remove('hidden', 'bg-amber-50', 'border-amber-500', 'bg-blue-50', 'border-blue-500', 'bg-green-50', 'border-green-500', 'bg-red-50', 'border-red-500');
@@ -410,8 +435,7 @@
                 tituloAlerta.className = 'font-bold text-sm text-green-900';
                 tituloAlerta.innerText = 'Carta de Compromiso Aprobada';
                 descAlerta.className = 'text-xs text-green-700';
-                descAlerta.innerText = 'Tu carta de compromiso ha sido verificada y aprobada por la administración.';
-                btnScroll.classList.add('hidden');
+                descAlerta.innerText = 'Tu carta de compromiso ha sido verificada y aprobada.';
                 txtEstado.innerHTML = `<span class="text-green-600 flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Carta Aprobada: <a href="${usuarioActual.carta_compromiso_url}" target="_blank" class="underline text-blue-600 font-bold">Ver Documento</a></span>`;
             } else if (estado === 'En Revisión') {
                 contAlerta.classList.add('bg-blue-50', 'border-blue-500');
@@ -420,7 +444,6 @@
                 tituloAlerta.innerText = 'Carta en Revisión';
                 descAlerta.className = 'text-xs text-blue-700';
                 descAlerta.innerText = 'Tu carta fue subida y está siendo revisada por un administrador.';
-                btnScroll.classList.add('hidden');
                 txtEstado.innerHTML = `<span class="text-blue-600 flex items-center gap-1"><i class="fa-solid fa-spinner fa-spin"></i> Carta en Revisión: <a href="${usuarioActual.carta_compromiso_url}" target="_blank" class="underline font-bold">Ver Documento Enviado</a></span>`;
             } else if (estado === 'Rechazada') {
                 contAlerta.classList.add('bg-red-50', 'border-red-500');
@@ -429,7 +452,6 @@
                 tituloAlerta.innerText = 'Carta Observada / Rechazada';
                 descAlerta.className = 'text-xs text-red-700';
                 descAlerta.innerText = 'Por favor vuelve a subir tu carta de compromiso con la firma legible.';
-                btnScroll.classList.remove('hidden');
                 txtEstado.innerHTML = `<span class="text-red-600 flex items-center gap-1"><i class="fa-solid fa-circle-xmark"></i> Documento Rechazado. Sube una nueva foto.</span>`;
             } else {
                 contAlerta.classList.add('bg-amber-50', 'border-amber-500');
@@ -438,11 +460,10 @@
                 tituloAlerta.innerText = 'Carta de Compromiso Requerida';
                 descAlerta.className = 'text-xs text-amber-700';
                 descAlerta.innerText = 'Para completar tu inscripción debes adjuntar tu carta firmada.';
-                btnScroll.classList.remove('hidden');
                 txtEstado.innerHTML = `<span class="text-red-500 flex items-center gap-1"><i class="fa-solid fa-circle-xmark"></i> Carta no adjuntada.</span>`;
             }
 
-            // Pagos y Costo según tipo de inscripción
+            // Pagos
             const { data: pagos } = await db.from('pagos').select('*').eq('inscrito_id', usuarioActual.id);
 
             let totalAprobado = 0;
@@ -461,7 +482,7 @@
           </tr>`;
             });
 
-            let costoTotal = 140; // Default Completo
+            let costoTotal = 140;
             if (usuarioActual.tipos_inscripcion) {
                 if (usuarioActual.tipos_inscripcion.es_manual) {
                     costoTotal = usuarioActual.precio_personalizado || 0;
