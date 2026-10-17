@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jesus Camp 2027 - Portal de Inscripción</title>
+    <title>Jesus Camp 2027 - Portal del Campamentista</title>
 
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
@@ -21,13 +21,11 @@
     <!-- NAVBAR -->
     <nav class="bg-gray-900 text-white p-4 shadow-md sticky top-0 z-50">
         <div class="max-w-4xl mx-auto flex justify-between items-center">
-            <!-- Título que redirige a la pantalla principal de búsqueda -->
             <button onclick="regresarInicio()" class="flex items-center space-x-2 text-left focus:outline-none group">
                 <i class="fa-solid fa-campground text-amber-400 text-xl group-hover:scale-110 transition-transform"></i>
                 <span class="font-bold text-lg tracking-wide group-hover:text-amber-400 transition-colors">JESUS CAMP 2027</span>
             </button>
             
-            <!-- Botón Dinámico: Panel Admin o Regresar al Inicio al ingresar -->
             <div id="contenedorNavBoton">
                 <a href="admin.html" id="btnNavAdmin"
                     class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg border border-gray-700 transition">
@@ -67,7 +65,7 @@
         <!-- VISTA DE PERFIL -->
         <div id="secPerfil" class="hidden space-y-6">
 
-            <!-- ALERTA DINÁMICA DE CARTA DE COMPROMISO -->
+            <!-- ALERTA CARTA DE COMPROMISO -->
             <div id="alertaCartaContenedor" class="hidden rounded-xl p-4 border shadow-sm">
                 <div class="flex flex-col md:flex-row items-center justify-between gap-3">
                     <div class="flex items-center gap-3">
@@ -83,7 +81,7 @@
                 </div>
             </div>
 
-            <!-- Cards de Resumen Finanzas -->
+            <!-- Cards Finanzas -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
                     <div>
@@ -161,15 +159,12 @@
                         </select>
                     </div>
                     <div>
-                        <label class="text-xs font-bold text-gray-500">Tipo de Hospedaje</label>
-                        <select id="usrHospedaje" disabled
-                            class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
-                            <option value="Colchon">Colchón (Bs 230)</option>
-                            <option value="Camping">Camping (Bs 220)</option>
-                        </select>
+                        <label class="text-xs font-bold text-gray-500">Tipo de Inscripción</label>
+                        <select id="usrTipoInscripcion" disabled
+                            class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none"></select>
                     </div>
                     <div>
-                        <label class="text-xs font-bold text-gray-500">Actividad Favorita para Dinámicas</label>
+                        <label class="text-xs font-bold text-gray-500">Actividad Favorita</label>
                         <select id="usrActividad" disabled
                             class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
                             <option value="Fútbol">Fútbol</option>
@@ -179,12 +174,12 @@
                             <option value="Coreografía / Baile">Coreografía / Baile</option>
                             <option value="Teatro / Dramatización">Teatro / Dramatización</option>
                             <option value="Atletismo / Carreras">Atletismo / Carreras</option>
-                            <option value="Juegos de Mesa">Juegos de Mesa / Conocimiento Bíblico</option>
+                            <option value="Juegos de Mesa">Juegos de Mesa</option>
                         </select>
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500">Habilidad o Talento Especial</label>
-                        <input type="text" id="usrHabilidad" disabled placeholder="Ej. Tocar guitarra, liderazgo..."
+                        <input type="text" id="usrHabilidad" disabled placeholder="Ej. Guitarra, canto..."
                             class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
                     </div>
                     <div>
@@ -193,7 +188,7 @@
                             class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
                     </div>
                     <div class="md:col-span-2">
-                        <label class="text-xs font-bold text-gray-500">Alergias o Medicamentos Especiales</label>
+                        <label class="text-xs font-bold text-gray-500">Alergias o Medicamentos</label>
                         <input type="text" id="usrAlergias" disabled placeholder="Ninguna"
                             class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
                     </div>
@@ -202,7 +197,7 @@
                     <div id="secMenorEdad"
                         class="hidden md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 bg-amber-50/50 p-4 rounded-xl border border-amber-200">
                         <div class="md:col-span-2 font-bold text-xs text-amber-900 flex items-center gap-1">
-                            <i class="fa-solid fa-child-reaching"></i> Información de Padre, Madre o Tutor Legal
+                            <i class="fa-solid fa-child-reaching"></i> Información de Tutor Legal
                         </div>
                         <div>
                             <label class="text-xs font-bold text-gray-500">Nombre del Tutor</label>
@@ -225,12 +220,12 @@
                 </form>
             </div>
 
-            <!-- SECCIÓN: CARTA DE COMPROMISO FIRMADA -->
+            <!-- CARTA DE COMPROMISO -->
             <div id="secSubirCarta" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <h3 class="font-bold text-gray-800 text-base mb-2 flex items-center gap-2">
                     <i class="fa-solid fa-file-signature text-indigo-600"></i> Carta de Compromiso Firmada
                 </h3>
-                <p class="text-xs text-gray-500 mb-4">Descarga el formato de Carta de Compromiso, imprímela, fírmala y sube una foto clara o archivo PDF para su revisión por parte del Administrador.</p>
+                <p class="text-xs text-gray-500 mb-4">Descarga el formato de Carta de Compromiso, imprímela, fírmala y sube una foto clara o archivo PDF.</p>
 
                 <div id="contenedorEstadoCarta" class="space-y-3">
                     <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
@@ -303,6 +298,21 @@
         const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let usuarioActual = null;
+        let tiposInscripcionGlobal = [];
+
+        async function cargarTiposInscripcion() {
+            const { data } = await db.from('tipos_inscripcion').select('*').order('precio', { ascending: false });
+            tiposInscripcionGlobal = data || [];
+
+            const selectUser = document.getElementById('usrTipoInscripcion');
+            if (selectUser) {
+                selectUser.innerHTML = '';
+                tiposInscripcionGlobal.forEach(t => {
+                    let label = t.es_manual ? `${t.nombre} (Precio personalizado)` : `${t.nombre} (Bs ${t.precio})`;
+                    selectUser.innerHTML += `<option value="${t.id}">${label}</option>`;
+                });
+            }
+        }
 
         function regresarInicio() {
             usuarioActual = null;
@@ -317,9 +327,11 @@
             const ciInput = document.getElementById('inputCI').value.trim();
             if (!ciInput) return;
 
+            await cargarTiposInscripcion();
+
             const { data: inscrito, error } = await db
                 .from('inscritos')
-                .select('*')
+                .select('*, tipos_inscripcion(*)')
                 .ilike('ci', ciInput)
                 .maybeSingle();
 
@@ -345,7 +357,7 @@
             document.getElementById('usrTelefono').value = usuarioActual.telefono || '';
             document.getElementById('usrCelula').value = usuarioActual.celula || '';
             document.getElementById('usrTalla').value = usuarioActual.talla_polera || 'S';
-            document.getElementById('usrHospedaje').value = usuarioActual.tipo_hospedaje || 'Colchon';
+            document.getElementById('usrTipoInscripcion').value = usuarioActual.tipo_inscripcion_id || '';
             document.getElementById('usrActividad').value = usuarioActual.actividad_favorita || 'Fútbol';
             document.getElementById('usrHabilidad').value = usuarioActual.habilidad_especial || '';
             document.getElementById('usrEmergencia').value = usuarioActual.contacto_emergencia || '';
@@ -359,7 +371,7 @@
                 document.getElementById('usrTutorTel').value = usuarioActual.tutor_telefono || '';
             }
 
-            // Validar Estado de la Carta de Compromiso
+            // Validar Carta
             const contAlerta = document.getElementById('alertaCartaContenedor');
             const iconoAlerta = document.getElementById('iconoAlertaCarta');
             const tituloAlerta = document.getElementById('tituloAlertaCarta');
@@ -377,16 +389,16 @@
                 tituloAlerta.className = 'font-bold text-sm text-green-900';
                 tituloAlerta.innerText = 'Carta de Compromiso Aprobada';
                 descAlerta.className = 'text-xs text-green-700';
-                descAlerta.innerText = 'Tu carta de compromiso ha sido verificada y aprobada por la administración. ¡Habilitación completa!';
+                descAlerta.innerText = 'Tu carta de compromiso ha sido verificada y aprobada por la administración.';
                 btnScroll.classList.add('hidden');
                 txtEstado.innerHTML = `<span class="text-green-600 flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Carta Aprobada: <a href="${usuarioActual.carta_compromiso_url}" target="_blank" class="underline text-blue-600 font-bold">Ver Documento</a></span>`;
             } else if (estado === 'En Revisión') {
                 contAlerta.classList.add('bg-blue-50', 'border-blue-500');
                 iconoAlerta.className = 'fa-solid fa-clock-rotate-left text-blue-600 text-2xl';
                 tituloAlerta.className = 'font-bold text-sm text-blue-900';
-                tituloAlerta.innerText = 'Carta en Revisión por la Administración';
+                tituloAlerta.innerText = 'Carta en Revisión';
                 descAlerta.className = 'text-xs text-blue-700';
-                descAlerta.innerText = 'Tu carta fue subida exitosamente y está siendo verificada por un administrador.';
+                descAlerta.innerText = 'Tu carta fue subida y está siendo revisada por un administrador.';
                 btnScroll.classList.add('hidden');
                 txtEstado.innerHTML = `<span class="text-blue-600 flex items-center gap-1"><i class="fa-solid fa-spinner fa-spin"></i> Carta en Revisión: <a href="${usuarioActual.carta_compromiso_url}" target="_blank" class="underline font-bold">Ver Documento Enviado</a></span>`;
             } else if (estado === 'Rechazada') {
@@ -395,21 +407,21 @@
                 tituloAlerta.className = 'font-bold text-sm text-red-900';
                 tituloAlerta.innerText = 'Carta Observada / Rechazada';
                 descAlerta.className = 'text-xs text-red-700';
-                descAlerta.innerText = 'Tu carta fue observada por el administrador. Por favor vuelve a subirla con una firma legible.';
+                descAlerta.innerText = 'Por favor vuelve a subir tu carta de compromiso con la firma legible.';
                 btnScroll.classList.remove('hidden');
-                txtEstado.innerHTML = `<span class="text-red-600 flex items-center gap-1"><i class="fa-solid fa-circle-xmark"></i> Documento Rechazado. Por favor sube una nueva versión.</span>`;
-            } else { // Pendiente
+                txtEstado.innerHTML = `<span class="text-red-600 flex items-center gap-1"><i class="fa-solid fa-circle-xmark"></i> Documento Rechazado. Sube una nueva foto.</span>`;
+            } else {
                 contAlerta.classList.add('bg-amber-50', 'border-amber-500');
                 iconoAlerta.className = 'fa-solid fa-file-contract text-amber-600 text-2xl';
                 tituloAlerta.className = 'font-bold text-sm text-amber-900';
                 tituloAlerta.innerText = 'Carta de Compromiso Requerida';
                 descAlerta.className = 'text-xs text-amber-700';
-                descAlerta.innerText = 'Para completar tu habilitación oficial debes adjuntar la foto o PDF de tu carta firmada.';
+                descAlerta.innerText = 'Para completar tu inscripción debes adjuntar tu carta firmada.';
                 btnScroll.classList.remove('hidden');
-                txtEstado.innerHTML = `<span class="text-red-500 flex items-center gap-1"><i class="fa-solid fa-circle-xmark"></i> Aún no has adjuntado tu Carta de Compromiso firmada.</span>`;
+                txtEstado.innerHTML = `<span class="text-red-500 flex items-center gap-1"><i class="fa-solid fa-circle-xmark"></i> Carta no adjuntada.</span>`;
             }
 
-            // Calcular Pagos
+            // Pagos y Costo según tipo de inscripción
             const { data: pagos } = await db.from('pagos').select('*').eq('inscrito_id', usuarioActual.id);
 
             let totalAprobado = 0;
@@ -428,7 +440,15 @@
           </tr>`;
             });
 
-            const costoTotal = usuarioActual.tipo_hospedaje === 'Camping' ? 220 : 230;
+            let costoTotal = 140; // Default Completo
+            if (usuarioActual.tipos_inscripcion) {
+                if (usuarioActual.tipos_inscripcion.es_manual) {
+                    costoTotal = usuarioActual.precio_personalizado || 0;
+                } else {
+                    costoTotal = usuarioActual.tipos_inscripcion.precio || 0;
+                }
+            }
+
             document.getElementById('lblCosto').innerText = `Bs ${costoTotal}`;
             document.getElementById('lblAbonado').innerText = `Bs ${totalAprobado}`;
             document.getElementById('lblSaldo').innerText = `Bs ${costoTotal - totalAprobado}`;
@@ -455,7 +475,7 @@
                 telefono: document.getElementById('usrTelefono').value,
                 celula: document.getElementById('usrCelula').value,
                 talla_polera: document.getElementById('usrTalla').value,
-                tipo_hospedaje: document.getElementById('usrHospedaje').value,
+                tipo_inscripcion_id: document.getElementById('usrTipoInscripcion').value,
                 actividad_favorita: document.getElementById('usrActividad').value,
                 habilidad_especial: document.getElementById('usrHabilidad').value,
                 contacto_emergencia: document.getElementById('usrEmergencia').value,
@@ -481,7 +501,6 @@
 
             const { data: urlData } = db.storage.from('cartas').getPublicUrl(fileName);
 
-            // Al subir pasa inmediatamente a estado 'En Revisión'
             await db.from('inscritos').update({ 
                 carta_compromiso_url: urlData.publicUrl,
                 estado_carta: 'En Revisión'
@@ -490,7 +509,7 @@
             usuarioActual.carta_compromiso_url = urlData.publicUrl;
             usuarioActual.estado_carta = 'En Revisión';
 
-            alert('Carta de compromiso subida. Ha quedado en revisión por el Administrador.');
+            alert('Carta de compromiso subida. Ha quedado en revisión.');
             cargarPerfil();
         }
 
@@ -514,7 +533,7 @@
                 observaciones: document.getElementById('pagoObs').value
             }]);
 
-            alert('Comprobante enviado exitosamente a Tesorería.');
+            alert('Comprobante enviado a Tesorería.');
             cargarPerfil();
         }
     </script>
