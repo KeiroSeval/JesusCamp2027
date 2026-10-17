@@ -429,7 +429,7 @@
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="font-bold text-gray-800 text-base">Registro de Egresos</h3>
-                    <button onclick="toggleFormulario('formContenedorEgreso')"
+                    <button onclick="prepararCrearEgreso()"
                         class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
                         <i class="fa-solid fa-plus"></i> Registrar Egreso
                     </button>
@@ -437,6 +437,7 @@
 
                 <div id="formContenedorEgreso" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
                     <form onsubmit="registrarNuevoEgreso(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <input type="hidden" id="egIdEdit">
                         <input type="text" id="egConcepto" placeholder="Concepto de Gasto" required class="p-2.5 border rounded-xl text-xs bg-white">
                         <select id="egCategoria" class="p-2.5 border rounded-xl text-xs bg-white">
                             <option value="Alimentación">Alimentación</option>
@@ -491,6 +492,8 @@
                             <option value="estado_carta">Estado de Carta de Compromiso</option>
                             <option value="es_staff">Rol (Staff vs Campamentista)</option>
                             <option value="tipo_inscripcion">Tipo de Inscripción</option>
+                            <option value="es_menor">Rango de Edad (Mayores / Menores)</option>
+                            <option value="estado_financiero">Estado Financiero (Saldos de Cuotas)</option>
                         </select>
                     </div>
 
@@ -584,7 +587,7 @@
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="font-bold text-gray-800 text-base">Roles y Permisos Granulares</h3>
-                    <button onclick="toggleFormulario('formContenedorRol')"
+                    <button onclick="prepararCrearRol()"
                         class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
                         <i class="fa-solid fa-key"></i> Crear / Configurar Rol
                     </button>
@@ -706,7 +709,7 @@
         </div>
     </div>
 
-    <!-- MODAL EDITAR CAMPAMENTISTA / STAFF (TOTALMENTE SCROLLEABLE Y ADAPTATIVO AL TAMAÑO DE PANTALLA) -->
+    <!-- MODAL EDITAR CAMPAMENTISTA / STAFF -->
     <div id="modalEditCampamentista" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-2 sm:p-4">
         <div class="bg-white rounded-2xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl flex flex-col max-h-[90vh]">
             
@@ -717,7 +720,6 @@
                 <button onclick="cerrarModalCampamentista()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
-            <!-- CONTENEDOR CON CONEXIÓN DE SCROLL INTERNO QUE GARANTIZA LA VISIBILIDAD DE LOS BOTONES DE GUARDAR Y ELIMINAR -->
             <form onsubmit="confirmarYGuardarInscrito(event)" class="overflow-y-auto flex-1 pr-2 space-y-4">
                 <input type="hidden" id="editInsId">
                 
@@ -912,6 +914,51 @@
             });
         }
 
+        // FUNCIONES DE TIPOS DE INSCRIPCIÓN / CATEGORÍAS
+        function prepararCrearCategoria() {
+            document.getElementById('catIdEdit').value = '';
+            document.getElementById('catNombre').value = '';
+            document.getElementById('catPrecio').value = '';
+            document.getElementById('catEsManual').checked = false;
+            document.getElementById('catEsVisible').checked = true;
+            document.getElementById('formContenedorCategoria').classList.remove('hidden');
+        }
+
+        function editarCategoria(id) {
+            const cat = tiposInscripcionGlobal.find(t => t.id === id);
+            if (!cat) return;
+
+            document.getElementById('catIdEdit').value = cat.id;
+            document.getElementById('catNombre').value = cat.nombre;
+            document.getElementById('catPrecio').value = cat.precio;
+            document.getElementById('catEsManual').checked = !!cat.es_manual;
+            document.getElementById('catEsVisible').checked = !!cat.es_visible;
+            document.getElementById('formContenedorCategoria').classList.remove('hidden');
+        }
+
+        async function guardarTipoInscripcion(e) {
+            e.preventDefault();
+            const id = document.getElementById('catIdEdit').value;
+            const nombre = document.getElementById('catNombre').value.trim();
+            const precio = parseFloat(document.getElementById('catPrecio').value) || 0;
+            const esManual = document.getElementById('catEsManual').checked;
+            const esVisible = document.getElementById('catEsVisible').checked;
+
+            const payload = { nombre, precio, es_manual: esManual, es_visible: esVisible };
+
+            if (id) {
+                await db.from('tipos_inscripcion').update(payload).eq('id', id);
+                await registrarLogAuditoria('Editar Categoría', 'Categorías', `Modificó categoría: ${nombre}`);
+            } else {
+                await db.from('tipos_inscripcion').insert([payload]);
+                await registrarLogAuditoria('Nueva Categoría', 'Categorías', `Creó categoría: ${nombre}`);
+            }
+
+            alert('Tipo de inscripción guardado correctamente.');
+            toggleFormulario('formContenedorCategoria');
+            cargarTiposInscripcion();
+        }
+
         async function cargarTiposInscripcion() {
             const { data } = await db.from('tipos_inscripcion').select('*').order('precio', { ascending: false });
             tiposInscripcionGlobal = data || [];
@@ -934,7 +981,7 @@
                 tbody.innerHTML = '';
                 tiposInscripcionGlobal.forEach(t => {
                     let badgeVisib = t.es_visible 
-                        ? `<span class="bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded-full text-[10px]">👁️ Visible Publico</span>`
+                        ? `<span class="bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded-full text-[10px]">👁️ Visible Público</span>`
                         : `<span class="bg-gray-100 text-gray-600 font-bold px-2 py-0.5 rounded-full text-[10px]">🔒 Solo Admin</span>`;
 
                     tbody.innerHTML += `
@@ -944,16 +991,131 @@
               <td class="p-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${t.es_manual ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'}">${t.es_manual ? 'Precio Personalizado' : 'Fijo'}</span></td>
               <td class="p-2">${badgeVisib}</td>
               <td class="p-2 text-center flex justify-center gap-1">
-                <button onclick="editarCategoria('${t.id}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1 rounded-lg border border-amber-300" title="Editar">
+                <button onclick="editarCategoria('${t.id}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 rounded-lg border border-amber-300" title="Editar">
                   <i class="fa-solid fa-pencil text-xs"></i>
                 </button>
-                <button onclick="solicitarSeguridad('borrarCategoria', '${t.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1 rounded-lg border border-red-200" title="Eliminar">
+                <button onclick="solicitarSeguridad('borrarCategoria', '${t.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200" title="Eliminar">
                   <i class="fa-solid fa-trash text-xs"></i>
                 </button>
               </td>
             </tr>`;
                 });
             }
+        }
+
+        // FUNCIONES DE EGRESOS
+        function prepararCrearEgreso() {
+            document.getElementById('egIdEdit').value = '';
+            document.getElementById('egConcepto').value = '';
+            document.getElementById('egCategoria').value = 'Alimentación';
+            document.getElementById('egMonto').value = '';
+            document.getElementById('formContenedorEgreso').classList.remove('hidden');
+        }
+
+        function abrirModalEditarEgreso(id, concepto, categoria, monto) {
+            document.getElementById('egIdEdit').value = id;
+            document.getElementById('egConcepto').value = concepto;
+            document.getElementById('egCategoria').value = categoria;
+            document.getElementById('egMonto').value = monto;
+            document.getElementById('formContenedorEgreso').classList.remove('hidden');
+        }
+
+        async function registrarNuevoEgreso(e) {
+            e.preventDefault();
+            const id = document.getElementById('egIdEdit').value;
+            const concepto = document.getElementById('egConcepto').value.trim();
+            const categoria = document.getElementById('egCategoria').value;
+            const monto = parseFloat(document.getElementById('egMonto').value) || 0;
+
+            const payload = {
+                concepto,
+                categoria,
+                monto,
+                registrado_por: adminSesion?.nombre || 'Admin'
+            };
+
+            if (id) {
+                await db.from('egresos').update(payload).eq('id', id);
+                await registrarLogAuditoria('Editar Egreso', 'Egresos', `Modificó egreso: ${concepto}`);
+            } else {
+                await db.from('egresos').insert([payload]);
+                await registrarLogAuditoria('Nuevo Egreso', 'Egresos', `Registró egreso por Bs ${monto}`);
+            }
+
+            alert('Egreso guardado correctamente.');
+            toggleFormulario('formContenedorEgreso');
+            cargarTodoElDashboard();
+        }
+
+        // FUNCIONES DE ADMINISTRADORES Y ROLES
+        async function guardarAdmin(e) {
+            e.preventDefault();
+            const nombre = document.getElementById('adminNewNombre').value.trim();
+            const user = document.getElementById('adminNewUser').value.trim();
+            const pass = document.getElementById('adminNewPass').value.trim();
+            const rolId = document.getElementById('adminRolSelect').value;
+
+            const hashHex = await calcularSHA256(pass);
+
+            await db.from('administradores').insert([{
+                nombre: nombre,
+                usuario: user,
+                password_hash: hashHex,
+                rol_id: rolId || null
+            }]);
+
+            await registrarLogAuditoria('Nuevo Admin', 'Administradores', `Creó usuario admin: ${user}`);
+            alert('Administrador registrado.');
+            e.target.reset();
+            toggleFormulario('formContenedorAdmin');
+            cargarRolesYAdmins();
+        }
+
+        function prepararCrearRol() {
+            document.getElementById('rolIdEdit').value = '';
+            document.getElementById('rolNombre').value = '';
+            document.querySelectorAll('#formContenedorRol input[type="checkbox"]').forEach(c => c.checked = false);
+            document.getElementById('formContenedorRol').classList.remove('hidden');
+        }
+
+        async function guardarRol(e) {
+            e.preventDefault();
+            const id = document.getElementById('rolIdEdit').value;
+            const nombre = document.getElementById('rolNombre').value.trim();
+
+            const permisos = {
+                verFinanzas: document.getElementById('permVerFinanzas').checked,
+                solicitudes: document.getElementById('permSolicitudes').checked,
+                inscritosVer: document.getElementById('permInscritosVer').checked,
+                inscritosCrear: document.getElementById('permInscritosCrear').checked,
+                inscritosEditar: document.getElementById('permInscritosEditar').checked,
+                inscritosEliminar: document.getElementById('permInscritosEliminar').checked,
+                categorias: document.getElementById('permCategorias').checked,
+                ingresosVer: document.getElementById('permIngresosVer').checked,
+                ingresosEliminar: document.getElementById('permIngresosEliminar').checked,
+                egresosVer: document.getElementById('permEgresosVer').checked,
+                egresosCrear: document.getElementById('permEgresosCrear').checked,
+                egresosEditar: document.getElementById('permEgresosEditar').checked,
+                egresosEliminar: document.getElementById('permEgresosEliminar').checked,
+                reportesVer: document.getElementById('permReportesVer').checked,
+                reportesCrear: document.getElementById('permReportesCrear').checked,
+                usuarios: document.getElementById('permUsuarios').checked,
+                roles: document.getElementById('permRoles').checked
+            };
+
+            const payload = { nombre, permisos };
+
+            if (id) {
+                await db.from('roles').update(payload).eq('id', id);
+                await registrarLogAuditoria('Editar Rol', 'Roles', `Actualizó permisos del rol: ${nombre}`);
+            } else {
+                await db.from('roles').insert([payload]);
+                await registrarLogAuditoria('Nuevo Rol', 'Roles', `Creó rol: ${nombre}`);
+            }
+
+            alert('Rol guardado correctamente.');
+            toggleFormulario('formContenedorRol');
+            cargarRolesYAdmins();
         }
 
         function evaluarPrecioManual(tipoId, idDivTarget) {
@@ -1068,7 +1230,6 @@
             document.getElementById('stEgresos').innerText = `Bs ${eg}`;
             document.getElementById('stBalance').innerText = `Bs ${ing - eg}`;
 
-            // Cargar combo de cobro directo
             const selectPagoAdmin = document.getElementById('pagoAdminInscrito');
             if (selectPagoAdmin) {
                 selectPagoAdmin.innerHTML = '<option value="">-- Seleccionar Campamentista --</option>';
@@ -1169,7 +1330,7 @@
             cargarTodoElDashboard();
         }
 
-        // GENERADOR DE REPORTES Y ESTADÍSTICAS CON GRÁFICOS CHART.JS
+        // GENERADOR DE REPORTES Y ESTADÍSTICAS GRANULARES CON TOTALES ARRIBA
         async function generarReporteGrafico() {
             const variable = document.getElementById('repVariableSelect').value;
             const operacion = document.getElementById('repOperacionSelect').value;
@@ -1183,9 +1344,23 @@
 
             (inscritos || []).forEach(i => {
                 let key = '-';
-                if (variable === 'tipo_inscripcion') key = i.tipos_inscripcion?.nombre || 'Estándar';
-                else if (variable === 'es_staff') key = i.es_staff ? 'STAFF' : 'Campamentista';
-                else key = i[variable] || 'Sin Especificar';
+                if (variable === 'tipo_inscripcion') {
+                    key = i.tipos_inscripcion?.nombre || 'Estándar';
+                } else if (variable === 'es_staff') {
+                    key = i.es_staff ? 'STAFF' : 'Campamentista';
+                } else if (variable === 'es_menor') {
+                    key = i.es_menor ? 'Menor de Edad' : 'Mayor de Edad';
+                } else if (variable === 'estado_financiero') {
+                    let costo = i.tipos_inscripcion?.es_manual ? (i.precio_personalizado || 0) : (i.tipos_inscripcion?.precio || 140);
+                    let misPagos = pagos ? pagos.filter(p => p.inscrito_id === i.id) : [];
+                    let totalAbonado = misPagos.reduce((sum, p) => sum + Number(p.monto), 0);
+
+                    if (totalAbonado >= costo) key = 'Totalmente Pagado';
+                    else if (totalAbonado > 0) key = 'Abono Parcial';
+                    else key = 'Sin Abonos (Pendiente)';
+                } else {
+                    key = i[variable] || 'Sin Especificar';
+                }
 
                 if (!conteo[key]) {
                     conteo[key] = 0;
@@ -1203,19 +1378,56 @@
             let labels = Object.keys(conteo);
             let valores = [];
 
+            // Cálculos de Totales Globales
+            let totalPersonasGlobal = 0;
+            let totalMontoGlobal = 0;
+
             labels.forEach(k => {
+                totalPersonasGlobal += conteo[k];
+                totalMontoGlobal += montos[k];
+
                 if (operacion === 'conteo') valores.push(conteo[k]);
                 else if (operacion === 'suma_pagos') valores.push(montos[k]);
                 else if (operacion === 'promedio_pagos') valores.push(conteo[k] > 0 ? (montos[k] / conteo[k]).toFixed(2) : 0);
             });
 
-            // Renderizar Tabla Estadísticas
+            let promedioGlobal = totalPersonasGlobal > 0 ? (totalMontoGlobal / totalPersonasGlobal).toFixed(2) : 0;
+
+            // Renderizar Tabla con Fila de TOTALES ARRIBA de los encabezados
             const divTabla = document.getElementById('contenedorTablaEstadisticas');
-            let html = `<table class="w-full text-left border-collapse my-2"><thead class="bg-gray-200 font-bold"><tr><th class="p-2 border">${variable.toUpperCase()}</th><th class="p-2 border">Personas</th><th class="p-2 border">Total Bs</th><th class="p-2 border">Promedio Bs</th></tr></thead><tbody>`;
+            let html = `
+            <div class="mb-3 p-3 bg-indigo-50 rounded-xl border border-indigo-200">
+                <p class="text-[10px] uppercase font-bold text-indigo-700 mb-1">Resumen Global de la Columna</p>
+                <div class="grid grid-cols-3 gap-2 text-center">
+                    <div class="bg-white p-2 rounded-lg shadow-sm border">
+                        <span class="block text-[10px] text-gray-400 font-semibold uppercase">Total Personas</span>
+                        <span class="text-sm font-black text-indigo-900">${totalPersonasGlobal}</span>
+                    </div>
+                    <div class="bg-white p-2 rounded-lg shadow-sm border">
+                        <span class="block text-[10px] text-gray-400 font-semibold uppercase">Total Cobrado</span>
+                        <span class="text-sm font-black text-green-600">Bs ${totalMontoGlobal}</span>
+                    </div>
+                    <div class="bg-white p-2 rounded-lg shadow-sm border">
+                        <span class="block text-[10px] text-gray-400 font-semibold uppercase">Promedio General</span>
+                        <span class="text-sm font-black text-blue-600">Bs ${promedioGlobal}</span>
+                    </div>
+                </div>
+            </div>
+
+            <table class="w-full text-left border-collapse my-2">
+                <thead class="bg-gray-200 font-bold">
+                    <tr>
+                        <th class="p-2 border">${variable.replace('_', ' ').toUpperCase()}</th>
+                        <th class="p-2 border">Personas</th>
+                        <th class="p-2 border">Total Bs</th>
+                        <th class="p-2 border">Promedio Bs</th>
+                    </tr>
+                </thead>
+                <tbody>`;
 
             labels.forEach(k => {
                 let prom = conteo[k] > 0 ? (montos[k] / conteo[k]).toFixed(2) : 0;
-                html += `<tr><td class="p-2 border font-bold">${k}</td><td class="p-2 border">${conteo[k]}</td><td class="p-2 border font-bold text-green-600">Bs ${montos[k]}</td><td class="p-2 border">Bs ${prom}</td></tr>`;
+                html += `<tr><td class="p-2 border font-bold text-gray-800">${k}</td><td class="p-2 border font-semibold">${conteo[k]}</td><td class="p-2 border font-bold text-green-600">Bs ${montos[k]}</td><td class="p-2 border">Bs ${prom}</td></tr>`;
             });
             html += `</tbody></table>`;
             divTabla.innerHTML = html;
@@ -1224,7 +1436,7 @@
             const ctx = document.getElementById('canvasGraficoReporte').getContext('2d');
             if (instanciaGrafico) instanciaGrafico.destroy();
 
-            const colores = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#6366f1', '#14b8a6'];
+            const colores = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#6366f1', '#14b8a6', '#f97316'];
 
             instanciaGrafico = new Chart(ctx, {
                 type: tipoGrafico,
