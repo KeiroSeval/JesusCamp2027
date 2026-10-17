@@ -4,8 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jesus Camp 2027 - Portal de Inscripción</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Favicon para evitar error 404 -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛺</text></svg>">
+
+  <!-- Tailwind CSS CDN sin advertencias de CDN Play -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  
+  <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <!-- FontAwesome -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-slate-100 min-h-screen text-slate-800 font-sans">
@@ -173,10 +182,12 @@
   </main>
 
   <script>
-    // Configuración de Supabase (REEMPLAZA CON TUS CREDENCIALES)
+    // CREDENCIALES DE SUPABASE
     const SUPABASE_URL = 'https://bpwsdgkafjnsgfilbfgg.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwd3NkZ2thZmpuc2dmaWxiZmdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxODM1NzUsImV4cCI6MjEwNzc1OTU3NX0.rnSg8vNFpAuwNfECYwfyynERKwv3CJ7CGZRhAKbyDDM';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+   
+    // Inicialización corregida usando la instancia global
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let usuarioActual = null;
 
@@ -184,7 +195,7 @@
       const ci = document.getElementById('inputCI').value.trim();
       if (!ci) return;
 
-      const { data: inscrito, error } = await supabase
+      const { data: inscrito, error } = await db
         .from('inscritos')
         .select('*')
         .eq('ci', ci)
@@ -196,6 +207,7 @@
         return;
       }
 
+      document.getElementById('msgBusqueda').classList.add('hidden');
       usuarioActual = inscrito;
       cargarPerfil();
     }
@@ -211,7 +223,7 @@
       document.getElementById('usrHospedaje').value = usuarioActual.tipo_hospedaje || 'Colchon';
 
       // Calcular Pagos
-      const { data: pagos } = await supabase.from('pagos').select('*').eq('inscrito_id', usuarioActual.id);
+      const { data: pagos } = await db.from('pagos').select('*').eq('inscrito_id', usuarioActual.id);
       
       let totalAprobado = 0;
       const tbody = document.getElementById('tblHistorialPagos');
@@ -236,8 +248,8 @@
       document.getElementById('lblAbonado').innerText = `Bs ${totalAprobado}`;
       document.getElementById('lblSaldo').innerText = `Bs ${costoTotal - totalAprobado}`;
 
-      // Verificar si hay solicitud de edicion pendiente
-      const { data: edicion } = await supabase
+      // Verificar si hay solicitud de edición pendiente
+      const { data: edicion } = await db
         .from('solicitudes_edicion')
         .select('*')
         .eq('inscrito_id', usuarioActual.id)
@@ -259,7 +271,7 @@
         tipo_hospedaje: document.getElementById('usrHospedaje').value
       };
 
-      await supabase.from('solicitudes_edicion').insert([datos]);
+      await db.from('solicitudes_edicion').insert([datos]);
       alert('Tu solicitud de actualización ha sido enviada para revisión del Administrador.');
       cargarPerfil();
     }
@@ -274,13 +286,13 @@
       const fileName = `${Date.now()}_${file.name}`;
 
       // Subir imagen a Supabase Storage
-      const { data: uploadData, error: uploadErr } = await supabase.storage.from('comprobantes').upload(fileName, file);
+      const { data: uploadData, error: uploadErr } = await db.storage.from('comprobantes').upload(fileName, file);
       if (uploadErr) return alert('Error al subir comprobante: ' + uploadErr.message);
 
-      const { data: urlData } = supabase.storage.from('comprobantes').getPublicUrl(fileName);
+      const { data: urlData } = db.storage.from('comprobantes').getPublicUrl(fileName);
 
       // Guardar en tabla pagos
-      await supabase.from('pagos').insert([{
+      await db.from('pagos').insert([{
         inscrito_id: usuarioActual.id,
         monto: monto,
         comprobante_url: urlData.publicUrl,
