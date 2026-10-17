@@ -1,308 +1,342 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jesus Camp 2027 - Portal de Inscripción</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jesus Camp 2027 - Portal de Inscripción</title>
 
-  <!-- Favicon para evitar error 404 -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛺</text></svg>">
+    <!-- Favicon para evitar error 404 -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛺</text></svg>">
 
-  <!-- Tailwind CSS Nivel Producción CDN (Sin advertencias en consola) -->
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Tailwind CSS Nivel Producción CDN (Sin advertencias en consola) -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
-  <!-- Supabase JS Client -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- FontAwesome Icons -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
+
 <body class="bg-slate-100 min-h-screen text-gray-800 font-sans">
 
-  <!-- Navbar -->
-  <nav class="bg-gray-900 text-white p-4 shadow-md sticky top-0 z-50">
-    <div class="max-w-4xl mx-auto flex justify-between items-center">
-      <div class="flex items-center space-x-2">
-        <i class="fa-solid fa-campground text-amber-400 text-xl"></i>
-        <span class="font-bold text-lg tracking-wide">JESUS CAMP 2027</span>
-      </div>
-      <a href="admin.html" class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg border border-gray-700 transition">
-        <i class="fa-solid fa-user-gear mr-1"></i> Panel Admin
-      </a>
-    </div>
-  </nav>
-
-  <main class="max-w-4xl mx-auto p-4 space-y-6">
-
-    <!-- BÚSQUEDA DE PERFIL -->
-    <section id="secBusqueda" class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 text-center max-w-md mx-auto mt-8">
-      <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
-        <i class="fa-solid fa-id-card"></i>
-      </div>
-      <h2 class="text-xl font-bold text-gray-900 mb-1">Ingreso de Campamentista</h2>
-      <p class="text-xs text-gray-500 mb-6">Ingresa tu número de C.I. para ver tu estado, abonar cuotas o editar tus datos.</p>
-      
-      <div class="space-y-3">
-        <input type="text" id="inputCI" placeholder="Tu C.I. (ej. 13489470)" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-center text-lg font-semibold tracking-wider">
-        <button onclick="buscarCampamentista()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition">
-          Ingresar al Portal
-        </button>
-      </div>
-      <p id="msgBusqueda" class="text-red-500 text-xs mt-3 hidden"></p>
-    </section>
-
-    <!-- VISTA DE PERFIL -->
-    <div id="secPerfil" class="hidden space-y-6">
-      
-      <!-- Cards de Resumen -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
-          <div>
-            <p class="text-xs font-semibold text-gray-400 uppercase">Costo Total</p>
-            <h3 class="text-2xl font-black text-gray-800" id="lblCosto">Bs 0</h3>
-          </div>
-          <div class="p-3 bg-gray-100 text-gray-600 rounded-xl"><i class="fa-solid fa-tag"></i></div>
-        </div>
-        <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
-          <div>
-            <p class="text-xs font-semibold text-gray-400 uppercase">Abonado Aprobado</p>
-            <h3 class="text-2xl font-black text-green-600" id="lblAbonado">Bs 0</h3>
-          </div>
-          <div class="p-3 bg-green-50 text-green-600 rounded-xl"><i class="fa-solid fa-circle-check"></i></div>
-        </div>
-        <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
-          <div>
-            <p class="text-xs font-semibold text-gray-400 uppercase">Saldo Pendiente</p>
-            <h3 class="text-2xl font-black text-red-600" id="lblSaldo">Bs 0</h3>
-          </div>
-          <div class="p-3 bg-red-50 text-red-600 rounded-xl"><i class="fa-solid fa-clock-rotate-left"></i></div>
-        </div>
-      </div>
-
-      <!-- Datos Personales & Solicitud de Cambio -->
-      <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="font-bold text-gray-800 text-lg flex items-center gap-2">
-            <i class="fa-solid fa-user text-blue-600"></i> Información Inscrita
-          </h3>
-          <span id="badgeEdicion" class="hidden text-xs bg-amber-100 text-amber-800 font-semibold px-3 py-1 rounded-full border border-amber-300">
-            Cambio en revisión
-          </span>
-        </div>
-
-        <form id="formPerfil" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="text-xs font-bold text-gray-500">Nombre Completo</label>
-            <input type="text" id="usrNombre" disabled class="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 text-sm font-semibold">
-          </div>
-          <div>
-            <label class="text-xs font-bold text-gray-500">Teléfono / WhatsApp</label>
-            <input type="text" id="usrTelefono" class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 outline-none">
-          </div>
-          <div>
-            <label class="text-xs font-bold text-gray-500">Célula</label>
-            <input type="text" id="usrCelula" class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 outline-none">
-          </div>
-          <div>
-            <label class="text-xs font-bold text-gray-500">Talla de Polera</label>
-            <select id="usrTalla" class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 outline-none">
-              <option value="XS">XS</option>
-              <option value="S">S</option>
-              <option value="M">M</option>
-              <option value="L">L</option>
-              <option value="XL">XL</option>
-            </select>
-          </div>
-          <div class="md:col-span-2">
-            <label class="text-xs font-bold text-gray-500">Tipo de Hospedaje</label>
-            <select id="usrHospedaje" class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 outline-none">
-              <option value="Colchon">Colchón (Bs 230)</option>
-              <option value="Camping">Camping (Bs 220)</option>
-            </select>
-          </div>
-          <div class="md:col-span-2 pt-2">
-            <button type="button" id="btnSolicitarCambio" onclick="solicitarCambioDatos()" class="bg-gray-800 hover:bg-gray-900 text-white text-xs font-bold px-4 py-2.5 rounded-lg transition">
-              Solicitar Actualización de Datos
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <!-- Registrar Pago e Historial -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        
-        <!-- Formulario Abonar Pago -->
-        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-          <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-            <i class="fa-solid fa-cloud-arrow-up text-green-600"></i> Subir Comprobante de Pago
-          </h3>
-          <div class="space-y-3">
-            <div>
-              <label class="text-xs font-bold text-gray-500">Monto del Abono (Bs)</label>
-              <input type="number" id="pagoMonto" placeholder="Ej. 50, 100" class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-green-600">
+    <!-- Navbar -->
+    <nav class="bg-gray-900 text-white p-4 shadow-md sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-campground text-amber-400 text-xl"></i>
+                <span class="font-bold text-lg tracking-wide">JESUS CAMP 2027</span>
             </div>
-            <div>
-              <label class="text-xs font-bold text-gray-500">Foto o Recibo de Transferencia</label>
-              <input type="file" id="pagoArchivo" accept="image/*,.pdf" class="w-full mt-1 text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
+            <a href="admin.html"
+                class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg border border-gray-700 transition">
+                <i class="fa-solid fa-user-gear mr-1"></i> Panel Admin
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto p-4 space-y-6">
+
+        <!-- BÚSQUEDA DE PERFIL -->
+        <section id="secBusqueda"
+            class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 text-center max-w-md mx-auto mt-8">
+            <div
+                class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                <i class="fa-solid fa-id-card"></i>
             </div>
-            <div>
-              <label class="text-xs font-bold text-gray-500">Observaciones (Opcional)</label>
-              <input type="text" id="pagoObs" placeholder="Ej. Transferencia Banco Unión" class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-green-600">
+            <h2 class="text-xl font-bold text-gray-900 mb-1">Ingreso de Campamentista</h2>
+            <p class="text-xs text-gray-500 mb-6">Ingresa tu número de C.I. para ver tu estado, abonar cuotas o editar
+                tus datos.</p>
+
+            <div class="space-y-3">
+                <input type="text" id="inputCI" placeholder="Tu C.I. (ej. 13489470)"
+                    class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-center text-lg font-semibold tracking-wider">
+                <button onclick="buscarCampamentista()"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition">
+                    Ingresar al Portal
+                </button>
             </div>
-            <button onclick="subirComprobante()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-lg text-sm transition shadow-lg">
-              Enviar Pago a Tesorería
-            </button>
-          </div>
+            <p id="msgBusqueda" class="text-red-500 text-xs mt-3 hidden"></p>
+        </section>
+
+        <!-- VISTA DE PERFIL -->
+        <div id="secPerfil" class="hidden space-y-6">
+
+            <!-- Cards de Resumen -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div
+                    class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-gray-400 uppercase">Costo Total</p>
+                        <h3 class="text-2xl font-black text-gray-800" id="lblCosto">Bs 0</h3>
+                    </div>
+                    <div class="p-3 bg-gray-100 text-gray-600 rounded-xl"><i class="fa-solid fa-tag"></i></div>
+                </div>
+                <div
+                    class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-gray-400 uppercase">Abonado Aprobado</p>
+                        <h3 class="text-2xl font-black text-green-600" id="lblAbonado">Bs 0</h3>
+                    </div>
+                    <div class="p-3 bg-green-50 text-green-600 rounded-xl"><i class="fa-solid fa-circle-check"></i>
+                    </div>
+                </div>
+                <div
+                    class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-gray-400 uppercase">Saldo Pendiente</p>
+                        <h3 class="text-2xl font-black text-red-600" id="lblSaldo">Bs 0</h3>
+                    </div>
+                    <div class="p-3 bg-red-50 text-red-600 rounded-xl"><i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Datos Personales & Solicitud de Cambio -->
+            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-gray-800 text-lg flex items-center gap-2">
+                        <i class="fa-solid fa-user text-blue-600"></i> Información Inscrita
+                    </h3>
+                    <span id="badgeEdicion"
+                        class="hidden text-xs bg-amber-100 text-amber-800 font-semibold px-3 py-1 rounded-full border border-amber-300">
+                        Cambio en revisión
+                    </span>
+                </div>
+
+                <form id="formPerfil" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-gray-500">Nombre Completo</label>
+                        <input type="text" id="usrNombre" disabled
+                            class="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 text-sm font-semibold">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500">Teléfono / WhatsApp</label>
+                        <input type="text" id="usrTelefono"
+                            class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 outline-none">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500">Célula</label>
+                        <input type="text" id="usrCelula"
+                            class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 outline-none">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500">Talla de Polera</label>
+                        <select id="usrTalla"
+                            class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 outline-none">
+                            <option value="XS">XS</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="text-xs font-bold text-gray-500">Tipo de Hospedaje</label>
+                        <select id="usrHospedaje"
+                            class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 outline-none">
+                            <option value="Colchon">Colchón (Bs 230)</option>
+                            <option value="Camping">Camping (Bs 220)</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-2 pt-2">
+                        <button type="button" id="btnSolicitarCambio" onclick="solicitarCambioDatos()"
+                            class="bg-gray-800 hover:bg-gray-900 text-white text-xs font-bold px-4 py-2.5 rounded-lg transition">
+                            Solicitar Actualización de Datos
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Registrar Pago e Historial -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Formulario Abonar Pago -->
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                    <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-cloud-arrow-up text-green-600"></i> Subir Comprobante de Pago
+                    </h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="text-xs font-bold text-gray-500">Monto del Abono (Bs)</label>
+                            <input type="number" id="pagoMonto" placeholder="Ej. 50, 100"
+                                class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-green-600">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500">Foto o Recibo de Transferencia</label>
+                            <input type="file" id="pagoArchivo" accept="image/*,.pdf"
+                                class="w-full mt-1 text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500">Observaciones (Opcional)</label>
+                            <input type="text" id="pagoObs" placeholder="Ej. Transferencia Banco Unión"
+                                class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-green-600">
+                        </div>
+                        <button onclick="subirComprobante()"
+                            class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-lg text-sm transition shadow-lg">
+                            Enviar Pago a Tesorería
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Historial de Pagos -->
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                    <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-receipt text-gray-600"></i> Historial de Cuotas
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-gray-600">
+                            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                                <tr>
+                                    <th class="p-2">Fecha</th>
+                                    <th class="p-2">Monto</th>
+                                    <th class="p-2">Recibo</th>
+                                    <th class="p-2">Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblHistorialPagos" class="divide-y divide-gray-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
 
-        <!-- Historial de Pagos -->
-        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-          <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-            <i class="fa-solid fa-receipt text-gray-600"></i> Historial de Cuotas
-          </h3>
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs text-gray-600">
-              <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                <tr>
-                  <th class="p-2">Fecha</th>
-                  <th class="p-2">Monto</th>
-                  <th class="p-2">Recibo</th>
-                  <th class="p-2">Estado</th>
-                </tr>
-              </thead>
-              <tbody id="tblHistorialPagos" class="divide-y divide-gray-100"></tbody>
-            </table>
-          </div>
-        </div>
+    </main>
 
-      </div>
-
-    </div>
-
-  </main>
-
-  <script>
-    // ⚠️ REEMPLAZA CON TUS CREDENCIALES EXACTAS DE SUPABASE ⚠️
-    const SUPABASE_URL = 'https://bpwsdgkafjnsgfilbfgg.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwd3NkZ2thZmpuc2dmaWxiZmdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxODM1NzUsImV4cCI6MjEwNzc1OTU3NX0.rnSg8vNFpAuwNfECYwfyynERKwv3CJ7CGZRhAKbyDDM';
+    <script>
+        // ⚠️ REEMPLAZA CON TUS CREDENCIALES EXACTAS DE SUPABASE ⚠️
+        const SUPABASE_URL = 'https://bpwsdgkafjnsgfilbfgg.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwd3NkZ2thZmpuc2dmaWxiZmdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxODM1NzUsImV4cCI6MjEwNzc1OTU3NX0.rnSg8vNFpAuwNfECYwfyynERKwv3CJ7CGZRhAKbyDDM';
 
 
-    // Instancia limpia usando 'db' para no colisionar con la variable global 'supabase'
-    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // Instancia limpia usando 'db' para no colisionar con la variable global 'supabase'
+        const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    let usuarioActual = null;
+        let usuarioActual = null;
 
-    async function buscarCampamentista() {
-      const ci = document.getElementById('inputCI').value.trim();
-      if (!ci) return;
+        async function buscarCampamentista() {
+            const ci = document.getElementById('inputCI').value.trim();
+            if (!ci) return;
 
-      const { data: inscrito, error } = await db
-        .from('inscritos')
-        .select('*')
-        .eq('ci', ci)
-        .single();
+            // Usamos .maybeSingle() para evitar el error 406
+            const { data: inscrito, error } = await db
+                .from('inscritos')
+                .select('*')
+                .eq('ci', ci)
+                .maybeSingle();
 
-      if (error || !inscrito) {
-        document.getElementById('msgBusqueda').innerText = 'No se encontró ningún campamentista registrado con ese C.I.';
-        document.getElementById('msgBusqueda').classList.remove('hidden');
-        return;
-      }
+            if (error) {
+                console.error("Error en consulta:", error);
+                document.getElementById('msgBusqueda').innerText = 'Ocurrió un error al consultar la base de datos.';
+                document.getElementById('msgBusqueda').classList.remove('hidden');
+                return;
+            }
 
-      document.getElementById('msgBusqueda').classList.add('hidden');
-      usuarioActual = inscrito;
-      cargarPerfil();
-    }
+            if (!inscrito) {
+                document.getElementById('msgBusqueda').innerText = 'No se encontró ningún campamentista registrado con ese C.I.';
+                document.getElementById('msgBusqueda').classList.remove('hidden');
+                return;
+            }
 
-    async function cargarPerfil() {
-      document.getElementById('secBusqueda').classList.add('hidden');
-      document.getElementById('secPerfil').classList.remove('hidden');
+            document.getElementById('msgBusqueda').classList.add('hidden');
+            usuarioActual = inscrito;
+            cargarPerfil();
+        }
 
-      document.getElementById('usrNombre').value = usuarioActual.nombre_completo;
-      document.getElementById('usrTelefono').value = usuarioActual.telefono || '';
-      document.getElementById('usrCelula').value = usuarioActual.celula || '';
-      document.getElementById('usrTalla').value = usuarioActual.talla_polera || 'S';
-      document.getElementById('usrHospedaje').value = usuarioActual.tipo_hospedaje || 'Colchon';
+        async function cargarPerfil() {
+            document.getElementById('secBusqueda').classList.add('hidden');
+            document.getElementById('secPerfil').classList.remove('hidden');
 
-      // Calcular Pagos
-      const { data: pagos } = await db.from('pagos').select('*').eq('inscrito_id', usuarioActual.id);
-      
-      let totalAprobado = 0;
-      const tbody = document.getElementById('tblHistorialPagos');
-      tbody.innerHTML = '';
+            document.getElementById('usrNombre').value = usuarioActual.nombre_completo;
+            document.getElementById('usrTelefono').value = usuarioActual.telefono || '';
+            document.getElementById('usrCelula').value = usuarioActual.celula || '';
+            document.getElementById('usrTalla').value = usuarioActual.talla_polera || 'S';
+            document.getElementById('usrHospedaje').value = usuarioActual.tipo_hospedaje || 'Colchon';
 
-      (pagos || []).forEach(p => {
-        if (p.estado === 'Aprobado') totalAprobado += Number(p.monto);
-        
-        let colorEstado = p.estado === 'Aprobado' ? 'bg-green-100 text-green-700' : (p.estado === 'Pendiente' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700');
-        
-        tbody.innerHTML += `
+            // Calcular Pagos
+            const { data: pagos } = await db.from('pagos').select('*').eq('inscrito_id', usuarioActual.id);
+
+            let totalAprobado = 0;
+            const tbody = document.getElementById('tblHistorialPagos');
+            tbody.innerHTML = '';
+
+            (pagos || []).forEach(p => {
+                if (p.estado === 'Aprobado') totalAprobado += Number(p.monto);
+
+                let colorEstado = p.estado === 'Aprobado' ? 'bg-green-100 text-green-700' : (p.estado === 'Pendiente' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700');
+
+                tbody.innerHTML += `
           <tr>
             <td class="p-2">${new Date(p.fecha).toLocaleDateString()}</td>
             <td class="p-2 font-bold">Bs ${p.monto}</td>
             <td class="p-2"><a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline">Ver</a></td>
             <td class="p-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${colorEstado}">${p.estado}</span></td>
           </tr>`;
-      });
+            });
 
-      const costoTotal = usuarioActual.tipo_hospedaje === 'Camping' ? 220 : 230;
-      document.getElementById('lblCosto').innerText = `Bs ${costoTotal}`;
-      document.getElementById('lblAbonado').innerText = `Bs ${totalAprobado}`;
-      document.getElementById('lblSaldo').innerText = `Bs ${costoTotal - totalAprobado}`;
+            const costoTotal = usuarioActual.tipo_hospedaje === 'Camping' ? 220 : 230;
+            document.getElementById('lblCosto').innerText = `Bs ${costoTotal}`;
+            document.getElementById('lblAbonado').innerText = `Bs ${totalAprobado}`;
+            document.getElementById('lblSaldo').innerText = `Bs ${costoTotal - totalAprobado}`;
 
-      // Verificar si hay solicitud de edición pendiente
-      const { data: edicion } = await db
-        .from('solicitudes_edicion')
-        .select('*')
-        .eq('inscrito_id', usuarioActual.id)
-        .eq('estado', 'Pendiente')
-        .maybeSingle();
+            // Verificar si hay solicitud de edición pendiente
+            const { data: edicion } = await db
+                .from('solicitudes_edicion')
+                .select('*')
+                .eq('inscrito_id', usuarioActual.id)
+                .eq('estado', 'Pendiente')
+                .maybeSingle();
 
-      if (edicion) {
-        document.getElementById('badgeEdicion').classList.remove('hidden');
-        document.getElementById('btnSolicitarCambio').disabled = true;
-      }
-    }
+            if (edicion) {
+                document.getElementById('badgeEdicion').classList.remove('hidden');
+                document.getElementById('btnSolicitarCambio').disabled = true;
+            }
+        }
 
-    async function solicitarCambioDatos() {
-      const datos = {
-        inscrito_id: usuarioActual.id,
-        telefono: document.getElementById('usrTelefono').value,
-        celula: document.getElementById('usrCelula').value,
-        talla_polera: document.getElementById('usrTalla').value,
-        tipo_hospedaje: document.getElementById('usrHospedaje').value
-      };
+        async function solicitarCambioDatos() {
+            const datos = {
+                inscrito_id: usuarioActual.id,
+                telefono: document.getElementById('usrTelefono').value,
+                celula: document.getElementById('usrCelula').value,
+                talla_polera: document.getElementById('usrTalla').value,
+                tipo_hospedaje: document.getElementById('usrHospedaje').value
+            };
 
-      await db.from('solicitudes_edicion').insert([datos]);
-      alert('Tu solicitud de actualización ha sido enviada para revisión del Administrador.');
-      cargarPerfil();
-    }
+            await db.from('solicitudes_edicion').insert([datos]);
+            alert('Tu solicitud de actualización ha sido enviada para revisión del Administrador.');
+            cargarPerfil();
+        }
 
-    async function subirComprobante() {
-      const monto = document.getElementById('pagoMonto').value;
-      const fileInput = document.getElementById('pagoArchivo');
+        async function subirComprobante() {
+            const monto = document.getElementById('pagoMonto').value;
+            const fileInput = document.getElementById('pagoArchivo');
 
-      if (!monto || fileInput.files.length === 0) return alert('Ingresa el monto y la foto del comprobante.');
+            if (!monto || fileInput.files.length === 0) return alert('Ingresa el monto y la foto del comprobante.');
 
-      const file = fileInput.files[0];
-      const fileName = `${Date.now()}_${file.name}`;
+            const file = fileInput.files[0];
+            const fileName = `${Date.now()}_${file.name}`;
 
-      // Subir imagen a Supabase Storage
-      const { data: uploadData, error: uploadErr } = await db.storage.from('comprobantes').upload(fileName, file);
-      if (uploadErr) return alert('Error al subir comprobante: ' + uploadErr.message);
+            // Subir imagen a Supabase Storage
+            const { data: uploadData, error: uploadErr } = await db.storage.from('comprobantes').upload(fileName, file);
+            if (uploadErr) return alert('Error al subir comprobante: ' + uploadErr.message);
 
-      const { data: urlData } = db.storage.from('comprobantes').getPublicUrl(fileName);
+            const { data: urlData } = db.storage.from('comprobantes').getPublicUrl(fileName);
 
-      // Guardar en tabla pagos
-      await db.from('pagos').insert([{
-        inscrito_id: usuarioActual.id,
-        monto: monto,
-        comprobante_url: urlData.publicUrl,
-        observaciones: document.getElementById('pagoObs').value
-      }]);
+            // Guardar en tabla pagos
+            await db.from('pagos').insert([{
+                inscrito_id: usuarioActual.id,
+                monto: monto,
+                comprobante_url: urlData.publicUrl,
+                observaciones: document.getElementById('pagoObs').value
+            }]);
 
-      alert('Comprobante enviado exitosamente a Tesorería.');
-      cargarPerfil();
-    }
-  </script>
+            alert('Comprobante enviado exitosamente a Tesorería.');
+            cargarPerfil();
+        }
+    </script>
 </body>
+
 </html>
