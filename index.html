@@ -41,8 +41,7 @@
                 <i class="fa-solid fa-id-card"></i>
             </div>
             <h2 class="text-xl font-bold text-gray-900 mb-1">Ingreso de Campamentista</h2>
-            <p class="text-xs text-gray-500 mb-6">Ingresa tu número de C.I. para ver tu estado, abonar cuotas o
-                solicitar cambios.</p>
+            <p class="text-xs text-gray-500 mb-6">Ingresa tu C.I. para ver tu estado, subir tu Carta de Compromiso, abonar o editar tu ficha.</p>
 
             <div class="space-y-3">
                 <input type="text" id="inputCI" placeholder="Tu C.I. (ej. 13489470)"
@@ -58,37 +57,53 @@
         <!-- VISTA DE PERFIL -->
         <div id="secPerfil" class="hidden space-y-6">
 
+            <!-- ALERTA DE CARTA DE COMPROMISO PENDIENTE -->
+            <div id="alertaCarta" class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-xl shadow-sm flex flex-col md:flex-row items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-file-contract text-amber-600 text-2xl"></i>
+                    <div>
+                        <h4 class="font-bold text-amber-900 text-sm">Carta de Compromiso Requerida</h4>
+                        <p class="text-xs text-amber-700">Para completar tu habilitación oficial al campamento debes adjuntar la foto o PDF de tu carta firmada.</p>
+                    </div>
+                </div>
+                <button onclick="document.getElementById('secSubirCarta').scrollIntoView({behavior: 'smooth'})" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs px-4 py-2 rounded-lg transition whitespace-nowrap">
+                    Subir Carta Ahora
+                </button>
+            </div>
+
             <!-- Cards de Resumen Finanzas -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div
-                    class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-semibold text-gray-400 uppercase">Costo Total</p>
-                        <h3 class="text-2xl font-black text-gray-800" id="lblCosto">Bs 0</h3>
+                        <p class="text-[10px] font-semibold text-gray-400 uppercase">Costo Total</p>
+                        <h3 class="text-xl font-black text-gray-800" id="lblCosto">Bs 0</h3>
                     </div>
-                    <div class="p-3 bg-gray-100 text-gray-600 rounded-xl"><i class="fa-solid fa-tag"></i></div>
+                    <div class="p-2.5 bg-gray-100 text-gray-600 rounded-xl"><i class="fa-solid fa-tag"></i></div>
                 </div>
-                <div
-                    class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
+                <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-semibold text-gray-400 uppercase">Abonado Aprobado</p>
-                        <h3 class="text-2xl font-black text-green-600" id="lblAbonado">Bs 0</h3>
+                        <p class="text-[10px] font-semibold text-gray-400 uppercase">Abonado</p>
+                        <h3 class="text-xl font-black text-green-600" id="lblAbonado">Bs 0</h3>
                     </div>
-                    <div class="p-3 bg-green-50 text-green-600 rounded-xl"><i class="fa-solid fa-circle-check"></i>
-                    </div>
+                    <div class="p-2.5 bg-green-50 text-green-600 rounded-xl"><i class="fa-solid fa-circle-check"></i></div>
                 </div>
-                <div
-                    class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
+                <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-semibold text-gray-400 uppercase">Saldo Pendiente</p>
-                        <h3 class="text-2xl font-black text-red-600" id="lblSaldo">Bs 0</h3>
+                        <p class="text-[10px] font-semibold text-gray-400 uppercase">Saldo</p>
+                        <h3 class="text-xl font-black text-red-600" id="lblSaldo">Bs 0</h3>
                     </div>
-                    <div class="p-3 bg-red-50 text-red-600 rounded-xl"><i class="fa-solid fa-clock-rotate-left"></i>
+                    <div class="p-2.5 bg-red-50 text-red-600 rounded-xl"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] font-semibold text-gray-400 uppercase">Equipo Asignado</p>
+                        <h3 class="text-sm font-black text-indigo-600" id="lblEquipo">Sin Asignar</h3>
                     </div>
+                    <div class="p-2.5 bg-indigo-50 text-indigo-600 rounded-xl"><i class="fa-solid fa-shield"></i></div>
                 </div>
             </div>
 
-            <!-- Datos Personales (Modo Lectura por defecto con Botón Editar ✏️) -->
+            <!-- Datos Personales -->
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="font-bold text-gray-800 text-lg flex items-center gap-2">
@@ -142,6 +157,25 @@
                         </select>
                     </div>
                     <div>
+                        <label class="text-xs font-bold text-gray-500">Actividad Favorita para Dinámicas</label>
+                        <select id="usrActividad" disabled
+                            class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
+                            <option value="Fútbol">Fútbol</option>
+                            <option value="Vóley">Vóley</option>
+                            <option value="Memorizar Versículos">Memorizar Versículos</option>
+                            <option value="Canto y Alabanza">Canto y Alabanza</option>
+                            <option value="Coreografía / Baile">Coreografía / Baile</option>
+                            <option value="Teatro / Dramatización">Teatro / Dramatización</option>
+                            <option value="Atletismo / Carreras">Atletismo / Carreras</option>
+                            <option value="Juegos de Mesa">Juegos de Mesa / Conocimiento Bíblico</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500">Habilidad o Talento Especial</label>
+                        <input type="text" id="usrHabilidad" disabled placeholder="Ej. Tocar guitarra, liderazgo..."
+                            class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
+                    </div>
+                    <div>
                         <label class="text-xs font-bold text-gray-500">Contacto de Emergencia</label>
                         <input type="text" id="usrEmergencia" disabled
                             class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
@@ -152,7 +186,7 @@
                             class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
                     </div>
 
-                    <!-- Campos Exclusivos para Menores de Edad -->
+                    <!-- Menores de Edad -->
                     <div id="secMenorEdad"
                         class="hidden md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 bg-amber-50/50 p-4 rounded-xl border border-amber-200">
                         <div class="md:col-span-2 font-bold text-xs text-amber-900 flex items-center gap-1">
@@ -177,6 +211,24 @@
                         </button>
                     </div>
                 </form>
+            </div>
+
+            <!-- SECCIÓN: CARTA DE COMPROMISO FIRMADA -->
+            <div id="secSubirCarta" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <h3 class="font-bold text-gray-800 text-base mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-file-signature text-indigo-600"></i> Carta de Compromiso Firmada
+                </h3>
+                <p class="text-xs text-gray-500 mb-4">Descarga el formato de Carta de Compromiso, imprímela, fírmala y sube una foto clara o archivo PDF.</p>
+
+                <div id="contenedorEstadoCarta" class="space-y-3">
+                    <div class="flex items-center gap-3">
+                        <input type="file" id="cartaArchivo" accept="image/*,.pdf" class="text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                        <button onclick="subirCartaCompromiso()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-lg text-xs transition shadow">
+                            Subir Carta
+                        </button>
+                    </div>
+                    <div id="txtEstadoCarta" class="text-xs font-semibold"></div>
+                </div>
             </div>
 
             <!-- Registrar Pago e Historial -->
@@ -270,13 +322,26 @@
             document.getElementById('usrCelula').value = usuarioActual.celula || '';
             document.getElementById('usrTalla').value = usuarioActual.talla_polera || 'S';
             document.getElementById('usrHospedaje').value = usuarioActual.tipo_hospedaje || 'Colchon';
+            document.getElementById('usrActividad').value = usuarioActual.actividad_favorita || 'Fútbol';
+            document.getElementById('usrHabilidad').value = usuarioActual.habilidad_especial || '';
             document.getElementById('usrEmergencia').value = usuarioActual.contacto_emergencia || '';
             document.getElementById('usrAlergias').value = usuarioActual.alergias_medicina || '';
+
+            document.getElementById('lblEquipo').innerText = usuarioActual.equipo || 'Sin Asignar';
 
             if (usuarioActual.es_menor) {
                 document.getElementById('secMenorEdad').classList.remove('hidden');
                 document.getElementById('usrTutorNombre').value = usuarioActual.tutor_nombre || '';
                 document.getElementById('usrTutorTel').value = usuarioActual.tutor_telefono || '';
+            }
+
+            // Validar Estado de Carta
+            if (usuarioActual.carta_compromiso_url) {
+                document.getElementById('alertaCarta').classList.add('hidden');
+                document.getElementById('txtEstadoCarta').innerHTML = `<span class="text-green-600 flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Carta cargada exitosamente: <a href="${usuarioActual.carta_compromiso_url}" target="_blank" class="underline text-blue-600 font-bold">Ver Documento</a></span>`;
+            } else {
+                document.getElementById('alertaCarta').classList.remove('hidden');
+                document.getElementById('txtEstadoCarta').innerHTML = `<span class="text-red-500 flex items-center gap-1"><i class="fa-solid fa-circle-xmark"></i> Aún no has adjuntado tu Carta de Compromiso firmada.</span>`;
             }
 
             // Calcular Pagos
@@ -310,7 +375,6 @@
             }
         }
 
-        // Activa los inputs sólo tras presionar "Editar Datos" ✏️
         function habilitarEdicion() {
             document.querySelectorAll('.usr-input').forEach(i => {
                 i.disabled = false;
@@ -327,6 +391,8 @@
                 celula: document.getElementById('usrCelula').value,
                 talla_polera: document.getElementById('usrTalla').value,
                 tipo_hospedaje: document.getElementById('usrHospedaje').value,
+                actividad_favorita: document.getElementById('usrActividad').value,
+                habilidad_especial: document.getElementById('usrHabilidad').value,
                 contacto_emergencia: document.getElementById('usrEmergencia').value,
                 alergias_medicina: document.getElementById('usrAlergias').value,
                 tutor_nombre: document.getElementById('usrTutorNombre').value,
@@ -335,6 +401,25 @@
 
             await db.from('solicitudes_edicion').insert([datos]);
             alert('Tu solicitud de actualización ha sido enviada para revisión del Administrador.');
+            cargarPerfil();
+        }
+
+        async function subirCartaCompromiso() {
+            const fileInput = document.getElementById('cartaArchivo');
+            if (fileInput.files.length === 0) return alert('Por favor selecciona la foto o PDF de tu carta.');
+
+            const file = fileInput.files[0];
+            const fileName = `carta_${Date.now()}_${file.name}`;
+
+            const { data: uploadData, error: uploadErr } = await db.storage.from('cartas').upload(fileName, file);
+            if (uploadErr) return alert('Error al subir carta: ' + uploadErr.message);
+
+            const { data: urlData } = db.storage.from('cartas').getPublicUrl(fileName);
+
+            await db.from('inscritos').update({ carta_compromiso_url: urlData.publicUrl }).eq('id', usuarioActual.id);
+            usuarioActual.carta_compromiso_url = urlData.publicUrl;
+
+            alert('Carta de compromiso subida y vinculada correctamente.');
             cargarPerfil();
         }
 
