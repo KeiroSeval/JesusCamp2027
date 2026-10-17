@@ -509,6 +509,7 @@
                         <div>
                             <label class="text-[10px] font-bold text-gray-500 uppercase block">Variable de Agrupación:</label>
                             <select id="repVariableSelect" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold text-indigo-900">
+                                <option value="lista_personas_saldos">📋 Lista Nominal de Personas con Saldos</option>
                                 <option value="equipo">Equipo Asignado</option>
                                 <option value="celula">Célula</option>
                                 <option value="talla_polera">Talla de Polera</option>
@@ -517,7 +518,7 @@
                                 <option value="es_staff">Rol (Staff vs Campamentista)</option>
                                 <option value="tipo_inscripcion">Tipo de Inscripción</option>
                                 <option value="es_menor">Rango de Edad (Menores / Mayores)</option>
-                                <option value="estado_financiero">Estado Financiero (Saldos de Cuotas)</option>
+                                <option value="estado_financiero">Estado Financiero (Resumen por Categoría)</option>
                             </select>
                         </div>
 
@@ -968,7 +969,6 @@
             });
         }
 
-        // CONTROL PESTAÑAS DENTRO DEL MODAL EDITAR CAMPAMENTISTA
         function cambiarPestanaModal(pestana) {
             document.getElementById('tabModalGen').classList.add('hidden');
             document.getElementById('tabModalAsig').classList.add('hidden');
@@ -990,7 +990,6 @@
             }
         }
 
-        // FUNCIONES DE CATEGORÍAS
         function prepararCrearCategoria() {
             document.getElementById('catIdEdit').value = '';
             document.getElementById('catNombre').value = '';
@@ -1079,7 +1078,6 @@
             }
         }
 
-        // FUNCIONES DE INGRESOS (COBROS) EDITABLES
         function prepararCrearCobroDirecto() {
             document.getElementById('pagoAdminIdEdit').value = '';
             document.getElementById('lblTituloPagoForm').innerText = 'Registrar Pago Manual a Campamentista';
@@ -1132,7 +1130,6 @@
             cargarTodoElDashboard();
         }
 
-        // FUNCIONES DE EGRESOS
         function prepararCrearEgreso() {
             document.getElementById('egIdEdit').value = '';
             document.getElementById('egConcepto').value = '';
@@ -1176,7 +1173,6 @@
             cargarTodoElDashboard();
         }
 
-        // ADMINISTRADORES Y ROLES
         async function guardarAdmin(e) {
             e.preventDefault();
             const nombre = document.getElementById('adminNewNombre').value.trim();
@@ -1419,7 +1415,6 @@
             cargarAuditoriaLogs();
         }
 
-        // RENDERIZADO DINÁMICO DE TABLA DE INSCRITOS SEGÚN COLUMNAS SELECCIONADAS Y ORDEN
         function renderizarTablaInscritos() {
             const showTel = document.getElementById('col_tel').checked;
             const showCelula = document.getElementById('col_celula').checked;
@@ -1440,7 +1435,6 @@
                 return valA.toString().localeCompare(valB.toString());
             });
 
-            // Renderizar Thead
             const thead = document.getElementById('theadInscritos');
             thead.innerHTML = `
             <tr>
@@ -1459,7 +1453,6 @@
                 <th class="p-2 text-center">Acciones</th>
             </tr>`;
 
-            // Renderizar Tbody
             const tbodyIns = document.getElementById('tblTodosInscritos');
             tbodyIns.innerHTML = '';
 
@@ -1494,7 +1487,6 @@
             });
         }
 
-        // REPORTES AVANZADOS GRANULARES CON PLANTILLAS PERSONALIZADAS
         function guardarPlantillaReporte() {
             const nombre = document.getElementById('txtNombrePlantilla').value.trim();
             if (!nombre) return alert('Ingresa un nombre para identificar la plantilla.');
@@ -1560,6 +1552,103 @@
             const { data: inscritos } = await db.from('inscritos').select('*, tipos_inscripcion(*)');
             const { data: pagos } = await db.from('pagos').select('*').eq('estado', 'Aprobado');
 
+            const divTabla = document.getElementById('contenedorTablaEstadisticas');
+
+            // MODO ESPECIAL: LISTA NOMINAL DE PERSONAS CON SALDOS PENDIENTES
+            if (variable === 'lista_personas_saldos') {
+                let listaSaldos = [];
+                let totalCostoGlobal = 0;
+                let totalAbonadoGlobal = 0;
+                let totalSaldoGlobal = 0;
+
+                (inscritos || []).forEach(i => {
+                    let costo = i.tipos_inscripcion?.es_manual ? (i.precio_personalizado || 0) : (i.tipos_inscripcion?.precio || 140);
+                    let misPagos = pagos ? pagos.filter(p => p.inscrito_id === i.id) : [];
+                    let abonado = misPagos.reduce((sum, p) => sum + Number(p.monto), 0);
+                    let saldo = Math.max(0, costo - abonado);
+
+                    totalCostoGlobal += costo;
+                    totalAbonadoGlobal += abonado;
+                    totalSaldoGlobal += saldo;
+
+                    listaSaldos.push({
+                        nombre: i.nombre_completo,
+                        ci: i.ci,
+                        costo,
+                        abonado,
+                        saldo
+                    });
+                });
+
+                listaSaldos.sort((a, b) => b.saldo - a.saldo);
+
+                let html = `
+                <div class="mb-3 p-3 bg-indigo-50 rounded-xl border border-indigo-200">
+                    <p class="text-[10px] uppercase font-bold text-indigo-700 mb-1">Totales de Estado Financiero por Persona</p>
+                    <div class="grid grid-cols-3 gap-2 text-center">
+                        <div class="bg-white p-2 rounded-lg shadow-sm border">
+                            <span class="block text-[10px] text-gray-400 font-semibold uppercase">Costo Total</span>
+                            <span class="text-sm font-black text-indigo-900">Bs ${totalCostoGlobal}</span>
+                        </div>
+                        <div class="bg-white p-2 rounded-lg shadow-sm border">
+                            <span class="block text-[10px] text-gray-400 font-semibold uppercase">Total Cobrado</span>
+                            <span class="text-sm font-black text-green-600">Bs ${totalAbonadoGlobal}</span>
+                        </div>
+                        <div class="bg-white p-2 rounded-lg shadow-sm border">
+                            <span class="block text-[10px] text-gray-400 font-semibold uppercase">Saldo Pendiente</span>
+                            <span class="text-sm font-black text-red-600">Bs ${totalSaldoGlobal}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="w-full text-left border-collapse my-2">
+                    <thead class="bg-gray-200 font-bold">
+                        <tr>
+                            <th class="p-2 border">C.I.</th>
+                            <th class="p-2 border">Nombre Completo</th>
+                            <th class="p-2 border">Costo (Bs)</th>
+                            <th class="p-2 border">Abonado (Bs)</th>
+                            <th class="p-2 border">Saldo Deuda (Bs)</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+                listaSaldos.forEach(item => {
+                    let colorSaldo = item.saldo > 0 ? 'text-red-600 font-bold' : 'text-green-600 font-semibold';
+                    html += `<tr>
+                        <td class="p-2 border text-gray-600">${item.ci}</td>
+                        <td class="p-2 border font-bold text-gray-800">${item.nombre}</td>
+                        <td class="p-2 border font-semibold">Bs ${item.costo}</td>
+                        <td class="p-2 border text-green-600 font-bold">Bs ${item.abonado}</td>
+                        <td class="p-2 border ${colorSaldo}">Bs ${item.saldo}</td>
+                    </tr>`;
+                });
+                html += `</tbody></table>`;
+                divTabla.innerHTML = html;
+
+                // Gráfico para Lista de Saldos (Compara Al Día vs Pendiente)
+                const ctx = document.getElementById('canvasGraficoReporte').getContext('2d');
+                if (instanciaGrafico) instanciaGrafico.destroy();
+
+                let alDia = listaSaldos.filter(x => x.saldo === 0).length;
+                let pendientes = listaSaldos.filter(x => x.saldo > 0).length;
+
+                instanciaGrafico = new Chart(ctx, {
+                    type: tipoGrafico,
+                    data: {
+                        labels: ['Al Día (Sin Deuda)', 'Con Saldo Pendiente'],
+                        datasets: [{
+                            data: [alDia, pendientes],
+                            backgroundColor: ['#10b981', '#ef4444']
+                        }]
+                    },
+                    options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+                });
+
+                return;
+            }
+
+            // MODOS DE AGRUPACIÓN ESTÁNDAR
             let conteo = {};
             let montos = {};
             let saldos = {};
@@ -1609,8 +1698,6 @@
 
             let promedioGlobal = totalPersonasGlobal > 0 ? (totalMontoGlobal / totalPersonasGlobal).toFixed(2) : 0;
 
-            // Renderizar Tabla con Totales Arriba
-            const divTabla = document.getElementById('contenedorTablaEstadisticas');
             let html = `
             <div class="mb-3 p-3 bg-indigo-50 rounded-xl border border-indigo-200">
                 <p class="text-[10px] uppercase font-bold text-indigo-700 mb-1">Totales Globales de la Categoría</p>
@@ -1663,7 +1750,6 @@
             html += `</tbody></table>`;
             divTabla.innerHTML = html;
 
-            // Renderizar Gráfico
             const ctx = document.getElementById('canvasGraficoReporte').getContext('2d');
             if (instanciaGrafico) instanciaGrafico.destroy();
 
