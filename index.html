@@ -97,7 +97,7 @@
                 </div>
             </div>
 
-            <!-- NAVEGACIÓN DE PESTAÑAS DEL PERFIL -->
+            <!-- NAVEGACIÓN PESTAÑAS PERFIL -->
             <div class="flex flex-wrap gap-2 border-b border-gray-200 pb-2">
                 <button id="btnTabCarta" onclick="cambiarPestanaPerfil('carta')"
                     class="tab-usr-btn bg-blue-600 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition shadow">
@@ -117,7 +117,7 @@
                 </button>
             </div>
 
-            <!-- SECCIÓN 1: CARTA DE COMPROMISO -->
+            <!-- CARTA DE COMPROMISO -->
             <div id="tabUsrCarta" class="tab-usr-content space-y-4">
                 <div id="alertaCartaContenedor" class="rounded-xl p-4 border shadow-sm">
                     <div class="flex flex-col md:flex-row items-center justify-between gap-3">
@@ -148,7 +148,7 @@
                 </div>
             </div>
 
-            <!-- SECCIÓN 2: DATOS PERSONALES -->
+            <!-- DATOS PERSONALES -->
             <div id="tabUsrDatos" class="tab-usr-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
                 <div class="flex justify-between items-center mb-2">
                     <h3 class="font-bold text-gray-800 text-lg flex items-center gap-2">
@@ -245,7 +245,6 @@
                         </div>
                     </div>
 
-                    <!-- BOTÓN CORREGIDO CON TEXTO AMARILLO SOBRE FONDO OSCURO -->
                     <div id="secBotonGuardar" class="hidden md:col-span-2 pt-2">
                         <button type="button" id="btnSolicitarCambio" onclick="solicitarCambioDatos()"
                             class="w-full bg-gray-900 hover:bg-black text-amber-400 font-black text-sm px-5 py-3 rounded-xl transition shadow-lg border border-amber-400 flex items-center justify-center gap-2">
@@ -255,20 +254,22 @@
                 </form>
             </div>
 
-            <!-- SECCIÓN 3: SUBIR COMPROBANTE -->
+            <!-- SUBIR COMPROBANTE CON IMAGEN OBLIGATORIA -->
             <div id="tabUsrPago" class="tab-usr-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
                     <i class="fa-solid fa-cloud-arrow-up text-green-600"></i> Subir Comprobante de Pago
                 </h3>
                 <div class="space-y-4 max-w-lg">
                     <div>
-                        <label class="text-xs font-bold text-gray-500">Monto del Abono (Bs)</label>
-                        <input type="number" id="pagoMonto" placeholder="Ej. 50, 100"
+                        <label class="text-xs font-bold text-gray-500">Monto del Abono (Bs) *</label>
+                        <input type="number" id="pagoMonto" required placeholder="Ej. 50, 100"
                             class="w-full mt-1 p-3 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-green-600 font-bold">
                     </div>
                     <div>
-                        <label class="text-xs font-bold text-gray-500">Foto o Recibo de Transferencia</label>
-                        <input type="file" id="pagoArchivo" accept="image/*,.pdf"
+                        <label class="text-xs font-bold text-gray-700 flex items-center gap-1">
+                            Foto / Recibo del Comprobante (Obligatorio) *
+                        </label>
+                        <input type="file" id="pagoArchivo" accept="image/*,.pdf" required
                             class="w-full mt-1 text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
                     </div>
                     <div>
@@ -277,13 +278,13 @@
                             class="w-full mt-1 p-3 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-green-600">
                     </div>
                     <button onclick="subirComprobante()"
-                        class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl text-sm transition shadow-lg">
-                        Enviar Pago a Tesorería
+                        class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl text-sm transition shadow-lg flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-upload"></i> Enviar Pago a Tesorería
                     </button>
                 </div>
             </div>
 
-            <!-- SECCIÓN 4: HISTORIAL DE CUOTAS -->
+            <!-- HISTORIAL DE CUOTAS -->
             <div id="tabUsrHistorial" class="tab-usr-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
                     <i class="fa-solid fa-receipt text-gray-600"></i> Historial de Cuotas
@@ -418,7 +419,6 @@
                 document.getElementById('usrTutorTel').value = usuarioActual.tutor_telefono || '';
             }
 
-            // Validar Carta
             const contAlerta = document.getElementById('alertaCartaContenedor');
             const iconoAlerta = document.getElementById('iconoAlertaCarta');
             const tituloAlerta = document.getElementById('tituloAlertaCarta');
@@ -463,7 +463,6 @@
                 txtEstado.innerHTML = `<span class="text-red-500 flex items-center gap-1"><i class="fa-solid fa-circle-xmark"></i> Carta no adjuntada.</span>`;
             }
 
-            // Pagos
             const { data: pagos } = await db.from('pagos').select('*').eq('inscrito_id', usuarioActual.id);
 
             let totalAprobado = 0;
@@ -477,7 +476,7 @@
           <tr>
             <td class="p-2">${new Date(p.fecha).toLocaleDateString()}</td>
             <td class="p-2 font-bold">Bs ${p.monto}</td>
-            <td class="p-2"><a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline">Ver</a></td>
+            <td class="p-2"><a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline">Ver Foto</a></td>
             <td class="p-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${colorEstado}">${p.estado}</span></td>
           </tr>`;
             });
@@ -567,7 +566,10 @@
         async function subirComprobante() {
             const monto = document.getElementById('pagoMonto').value;
             const fileInput = document.getElementById('pagoArchivo');
-            if (!monto || fileInput.files.length === 0) return alert('Ingresa el monto y la foto del comprobante.');
+
+            if (!monto || fileInput.files.length === 0) {
+                return alert('⚠️ Por favor ingresa el monto y adjunta OBLIGATORIAMENTE la foto o recibo del comprobante.');
+            }
 
             const file = fileInput.files[0];
             const fileName = `${Date.now()}_${file.name}`;
@@ -584,7 +586,7 @@
                 observaciones: document.getElementById('pagoObs').value
             }]);
 
-            alert('Comprobante enviado a Tesorería.');
+            alert('Comprobante enviado exitosamente a Tesorería para verificación.');
             cargarPerfil();
         }
     </script>
