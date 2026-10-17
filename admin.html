@@ -125,41 +125,64 @@
             </button>
         </div>
 
-        <!-- PESTAÑA 1: PENDIENTES -->
-        <div id="tabSolicitudes" class="tab-content grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-receipt text-amber-500"></i> Comprobantes Pendientes
-                </h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-gray-600">
-                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                            <tr>
-                                <th class="p-2">Inscrito</th>
-                                <th class="p-2">Monto</th>
-                                <th class="p-2">Recibo</th>
-                                <th class="p-2">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tblPagosPendientes" class="divide-y divide-gray-100"></tbody>
-                    </table>
+        <!-- PESTAÑA 1: PENDIENTES (INCLUYE REVISIÓN DE CARTAS) -->
+        <div id="tabSolicitudes" class="tab-content space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                    <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-receipt text-amber-500"></i> Comprobantes de Pago Pendientes
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-gray-600">
+                            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                                <tr>
+                                    <th class="p-2">Inscrito</th>
+                                    <th class="p-2">Monto</th>
+                                    <th class="p-2">Recibo</th>
+                                    <th class="p-2">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblPagosPendientes" class="divide-y divide-gray-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                    <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-user-pen text-blue-500"></i> Cambios de Datos Pendientes
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-gray-600">
+                            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                                <tr>
+                                    <th class="p-2">Inscrito</th>
+                                    <th class="p-2">Nuevos Datos</th>
+                                    <th class="p-2">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblEdicionesPendientes" class="divide-y divide-gray-100"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
+            <!-- TABLA DE REVISIÓN DE CARTAS DE COMPROMISO -->
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-user-pen text-blue-500"></i> Cambios Pendientes
+                    <i class="fa-solid fa-file-signature text-indigo-600"></i> Cartas de Compromiso Pendientes de Revisión
                 </h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-gray-600">
                         <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
                             <tr>
-                                <th class="p-2">Inscrito</th>
-                                <th class="p-2">Nuevos Datos</th>
-                                <th class="p-2">Acción</th>
+                                <th class="p-2">C.I.</th>
+                                <th class="p-2">Campamentista</th>
+                                <th class="p-2">Célula</th>
+                                <th class="p-2">Documento Adjunto</th>
+                                <th class="p-2 text-center">Acciones de Aprobación</th>
                             </tr>
                         </thead>
-                        <tbody id="tblEdicionesPendientes" class="divide-y divide-gray-100"></tbody>
+                        <tbody id="tblCartasPendientes" class="divide-y divide-gray-100"></tbody>
                     </table>
                 </div>
             </div>
@@ -168,80 +191,87 @@
         <!-- PESTAÑA 2: INSCRITOS Y DIVISIÓN DE EQUIPOS -->
         <div id="tabInscritos" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-user-plus text-green-600"></i> Inscribir Campamentista (Equipos & Talentos)
-                </h3>
-                <form onsubmit="crearNuevoCampamentista(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <input type="text" id="newCi" placeholder="C.I. (Obligatorio)" required
-                        class="p-2.5 border rounded-xl text-xs outline-none">
-                    <input type="text" id="newNombre" placeholder="Nombre Completo" required
-                        class="p-2.5 border rounded-xl text-xs outline-none">
-                    <input type="text" id="newTel" placeholder="Teléfono / WhatsApp"
-                        class="p-2.5 border rounded-xl text-xs outline-none">
-                    <input type="text" id="newCelula" placeholder="Célula"
-                        class="p-2.5 border rounded-xl text-xs outline-none">
-                    <select id="newTalla" class="p-2.5 border rounded-xl text-xs outline-none">
-                        <option value="XS">Talla XS</option>
-                        <option value="S">Talla S</option>
-                        <option value="M" selected>Talla M</option>
-                        <option value="L">Talla L</option>
-                        <option value="XL">Talla XL</option>
-                    </select>
-                    <select id="newHospedaje" class="p-2.5 border rounded-xl text-xs outline-none">
-                        <option value="Colchon">Colchón (Bs 230)</option>
-                        <option value="Camping">Camping (Bs 220)</option>
-                    </select>
-                    <select id="newEquipo" class="p-2.5 border rounded-xl text-xs outline-none bg-indigo-50 font-bold text-indigo-900">
-                        <option value="Sin Asignar">Equipo: Sin Asignar</option>
-                        <option value="Búfalos">Equipo: Búfalos 🦬</option>
-                        <option value="Águilas">Equipo: Águilas 🦅</option>
-                        <option value="Leones">Equipo: Leones 🦁</option>
-                        <option value="Ciervos">Equipo: Ciervos 🦌</option>
-                    </select>
-                    <select id="newActividad" class="p-2.5 border rounded-xl text-xs outline-none">
-                        <option value="Fútbol">Actividad Favorita: Fútbol</option>
-                        <option value="Vóley">Actividad Favorita: Vóley</option>
-                        <option value="Memorizar Versículos">Actividad Favorita: Memorizar Versículos</option>
-                        <option value="Canto y Alabanza">Actividad Favorita: Canto y Alabanza</option>
-                        <option value="Coreografía / Baile">Actividad Favorita: Coreografía / Baile</option>
-                        <option value="Teatro / Dramatización">Actividad Favorita: Teatro / Dramatización</option>
-                        <option value="Atletismo / Carreras">Actividad Favorita: Atletismo / Carreras</option>
-                        <option value="Juegos de Mesa">Actividad Favorita: Juegos de Mesa</option>
-                    </select>
-                    <input type="text" id="newHabilidad" placeholder="Habilidad o Talento Especial"
-                        class="p-2.5 border rounded-xl text-xs outline-none">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
+                        <i class="fa-solid fa-users text-green-600"></i> Directorio de Campamentistas
+                    </h3>
+                    <button id="btnToggleNuevoCampamentista" onclick="toggleFormulario('formContenedorCampamentista')"
+                        class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
+                        <i class="fa-solid fa-plus"></i> Inscribir Campamentista
+                    </button>
+                </div>
 
-                    <div class="md:col-span-3 flex items-center gap-4 bg-gray-50 p-3 rounded-xl border border-gray-200">
-                        <label class="text-xs font-bold text-gray-700 flex items-center gap-2">
-                            <input type="checkbox" id="newEsMenor" onchange="toggleFormMenor(this.checked)"
-                                class="rounded text-blue-600">
-                            ¿Es Menor de Edad / Niño?
-                        </label>
-                    </div>
-
-                    <div id="newSecTutor"
-                        class="hidden md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-4 bg-amber-50/50 p-3 rounded-xl border border-amber-200">
-                        <input type="text" id="newTutorNombre" placeholder="Nombre de Padre / Madre / Tutor"
+                <!-- FORMULARIO OCULTO POR DEFECTO -->
+                <div id="formContenedorCampamentista" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
+                    <h4 class="font-bold text-gray-700 text-xs uppercase mb-3 border-b pb-1">Nuevo Registro de Campamentista</h4>
+                    <form onsubmit="crearNuevoCampamentista(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <input type="text" id="newCi" placeholder="C.I. (Obligatorio)" required
                             class="p-2.5 border rounded-xl text-xs outline-none bg-white">
-                        <input type="text" id="newTutorTel" placeholder="Teléfono del Tutor"
+                        <input type="text" id="newNombre" placeholder="Nombre Completo" required
                             class="p-2.5 border rounded-xl text-xs outline-none bg-white">
-                    </div>
+                        <input type="text" id="newTel" placeholder="Teléfono / WhatsApp"
+                            class="p-2.5 border rounded-xl text-xs outline-none bg-white">
+                        <input type="text" id="newCelula" placeholder="Célula"
+                            class="p-2.5 border rounded-xl text-xs outline-none bg-white">
+                        <select id="newTalla" class="p-2.5 border rounded-xl text-xs outline-none bg-white">
+                            <option value="XS">Talla XS</option>
+                            <option value="S">Talla S</option>
+                            <option value="M" selected>Talla M</option>
+                            <option value="L">Talla L</option>
+                            <option value="XL">Talla XL</option>
+                        </select>
+                        <select id="newHospedaje" class="p-2.5 border rounded-xl text-xs outline-none bg-white">
+                            <option value="Colchon">Colchón (Bs 230)</option>
+                            <option value="Camping">Camping (Bs 220)</option>
+                        </select>
+                        <select id="newEquipo" class="p-2.5 border rounded-xl text-xs outline-none bg-indigo-50 font-bold text-indigo-900">
+                            <option value="Sin Asignar">Equipo: Sin Asignar</option>
+                            <option value="Búfalos">Equipo: Búfalos 🦬</option>
+                            <option value="Águilas">Equipo: Águilas 🦅</option>
+                            <option value="Leones">Equipo: Leones 🦁</option>
+                            <option value="Ciervos">Equipo: Ciervos 🦌</option>
+                        </select>
+                        <select id="newActividad" class="p-2.5 border rounded-xl text-xs outline-none bg-white">
+                            <option value="Fútbol">Actividad Favorita: Fútbol</option>
+                            <option value="Vóley">Actividad Favorita: Vóley</option>
+                            <option value="Memorizar Versículos">Actividad Favorita: Memorizar Versículos</option>
+                            <option value="Canto y Alabanza">Actividad Favorita: Canto y Alabanza</option>
+                            <option value="Coreografía / Baile">Actividad Favorita: Coreografía / Baile</option>
+                            <option value="Teatro / Dramatización">Actividad Favorita: Teatro / Dramatización</option>
+                            <option value="Atletismo / Carreras">Actividad Favorita: Atletismo / Carreras</option>
+                            <option value="Juegos de Mesa">Actividad Favorita: Juegos de Mesa</option>
+                        </select>
+                        <input type="text" id="newHabilidad" placeholder="Habilidad o Talento Especial"
+                            class="p-2.5 border rounded-xl text-xs outline-none bg-white">
 
-                    <input type="text" id="newEmergencia" placeholder="Contacto de Emergencia"
-                        class="p-2.5 border rounded-xl text-xs outline-none">
-                    <input type="text" id="newAlergias" placeholder="Alergias o Medicamentos"
-                        class="p-2.5 border rounded-xl text-xs outline-none md:col-span-2">
+                        <div class="md:col-span-3 flex items-center gap-4 bg-white p-3 rounded-xl border border-gray-200">
+                            <label class="text-xs font-bold text-gray-700 flex items-center gap-2">
+                                <input type="checkbox" id="newEsMenor" onchange="toggleFormMenor(this.checked)"
+                                    class="rounded text-blue-600">
+                                ¿Es Menor de Edad / Niño?
+                            </label>
+                        </div>
 
-                    <div class="md:col-span-3">
-                        <button type="submit"
-                            class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-6 py-2.5 rounded-xl transition shadow">+
-                            Inscribir Campamentista</button>
-                    </div>
-                </form>
-            </div>
+                        <div id="newSecTutor"
+                            class="hidden md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-4 bg-amber-50/50 p-3 rounded-xl border border-amber-200">
+                            <input type="text" id="newTutorNombre" placeholder="Nombre de Padre / Madre / Tutor"
+                                class="p-2.5 border rounded-xl text-xs outline-none bg-white">
+                            <input type="text" id="newTutorTel" placeholder="Teléfono del Tutor"
+                                class="p-2.5 border rounded-xl text-xs outline-none bg-white">
+                        </div>
 
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4">Directorio de Campamentistas</h3>
+                        <input type="text" id="newEmergencia" placeholder="Contacto de Emergencia"
+                            class="p-2.5 border rounded-xl text-xs outline-none bg-white">
+                        <input type="text" id="newAlergias" placeholder="Alergias o Medicamentos"
+                            class="p-2.5 border rounded-xl text-xs outline-none bg-white md:col-span-2">
+
+                        <div class="md:col-span-3 flex justify-end gap-2">
+                            <button type="button" onclick="toggleFormulario('formContenedorCampamentista')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-6 py-2 rounded-xl transition shadow">+ Guardar Registro</button>
+                        </div>
+                    </form>
+                </div>
+
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-gray-600">
                         <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
@@ -251,7 +281,7 @@
                                 <th class="p-2">Célula</th>
                                 <th class="p-2">Equipo</th>
                                 <th class="p-2">Actividad</th>
-                                <th class="p-2">Carta</th>
+                                <th class="p-2">Estado Carta</th>
                                 <th class="p-2 text-center">Acciones</th>
                             </tr>
                         </thead>
@@ -284,26 +314,35 @@
         <!-- PESTAÑA 4: EGRESOS -->
         <div id="tabEgresos" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4">Registrar Nuevo Egreso</h3>
-                <form onsubmit="registrarNuevoEgreso(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <input type="text" id="egConcepto" placeholder="Concepto de Gasto" required
-                        class="p-2.5 border rounded-xl text-xs outline-none">
-                    <select id="egCategoria" class="p-2.5 border rounded-xl text-xs outline-none">
-                        <option value="Alimentación">Alimentación</option>
-                        <option value="Logística">Logística</option>
-                        <option value="Sonido">Sonido / Iluminación</option>
-                        <option value="Transporte">Transporte</option>
-                        <option value="Otros">Otros Gastos</option>
-                    </select>
-                    <input type="number" step="0.01" id="egMonto" placeholder="Monto (Bs)" required
-                        class="p-2.5 border rounded-xl text-xs outline-none">
-                    <button type="submit"
-                        class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs py-2.5 rounded-xl col-span-3 transition shadow">-
-                        Registrar Gasto</button>
-                </form>
-            </div>
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-gray-800 text-base">Registro de Egresos</h3>
+                    <button onclick="toggleFormulario('formContenedorEgreso')"
+                        class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
+                        <i class="fa-solid fa-plus"></i> Registrar Nuevo Egreso
+                    </button>
+                </div>
 
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <!-- FORMULARIO OCULTO POR DEFECTO -->
+                <div id="formContenedorEgreso" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
+                    <form onsubmit="registrarNuevoEgreso(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <input type="text" id="egConcepto" placeholder="Concepto de Gasto" required
+                            class="p-2.5 border rounded-xl text-xs outline-none bg-white">
+                        <select id="egCategoria" class="p-2.5 border rounded-xl text-xs outline-none bg-white">
+                            <option value="Alimentación">Alimentación</option>
+                            <option value="Logística">Logística</option>
+                            <option value="Sonido">Sonido / Iluminación</option>
+                            <option value="Transporte">Transporte</option>
+                            <option value="Otros">Otros Gastos</option>
+                        </select>
+                        <input type="number" step="0.01" id="egMonto" placeholder="Monto (Bs)" required
+                            class="p-2.5 border rounded-xl text-xs outline-none bg-white">
+                        <div class="col-span-3 flex justify-end gap-2">
+                            <button type="button" onclick="toggleFormulario('formContenedorEgreso')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-6 py-2 rounded-xl transition shadow">- Guardar Egreso</button>
+                        </div>
+                    </form>
+                </div>
+
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-gray-600">
                         <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
@@ -325,89 +364,99 @@
         <!-- PESTAÑA 5: REPORTES CON GRUPOS Y SUBGRUPOS DINÁMICOS -->
         <div id="tabReportes" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
-                <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
-                    <i class="fa-solid fa-sitemap text-blue-600"></i> Diseñador de Reportes Agrupados
-                </h3>
+                <div class="flex justify-between items-center border-b pb-3">
+                    <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
+                        <i class="fa-solid fa-sitemap text-blue-600"></i> Diseñador de Reportes Agrupados
+                    </h3>
+                    <button onclick="toggleFormulario('formContenedorReporte')"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
+                        <i class="fa-solid fa-sliders"></i> Diseñar Nuevo Reporte
+                    </button>
+                </div>
 
-                <form onsubmit="guardarNuevoReporteAvanzado(event)" class="space-y-4">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <input type="text" id="repNombre"
-                            placeholder="Nombre del Reporte (Ej: Saldos por Célula y Equipo)" required
-                            class="p-2.5 border rounded-xl text-xs outline-none">
-                        
+                <!-- FORMULARIO OCULTO POR DEFECTO -->
+                <div id="formContenedorReporte" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-4">
+                    <form onsubmit="guardarNuevoReporteAvanzado(event)" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <input type="text" id="repNombre"
+                                placeholder="Nombre del Reporte (Ej: Saldos por Célula y Equipo)" required
+                                class="p-2.5 border rounded-xl text-xs outline-none bg-white">
+                            
+                            <div>
+                                <label class="text-[10px] font-bold text-gray-500 uppercase block">Grupo Principal:</label>
+                                <select id="repGrupoPrincipal" class="p-2 border rounded-xl text-xs w-full outline-none bg-white">
+                                    <option value="ninguno">Sin Agrupación (Lista Plana)</option>
+                                    <option value="celula" selected>Agrupar por Célula</option>
+                                    <option value="equipo">Agrupar por Equipo</option>
+                                    <option value="tipo_hospedaje">Agrupar por Hospedaje</option>
+                                    <option value="talla_polera">Agrupar por Talla de Polera</option>
+                                    <option value="actividad_favorita">Agrupar por Actividad Favorita</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="text-[10px] font-bold text-gray-500 uppercase block">Subgrupo Secundario:</label>
+                                <select id="repGrupoSecundario" class="p-2 border rounded-xl text-xs w-full outline-none bg-white">
+                                    <option value="ninguno" selected>Sin Subgrupo</option>
+                                    <option value="equipo">Subagrupar por Equipo</option>
+                                    <option value="celula">Subagrupar por Célula</option>
+                                    <option value="estado_saldo">Subagrupar por Estado de Saldo (Deudores / Pagados)</option>
+                                    <option value="tipo_hospedaje">Subagrupar por Hospedaje</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div>
-                            <label class="text-[10px] font-bold text-gray-500 uppercase block">Grupo Principal:</label>
-                            <select id="repGrupoPrincipal" class="p-2 border rounded-xl text-xs w-full outline-none">
-                                <option value="ninguno">Sin Agrupación (Lista Plana)</option>
-                                <option value="celula" selected>Agrupar por Célula</option>
-                                <option value="equipo">Agrupar por Equipo</option>
-                                <option value="tipo_hospedaje">Agrupar por Hospedaje</option>
-                                <option value="talla_polera">Agrupar por Talla de Polera</option>
-                                <option value="actividad_favorita">Agrupar por Actividad Favorita</option>
-                            </select>
+                            <label class="text-xs font-bold text-gray-600 block mb-2">Columnas Visibles:</label>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 bg-white p-3 rounded-xl border border-gray-200 text-xs">
+                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_ci" checked> C.I.</label>
+                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_nombre" checked> Nombre</label>
+                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_tel" checked> Teléfono</label>
+                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_celula" checked> Célula</label>
+                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_equipo" checked> Equipo</label>
+                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_actividad" checked> Actividad</label>
+                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_monto_costo" checked> Costo Total</label>
+                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_monto_abonado" checked> Abonado</label>
+                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_monto_saldo" checked> Saldo</label>
+                            </div>
                         </div>
 
                         <div>
-                            <label class="text-[10px] font-bold text-gray-500 uppercase block">Subgrupo Secundario:</label>
-                            <select id="repGrupoSecundario" class="p-2 border rounded-xl text-xs w-full outline-none">
-                                <option value="ninguno" selected>Sin Subgrupo</option>
-                                <option value="equipo">Subagrupar por Equipo</option>
-                                <option value="celula">Subagrupar por Célula</option>
-                                <option value="estado_saldo">Subagrupar por Estado de Saldo (Deudores / Pagados)</option>
-                                <option value="tipo_hospedaje">Subagrupar por Hospedaje</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="text-xs font-bold text-gray-600 block mb-2">Columnas Visibles:</label>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 bg-gray-50 p-3 rounded-xl border border-gray-200 text-xs">
-                            <label class="flex items-center gap-1.5"><input type="checkbox" id="col_ci" checked> C.I.</label>
-                            <label class="flex items-center gap-1.5"><input type="checkbox" id="col_nombre" checked> Nombre</label>
-                            <label class="flex items-center gap-1.5"><input type="checkbox" id="col_tel" checked> Teléfono</label>
-                            <label class="flex items-center gap-1.5"><input type="checkbox" id="col_celula" checked> Célula</label>
-                            <label class="flex items-center gap-1.5"><input type="checkbox" id="col_equipo" checked> Equipo</label>
-                            <label class="flex items-center gap-1.5"><input type="checkbox" id="col_actividad" checked> Actividad</label>
-                            <label class="flex items-center gap-1.5"><input type="checkbox" id="col_monto_costo" checked> Costo Total</label>
-                            <label class="flex items-center gap-1.5"><input type="checkbox" id="col_monto_abonado" checked> Abonado</label>
-                            <label class="flex items-center gap-1.5"><input type="checkbox" id="col_monto_saldo" checked> Saldo</label>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="text-xs font-bold text-gray-600 block mb-2">Cálculo de Totales Encabezado (Suma / Promedio / Ninguno):</label>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-blue-50/50 p-3 rounded-xl border border-blue-200 text-xs">
-                            <div>
-                                <span class="font-bold block mb-1">Costo Total:</span>
-                                <select id="agg_costo" class="p-1.5 border rounded-lg text-xs w-full bg-white">
-                                    <option value="ninguno">Ninguno</option>
-                                    <option value="suma" selected>Suma Total</option>
-                                    <option value="promedio">Promedio</option>
-                                </select>
-                            </div>
-                            <div>
-                                <span class="font-bold block mb-1">Abonado:</span>
-                                <select id="agg_abonado" class="p-1.5 border rounded-lg text-xs w-full bg-white">
-                                    <option value="ninguno">Ninguno</option>
-                                    <option value="suma" selected>Suma Total</option>
-                                    <option value="promedio">Promedio</option>
-                                </select>
-                            </div>
-                            <div>
-                                <span class="font-bold block mb-1">Saldo Pendiente:</span>
-                                <select id="agg_saldo" class="p-1.5 border rounded-lg text-xs w-full bg-white">
-                                    <option value="ninguno">Ninguno</option>
-                                    <option value="suma" selected>Suma Total</option>
-                                    <option value="promedio">Promedio</option>
-                                </select>
+                            <label class="text-xs font-bold text-gray-600 block mb-2">Cálculo de Totales Encabezado (Suma / Promedio / Ninguno):</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-blue-50/50 p-3 rounded-xl border border-blue-200 text-xs">
+                                <div>
+                                    <span class="font-bold block mb-1">Costo Total:</span>
+                                    <select id="agg_costo" class="p-1.5 border rounded-lg text-xs w-full bg-white">
+                                        <option value="ninguno">Ninguno</option>
+                                        <option value="suma" selected>Suma Total</option>
+                                        <option value="promedio">Promedio</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <span class="font-bold block mb-1">Abonado:</span>
+                                    <select id="agg_abonado" class="p-1.5 border rounded-lg text-xs w-full bg-white">
+                                        <option value="ninguno">Ninguno</option>
+                                        <option value="suma" selected>Suma Total</option>
+                                        <option value="promedio">Promedio</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <span class="font-bold block mb-1">Saldo Pendiente:</span>
+                                    <select id="agg_saldo" class="p-1.5 border rounded-lg text-xs w-full bg-white">
+                                        <option value="ninguno">Ninguno</option>
+                                        <option value="suma" selected>Suma Total</option>
+                                        <option value="promedio">Promedio</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <button type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-6 py-2.5 rounded-xl transition shadow">+
-                        Guardar y Generar Reporte</button>
-                </form>
+                        <div class="flex justify-end gap-2">
+                            <button type="button" onclick="toggleFormulario('formContenedorReporte')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-6 py-2 rounded-xl transition shadow">+ Guardar Reporte</button>
+                        </div>
+                    </form>
+                </div>
             </div>
 
             <!-- Lista de Reportes y Resultados -->
@@ -429,23 +478,31 @@
         <!-- PESTAÑA 6: ADMINISTRADORES -->
         <div id="tabUsuarios" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4">Crear / Registrar Administrador</h3>
-                <form onsubmit="guardarAdmin(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <input type="text" id="adminNewNombre" placeholder="Nombre Completo" required
-                        class="p-2.5 border rounded-xl text-xs outline-none">
-                    <input type="text" id="adminNewUser" placeholder="Usuario" required
-                        class="p-2.5 border rounded-xl text-xs outline-none">
-                    <input type="password" id="adminNewPass" placeholder="Contraseña" required
-                        class="p-2.5 border rounded-xl text-xs outline-none">
-                    <select id="adminRolSelect" class="p-2.5 border rounded-xl text-xs outline-none"></select>
-                    <button type="submit"
-                        class="bg-gray-900 text-white font-bold text-xs py-2.5 rounded-xl col-span-4 transition hover:bg-black">+
-                        Crear Administrador</button>
-                </form>
-            </div>
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-gray-800 text-base">Administradores del Sistema</h3>
+                    <button onclick="toggleFormulario('formContenedorAdmin')"
+                        class="bg-gray-900 hover:bg-black text-amber-400 font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
+                        <i class="fa-solid fa-user-plus"></i> Crear Nuevo Admin
+                    </button>
+                </div>
 
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4">Administradores Registrados y Edición de Rol</h3>
+                <!-- FORMULARIO OCULTO POR DEFECTO -->
+                <div id="formContenedorAdmin" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
+                    <form onsubmit="guardarAdmin(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <input type="text" id="adminNewNombre" placeholder="Nombre Completo" required
+                            class="p-2.5 border rounded-xl text-xs outline-none bg-white">
+                        <input type="text" id="adminNewUser" placeholder="Usuario" required
+                            class="p-2.5 border rounded-xl text-xs outline-none bg-white">
+                        <input type="password" id="adminNewPass" placeholder="Contraseña" required
+                            class="p-2.5 border rounded-xl text-xs outline-none bg-white">
+                        <select id="adminRolSelect" class="p-2.5 border rounded-xl text-xs outline-none bg-white"></select>
+                        <div class="col-span-4 flex justify-end gap-2">
+                            <button type="button" onclick="toggleFormulario('formContenedorAdmin')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                            <button type="submit" class="bg-gray-900 text-white font-bold text-xs px-6 py-2 rounded-xl transition hover:bg-black">+ Crear Administrador</button>
+                        </div>
+                    </form>
+                </div>
+
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-gray-600">
                         <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
@@ -465,29 +522,46 @@
         <!-- PESTAÑA 7: CONFIGURACIÓN DE ROLES CON EDICIÓN Y ELIMINACIÓN -->
         <div id="tabRoles" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4">Configurador de Roles y Permisos Granulares</h3>
-                <form onsubmit="guardarRol(event)" class="space-y-4">
-                    <input type="hidden" id="rolIdEdit">
-                    <input type="text" id="rolNombre" placeholder="Nombre del Rol (ej. Tesorero, Supervisor)" required
-                        class="p-2.5 border rounded-xl text-xs w-full max-w-md">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-gray-800 text-base">Roles y Permisos Granulares</h3>
+                    <button onclick="toggleFormulario('formContenedorRol')"
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
+                        <i class="fa-solid fa-key"></i> Crear / Configurar Rol
+                    </button>
+                </div>
 
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-gray-50 p-4 rounded-xl border border-gray-200">
-                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permSolicitudes"> Módulo Pendientes</label>
-                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permInscritos"> Módulo Inscritos</label>
-                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permIngresos"> Módulo Ingresos</label>
-                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEgresos"> Módulo Egresos</label>
-                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permReportes"> Módulo Reportes</label>
-                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permUsuarios"> Módulo Administradores</label>
-                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permRoles"> Módulo Permisos y Roles</label>
-                    </div>
-                    <button type="submit"
-                        class="bg-indigo-600 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-md hover:bg-indigo-700 transition">+
-                        Guardar Rol</button>
-                </form>
-            </div>
+                <!-- FORMULARIO OCULTO POR DEFECTO -->
+                <div id="formContenedorRol" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
+                    <form onsubmit="guardarRol(event)" class="space-y-4">
+                        <input type="hidden" id="rolIdEdit">
+                        <input type="text" id="rolNombre" placeholder="Nombre del Rol (ej. Tesorero, Supervisor)" required
+                            class="p-2.5 border rounded-xl text-xs w-full max-w-md bg-white">
 
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4">Roles Creados en el Sistema</h3>
+                        <label class="text-xs font-bold text-gray-700 block">Permisos Granulares por Módulo:</label>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-white p-4 rounded-xl border border-gray-200">
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permSolicitudes"> Mod. Pendientes</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permInscritosVer"> Ver Inscritos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permInscritosCrear"> Crear Inscritos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permInscritosEditar"> Editar Inscritos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permInscritosEliminar"> Eliminar Inscritos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permIngresosVer"> Ver Ingresos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permIngresosEliminar"> Eliminar Ingresos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEgresosVer"> Ver Egresos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEgresosCrear"> Crear Egresos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEgresosEditar"> Editar Egresos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEgresosEliminar"> Eliminar Egresos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permReportesVer"> Ver Reportes</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permReportesCrear"> Crear Reportes</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permUsuarios"> Mod. Administradores</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permRoles"> Mod. Permisos y Roles</label>
+                        </div>
+                        <div class="flex justify-end gap-2">
+                            <button type="button" onclick="toggleFormulario('formContenedorRol')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                            <button type="submit" class="bg-indigo-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow-md hover:bg-indigo-700 transition">+ Guardar Rol</button>
+                        </div>
+                    </form>
+                </div>
+
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-gray-600">
                         <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
@@ -503,6 +577,34 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- MODAL EDITAR ADMINISTRADOR -->
+    <div id="modalEditAdmin" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-user-pen text-indigo-600"></i> Editar Administrador
+            </h3>
+            <form onsubmit="confirmarYGuardarAdmin(event)" class="space-y-3">
+                <input type="hidden" id="editAdminId">
+                <div>
+                    <label class="text-xs font-bold text-gray-600">Nombre Completo</label>
+                    <input type="text" id="editAdminNombre" required class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-600">Nombre de Usuario</label>
+                    <input type="text" id="editAdminUser" required class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-600">Rol Asignado</label>
+                    <select id="editAdminRolSelect" class="w-full p-2.5 border rounded-xl text-xs outline-none"></select>
+                </div>
+                <div class="flex justify-end gap-2 pt-3">
+                    <button type="button" onclick="cerrarModalAdmin()" class="bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2 rounded-xl">Cancelar</button>
+                    <button type="submit" class="bg-indigo-600 text-white font-bold text-xs px-5 py-2 rounded-xl shadow">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- MODAL EDITAR CAMPAMENTISTA -->
@@ -578,6 +680,15 @@
                 <div>
                     <label class="text-xs font-bold text-gray-600">Habilidad / Talento</label>
                     <input type="text" id="editInsHabilidad" class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-600">Estado de Carta de Compromiso</label>
+                    <select id="editInsEstadoCarta" class="w-full p-2.5 border rounded-xl text-xs outline-none font-bold bg-gray-50">
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="En Revisión">En Revisión</option>
+                        <option value="Aprobada">Aprobada</option>
+                        <option value="Rechazada">Rechazada</option>
+                    </select>
                 </div>
                 <div>
                     <label class="text-xs font-bold text-gray-600">Contacto de Emergencia</label>
@@ -682,6 +793,13 @@
         let listaRolesGlobal = [];
         let accionPendienteProtegida = null;
 
+        function toggleFormulario(idContainer) {
+            const container = document.getElementById(idContainer);
+            if (container) {
+                container.classList.toggle('hidden');
+            }
+        }
+
         async function iniciarSesionAdmin(e) {
             e.preventDefault();
             const user = document.getElementById('loginUser').value.trim();
@@ -716,10 +834,10 @@
             const esSuper = !adminSesion.rol_id || adminSesion.roles?.nombre === 'SuperAdmin';
 
             document.getElementById('navSolicitudes').style.display = (esSuper || permisosAdmin.solicitudes) ? 'block' : 'none';
-            document.getElementById('navInscritos').style.display = (esSuper || permisosAdmin.inscritos) ? 'block' : 'none';
-            document.getElementById('navIngresos').style.display = (esSuper || permisosAdmin.ingresos) ? 'block' : 'none';
-            document.getElementById('navEgresos').style.display = (esSuper || permisosAdmin.egresos) ? 'block' : 'none';
-            document.getElementById('navReportes').style.display = (esSuper || permisosAdmin.reportes) ? 'block' : 'none';
+            document.getElementById('navInscritos').style.display = (esSuper || permisosAdmin.inscritosVer || permisosAdmin.inscritos) ? 'block' : 'none';
+            document.getElementById('navIngresos').style.display = (esSuper || permisosAdmin.ingresosVer || permisosAdmin.ingresos) ? 'block' : 'none';
+            document.getElementById('navEgresos').style.display = (esSuper || permisosAdmin.egresosVer || permisosAdmin.egresos) ? 'block' : 'none';
+            document.getElementById('navReportes').style.display = (esSuper || permisosAdmin.reportesVer || permisosAdmin.reportes) ? 'block' : 'none';
             document.getElementById('navUsuarios').style.display = (esSuper || permisosAdmin.usuarios) ? 'block' : 'none';
             document.getElementById('navRoles').style.display = (esSuper || permisosAdmin.roles) ? 'block' : 'none';
         }
@@ -748,9 +866,8 @@
             const tbodyIns = document.getElementById('tblTodosInscritos');
             tbodyIns.innerHTML = '';
             (inscritos || []).forEach(i => {
-                let badgeCarta = i.carta_compromiso_url 
-                    ? `<a href="${i.carta_compromiso_url}" target="_blank" class="text-green-600 font-bold underline"><i class="fa-solid fa-file-check"></i> Ver Carta</a>`
-                    : `<span class="text-red-500 font-bold"><i class="fa-solid fa-file-xmark"></i> Pendiente</span>`;
+                let estadoCarta = i.estado_carta || (i.carta_compromiso_url ? 'En Revisión' : 'Pendiente');
+                let colorBadge = estadoCarta === 'Aprobada' ? 'bg-green-100 text-green-700' : (estadoCarta === 'En Revisión' ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700');
 
                 tbodyIns.innerHTML += `
           <tr>
@@ -759,7 +876,7 @@
             <td class="p-2">${i.celula || '-'}</td>
             <td class="p-2 font-bold text-indigo-700">${i.equipo || 'Sin Asignar'}</td>
             <td class="p-2">${i.actividad_favorita || '-'}</td>
-            <td class="p-2">${badgeCarta}</td>
+            <td class="p-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${colorBadge}">${estadoCarta}</span></td>
             <td class="p-2 text-center">
               <button onclick="abrirModalEditarCampamentista('${i.id}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 rounded-lg border border-amber-300 transition" title="Editar Campamentista">
                 <i class="fa-solid fa-pencil text-xs"></i>
@@ -829,6 +946,7 @@
             document.getElementById('editInsHospedaje').value = i.tipo_hospedaje || 'Colchon';
             document.getElementById('editInsActividad').value = i.actividad_favorita || 'Fútbol';
             document.getElementById('editInsHabilidad').value = i.habilidad_especial || '';
+            document.getElementById('editInsEstadoCarta').value = i.estado_carta || 'Pendiente';
             document.getElementById('editInsEmergencia').value = i.contacto_emergencia || '';
             document.getElementById('editInsAlergias').value = i.alergias_medicina || '';
             document.getElementById('editInsTutorNom').value = i.tutor_nombre || '';
@@ -862,6 +980,30 @@
         function confirmarYGuardarEgreso(e) {
             e.preventDefault();
             solicitarSeguridad('guardarEdicionEgreso');
+        }
+
+        // MODAL EDITAR ADMIN
+        function abrirModalEditarAdmin(id, nombre, usuario, rolId) {
+            document.getElementById('editAdminId').value = id;
+            document.getElementById('editAdminNombre').value = nombre;
+            document.getElementById('editAdminUser').value = usuario;
+            
+            const selectRol = document.getElementById('editAdminRolSelect');
+            selectRol.innerHTML = '';
+            listaRolesGlobal.forEach(r => {
+                selectRol.innerHTML += `<option value="${r.id}" ${r.id === rolId ? 'selected' : ''}>${r.nombre}</option>`;
+            });
+
+            document.getElementById('modalEditAdmin').classList.remove('hidden');
+        }
+
+        function cerrarModalAdmin() {
+            document.getElementById('modalEditAdmin').classList.add('hidden');
+        }
+
+        function confirmarYGuardarAdmin(e) {
+            e.preventDefault();
+            solicitarSeguridad('guardarEdicionAdminCompleto');
         }
 
         // VERIFICACIÓN CON CONTRASEÑA OBLIGATORIA
@@ -898,6 +1040,7 @@
                     tipo_hospedaje: document.getElementById('editInsHospedaje').value,
                     actividad_favorita: document.getElementById('editInsActividad').value,
                     habilidad_especial: document.getElementById('editInsHabilidad').value,
+                    estado_carta: document.getElementById('editInsEstadoCarta').value,
                     contacto_emergencia: document.getElementById('editInsEmergencia').value,
                     alergias_medicina: document.getElementById('editInsAlergias').value,
                     tutor_nombre: document.getElementById('editInsTutorNom').value,
@@ -920,15 +1063,22 @@
 
                 cerrarModalEgreso();
                 alert('Egreso modificado exitosamente.');
+            } else if (accionPendienteProtegida.tipo === 'guardarEdicionAdminCompleto') {
+                const id = document.getElementById('editAdminId').value;
+                await db.from('administradores').update({
+                    nombre: document.getElementById('editAdminNombre').value.trim(),
+                    usuario: document.getElementById('editAdminUser').value.trim(),
+                    rol_id: document.getElementById('editAdminRolSelect').value
+                }).eq('id', id);
+
+                cerrarModalAdmin();
+                alert('Administrador actualizado.');
             } else if (accionPendienteProtegida.tipo === 'borrarIngreso') {
                 await db.from('pagos').delete().eq('id', accionPendienteProtegida.id);
                 alert('Ingreso eliminado.');
             } else if (accionPendienteProtegida.tipo === 'borrarEgreso') {
                 await db.from('egresos').delete().eq('id', accionPendienteProtegida.id);
                 alert('Egreso eliminado.');
-            } else if (accionPendienteProtegida.tipo === 'cambiarRolAdmin') {
-                await db.from('administradores').update({ rol_id: accionPendienteProtegida.id.rolId }).eq('id', accionPendienteProtegida.id.adminId);
-                alert('Rol del usuario actualizado.');
             } else if (accionPendienteProtegida.tipo === 'borrarAdmin') {
                 await db.from('administradores').delete().eq('id', accionPendienteProtegida.id);
                 alert('Administrador eliminado.');
@@ -944,7 +1094,7 @@
             cargarTodoElDashboard();
         }
 
-        // GENERADOR DE REPORTES AGRUPADOS (GRUPOS Y SUBGRUPOS)
+        // GENERADOR DE REPORTES AGRUPADOS
         async function guardarNuevoReporteAvanzado(e) {
             e.preventDefault();
             const nombre = document.getElementById('repNombre').value.trim();
@@ -977,6 +1127,7 @@
             }]);
 
             alert('Reporte personalizado guardado con éxito.');
+            toggleFormulario('formContenedorReporte');
             cargarReportesGuardados();
         }
 
@@ -1019,7 +1170,6 @@
             const grupoP = rep.filtros?.grupoPrincipal || 'ninguno';
             const grupoS = rep.filtros?.grupoSecundario || 'ninguno';
 
-            // Agrupar los datos dinámicamente
             let grupos = {};
 
             (inscritos || []).forEach(i => {
@@ -1085,7 +1235,6 @@
                         htmlFull += `</tr>`;
                     });
 
-                    // Totales Agregados del Grupo
                     htmlFull += `<tfoot class="bg-gray-100 font-bold text-[10px]"><tr>`;
                     if (cols.ci) htmlFull += `<td class="p-2">Cant: ${cant}</td>`;
                     if (cols.nombre) htmlFull += `<td class="p-2">--</td>`;
@@ -1123,11 +1272,13 @@
                 tutor_nombre: document.getElementById('newTutorNombre').value.trim(),
                 tutor_telefono: document.getElementById('newTutorTel').value.trim(),
                 contacto_emergencia: document.getElementById('newEmergencia').value.trim(),
-                alergias_medicina: document.getElementById('newAlergias').value.trim()
+                alergias_medicina: document.getElementById('newAlergias').value.trim(),
+                estado_carta: 'Pendiente'
             }]);
 
             alert('Campamentista registrado exitosamente.');
             e.target.reset();
+            toggleFormulario('formContenedorCampamentista');
             cargarTodoElDashboard();
         }
 
@@ -1144,29 +1295,23 @@
             const tbodyA = document.getElementById('tblListaAdmins');
             tbodyA.innerHTML = '';
             (admins || []).forEach(a => {
-                let optionsRoles = listaRolesGlobal.map(r => `<option value="${r.id}" ${r.id === a.rol_id ? 'selected' : ''}>${r.nombre}</option>`).join('');
-
                 tbodyA.innerHTML += `
           <tr>
             <td class="p-2 font-semibold">${a.nombre}</td>
             <td class="p-2">${a.usuario}</td>
-            <td class="p-2">
-              <select id="sel_rol_${a.id}" class="border rounded p-1 text-xs bg-gray-50 outline-none">
-                ${optionsRoles}
-              </select>
-            </td>
+            <td class="p-2 font-bold text-indigo-700">${a.roles?.nombre || 'SuperAdmin'}</td>
             <td class="p-2 text-center flex justify-center gap-1">
-              <button onclick="solicitarCambioRolAdmin('${a.id}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2 py-1 rounded text-xs font-bold" title="Guardar Rol">
-                <i class="fa-solid fa-floppy-disk"></i>
+              <button onclick="abrirModalEditarAdmin('${a.id}', '${a.nombre}', '${a.usuario}', '${a.rol_id}')" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-800 p-1.5 rounded-lg border border-indigo-300 transition" title="Editar Admin">
+                <i class="fa-solid fa-pencil text-xs"></i>
               </button>
-              <button onclick="solicitarSeguridad('borrarAdmin', '${a.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 px-2 py-1 rounded text-xs font-bold border border-red-200" title="Eliminar Admin">
-                <i class="fa-solid fa-trash"></i>
+              <button onclick="solicitarSeguridad('borrarAdmin', '${a.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200 transition" title="Eliminar Admin">
+                <i class="fa-solid fa-trash text-xs"></i>
               </button>
             </td>
           </tr>`;
             });
 
-            // Renderizar Lista de Roles para Editar o Eliminar
+            // Renderizar Lista de Roles
             const tbodyR = document.getElementById('tblListaRolesExistentes');
             tbodyR.innerHTML = '';
             (roles || []).forEach(r => {
@@ -1176,26 +1321,39 @@
             <td class="p-2 font-bold text-indigo-900">${r.nombre}</td>
             <td class="p-2 text-[10px] text-gray-500">${permisosTxt || 'Sin permisos'}</td>
             <td class="p-2 text-center flex justify-center gap-1">
-              <button onclick="cargarRolParaEditar('${r.id}', '${r.nombre}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 px-2 py-1 rounded text-xs font-bold border border-amber-300" title="Editar Rol">
-                <i class="fa-solid fa-pencil"></i>
+              <button onclick="cargarRolParaEditar('${r.id}', '${r.nombre}', '${JSON.stringify(r.permisos).replace(/'/g, "&apos;")}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 rounded-lg border border-amber-300" title="Editar Rol">
+                <i class="fa-solid fa-pencil text-xs"></i>
               </button>
-              <button onclick="solicitarSeguridad('borrarRol', '${r.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 px-2 py-1 rounded text-xs font-bold border border-red-200" title="Eliminar Rol">
-                <i class="fa-solid fa-trash"></i>
+              <button onclick="solicitarSeguridad('borrarRol', '${r.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200" title="Eliminar Rol">
+                <i class="fa-solid fa-trash text-xs"></i>
               </button>
             </td>
           </tr>`;
             });
         }
 
-        function cargarRolParaEditar(id, nombre) {
+        function cargarRolParaEditar(id, nombre, permisosStr) {
             document.getElementById('rolIdEdit').value = id;
             document.getElementById('rolNombre').value = nombre;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
 
-        function solicitarCambioRolAdmin(adminId) {
-            const rolId = document.getElementById(`sel_rol_${adminId}`).value;
-            solicitarSeguridad('cambiarRolAdmin', { adminId, rolId });
+            const permisos = JSON.parse(permisosStr);
+            document.getElementById('permSolicitudes').checked = !!permisos.solicitudes;
+            document.getElementById('permInscritosVer').checked = !!permisos.inscritosVer;
+            document.getElementById('permInscritosCrear').checked = !!permisos.inscritosCrear;
+            document.getElementById('permInscritosEditar').checked = !!permisos.inscritosEditar;
+            document.getElementById('permInscritosEliminar').checked = !!permisos.inscritosEliminar;
+            document.getElementById('permIngresosVer').checked = !!permisos.ingresosVer;
+            document.getElementById('permIngresosEliminar').checked = !!permisos.ingresosEliminar;
+            document.getElementById('permEgresosVer').checked = !!permisos.egresosVer;
+            document.getElementById('permEgresosCrear').checked = !!permisos.egresosCrear;
+            document.getElementById('permEgresosEditar').checked = !!permisos.egresosEditar;
+            document.getElementById('permEgresosEliminar').checked = !!permisos.egresosEliminar;
+            document.getElementById('permReportesVer').checked = !!permisos.reportesVer;
+            document.getElementById('permReportesCrear').checked = !!permisos.reportesCrear;
+            document.getElementById('permUsuarios').checked = !!permisos.usuarios;
+            document.getElementById('permRoles').checked = !!permisos.roles;
+
+            document.getElementById('formContenedorRol').classList.remove('hidden');
         }
 
         async function guardarAdmin(e) {
@@ -1216,6 +1374,7 @@
 
             alert('Nuevo administrador registrado.');
             e.target.reset();
+            toggleFormulario('formContenedorAdmin');
             cargarRolesYAdmins();
         }
 
@@ -1226,10 +1385,18 @@
 
             const permisos = {
                 solicitudes: document.getElementById('permSolicitudes').checked,
-                inscritos: document.getElementById('permInscritos').checked,
-                ingresos: document.getElementById('permIngresos').checked,
-                egresos: document.getElementById('permEgresos').checked,
-                reportes: document.getElementById('permReportes').checked,
+                inscritosVer: document.getElementById('permInscritosVer').checked,
+                inscritosCrear: document.getElementById('permInscritosCrear').checked,
+                inscritosEditar: document.getElementById('permInscritosEditar').checked,
+                inscritosEliminar: document.getElementById('permInscritosEliminar').checked,
+                ingresosVer: document.getElementById('permIngresosVer').checked,
+                ingresosEliminar: document.getElementById('permIngresosEliminar').checked,
+                egresosVer: document.getElementById('permEgresosVer').checked,
+                egresosCrear: document.getElementById('permEgresosCrear').checked,
+                egresosEditar: document.getElementById('permEgresosEditar').checked,
+                egresosEliminar: document.getElementById('permEgresosEliminar').checked,
+                reportesVer: document.getElementById('permReportesVer').checked,
+                reportesCrear: document.getElementById('permReportesCrear').checked,
                 usuarios: document.getElementById('permUsuarios').checked,
                 roles: document.getElementById('permRoles').checked
             };
@@ -1244,6 +1411,7 @@
 
             e.target.reset();
             document.getElementById('rolIdEdit').value = '';
+            toggleFormulario('formContenedorRol');
             cargarRolesYAdmins();
         }
 
@@ -1257,10 +1425,12 @@
             }]);
             alert('Egreso registrado.');
             e.target.reset();
+            toggleFormulario('formContenedorEgreso');
             cargarTodoElDashboard();
         }
 
         async function cargarPendientes() {
+            // Pagos
             const { data: pagosPend } = await db.from('pagos').select('*, inscritos(nombre_completo)').eq('estado', 'Pendiente');
             const tbodyP = document.getElementById('tblPagosPendientes');
             tbodyP.innerHTML = '';
@@ -1277,6 +1447,7 @@
           </tr>`;
             });
 
+            // Cambios de Perfil
             const { data: edicPend } = await db.from('solicitudes_edicion').select('*, inscritos(nombre_completo)').eq('estado', 'Pendiente');
             const tbodyE = document.getElementById('tblEdicionesPendientes');
             tbodyE.innerHTML = '';
@@ -1291,6 +1462,30 @@
             </td>
           </tr>`;
             });
+
+            // Cartas de Compromiso
+            const { data: cartasPend } = await db.from('inscritos').select('*').eq('estado_carta', 'En Revisión');
+            const tbodyC = document.getElementById('tblCartasPendientes');
+            tbodyC.innerHTML = '';
+            (cartasPend || []).forEach(c => {
+                tbodyC.innerHTML += `
+          <tr>
+            <td class="p-2 font-bold">${c.ci}</td>
+            <td class="p-2 font-semibold">${c.nombre_completo}</td>
+            <td class="p-2">${c.celula || '-'}</td>
+            <td class="p-2"><a href="${c.carta_compromiso_url}" target="_blank" class="text-indigo-600 font-bold underline"><i class="fa-solid fa-file-pdf"></i> Ver Documento</a></td>
+            <td class="p-2 text-center flex justify-center gap-1">
+              <button onclick="procesarCarta('${c.id}', 'Aprobada')" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs font-bold">Aprobar ✓</button>
+              <button onclick="procesarCarta('${c.id}', 'Rechazada')" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs font-bold">Rechazar ✕</button>
+            </td>
+          </tr>`;
+            });
+        }
+
+        async function procesarCarta(id, nuevoEstado) {
+            await db.from('inscritos').update({ estado_carta: nuevoEstado }).eq('id', id);
+            alert(`Carta marcada como: ${nuevoEstado}`);
+            cargarTodoElDashboard();
         }
 
         async function procesarPago(id, estado) {

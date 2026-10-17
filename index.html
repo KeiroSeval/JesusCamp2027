@@ -18,16 +18,26 @@
 
 <body class="bg-slate-100 min-h-screen text-gray-800 font-sans">
 
+    <!-- NAVBAR -->
     <nav class="bg-gray-900 text-white p-4 shadow-md sticky top-0 z-50">
         <div class="max-w-4xl mx-auto flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <i class="fa-solid fa-campground text-amber-400 text-xl"></i>
-                <span class="font-bold text-lg tracking-wide">JESUS CAMP 2027</span>
+            <!-- Título que redirige a la pantalla principal de búsqueda -->
+            <button onclick="regresarInicio()" class="flex items-center space-x-2 text-left focus:outline-none group">
+                <i class="fa-solid fa-campground text-amber-400 text-xl group-hover:scale-110 transition-transform"></i>
+                <span class="font-bold text-lg tracking-wide group-hover:text-amber-400 transition-colors">JESUS CAMP 2027</span>
+            </button>
+            
+            <!-- Botón Dinámico: Panel Admin o Regresar al Inicio al ingresar -->
+            <div id="contenedorNavBoton">
+                <a href="admin.html" id="btnNavAdmin"
+                    class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg border border-gray-700 transition">
+                    <i class="fa-solid fa-user-gear mr-1"></i> Panel Admin
+                </a>
+                <button onclick="regresarInicio()" id="btnNavInicio"
+                    class="hidden text-xs bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-3 py-2 rounded-lg transition shadow">
+                    <i class="fa-solid fa-house mr-1"></i> Regresar al Inicio
+                </button>
             </div>
-            <a href="admin.html"
-                class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg border border-gray-700 transition">
-                <i class="fa-solid fa-user-gear mr-1"></i> Panel Admin
-            </a>
         </div>
     </nav>
 
@@ -57,18 +67,20 @@
         <!-- VISTA DE PERFIL -->
         <div id="secPerfil" class="hidden space-y-6">
 
-            <!-- ALERTA DE CARTA DE COMPROMISO PENDIENTE -->
-            <div id="alertaCarta" class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-xl shadow-sm flex flex-col md:flex-row items-center justify-between gap-3">
-                <div class="flex items-center gap-3">
-                    <i class="fa-solid fa-file-contract text-amber-600 text-2xl"></i>
-                    <div>
-                        <h4 class="font-bold text-amber-900 text-sm">Carta de Compromiso Requerida</h4>
-                        <p class="text-xs text-amber-700">Para completar tu habilitación oficial al campamento debes adjuntar la foto o PDF de tu carta firmada.</p>
+            <!-- ALERTA DINÁMICA DE CARTA DE COMPROMISO -->
+            <div id="alertaCartaContenedor" class="hidden rounded-xl p-4 border shadow-sm">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <i id="iconoAlertaCarta" class="text-2xl"></i>
+                        <div>
+                            <h4 id="tituloAlertaCarta" class="font-bold text-sm"></h4>
+                            <p id="descAlertaCarta" class="text-xs"></p>
+                        </div>
                     </div>
+                    <button id="btnScrollSubirCarta" onclick="document.getElementById('secSubirCarta').scrollIntoView({behavior: 'smooth'})" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs px-4 py-2 rounded-lg transition whitespace-nowrap hidden">
+                        Subir Carta Ahora
+                    </button>
                 </div>
-                <button onclick="document.getElementById('secSubirCarta').scrollIntoView({behavior: 'smooth'})" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs px-4 py-2 rounded-lg transition whitespace-nowrap">
-                    Subir Carta Ahora
-                </button>
             </div>
 
             <!-- Cards de Resumen Finanzas -->
@@ -218,16 +230,16 @@
                 <h3 class="font-bold text-gray-800 text-base mb-2 flex items-center gap-2">
                     <i class="fa-solid fa-file-signature text-indigo-600"></i> Carta de Compromiso Firmada
                 </h3>
-                <p class="text-xs text-gray-500 mb-4">Descarga el formato de Carta de Compromiso, imprímela, fírmala y sube una foto clara o archivo PDF.</p>
+                <p class="text-xs text-gray-500 mb-4">Descarga el formato de Carta de Compromiso, imprímela, fírmala y sube una foto clara o archivo PDF para su revisión por parte del Administrador.</p>
 
                 <div id="contenedorEstadoCarta" class="space-y-3">
-                    <div class="flex items-center gap-3">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                         <input type="file" id="cartaArchivo" accept="image/*,.pdf" class="text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
                         <button onclick="subirCartaCompromiso()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-lg text-xs transition shadow">
-                            Subir Carta
+                            Subir para Revisión
                         </button>
                     </div>
-                    <div id="txtEstadoCarta" class="text-xs font-semibold"></div>
+                    <div id="txtEstadoCarta" class="text-xs font-semibold mt-2"></div>
                 </div>
             </div>
 
@@ -292,6 +304,15 @@
 
         let usuarioActual = null;
 
+        function regresarInicio() {
+            usuarioActual = null;
+            document.getElementById('inputCI').value = '';
+            document.getElementById('secPerfil').classList.add('hidden');
+            document.getElementById('secBusqueda').classList.remove('hidden');
+            document.getElementById('btnNavAdmin').classList.remove('hidden');
+            document.getElementById('btnNavInicio').classList.add('hidden');
+        }
+
         async function buscarCampamentista() {
             const ciInput = document.getElementById('inputCI').value.trim();
             if (!ciInput) return;
@@ -317,6 +338,9 @@
             document.getElementById('secBusqueda').classList.add('hidden');
             document.getElementById('secPerfil').classList.remove('hidden');
 
+            document.getElementById('btnNavAdmin').classList.add('hidden');
+            document.getElementById('btnNavInicio').classList.remove('hidden');
+
             document.getElementById('usrNombre').value = usuarioActual.nombre_completo;
             document.getElementById('usrTelefono').value = usuarioActual.telefono || '';
             document.getElementById('usrCelula').value = usuarioActual.celula || '';
@@ -335,13 +359,54 @@
                 document.getElementById('usrTutorTel').value = usuarioActual.tutor_telefono || '';
             }
 
-            // Validar Estado de Carta
-            if (usuarioActual.carta_compromiso_url) {
-                document.getElementById('alertaCarta').classList.add('hidden');
-                document.getElementById('txtEstadoCarta').innerHTML = `<span class="text-green-600 flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Carta cargada exitosamente: <a href="${usuarioActual.carta_compromiso_url}" target="_blank" class="underline text-blue-600 font-bold">Ver Documento</a></span>`;
-            } else {
-                document.getElementById('alertaCarta').classList.remove('hidden');
-                document.getElementById('txtEstadoCarta').innerHTML = `<span class="text-red-500 flex items-center gap-1"><i class="fa-solid fa-circle-xmark"></i> Aún no has adjuntado tu Carta de Compromiso firmada.</span>`;
+            // Validar Estado de la Carta de Compromiso
+            const contAlerta = document.getElementById('alertaCartaContenedor');
+            const iconoAlerta = document.getElementById('iconoAlertaCarta');
+            const tituloAlerta = document.getElementById('tituloAlertaCarta');
+            const descAlerta = document.getElementById('descAlertaCarta');
+            const btnScroll = document.getElementById('btnScrollSubirCarta');
+            const txtEstado = document.getElementById('txtEstadoCarta');
+
+            contAlerta.classList.remove('hidden', 'bg-amber-50', 'border-amber-500', 'bg-blue-50', 'border-blue-500', 'bg-green-50', 'border-green-500', 'bg-red-50', 'border-red-500');
+
+            const estado = usuarioActual.estado_carta || (usuarioActual.carta_compromiso_url ? 'En Revisión' : 'Pendiente');
+
+            if (estado === 'Aprobada') {
+                contAlerta.classList.add('bg-green-50', 'border-green-500');
+                iconoAlerta.className = 'fa-solid fa-circle-check text-green-600 text-2xl';
+                tituloAlerta.className = 'font-bold text-sm text-green-900';
+                tituloAlerta.innerText = 'Carta de Compromiso Aprobada';
+                descAlerta.className = 'text-xs text-green-700';
+                descAlerta.innerText = 'Tu carta de compromiso ha sido verificada y aprobada por la administración. ¡Habilitación completa!';
+                btnScroll.classList.add('hidden');
+                txtEstado.innerHTML = `<span class="text-green-600 flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Carta Aprobada: <a href="${usuarioActual.carta_compromiso_url}" target="_blank" class="underline text-blue-600 font-bold">Ver Documento</a></span>`;
+            } else if (estado === 'En Revisión') {
+                contAlerta.classList.add('bg-blue-50', 'border-blue-500');
+                iconoAlerta.className = 'fa-solid fa-clock-rotate-left text-blue-600 text-2xl';
+                tituloAlerta.className = 'font-bold text-sm text-blue-900';
+                tituloAlerta.innerText = 'Carta en Revisión por la Administración';
+                descAlerta.className = 'text-xs text-blue-700';
+                descAlerta.innerText = 'Tu carta fue subida exitosamente y está siendo verificada por un administrador.';
+                btnScroll.classList.add('hidden');
+                txtEstado.innerHTML = `<span class="text-blue-600 flex items-center gap-1"><i class="fa-solid fa-spinner fa-spin"></i> Carta en Revisión: <a href="${usuarioActual.carta_compromiso_url}" target="_blank" class="underline font-bold">Ver Documento Enviado</a></span>`;
+            } else if (estado === 'Rechazada') {
+                contAlerta.classList.add('bg-red-50', 'border-red-500');
+                iconoAlerta.className = 'fa-solid fa-triangle-exclamation text-red-600 text-2xl';
+                tituloAlerta.className = 'font-bold text-sm text-red-900';
+                tituloAlerta.innerText = 'Carta Observada / Rechazada';
+                descAlerta.className = 'text-xs text-red-700';
+                descAlerta.innerText = 'Tu carta fue observada por el administrador. Por favor vuelve a subirla con una firma legible.';
+                btnScroll.classList.remove('hidden');
+                txtEstado.innerHTML = `<span class="text-red-600 flex items-center gap-1"><i class="fa-solid fa-circle-xmark"></i> Documento Rechazado. Por favor sube una nueva versión.</span>`;
+            } else { // Pendiente
+                contAlerta.classList.add('bg-amber-50', 'border-amber-500');
+                iconoAlerta.className = 'fa-solid fa-file-contract text-amber-600 text-2xl';
+                tituloAlerta.className = 'font-bold text-sm text-amber-900';
+                tituloAlerta.innerText = 'Carta de Compromiso Requerida';
+                descAlerta.className = 'text-xs text-amber-700';
+                descAlerta.innerText = 'Para completar tu habilitación oficial debes adjuntar la foto o PDF de tu carta firmada.';
+                btnScroll.classList.remove('hidden');
+                txtEstado.innerHTML = `<span class="text-red-500 flex items-center gap-1"><i class="fa-solid fa-circle-xmark"></i> Aún no has adjuntado tu Carta de Compromiso firmada.</span>`;
             }
 
             // Calcular Pagos
@@ -416,10 +481,16 @@
 
             const { data: urlData } = db.storage.from('cartas').getPublicUrl(fileName);
 
-            await db.from('inscritos').update({ carta_compromiso_url: urlData.publicUrl }).eq('id', usuarioActual.id);
+            // Al subir pasa inmediatamente a estado 'En Revisión'
+            await db.from('inscritos').update({ 
+                carta_compromiso_url: urlData.publicUrl,
+                estado_carta: 'En Revisión'
+            }).eq('id', usuarioActual.id);
+            
             usuarioActual.carta_compromiso_url = urlData.publicUrl;
+            usuarioActual.estado_carta = 'En Revisión';
 
-            alert('Carta de compromiso subida y vinculada correctamente.');
+            alert('Carta de compromiso subida. Ha quedado en revisión por el Administrador.');
             cargarPerfil();
         }
 
