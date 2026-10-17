@@ -39,7 +39,7 @@
         </div>
     </nav>
 
-    <!-- PANTALLA DE LOGIN CON BOTÓN CORREGIDO -->
+    <!-- PANTALLA DE LOGIN -->
     <section id="secLogin" class="max-w-md mx-auto mt-16 p-6 bg-white rounded-2xl shadow-xl border border-gray-200">
         <div class="text-center mb-6">
             <div
@@ -54,14 +54,13 @@
             <div>
                 <label class="text-xs font-bold text-gray-600">Usuario</label>
                 <input type="text" id="loginUser" required placeholder="admin"
-                    class="w-full mt-1 p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-gray-900 outline-none">
+                    class="w-full mt-1 p-3 border border-gray-300 rounded-xl text-sm outline-none">
             </div>
             <div>
                 <label class="text-xs font-bold text-gray-600">Contraseña</label>
                 <input type="password" id="loginPass" required placeholder="••••••••"
-                    class="w-full mt-1 p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-gray-900 outline-none">
+                    class="w-full mt-1 p-3 border border-gray-300 rounded-xl text-sm outline-none">
             </div>
-            <!-- Botón con legibilidad corregida (Texto Blanco Brillante) -->
             <button type="submit"
                 class="w-full bg-gray-900 hover:bg-black text-white font-extrabold py-3 rounded-xl shadow-lg transition text-sm flex items-center justify-center gap-2">
                 <i class="fa-solid fa-right-to-bracket text-amber-400"></i> Ingresar al Panel
@@ -94,7 +93,7 @@
             </div>
         </div>
 
-        <!-- PESTAÑAS DE NAVEGACIÓN -->
+        <!-- PESTAÑAS DE NAVEGACIÓN PERMISOS SEGMENTADOS -->
         <div class="flex flex-wrap gap-2 border-b border-gray-200 pb-2">
             <button id="navSolicitudes" onclick="cambiarPestana('solicitudes')"
                 class="tab-btn bg-gray-900 text-white text-xs font-bold px-4 py-2 rounded-xl transition">
@@ -162,8 +161,65 @@
             </div>
         </div>
 
-        <!-- PESTAÑA 2: INSCRITOS (CON EDICIÓN POR BOTÓN DE LÁPIZ) -->
+        <!-- PESTAÑA 2: INSCRITOS (REGISTRO COMPLETO + EDICIÓN POR LÁPIZ) -->
         <div id="tabInscritos" class="tab-content hidden space-y-6">
+            <!-- Formulario para Registrar Nuevo Campamentista (Niño/Adulto) -->
+            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-user-plus text-green-600"></i> Inscribir Campamentista (Niño o Adulto)
+                </h3>
+                <form onsubmit="crearNuevoCampamentista(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <input type="text" id="newCi" placeholder="C.I. (Obligatorio)" required
+                        class="p-2.5 border rounded-xl text-xs outline-none">
+                    <input type="text" id="newNombre" placeholder="Nombre Completo" required
+                        class="p-2.5 border rounded-xl text-xs outline-none">
+                    <input type="text" id="newTel" placeholder="Teléfono / WhatsApp"
+                        class="p-2.5 border rounded-xl text-xs outline-none">
+                    <input type="text" id="newCelula" placeholder="Célula"
+                        class="p-2.5 border rounded-xl text-xs outline-none">
+                    <select id="newTalla" class="p-2.5 border rounded-xl text-xs outline-none">
+                        <option value="XS">Talla XS</option>
+                        <option value="S">Talla S</option>
+                        <option value="M" selected>Talla M</option>
+                        <option value="L">Talla L</option>
+                        <option value="XL">Talla XL</option>
+                    </select>
+                    <select id="newHospedaje" class="p-2.5 border rounded-xl text-xs outline-none">
+                        <option value="Colchon">Colchón (Bs 230)</option>
+                        <option value="Camping">Camping (Bs 220)</option>
+                    </select>
+
+                    <!-- Campos Niños vs Adultos -->
+                    <div class="md:col-span-3 flex items-center gap-4 bg-gray-50 p-3 rounded-xl border border-gray-200">
+                        <label class="text-xs font-bold text-gray-700 flex items-center gap-2">
+                            <input type="checkbox" id="newEsMenor" onchange="toggleFormMenor(this.checked)"
+                                class="rounded text-blue-600">
+                            ¿Es Menor de Edad / Niño?
+                        </label>
+                    </div>
+
+                    <div id="newSecTutor"
+                        class="hidden md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-4 bg-amber-50/50 p-3 rounded-xl border border-amber-200">
+                        <input type="text" id="newTutorNombre" placeholder="Nombre de Padre / Madre / Tutor"
+                            class="p-2.5 border rounded-xl text-xs outline-none bg-white">
+                        <input type="text" id="newTutorTel" placeholder="Teléfono del Tutor"
+                            class="p-2.5 border rounded-xl text-xs outline-none bg-white">
+                    </div>
+
+                    <input type="text" id="newEmergencia" placeholder="Contacto de Emergencia"
+                        class="p-2.5 border rounded-xl text-xs outline-none">
+                    <input type="text" id="newAlergias" placeholder="Alergias o Medicamentos"
+                        class="p-2.5 border rounded-xl text-xs outline-none md:col-span-2">
+
+                    <div class="md:col-span-3">
+                        <button type="submit"
+                            class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-6 py-2.5 rounded-xl transition shadow">+
+                            Inscribir Campamentista</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tabla con Modo Edición x Lápiz ✏️ -->
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <h3 class="font-bold text-gray-800 text-base mb-4">Directorio de Campamentistas</h3>
                 <div class="overflow-x-auto">
@@ -185,7 +241,7 @@
             </div>
         </div>
 
-        <!-- PESTAÑA 3: INGRESOS CORREGIDOS -->
+        <!-- PESTAÑA 3: INGRESOS -->
         <div id="tabIngresos" class="tab-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
             <h3 class="font-bold text-gray-800 text-base mb-4">Historial de Ingresos Confirmados</h3>
             <div class="overflow-x-auto">
@@ -204,7 +260,7 @@
             </div>
         </div>
 
-        <!-- PESTAÑA 4: EGRESOS CORREGIDOS -->
+        <!-- PESTAÑA 4: EGRESOS -->
         <div id="tabEgresos" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <h3 class="font-bold text-gray-800 text-base mb-4">Registrar Nuevo Egreso</h3>
@@ -244,34 +300,35 @@
             </div>
         </div>
 
-        <!-- PESTAÑA 5: ADMINISTRADORES -->
+        <!-- PESTAÑA 5: ADMINISTRADORES Y EDICIÓN DE ROLES -->
         <div id="tabUsuarios" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4">Crear / Modificar Administrador</h3>
+                <h3 class="font-bold text-gray-800 text-base mb-4">Crear / Registrar Administrador</h3>
                 <form onsubmit="guardarAdmin(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <input type="hidden" id="adminIdEdit">
                     <input type="text" id="adminNewNombre" placeholder="Nombre Completo" required
                         class="p-2.5 border rounded-xl text-xs outline-none">
                     <input type="text" id="adminNewUser" placeholder="Usuario" required
                         class="p-2.5 border rounded-xl text-xs outline-none">
-                    <input type="password" id="adminNewPass" placeholder="Contraseña (dejar vacío si no cambia)"
+                    <input type="password" id="adminNewPass" placeholder="Contraseña" required
                         class="p-2.5 border rounded-xl text-xs outline-none">
                     <select id="adminRolSelect" class="p-2.5 border rounded-xl text-xs outline-none"></select>
                     <button type="submit"
-                        class="bg-gray-900 text-amber-400 font-bold text-xs py-2.5 rounded-xl col-span-4 transition hover:bg-black">+
-                        Guardar Administrador</button>
+                        class="bg-gray-900 text-white font-bold text-xs py-2.5 rounded-xl col-span-4 transition hover:bg-black">+
+                        Crear Administrador</button>
                 </form>
             </div>
 
+            <!-- Tabla de Administradores con Edición Directa de Rol -->
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <h3 class="font-bold text-gray-800 text-base mb-4">Administradores Registrados y Edición de Rol</h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-gray-600">
                         <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
                             <tr>
                                 <th class="p-2">Nombre</th>
                                 <th class="p-2">Usuario</th>
-                                <th class="p-2">Rol</th>
-                                <th class="p-2">Acción</th>
+                                <th class="p-2">Rol Asignado</th>
+                                <th class="p-2 text-center">Acción</th>
                             </tr>
                         </thead>
                         <tbody id="tblListaAdmins" class="divide-y divide-gray-100"></tbody>
@@ -280,33 +337,31 @@
             </div>
         </div>
 
-        <!-- PESTAÑA 6: CREACIÓN DE ROLES -->
+        <!-- PESTAÑA 6: CONFIGURACIÓN DE ROLES GRANULARES -->
         <div id="tabRoles" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4">Configurador de Roles y Permisos Granulares</h3>
+                <h3 class="font-bold text-gray-800 text-base mb-4">Configurador de Roles y Permisos Segmentados</h3>
                 <form onsubmit="guardarRol(event)" class="space-y-4">
-                    <input type="text" id="rolNombre" placeholder="Nombre del Rol (ej. Tesorero)" required
+                    <input type="text" id="rolNombre" placeholder="Nombre del Rol (ej. Tesorero, Supervisor)" required
                         class="p-2.5 border rounded-xl text-xs w-full max-w-md">
 
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-gray-50 p-4 rounded-xl border border-gray-200">
                         <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                id="permSolicitudes"> Ver Pendientes</label>
+                                id="permSolicitudes"> Módulo Pendientes</label>
                         <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                id="permInscritos"> Ver Inscritos</label>
+                                id="permInscritos"> Módulo Inscritos</label>
                         <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                id="permIngresos"> Ver Ingresos</label>
+                                id="permIngresos"> Módulo Ingresos</label>
                         <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                id="permEgresos"> Ver Egresos</label>
+                                id="permEgresos"> Módulo Egresos</label>
                         <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                id="permUsuarios"> Gestionar Admins</label>
+                                id="permUsuarios"> Módulo Administradores</label>
                         <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                id="permRoles"> Crear Roles</label>
-                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                id="permEditInscritos"> Editar Inscritos</label>
+                                id="permRoles"> Módulo Permisos y Roles</label>
                     </div>
                     <button type="submit"
                         class="bg-indigo-600 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-md hover:bg-indigo-700 transition">+
-                        Crear / Guardar Rol</button>
+                        Guardar Rol</button>
                 </form>
             </div>
         </div>
@@ -321,6 +376,7 @@
 
         let adminSesion = null;
         let permisosAdmin = {};
+        let listaRolesGlobal = [];
 
         async function iniciarSesionAdmin(e) {
             e.preventDefault();
@@ -329,8 +385,7 @@
 
             const msgUint8 = new TextEncoder().encode(pass);
             const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            const hashHex = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
 
             const { data: admin } = await db.from('administradores').select('*, roles(*)').eq('usuario', user).eq('password_hash', hashHex).maybeSingle();
 
@@ -350,7 +405,6 @@
         }
 
         function aplicarPermisosVisuales() {
-            // Si el rol no tiene restricciones, asignamos permisos totales por defecto
             const esSuper = !adminSesion.rol_id || adminSesion.roles?.nombre === 'SuperAdmin';
 
             document.getElementById('navSolicitudes').style.display = (esSuper || permisosAdmin.solicitudes) ? 'block' : 'none';
@@ -361,8 +415,12 @@
             document.getElementById('navRoles').style.display = (esSuper || permisosAdmin.roles) ? 'block' : 'none';
         }
 
+        function toggleFormMenor(checked) {
+            if (checked) document.getElementById('newSecTutor').classList.remove('hidden');
+            else document.getElementById('newSecTutor').classList.add('hidden');
+        }
+
         async function cargarTodoElDashboard() {
-            // Consultas directas sin filtros restrictivos
             const { data: inscritos } = await db.from('inscritos').select('*');
             const { data: pagos } = await db.from('pagos').select('*, inscritos(nombre_completo)').eq('estado', 'Aprobado');
             const { data: egresos } = await db.from('egresos').select('*');
@@ -377,7 +435,7 @@
             document.getElementById('stEgresos').innerText = `Bs ${eg}`;
             document.getElementById('stBalance').innerText = `Bs ${ing - eg}`;
 
-            // Renderizar Inscritos con modo lectura por defecto y Botón Lápiz ✏️
+            // Renderizar Inscritos (Modo Lectura por defecto + Lápiz ✏️)
             const tbodyIns = document.getElementById('tblTodosInscritos');
             tbodyIns.innerHTML = '';
             (inscritos || []).forEach(i => {
@@ -429,7 +487,6 @@
             cargarRolesYAdmins();
         }
 
-        // Activa los inputs sólo cuando se presiona el lápiz ✏️
         function activarModoEdicion(id, nom, tel, cel, tal) {
             document.getElementById(`val_nom_${id}`).innerHTML = `<input type="text" id="ins_nom_${id}" value="${nom}" class="border rounded p-1 text-xs w-full bg-amber-50">`;
             document.getElementById(`val_tel_${id}`).innerHTML = `<input type="text" id="ins_tel_${id}" value="${tel}" class="border rounded p-1 text-xs w-24 bg-amber-50">`;
@@ -452,6 +509,106 @@
 
             alert('Campamentista actualizado con éxito.');
             cargarTodoElDashboard();
+        }
+
+        async function crearNuevoCampamentista(e) {
+            e.preventDefault();
+            await db.from('inscritos').insert([{
+                ci: document.getElementById('newCi').value.trim(),
+                nombre_completo: document.getElementById('newNombre').value.trim(),
+                telefono: document.getElementById('newTel').value.trim(),
+                celula: document.getElementById('newCelula').value.trim(),
+                talla_polera: document.getElementById('newTalla').value,
+                tipo_hospedaje: document.getElementById('newHospedaje').value,
+                es_menor: document.getElementById('newEsMenor').checked,
+                tutor_nombre: document.getElementById('newTutorNombre').value.trim(),
+                tutor_telefono: document.getElementById('newTutorTel').value.trim(),
+                contacto_emergencia: document.getElementById('newEmergencia').value.trim(),
+                alergias_medicina: document.getElementById('newAlergias').value.trim()
+            }]);
+
+            alert('Campamentista registrado exitosamente.');
+            e.target.reset();
+            cargarTodoElDashboard();
+        }
+
+        async function cargarRolesYAdmins() {
+            const { data: roles } = await db.from('roles').select('*');
+            listaRolesGlobal = roles || [];
+
+            const selectRol = document.getElementById('adminRolSelect');
+            selectRol.innerHTML = '';
+            listaRolesGlobal.forEach(r => selectRol.innerHTML += `<option value="${r.id}">${r.nombre}</option>`);
+
+            const { data: admins } = await db.from('administradores').select('*, roles(*)');
+            const tbodyA = document.getElementById('tblListaAdmins');
+            tbodyA.innerHTML = '';
+            (admins || []).forEach(a => {
+                let optionsRoles = listaRolesGlobal.map(r => `<option value="${r.id}" ${r.id === a.rol_id ? 'selected' : ''}>${r.nombre}</option>`).join('');
+
+                tbodyA.innerHTML += `
+          <tr>
+            <td class="p-2 font-semibold">${a.nombre}</td>
+            <td class="p-2">${a.usuario}</td>
+            <td class="p-2">
+              <select id="sel_rol_${a.id}" class="border border-gray-300 rounded p-1 text-xs bg-gray-50 outline-none">
+                ${optionsRoles}
+              </select>
+            </td>
+            <td class="p-2 text-center">
+              <button onclick="guardarNuevoRolAdmin('${a.id}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2 py-1 rounded text-xs font-bold mr-1">
+                <i class="fa-solid fa-floppy-disk"></i> Cambiar Rol
+              </button>
+            </td>
+          </tr>`;
+            });
+        }
+
+        // Cambiar rol de un administrador ya creado
+        async function guardarNuevoRolAdmin(adminId) {
+            const nuevoRolId = document.getElementById(`sel_rol_${adminId}`).value;
+            await db.from('administradores').update({ rol_id: nuevoRolId }).eq('id', adminId);
+            alert('Rol de usuario actualizado correctamente.');
+            cargarRolesYAdmins();
+        }
+
+        async function guardarAdmin(e) {
+            e.preventDefault();
+            const user = document.getElementById('adminNewUser').value.trim();
+            const pass = document.getElementById('adminNewPass').value.trim();
+            const nombre = document.getElementById('adminNewNombre').value.trim();
+            const rolId = document.getElementById('adminRolSelect').value;
+
+            const msgUint8 = new TextEncoder().encode(pass);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+            const hashHex = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+
+            await db.from('administradores').insert([{
+                nombre: nombre,
+                usuario: user,
+                password_hash: hashHex,
+                rol_id: rolId
+            }]);
+
+            alert('Nuevo administrador creado.');
+            e.target.reset();
+            cargarRolesYAdmins();
+        }
+
+        async function guardarRol(e) {
+            e.preventDefault();
+            const permisos = {
+                solicitudes: document.getElementById('permSolicitudes').checked,
+                inscritos: document.getElementById('permInscritos').checked,
+                ingresos: document.getElementById('permIngresos').checked,
+                egresos: document.getElementById('permEgresos').checked,
+                usuarios: document.getElementById('permUsuarios').checked,
+                roles: document.getElementById('permRoles').checked
+            };
+
+            await db.from('roles').insert([{ nombre: document.getElementById('rolNombre').value, permisos }]);
+            alert('Rol configurado exitosamente.');
+            cargarRolesYAdmins();
         }
 
         async function registrarNuevoEgreso(e) {
@@ -498,45 +655,6 @@
             </td>
           </tr>`;
             });
-        }
-
-        async function cargarRolesYAdmins() {
-            const { data: roles } = await db.from('roles').select('*');
-            const selectRol = document.getElementById('adminRolSelect');
-            selectRol.innerHTML = '';
-            (roles || []).forEach(r => selectRol.innerHTML += `<option value="${r.id}">${r.nombre}</option>`);
-
-            const { data: admins } = await db.from('administradores').select('*, roles(*)');
-            const tbodyA = document.getElementById('tblListaAdmins');
-            tbodyA.innerHTML = '';
-            (admins || []).forEach(a => {
-                tbodyA.innerHTML += `
-          <tr>
-            <td class="p-2 font-semibold">${a.nombre}</td>
-            <td class="p-2">${a.usuario}</td>
-            <td class="p-2 font-bold text-indigo-600">${a.roles?.nombre || 'SuperAdmin'}</td>
-            <td class="p-2">
-              <button onclick="eliminarAdmin('${a.id}')" class="bg-red-600 text-white px-2 py-1 rounded text-xs">Eliminar</button>
-            </td>
-          </tr>`;
-            });
-        }
-
-        async function guardarRol(e) {
-            e.preventDefault();
-            const permisos = {
-                solicitudes: document.getElementById('permSolicitudes').checked,
-                inscritos: document.getElementById('permInscritos').checked,
-                ingresos: document.getElementById('permIngresos').checked,
-                egresos: document.getElementById('permEgresos').checked,
-                usuarios: document.getElementById('permUsuarios').checked,
-                roles: document.getElementById('permRoles').checked,
-                editar_inscritos: document.getElementById('permEditInscritos').checked
-            };
-
-            await db.from('roles').insert([{ nombre: document.getElementById('rolNombre').value, permisos }]);
-            alert('Rol guardado exitosamente.');
-            cargarRolesYAdmins();
         }
 
         async function procesarPago(id, estado) {

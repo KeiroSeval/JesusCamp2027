@@ -6,28 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jesus Camp 2027 - Portal de Inscripción</title>
 
-    <!-- Favicon para evitar error 404 -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f172a">
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛺</text></svg>">
 
-    <!-- Tailwind CSS Nivel Producción CDN (Sin advertencias en consola) -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-
-    <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- FontAwesome Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0f172a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 
 <body class="bg-slate-100 min-h-screen text-gray-800 font-sans">
 
-    <!-- Navbar -->
     <nav class="bg-gray-900 text-white p-4 shadow-md sticky top-0 z-50">
         <div class="max-w-4xl mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-2">
@@ -51,8 +41,8 @@
                 <i class="fa-solid fa-id-card"></i>
             </div>
             <h2 class="text-xl font-bold text-gray-900 mb-1">Ingreso de Campamentista</h2>
-            <p class="text-xs text-gray-500 mb-6">Ingresa tu número de C.I. para ver tu estado, abonar cuotas o editar
-                tus datos.</p>
+            <p class="text-xs text-gray-500 mb-6">Ingresa tu número de C.I. para ver tu estado, abonar cuotas o
+                solicitar cambios.</p>
 
             <div class="space-y-3">
                 <input type="text" id="inputCI" placeholder="Tu C.I. (ej. 13489470)"
@@ -68,7 +58,7 @@
         <!-- VISTA DE PERFIL -->
         <div id="secPerfil" class="hidden space-y-6">
 
-            <!-- Cards de Resumen -->
+            <!-- Cards de Resumen Finanzas -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div
                     class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
@@ -98,38 +88,44 @@
                 </div>
             </div>
 
-            <!-- Datos Personales & Solicitud de Cambio -->
+            <!-- Datos Personales (Modo Lectura por defecto con Botón Editar ✏️) -->
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="font-bold text-gray-800 text-lg flex items-center gap-2">
                         <i class="fa-solid fa-user text-blue-600"></i> Información Inscrita
                     </h3>
-                    <span id="badgeEdicion"
-                        class="hidden text-xs bg-amber-100 text-amber-800 font-semibold px-3 py-1 rounded-full border border-amber-300">
-                        Cambio en revisión
-                    </span>
+                    <div class="flex items-center gap-2">
+                        <span id="badgeEdicion"
+                            class="hidden text-xs bg-amber-100 text-amber-800 font-semibold px-3 py-1 rounded-full border border-amber-300">
+                            Cambio en revisión
+                        </span>
+                        <button id="btnHabilitarEdicion" onclick="habilitarEdicion()"
+                            class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-xs px-3 py-1.5 rounded-lg border border-amber-300 transition flex items-center gap-1">
+                            <i class="fa-solid fa-pencil"></i> Editar Datos
+                        </button>
+                    </div>
                 </div>
 
                 <form id="formPerfil" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="text-xs font-bold text-gray-500">Nombre Completo</label>
                         <input type="text" id="usrNombre" disabled
-                            class="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 text-sm font-semibold">
+                            class="w-full mt-1 p-2.5 bg-gray-100 border border-gray-200 rounded-lg text-gray-600 text-sm font-semibold">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500">Teléfono / WhatsApp</label>
-                        <input type="text" id="usrTelefono"
-                            class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 outline-none">
+                        <input type="text" id="usrTelefono" disabled
+                            class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500">Célula</label>
-                        <input type="text" id="usrCelula"
-                            class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 outline-none">
+                        <input type="text" id="usrCelula" disabled
+                            class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500">Talla de Polera</label>
-                        <select id="usrTalla"
-                            class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 outline-none">
+                        <select id="usrTalla" disabled
+                            class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
                             <option value="XS">XS</option>
                             <option value="S">S</option>
                             <option value="M">M</option>
@@ -137,18 +133,47 @@
                             <option value="XL">XL</option>
                         </select>
                     </div>
-                    <div class="md:col-span-2">
+                    <div>
                         <label class="text-xs font-bold text-gray-500">Tipo de Hospedaje</label>
-                        <select id="usrHospedaje"
-                            class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 outline-none">
+                        <select id="usrHospedaje" disabled
+                            class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
                             <option value="Colchon">Colchón (Bs 230)</option>
                             <option value="Camping">Camping (Bs 220)</option>
                         </select>
                     </div>
-                    <div class="md:col-span-2 pt-2">
+                    <div>
+                        <label class="text-xs font-bold text-gray-500">Contacto de Emergencia</label>
+                        <input type="text" id="usrEmergencia" disabled
+                            class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="text-xs font-bold text-gray-500">Alergias o Medicamentos Especiales</label>
+                        <input type="text" id="usrAlergias" disabled placeholder="Ninguna"
+                            class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
+                    </div>
+
+                    <!-- Campos Exclusivos para Menores de Edad -->
+                    <div id="secMenorEdad"
+                        class="hidden md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 bg-amber-50/50 p-4 rounded-xl border border-amber-200">
+                        <div class="md:col-span-2 font-bold text-xs text-amber-900 flex items-center gap-1">
+                            <i class="fa-solid fa-child-reaching"></i> Información de Padre, Madre o Tutor Legal
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500">Nombre del Tutor</label>
+                            <input type="text" id="usrTutorNombre" disabled
+                                class="usr-input w-full mt-1 p-2.5 bg-white border border-gray-200 rounded-lg text-sm outline-none">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500">Teléfono del Tutor</label>
+                            <input type="text" id="usrTutorTel" disabled
+                                class="usr-input w-full mt-1 p-2.5 bg-white border border-gray-200 rounded-lg text-sm outline-none">
+                        </div>
+                    </div>
+
+                    <div id="secBotonGuardar" class="hidden md:col-span-2 pt-2">
                         <button type="button" id="btnSolicitarCambio" onclick="solicitarCambioDatos()"
-                            class="bg-gray-800 hover:bg-gray-900 text-white text-xs font-bold px-4 py-2.5 rounded-lg transition">
-                            Solicitar Actualización de Datos
+                            class="bg-gray-900 hover:bg-black text-amber-400 text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-md">
+                            Enviar Solicitud de Actualización
                         </button>
                     </div>
                 </form>
@@ -156,8 +181,6 @@
 
             <!-- Registrar Pago e Historial -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                <!-- Formulario Abonar Pago -->
                 <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                     <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
                         <i class="fa-solid fa-cloud-arrow-up text-green-600"></i> Subir Comprobante de Pago
@@ -185,7 +208,6 @@
                     </div>
                 </div>
 
-                <!-- Historial de Pagos -->
                 <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                     <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
                         <i class="fa-solid fa-receipt text-gray-600"></i> Historial de Cuotas
@@ -204,7 +226,6 @@
                         </table>
                     </div>
                 </div>
-
             </div>
 
         </div>
@@ -212,35 +233,24 @@
     </main>
 
     <script>
-        // ⚠️ REEMPLAZA CON TUS CREDENCIALES EXACTAS DE SUPABASE ⚠️
         const SUPABASE_URL = 'https://bpwsdgkafjnsgfilbfgg.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwd3NkZ2thZmpuc2dmaWxiZmdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxODM1NzUsImV4cCI6MjEwNzc1OTU3NX0.rnSg8vNFpAuwNfECYwfyynERKwv3CJ7CGZRhAKbyDDM';
 
-
-        // Instancia limpia usando 'db' para no colisionar con la variable global 'supabase'
         const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let usuarioActual = null;
 
         async function buscarCampamentista() {
-            const ci = document.getElementById('inputCI').value.trim();
-            if (!ci) return;
+            const ciInput = document.getElementById('inputCI').value.trim();
+            if (!ciInput) return;
 
-            // Usamos .maybeSingle() para evitar el error 406
             const { data: inscrito, error } = await db
                 .from('inscritos')
                 .select('*')
-                .eq('ci', ci)
+                .ilike('ci', ciInput)
                 .maybeSingle();
 
-            if (error) {
-                console.error("Error en consulta:", error);
-                document.getElementById('msgBusqueda').innerText = 'Ocurrió un error al consultar la base de datos.';
-                document.getElementById('msgBusqueda').classList.remove('hidden');
-                return;
-            }
-
-            if (!inscrito) {
+            if (error || !inscrito) {
                 document.getElementById('msgBusqueda').innerText = 'No se encontró ningún campamentista registrado con ese C.I.';
                 document.getElementById('msgBusqueda').classList.remove('hidden');
                 return;
@@ -260,6 +270,14 @@
             document.getElementById('usrCelula').value = usuarioActual.celula || '';
             document.getElementById('usrTalla').value = usuarioActual.talla_polera || 'S';
             document.getElementById('usrHospedaje').value = usuarioActual.tipo_hospedaje || 'Colchon';
+            document.getElementById('usrEmergencia').value = usuarioActual.contacto_emergencia || '';
+            document.getElementById('usrAlergias').value = usuarioActual.alergias_medicina || '';
+
+            if (usuarioActual.es_menor) {
+                document.getElementById('secMenorEdad').classList.remove('hidden');
+                document.getElementById('usrTutorNombre').value = usuarioActual.tutor_nombre || '';
+                document.getElementById('usrTutorTel').value = usuarioActual.tutor_telefono || '';
+            }
 
             // Calcular Pagos
             const { data: pagos } = await db.from('pagos').select('*').eq('inscrito_id', usuarioActual.id);
@@ -270,9 +288,7 @@
 
             (pagos || []).forEach(p => {
                 if (p.estado === 'Aprobado') totalAprobado += Number(p.monto);
-
                 let colorEstado = p.estado === 'Aprobado' ? 'bg-green-100 text-green-700' : (p.estado === 'Pendiente' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700');
-
                 tbody.innerHTML += `
           <tr>
             <td class="p-2">${new Date(p.fecha).toLocaleDateString()}</td>
@@ -287,18 +303,21 @@
             document.getElementById('lblAbonado').innerText = `Bs ${totalAprobado}`;
             document.getElementById('lblSaldo').innerText = `Bs ${costoTotal - totalAprobado}`;
 
-            // Verificar si hay solicitud de edición pendiente
-            const { data: edicion } = await db
-                .from('solicitudes_edicion')
-                .select('*')
-                .eq('inscrito_id', usuarioActual.id)
-                .eq('estado', 'Pendiente')
-                .maybeSingle();
-
+            const { data: edicion } = await db.from('solicitudes_edicion').select('*').eq('inscrito_id', usuarioActual.id).eq('estado', 'Pendiente').maybeSingle();
             if (edicion) {
                 document.getElementById('badgeEdicion').classList.remove('hidden');
-                document.getElementById('btnSolicitarCambio').disabled = true;
+                document.getElementById('btnHabilitarEdicion').disabled = true;
             }
+        }
+
+        // Activa los inputs sólo tras presionar "Editar Datos" ✏️
+        function habilitarEdicion() {
+            document.querySelectorAll('.usr-input').forEach(i => {
+                i.disabled = false;
+                i.classList.remove('bg-gray-50');
+                i.classList.add('bg-white', 'border-amber-400');
+            });
+            document.getElementById('secBotonGuardar').classList.remove('hidden');
         }
 
         async function solicitarCambioDatos() {
@@ -307,7 +326,11 @@
                 telefono: document.getElementById('usrTelefono').value,
                 celula: document.getElementById('usrCelula').value,
                 talla_polera: document.getElementById('usrTalla').value,
-                tipo_hospedaje: document.getElementById('usrHospedaje').value
+                tipo_hospedaje: document.getElementById('usrHospedaje').value,
+                contacto_emergencia: document.getElementById('usrEmergencia').value,
+                alergias_medicina: document.getElementById('usrAlergias').value,
+                tutor_nombre: document.getElementById('usrTutorNombre').value,
+                tutor_telefono: document.getElementById('usrTutorTel').value
             };
 
             await db.from('solicitudes_edicion').insert([datos]);
@@ -318,19 +341,16 @@
         async function subirComprobante() {
             const monto = document.getElementById('pagoMonto').value;
             const fileInput = document.getElementById('pagoArchivo');
-
             if (!monto || fileInput.files.length === 0) return alert('Ingresa el monto y la foto del comprobante.');
 
             const file = fileInput.files[0];
             const fileName = `${Date.now()}_${file.name}`;
 
-            // Subir imagen a Supabase Storage
             const { data: uploadData, error: uploadErr } = await db.storage.from('comprobantes').upload(fileName, file);
             if (uploadErr) return alert('Error al subir comprobante: ' + uploadErr.message);
 
             const { data: urlData } = db.storage.from('comprobantes').getPublicUrl(fileName);
 
-            // Guardar en tabla pagos
             await db.from('pagos').insert([{
                 inscrito_id: usuarioActual.id,
                 monto: monto,
