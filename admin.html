@@ -73,38 +73,47 @@
 
         <!-- MÉTRICAS DE PARTICIPANTES -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-blue-600 flex justify-between items-center">
+            <div
+                class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-blue-600 flex justify-between items-center">
                 <div>
                     <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Campamentistas</p>
                     <h3 class="text-2xl font-black text-gray-900 mt-0.5" id="stCampamentistas">0</h3>
                 </div>
-                <div class="p-3 bg-blue-50 text-blue-600 rounded-xl"><i class="fa-solid fa-person-hiking text-lg"></i></div>
+                <div class="p-3 bg-blue-50 text-blue-600 rounded-xl"><i class="fa-solid fa-person-hiking text-lg"></i>
+                </div>
             </div>
 
-            <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-purple-600 flex justify-between items-center">
+            <div
+                class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-purple-600 flex justify-between items-center">
                 <div>
                     <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Staff Totales</p>
                     <h3 class="text-2xl font-black text-purple-700 mt-0.5" id="stStaff">0</h3>
                 </div>
-                <div class="p-3 bg-purple-50 text-purple-600 rounded-xl"><i class="fa-solid fa-user-shield text-lg"></i></div>
+                <div class="p-3 bg-purple-50 text-purple-600 rounded-xl"><i class="fa-solid fa-user-shield text-lg"></i>
+                </div>
             </div>
 
-            <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-emerald-600 flex justify-between items-center bg-emerald-50/20">
+            <div
+                class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-emerald-600 flex justify-between items-center bg-emerald-50/20">
                 <div>
-                    <p class="text-[10px] font-extrabold text-emerald-800 uppercase tracking-wider">Total General Participantes</p>
+                    <p class="text-[10px] font-extrabold text-emerald-800 uppercase tracking-wider">Total General
+                        Participantes</p>
                     <h3 class="text-2xl font-black text-emerald-600 mt-0.5" id="stTotalGeneral">0</h3>
                 </div>
-                <div class="p-3 bg-emerald-100 text-emerald-700 rounded-xl"><i class="fa-solid fa-users text-lg"></i></div>
+                <div class="p-3 bg-emerald-100 text-emerald-700 rounded-xl"><i class="fa-solid fa-users text-lg"></i>
+                </div>
             </div>
         </div>
 
         <!-- METRICAS DE FINANZAS -->
         <div id="contTarjetasFinanzas" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div id="cardTotalIngresos" class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-green-600">
+            <div id="cardTotalIngresos"
+                class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-green-600">
                 <p class="text-xs font-bold text-gray-400 uppercase">Total Ingresos</p>
                 <h3 class="text-2xl font-black text-green-600 mt-1" id="stIngresos">Bs 0</h3>
             </div>
-            <div id="cardTotalEgresos" class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-red-600">
+            <div id="cardTotalEgresos"
+                class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-red-600">
                 <p class="text-xs font-bold text-gray-400 uppercase">Total Egresos</p>
                 <h3 class="text-2xl font-black text-red-600 mt-1" id="stEgresos">Bs 0</h3>
             </div>
@@ -230,14 +239,19 @@
                     </button>
                 </div>
 
-                <div id="formContenedorCampamentista" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
+                <div id="formContenedorCampamentista"
+                    class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
                     <h4 class="font-bold text-gray-700 text-xs uppercase mb-3 border-b pb-1">Nuevo Registro</h4>
                     <form onsubmit="crearNuevoCampamentista(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <input type="text" id="newCi" placeholder="C.I. (Obligatorio)" required class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="text" id="newNombre" placeholder="Nombre Completo" required class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="text" id="newTel" placeholder="Teléfono / WhatsApp" class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="text" id="newCelula" placeholder="Célula" class="p-2.5 border rounded-xl text-xs bg-white">
-                        
+                        <input type="text" id="newCi" placeholder="C.I. (Obligatorio)" required
+                            class="p-2.5 border rounded-xl text-xs bg-white">
+                        <input type="text" id="newNombre" placeholder="Nombre Completo" required
+                            class="p-2.5 border rounded-xl text-xs bg-white">
+                        <input type="text" id="newTel" placeholder="Teléfono / WhatsApp"
+                            class="p-2.5 border rounded-xl text-xs bg-white">
+                        <input type="text" id="newCelula" placeholder="Célula"
+                            class="p-2.5 border rounded-xl text-xs bg-white">
+
                         <select id="newTalla" class="p-2.5 border rounded-xl text-xs bg-white">
                             <option value="XS">Talla XS</option>
                             <option value="S">Talla S</option>
@@ -246,10 +260,12 @@
                             <option value="XL">Talla XL</option>
                         </select>
 
-                        <select id="newTipoInscripcion" onchange="evaluarPrecioManual(this.value, 'newDivPrecioManual')" class="p-2.5 border rounded-xl text-xs bg-white font-bold text-indigo-900"></select>
+                        <select id="newTipoInscripcion" onchange="evaluarPrecioManual(this.value, 'newDivPrecioManual')"
+                            class="p-2.5 border rounded-xl text-xs bg-white font-bold text-indigo-900"></select>
 
                         <div id="newDivPrecioManual" class="hidden">
-                            <input type="number" id="newPrecioManual" placeholder="Precio Especial (Bs)" class="p-2.5 border rounded-xl text-xs bg-amber-50 w-full font-bold">
+                            <input type="number" id="newPrecioManual" placeholder="Precio Especial (Bs)"
+                                class="p-2.5 border rounded-xl text-xs bg-amber-50 w-full font-bold">
                         </div>
 
                         <select id="newEquipo" class="p-2.5 border rounded-xl text-xs bg-white">
@@ -271,30 +287,41 @@
                             <option value="Juegos de Mesa">Juegos de Mesa</option>
                         </select>
 
-                        <input type="text" id="newHabilidad" placeholder="Habilidad o Talento" class="p-2.5 border rounded-xl text-xs bg-white">
+                        <input type="text" id="newHabilidad" placeholder="Habilidad o Talento"
+                            class="p-2.5 border rounded-xl text-xs bg-white">
 
-                        <div class="md:col-span-3 flex items-center gap-6 bg-white p-3 rounded-xl border border-gray-200">
+                        <div
+                            class="md:col-span-3 flex items-center gap-6 bg-white p-3 rounded-xl border border-gray-200">
                             <label class="text-xs font-bold text-gray-700 flex items-center gap-2">
                                 <input type="checkbox" id="newEsStaff" class="rounded text-purple-600">
                                 ⭐ Pertenece a la Categoría/Rol de STAFF
                             </label>
                             <label class="text-xs font-bold text-gray-700 flex items-center gap-2">
-                                <input type="checkbox" id="newEsMenor" onchange="toggleFormMenor(this.checked)" class="rounded text-blue-600">
+                                <input type="checkbox" id="newEsMenor" onchange="toggleFormMenor(this.checked)"
+                                    class="rounded text-blue-600">
                                 ¿Es Menor de Edad?
                             </label>
                         </div>
 
-                        <div id="newSecTutor" class="hidden md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-4 bg-amber-50/50 p-3 rounded-xl border border-amber-200">
-                            <input type="text" id="newTutorNombre" placeholder="Nombre del Tutor" class="p-2.5 border rounded-xl text-xs bg-white">
-                            <input type="text" id="newTutorTel" placeholder="Teléfono del Tutor" class="p-2.5 border rounded-xl text-xs bg-white">
+                        <div id="newSecTutor"
+                            class="hidden md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-4 bg-amber-50/50 p-3 rounded-xl border border-amber-200">
+                            <input type="text" id="newTutorNombre" placeholder="Nombre del Tutor"
+                                class="p-2.5 border rounded-xl text-xs bg-white">
+                            <input type="text" id="newTutorTel" placeholder="Teléfono del Tutor"
+                                class="p-2.5 border rounded-xl text-xs bg-white">
                         </div>
 
-                        <input type="text" id="newEmergencia" placeholder="Contacto de Emergencia" class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="text" id="newAlergias" placeholder="Alergias o Medicamentos" class="p-2.5 border rounded-xl text-xs bg-white md:col-span-2">
+                        <input type="text" id="newEmergencia" placeholder="Contacto de Emergencia"
+                            class="p-2.5 border rounded-xl text-xs bg-white">
+                        <input type="text" id="newAlergias" placeholder="Alergias o Medicamentos"
+                            class="p-2.5 border rounded-xl text-xs bg-white md:col-span-2">
 
                         <div class="md:col-span-3 flex justify-end gap-2">
-                            <button type="button" onclick="toggleFormulario('formContenedorCampamentista')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
-                            <button type="submit" class="bg-green-600 text-white font-bold text-xs px-6 py-2 rounded-xl transition shadow">+ Guardar Registro</button>
+                            <button type="button" onclick="toggleFormulario('formContenedorCampamentista')"
+                                class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                            <button type="submit"
+                                class="bg-green-600 text-white font-bold text-xs px-6 py-2 rounded-xl transition shadow">+
+                                Guardar Registro</button>
                         </div>
                     </form>
                 </div>
@@ -334,11 +361,13 @@
                         <input type="hidden" id="catIdEdit">
                         <div>
                             <label class="text-[10px] font-bold text-gray-500 uppercase">Nombre Categoría:</label>
-                            <input type="text" id="catNombre" placeholder="Nombre" required class="p-2.5 border rounded-xl text-xs bg-white w-full">
+                            <input type="text" id="catNombre" placeholder="Nombre" required
+                                class="p-2.5 border rounded-xl text-xs bg-white w-full">
                         </div>
                         <div>
                             <label class="text-[10px] font-bold text-gray-500 uppercase">Precio Oficial (Bs):</label>
-                            <input type="number" step="0.01" id="catPrecio" placeholder="Precio (Bs)" required class="p-2.5 border rounded-xl text-xs bg-white w-full">
+                            <input type="number" step="0.01" id="catPrecio" placeholder="Precio (Bs)" required
+                                class="p-2.5 border rounded-xl text-xs bg-white w-full">
                         </div>
 
                         <div class="flex flex-col gap-2 justify-center bg-white p-3 rounded-xl border">
@@ -353,8 +382,11 @@
                         </div>
 
                         <div class="col-span-3 flex justify-end gap-2">
-                            <button type="button" onclick="toggleFormulario('formContenedorCategoria')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
-                            <button type="submit" class="bg-indigo-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">Guardar Tipo de Inscripción</button>
+                            <button type="button" onclick="toggleFormulario('formContenedorCategoria')"
+                                class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                            <button type="submit"
+                                class="bg-indigo-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">Guardar
+                                Tipo de Inscripción</button>
                         </div>
                     </form>
                 </div>
@@ -409,7 +441,8 @@
 
                 <div id="formContenedorEgreso" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
                     <form onsubmit="registrarNuevoEgreso(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <input type="text" id="egConcepto" placeholder="Concepto de Gasto" required class="p-2.5 border rounded-xl text-xs bg-white">
+                        <input type="text" id="egConcepto" placeholder="Concepto de Gasto" required
+                            class="p-2.5 border rounded-xl text-xs bg-white">
                         <select id="egCategoria" class="p-2.5 border rounded-xl text-xs bg-white">
                             <option value="Alimentación">Alimentación</option>
                             <option value="Logística">Logística</option>
@@ -417,10 +450,14 @@
                             <option value="Transporte">Transporte</option>
                             <option value="Otros">Otros Gastos</option>
                         </select>
-                        <input type="number" step="0.01" id="egMonto" placeholder="Monto (Bs)" required class="p-2.5 border rounded-xl text-xs bg-white">
+                        <input type="number" step="0.01" id="egMonto" placeholder="Monto (Bs)" required
+                            class="p-2.5 border rounded-xl text-xs bg-white">
                         <div class="col-span-3 flex justify-end gap-2">
-                            <button type="button" onclick="toggleFormulario('formContenedorEgreso')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
-                            <button type="submit" class="bg-red-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">- Guardar Egreso</button>
+                            <button type="button" onclick="toggleFormulario('formContenedorEgreso')"
+                                class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                            <button type="submit"
+                                class="bg-red-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">- Guardar
+                                Egreso</button>
                         </div>
                     </form>
                 </div>
@@ -456,13 +493,16 @@
                     </button>
                 </div>
 
-                <div id="formContenedorReporte" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-4">
+                <div id="formContenedorReporte"
+                    class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-4">
                     <form onsubmit="guardarNuevoReporteAvanzado(event)" class="space-y-4">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <input type="text" id="repNombre" placeholder="Nombre del Reporte" required class="p-2.5 border rounded-xl text-xs bg-white">
-                            
+                            <input type="text" id="repNombre" placeholder="Nombre del Reporte" required
+                                class="p-2.5 border rounded-xl text-xs bg-white">
+
                             <div>
-                                <label class="text-[10px] font-bold text-gray-500 uppercase block">Grupo Principal:</label>
+                                <label class="text-[10px] font-bold text-gray-500 uppercase block">Grupo
+                                    Principal:</label>
                                 <select id="repGrupoPrincipal" class="p-2 border rounded-xl text-xs w-full bg-white">
                                     <option value="ninguno">Sin Agrupación</option>
                                     <option value="celula" selected>Agrupar por Célula</option>
@@ -474,7 +514,8 @@
                             </div>
 
                             <div>
-                                <label class="text-[10px] font-bold text-gray-500 uppercase block">Subgrupo Secundario:</label>
+                                <label class="text-[10px] font-bold text-gray-500 uppercase block">Subgrupo
+                                    Secundario:</label>
                                 <select id="repGrupoSecundario" class="p-2 border rounded-xl text-xs w-full bg-white">
                                     <option value="ninguno" selected>Sin Subgrupo</option>
                                     <option value="equipo">Subagrupar por Equipo</option>
@@ -486,19 +527,29 @@
 
                         <div>
                             <label class="text-xs font-bold text-gray-600 block mb-2">Columnas Visibles:</label>
-                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 bg-white p-3 rounded-xl border border-gray-200 text-xs">
-                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_ci" checked> C.I.</label>
-                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_nombre" checked> Nombre</label>
-                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_tel" checked> Teléfono</label>
-                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_celula" checked> Célula</label>
-                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_equipo" checked> Equipo</label>
-                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_actividad" checked> Actividad</label>
+                            <div
+                                class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 bg-white p-3 rounded-xl border border-gray-200 text-xs">
+                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_ci" checked>
+                                    C.I.</label>
+                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_nombre" checked>
+                                    Nombre</label>
+                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_tel" checked>
+                                    Teléfono</label>
+                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_celula" checked>
+                                    Célula</label>
+                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_equipo" checked>
+                                    Equipo</label>
+                                <label class="flex items-center gap-1.5"><input type="checkbox" id="col_actividad"
+                                        checked> Actividad</label>
                             </div>
                         </div>
 
                         <div class="flex justify-end gap-2">
-                            <button type="button" onclick="toggleFormulario('formContenedorReporte')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
-                            <button type="submit" class="bg-blue-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">+ Guardar Reporte</button>
+                            <button type="button" onclick="toggleFormulario('formContenedorReporte')"
+                                class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                            <button type="submit"
+                                class="bg-blue-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">+ Guardar
+                                Reporte</button>
                         </div>
                     </form>
                 </div>
@@ -511,7 +562,8 @@
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm col-span-2">
-                    <h4 class="font-bold text-gray-800 text-sm mb-3" id="lblTituloResultadoReporte">Resultados del Reporte</h4>
+                    <h4 class="font-bold text-gray-800 text-sm mb-3" id="lblTituloResultadoReporte">Resultados del
+                        Reporte</h4>
                     <div id="contenedorResultadoReporte" class="overflow-x-auto text-xs text-gray-600">
                         <p class="text-gray-400 italic">Selecciona un reporte para ejecutarlo.</p>
                     </div>
@@ -532,13 +584,19 @@
 
                 <div id="formContenedorAdmin" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
                     <form onsubmit="guardarAdmin(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <input type="text" id="adminNewNombre" placeholder="Nombre Completo" required class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="text" id="adminNewUser" placeholder="Usuario" required class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="password" id="adminNewPass" placeholder="Contraseña" required class="p-2.5 border rounded-xl text-xs bg-white">
+                        <input type="text" id="adminNewNombre" placeholder="Nombre Completo" required
+                            class="p-2.5 border rounded-xl text-xs bg-white">
+                        <input type="text" id="adminNewUser" placeholder="Usuario" required
+                            class="p-2.5 border rounded-xl text-xs bg-white">
+                        <input type="password" id="adminNewPass" placeholder="Contraseña" required
+                            class="p-2.5 border rounded-xl text-xs bg-white">
                         <select id="adminRolSelect" class="p-2.5 border rounded-xl text-xs bg-white"></select>
                         <div class="col-span-4 flex justify-end gap-2">
-                            <button type="button" onclick="toggleFormulario('formContenedorAdmin')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
-                            <button type="submit" class="bg-gray-900 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">+ Crear Admin</button>
+                            <button type="button" onclick="toggleFormulario('formContenedorAdmin')"
+                                class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                            <button type="submit"
+                                class="bg-gray-900 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">+ Crear
+                                Admin</button>
                         </div>
                     </form>
                 </div>
@@ -573,34 +631,57 @@
                 <div id="formContenedorRol" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
                     <form onsubmit="guardarRol(event)" class="space-y-4">
                         <input type="hidden" id="rolIdEdit">
-                        <input type="text" id="rolNombre" placeholder="Nombre del Rol (ej. Staff, Tesorero)" required class="p-2.5 border rounded-xl text-xs w-full max-w-md bg-white">
+                        <input type="text" id="rolNombre" placeholder="Nombre del Rol (ej. Staff, Tesorero)" required
+                            class="p-2.5 border rounded-xl text-xs w-full max-w-md bg-white">
 
                         <label class="text-xs font-bold text-gray-700 block">Matriz de Permisos:</label>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-white p-4 rounded-xl border border-gray-200">
-                            <label class="flex items-center gap-2 text-xs font-bold text-green-700 col-span-2 md:col-span-4 bg-green-50 p-2 rounded-lg border border-green-200">
-                                <input type="checkbox" id="permVerFinanzas"> 💰 Permitir ver Totales de Ingresos, Egresos y Balance Neto
+                        <div
+                            class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-white p-4 rounded-xl border border-gray-200">
+                            <label
+                                class="flex items-center gap-2 text-xs font-bold text-green-700 col-span-2 md:col-span-4 bg-green-50 p-2 rounded-lg border border-green-200">
+                                <input type="checkbox" id="permVerFinanzas"> 💰 Permitir ver Totales de Ingresos,
+                                Egresos y Balance Neto
                             </label>
 
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permSolicitudes"> Mod. Pendientes</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permInscritosVer"> Ver Inscritos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permInscritosCrear"> Crear Inscritos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permInscritosEditar"> Editar Inscritos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permInscritosEliminar"> Eliminar Inscritos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permCategorias"> Gestionar Categorías</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permIngresosVer"> Ver Ingresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permIngresosEliminar"> Eliminar Ingresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEgresosVer"> Ver Egresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEgresosCrear"> Crear Egresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEgresosEditar"> Editar Egresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permEgresosEliminar"> Eliminar Egresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permReportesVer"> Ver Reportes</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permReportesCrear"> Crear Reportes</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permUsuarios"> Mod. Administradores</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permRoles"> Mod. Permisos y Roles</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                    id="permSolicitudes"> Mod. Pendientes</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                    id="permInscritosVer"> Ver Inscritos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                    id="permInscritosCrear"> Crear Inscritos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                    id="permInscritosEditar"> Editar Inscritos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                    id="permInscritosEliminar"> Eliminar Inscritos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                    id="permCategorias"> Gestionar Categorías</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                    id="permIngresosVer"> Ver Ingresos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                    id="permIngresosEliminar"> Eliminar Ingresos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                    id="permEgresosVer"> Ver Egresos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                    id="permEgresosCrear"> Crear Egresos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                    id="permEgresosEditar"> Editar Egresos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                    id="permEgresosEliminar"> Eliminar Egresos</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                    id="permReportesVer"> Ver Reportes</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                    id="permReportesCrear"> Crear Reportes</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                    id="permUsuarios"> Mod. Administradores</label>
+                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                    id="permRoles"> Mod. Permisos y Roles</label>
                         </div>
                         <div class="flex justify-end gap-2">
-                            <button type="button" onclick="toggleFormulario('formContenedorRol')" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
-                            <button type="submit" class="bg-indigo-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">+ Guardar Rol</button>
+                            <button type="button" onclick="toggleFormulario('formContenedorRol')"
+                                class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                            <button type="submit"
+                                class="bg-indigo-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">+ Guardar
+                                Rol</button>
                         </div>
                     </form>
                 </div>
@@ -627,7 +708,8 @@
                     <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
                         <i class="fa-solid fa-clipboard-check text-indigo-600"></i> Historial de Auditoría y Revisiones
                     </h3>
-                    <button onclick="cargarAuditoriaLogs()" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-3 py-1.5 rounded-lg border transition">
+                    <button onclick="cargarAuditoriaLogs()"
+                        class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-3 py-1.5 rounded-lg border transition">
                         <i class="fa-solid fa-arrows-rotate mr-1"></i> Actualizar
                     </button>
                 </div>
@@ -652,45 +734,52 @@
     </div>
 
     <!-- MODAL COMPARACIÓN DE CAMBIOS PENDIENTES -->
-    <div id="modalVerCambios" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div id="modalVerCambios"
+        class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[85vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-2">
                 <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
                     <i class="fa-solid fa-code-compare text-blue-600"></i> Detalle de Solicitud de Cambio
                 </h3>
-                <button onclick="cerrarModalCambios()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="cerrarModalCambios()" class="text-gray-400 hover:text-gray-600"><i
+                        class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            
+
             <div id="contenidoComparacionCambios" class="space-y-3 text-xs"></div>
 
             <div class="flex justify-end gap-2 pt-2 border-t">
-                <button onclick="cerrarModalCambios()" class="bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2 rounded-xl">Cerrar</button>
+                <button onclick="cerrarModalCambios()"
+                    class="bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2 rounded-xl">Cerrar</button>
             </div>
         </div>
     </div>
 
     <!-- MODAL EDITAR CAMPAMENTISTA / STAFF -->
-    <div id="modalEditCampamentista" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-2 sm:p-4">
+    <div id="modalEditCampamentista"
+        class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-2 sm:p-4">
         <div class="bg-white rounded-2xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl flex flex-col max-h-[90vh]">
-            
+
             <div class="flex justify-between items-center mb-3 border-b pb-2 flex-shrink-0">
                 <h3 class="font-bold text-gray-800 text-base sm:text-lg flex items-center gap-2">
                     <i class="fa-solid fa-user-gear text-amber-500"></i> Editar Datos de Campamentista / Staff
                 </h3>
-                <button onclick="cerrarModalCampamentista()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="cerrarModalCampamentista()" class="text-gray-400 hover:text-gray-600"><i
+                        class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
             <form onsubmit="confirmarYGuardarInscrito(event)" class="overflow-y-auto flex-1 pr-2 space-y-4">
                 <input type="hidden" id="editInsId">
-                
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="text-xs font-bold text-gray-600">C.I.</label>
-                        <input type="text" id="editInsCi" required class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                        <input type="text" id="editInsCi" required
+                            class="w-full p-2.5 border rounded-xl text-xs outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-600">Nombre Completo</label>
-                        <input type="text" id="editInsNombre" required class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                        <input type="text" id="editInsNombre" required
+                            class="w-full p-2.5 border rounded-xl text-xs outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-600">Teléfono / WhatsApp</label>
@@ -698,11 +787,13 @@
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-600">Célula</label>
-                        <input type="text" id="editInsCelula" class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                        <input type="text" id="editInsCelula"
+                            class="w-full p-2.5 border rounded-xl text-xs outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-600">Equipo Asignado</label>
-                        <select id="editInsEquipo" class="w-full p-2.5 border rounded-xl text-xs outline-none bg-indigo-50 font-bold">
+                        <select id="editInsEquipo"
+                            class="w-full p-2.5 border rounded-xl text-xs outline-none bg-indigo-50 font-bold">
                             <option value="Sin Asignar">Sin Asignar</option>
                             <option value="Búfalos">Búfalos 🦬</option>
                             <option value="Águilas">Águilas 🦅</option>
@@ -723,12 +814,15 @@
 
                     <div>
                         <label class="text-xs font-bold text-gray-600">Tipo de Inscripción / Categoría</label>
-                        <select id="editInsTipoInscripcion" onchange="evaluarPrecioManual(this.value, 'editDivPrecioManual')" class="w-full p-2.5 border rounded-xl text-xs outline-none font-bold text-indigo-900 bg-white"></select>
+                        <select id="editInsTipoInscripcion"
+                            onchange="evaluarPrecioManual(this.value, 'editDivPrecioManual')"
+                            class="w-full p-2.5 border rounded-xl text-xs outline-none font-bold text-indigo-900 bg-white"></select>
                     </div>
 
                     <div id="editDivPrecioManual" class="hidden">
                         <label class="text-xs font-bold text-amber-800">Precio Personalizado (Bs)</label>
-                        <input type="number" id="editInsPrecioManual" class="w-full p-2.5 border rounded-xl text-xs outline-none bg-amber-50 font-bold">
+                        <input type="number" id="editInsPrecioManual"
+                            class="w-full p-2.5 border rounded-xl text-xs outline-none bg-amber-50 font-bold">
                     </div>
 
                     <div>
@@ -747,7 +841,8 @@
 
                     <div>
                         <label class="text-xs font-bold text-gray-600">Estado Carta de Compromiso</label>
-                        <select id="editInsEstadoCarta" class="w-full p-2.5 border rounded-xl text-xs outline-none font-bold">
+                        <select id="editInsEstadoCarta"
+                            class="w-full p-2.5 border rounded-xl text-xs outline-none font-bold">
                             <option value="Pendiente">Pendiente</option>
                             <option value="En Revisión">En Revisión</option>
                             <option value="Aprobada">Aprobada</option>
@@ -755,7 +850,8 @@
                         </select>
                     </div>
 
-                    <div class="md:col-span-2 flex items-center gap-4 bg-purple-50 p-3 rounded-xl border border-purple-200">
+                    <div
+                        class="md:col-span-2 flex items-center gap-4 bg-purple-50 p-3 rounded-xl border border-purple-200">
                         <label class="text-xs font-bold text-purple-900 flex items-center gap-2">
                             <input type="checkbox" id="editInsEsStaff" class="rounded text-purple-600">
                             ⭐ Pertenece a la Categoría / Rol Especial de STAFF
@@ -764,39 +860,48 @@
 
                     <div>
                         <label class="text-xs font-bold text-gray-600">Habilidad / Talento</label>
-                        <input type="text" id="editInsHabilidad" class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                        <input type="text" id="editInsHabilidad"
+                            class="w-full p-2.5 border rounded-xl text-xs outline-none">
                     </div>
 
                     <div>
                         <label class="text-xs font-bold text-gray-600">Contacto Emergencia</label>
-                        <input type="text" id="editInsEmergencia" class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                        <input type="text" id="editInsEmergencia"
+                            class="w-full p-2.5 border rounded-xl text-xs outline-none">
                     </div>
 
                     <div class="md:col-span-2">
                         <label class="text-xs font-bold text-gray-600">Alergias o Medicamentos</label>
-                        <input type="text" id="editInsAlergias" class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                        <input type="text" id="editInsAlergias"
+                            class="w-full p-2.5 border rounded-xl text-xs outline-none">
                     </div>
 
                     <div class="md:col-span-2 border-t pt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="text-xs font-bold text-gray-600">Nombre del Tutor</label>
-                            <input type="text" id="editInsTutorNom" class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                            <input type="text" id="editInsTutorNom"
+                                class="w-full p-2.5 border rounded-xl text-xs outline-none">
                         </div>
                         <div>
                             <label class="text-xs font-bold text-gray-600">Teléfono del Tutor</label>
-                            <input type="text" id="editInsTutorTel" class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                            <input type="text" id="editInsTutorTel"
+                                class="w-full p-2.5 border rounded-xl text-xs outline-none">
                         </div>
                     </div>
                 </div>
 
                 <div class="flex justify-between gap-2 pt-4 border-t sticky bottom-0 bg-white">
-                    <button type="button" onclick="solicitarSeguridad('borrarCampamentista', document.getElementById('editInsId').value)"
+                    <button type="button"
+                        onclick="solicitarSeguridad('borrarCampamentista', document.getElementById('editInsId').value)"
                         class="bg-red-100 text-red-700 hover:bg-red-200 text-xs font-bold px-4 py-2 rounded-xl border border-red-300">
                         <i class="fa-solid fa-trash mr-1"></i> Eliminar
                     </button>
                     <div class="flex gap-2">
-                        <button type="button" onclick="cerrarModalCampamentista()" class="bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2 rounded-xl">Cancelar</button>
-                        <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs px-5 py-2 rounded-xl shadow">Guardar Cambios</button>
+                        <button type="button" onclick="cerrarModalCampamentista()"
+                            class="bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2 rounded-xl">Cancelar</button>
+                        <button type="submit"
+                            class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs px-5 py-2 rounded-xl shadow">Guardar
+                            Cambios</button>
                     </div>
                 </div>
             </form>
@@ -804,7 +909,8 @@
     </div>
 
     <!-- MODAL EDITAR ADMIN -->
-    <div id="modalEditAdmin" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div id="modalEditAdmin"
+        class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
             <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
                 <i class="fa-solid fa-user-pen text-indigo-600"></i> Editar Administrador
@@ -813,33 +919,41 @@
                 <input type="hidden" id="editAdminId">
                 <div>
                     <label class="text-xs font-bold text-gray-600">Nombre Completo</label>
-                    <input type="text" id="editAdminNombre" required class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                    <input type="text" id="editAdminNombre" required
+                        class="w-full p-2.5 border rounded-xl text-xs outline-none">
                 </div>
                 <div>
                     <label class="text-xs font-bold text-gray-600">Nombre de Usuario</label>
-                    <input type="text" id="editAdminUser" required class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                    <input type="text" id="editAdminUser" required
+                        class="w-full p-2.5 border rounded-xl text-xs outline-none">
                 </div>
                 <div>
                     <label class="text-xs font-bold text-gray-600">Rol Asignado</label>
-                    <select id="editAdminRolSelect" class="w-full p-2.5 border rounded-xl text-xs outline-none"></select>
+                    <select id="editAdminRolSelect"
+                        class="w-full p-2.5 border rounded-xl text-xs outline-none"></select>
                 </div>
                 <div class="flex justify-end gap-2 pt-3">
-                    <button type="button" onclick="cerrarModalAdmin()" class="bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2 rounded-xl">Cancelar</button>
-                    <button type="submit" class="bg-indigo-600 text-white font-bold text-xs px-5 py-2 rounded-xl shadow">Guardar Cambios</button>
+                    <button type="button" onclick="cerrarModalAdmin()"
+                        class="bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2 rounded-xl">Cancelar</button>
+                    <button type="submit"
+                        class="bg-indigo-600 text-white font-bold text-xs px-5 py-2 rounded-xl shadow">Guardar
+                        Cambios</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- MODAL EDITAR EGRESO -->
-    <div id="modalEditEgreso" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div id="modalEditEgreso"
+        class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
             <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
                 <i class="fa-solid fa-pencil text-red-600"></i> Modificar Egreso
             </h3>
             <form onsubmit="confirmarYGuardarEgreso(event)" class="space-y-3">
                 <input type="hidden" id="editEgId">
-                <input type="text" id="editEgConcepto" placeholder="Concepto" required class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                <input type="text" id="editEgConcepto" placeholder="Concepto" required
+                    class="w-full p-2.5 border rounded-xl text-xs outline-none">
                 <select id="editEgCategoria" class="w-full p-2.5 border rounded-xl text-xs outline-none">
                     <option value="Alimentación">Alimentación</option>
                     <option value="Logística">Logística</option>
@@ -847,31 +961,41 @@
                     <option value="Transporte">Transporte</option>
                     <option value="Otros">Otros Gastos</option>
                 </select>
-                <input type="number" step="0.01" id="editEgMonto" placeholder="Monto" required class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                <input type="number" step="0.01" id="editEgMonto" placeholder="Monto" required
+                    class="w-full p-2.5 border rounded-xl text-xs outline-none">
                 <div class="flex justify-end gap-2 pt-3">
-                    <button type="button" onclick="cerrarModalEgreso()" class="bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2 rounded-xl">Cancelar</button>
-                    <button type="submit" class="bg-red-600 text-white font-bold text-xs px-5 py-2 rounded-xl shadow">Guardar Egreso</button>
+                    <button type="button" onclick="cerrarModalEgreso()"
+                        class="bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2 rounded-xl">Cancelar</button>
+                    <button type="submit"
+                        class="bg-red-600 text-white font-bold text-xs px-5 py-2 rounded-xl shadow">Guardar
+                        Egreso</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- MODAL CONFIRMACIÓN DE SEGURIDAD -->
-    <div id="modalConfirmPass" class="fixed inset-0 bg-gray-900/70 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div id="modalConfirmPass"
+        class="fixed inset-0 bg-gray-900/70 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
             <div class="text-center mb-4">
-                <div class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-2 text-xl">
+                <div
+                    class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-2 text-xl">
                     <i class="fa-solid fa-user-shield"></i>
                 </div>
                 <h3 class="font-bold text-gray-900 text-base">Verificación de Seguridad</h3>
-                <p class="text-xs text-gray-500 mt-1">Ingresa tu contraseña de administrador para confirmar esta acción sensible.</p>
+                <p class="text-xs text-gray-500 mt-1">Ingresa tu contraseña de administrador para confirmar esta acción
+                    sensible.</p>
             </div>
 
             <div class="space-y-4">
-                <input type="password" id="inputPassConfirm" placeholder="Tu Contraseña Admin" class="w-full p-3 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-red-500">
+                <input type="password" id="inputPassConfirm" placeholder="Tu Contraseña Admin"
+                    class="w-full p-3 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-red-500">
                 <div class="flex gap-2">
-                    <button onclick="cancelarVerificacionSeguridad()" class="w-1/2 bg-gray-200 text-gray-700 text-xs font-bold py-2.5 rounded-xl">Cancelar</button>
-                    <button onclick="ejecutarAcciónProtegida()" class="w-1/2 bg-red-600 text-white text-xs font-bold py-2.5 rounded-xl shadow">Confirmar</button>
+                    <button onclick="cancelarVerificacionSeguridad()"
+                        class="w-1/2 bg-gray-200 text-gray-700 text-xs font-bold py-2.5 rounded-xl">Cancelar</button>
+                    <button onclick="ejecutarAcciónProtegida()"
+                        class="w-1/2 bg-red-600 text-white text-xs font-bold py-2.5 rounded-xl shadow">Confirmar</button>
                 </div>
             </div>
         </div>
@@ -947,7 +1071,7 @@
             if (tbody) {
                 tbody.innerHTML = '';
                 tiposInscripcionGlobal.forEach(t => {
-                    let badgeVisib = t.es_visible 
+                    let badgeVisib = t.es_visible
                         ? `<span class="bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded-full text-[10px]">👁️ Visible Publico</span>`
                         : `<span class="bg-gray-100 text-gray-600 font-bold px-2 py-0.5 rounded-full text-[10px]">🔒 Solo Admin</span>`;
 
@@ -1084,8 +1208,8 @@
                 let estadoCarta = i.estado_carta || (i.carta_compromiso_url ? 'En Revisión' : 'Pendiente');
                 let colorBadge = estadoCarta === 'Aprobada' ? 'bg-green-100 text-green-700' : (estadoCarta === 'En Revisión' ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700');
 
-                let badgeRol = i.es_staff 
-                    ? `<span class="bg-purple-100 text-purple-800 font-extrabold px-2 py-0.5 rounded-full border border-purple-300">⭐ STAFF</span>` 
+                let badgeRol = i.es_staff
+                    ? `<span class="bg-purple-100 text-purple-800 font-extrabold px-2 py-0.5 rounded-full border border-purple-300">⭐ STAFF</span>`
                     : `<span class="bg-gray-100 text-gray-700 font-semibold px-2 py-0.5 rounded-full">Campamentista</span>`;
 
                 tbodyIns.innerHTML += `
@@ -1199,7 +1323,7 @@
             document.getElementById('editAdminId').value = id;
             document.getElementById('editAdminNombre').value = nombre;
             document.getElementById('editAdminUser').value = usuario;
-            
+
             const selectRol = document.getElementById('editAdminRolSelect');
             selectRol.innerHTML = '';
             listaRolesGlobal.forEach(r => selectRol.innerHTML += `<option value="${r.id}" ${r.id === rolId ? 'selected' : ''}>${r.nombre}</option>`);
@@ -1488,54 +1612,69 @@
             listaRolesGlobal = roles || [];
 
             const selectRol = document.getElementById('adminRolSelect');
-            selectRol.innerHTML = '';
-            listaRolesGlobal.forEach(r => selectRol.innerHTML += `<option value="${r.id}">${r.nombre}</option>`);
+            if (selectRol) {
+                selectRol.innerHTML = '';
+                listaRolesGlobal.forEach(r => selectRol.innerHTML += `<option value="${r.id}">${r.nombre}</option>`);
+            }
 
             const { data: admins } = await db.from('administradores').select('*, roles(*)');
             const tbodyA = document.getElementById('tblListaAdmins');
-            tbodyA.innerHTML = '';
-            (admins || []).forEach(a => {
-                tbodyA.innerHTML += `
-          <tr>
-            <td class="p-2 font-semibold">${a.nombre}</td>
-            <td class="p-2">${a.usuario}</td>
-            <td class="p-2 font-bold text-indigo-700">${a.roles?.nombre || 'SuperAdmin'}</td>
-            <td class="p-2 text-center flex justify-center gap-1">
-              <button onclick="abrirModalEditarAdmin('${a.id}', '${a.nombre}', '${a.usuario}', '${a.rol_id}')" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-800 p-1.5 rounded-lg border border-indigo-300">
-                <i class="fa-solid fa-pencil text-xs"></i>
-              </button>
-              <button onclick="solicitarSeguridad('borrarAdmin', '${a.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200">
-                <i class="fa-solid fa-trash text-xs"></i>
-              </button>
-            </td>
-          </tr>`;
-            });
+            if (tbodyA) {
+                tbodyA.innerHTML = '';
+                (admins || []).forEach(a => {
+                    tbodyA.innerHTML += `
+      <tr>
+        <td class="p-2 font-semibold">${a.nombre}</td>
+        <td class="p-2">${a.usuario}</td>
+        <td class="p-2 font-bold text-indigo-700">${a.roles?.nombre || 'SuperAdmin'}</td>
+        <td class="p-2 text-center flex justify-center gap-1">
+          <button onclick="abrirModalEditarAdmin('${a.id}', '${a.nombre}', '${a.usuario}', '${a.rol_id}')" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-800 p-1.5 rounded-lg border border-indigo-300">
+            <i class="fa-solid fa-pencil text-xs"></i>
+          </button>
+          <button onclick="solicitarSeguridad('borrarAdmin', '${a.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200">
+            <i class="fa-solid fa-trash text-xs"></i>
+          </button>
+        </td>
+      </tr>`;
+                });
+            }
 
             const tbodyR = document.getElementById('tblListaRolesExistentes');
-            tbodyR.innerHTML = '';
-            (roles || []).forEach(r => {
-                let permisosTxt = Object.keys(r.permisos || {}).filter(k => r.permisos[k]).join(', ');
-                tbodyR.innerHTML += `
-          <tr>
-            <td class="p-2 font-bold text-indigo-900">${r.nombre}</td>
-            <td class="p-2 text-[10px] text-gray-500">${permisosTxt || 'Sin permisos'}</td>
-            <td class="p-2 text-center flex justify-center gap-1">
-              <button onclick="cargarRolParaEditar('${r.id}', '${r.nombre}', '${JSON.stringify(r.permisos).replace(/'/g, "&apos;")}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 rounded-lg border border-amber-300">
-                <i class="fa-solid fa-pencil text-xs"></i>
-              </button>
-              <button onclick="solicitarSeguridad('borrarRol', '${r.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200">
-                <i class="fa-solid fa-trash text-xs"></i>
-              </button>
-            </td>
-          </tr>`;
-            });
+            if (tbodyR) {
+                tbodyR.innerHTML = '';
+                (roles || []).forEach(r => {
+                    let permisosTxt = Object.keys(r.permisos || {}).filter(k => r.permisos[k]).join(', ');
+                    // CODIFICACIÓN SEGURA PARA EVITAR EL ERROR DE SINTAXIS
+                    const permisosEncoded = encodeURIComponent(JSON.stringify(r.permisos || {}));
+
+                    tbodyR.innerHTML += `
+      <tr>
+        <td class="p-2 font-bold text-indigo-900">${r.nombre}</td>
+        <td class="p-2 text-[10px] text-gray-500">${permisosTxt || 'Sin permisos'}</td>
+        <td class="p-2 text-center flex justify-center gap-1">
+          <button onclick="cargarRolParaEditar('${r.id}', '${r.nombre}', '${permisosEncoded}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 rounded-lg border border-amber-300">
+            <i class="fa-solid fa-pencil text-xs"></i>
+          </button>
+          <button onclick="solicitarSeguridad('borrarRol', '${r.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200">
+            <i class="fa-solid fa-trash text-xs"></i>
+          </button>
+        </td>
+      </tr>`;
+                });
+            }
         }
 
-        function cargarRolParaEditar(id, nombre, permisosStr) {
+        function cargarRolParaEditar(id, nombre, permisosEncoded) {
             document.getElementById('rolIdEdit').value = id;
             document.getElementById('rolNombre').value = nombre;
 
-            const permisos = JSON.parse(permisosStr);
+            let permisos = {};
+            try {
+                permisos = JSON.parse(decodeURIComponent(permisosEncoded));
+            } catch (e) {
+                console.error('Error parseando permisos:', e);
+            }
+
             document.getElementById('permVerFinanzas').checked = !!permisos.verFinanzas;
             document.getElementById('permSolicitudes').checked = !!permisos.solicitudes;
             document.getElementById('permInscritosVer').checked = !!permisos.inscritosVer;
@@ -1701,7 +1840,7 @@
 
             const ins = sol.inscritos;
             const modalBody = document.getElementById('contenidoComparacionCambios');
-            
+
             const campos = [
                 { label: 'Teléfono', actual: ins.telefono, nuevo: sol.telefono },
                 { label: 'Célula', actual: ins.celula, nuevo: sol.celula },
@@ -1721,7 +1860,7 @@
             campos.forEach(c => {
                 let cambio = (c.actual || '') !== (c.nuevo || '');
                 let bgClass = cambio ? 'bg-amber-50 font-bold' : '';
-                
+
                 let valActual = c.actual;
                 let valNuevo = c.nuevo;
 
@@ -1762,7 +1901,7 @@
         async function procesarEdicion(idSol, estado) {
             const sol = solicitudesEdicionGlobal.find(s => s.id === idSol);
             await db.from('solicitudes_edicion').update({ estado: estado }).eq('id', idSol);
-            
+
             if (estado === 'Aprobado' && sol) {
                 const updatePayload = {};
                 if (sol.telefono !== undefined) updatePayload.telefono = sol.telefono;
