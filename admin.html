@@ -93,7 +93,7 @@
             </div>
         </div>
 
-        <!-- PESTAÑAS DE NAVEGACIÓN PERMISOS SEGMENTADOS -->
+        <!-- PESTAÑAS DE NAVEGACIÓN -->
         <div class="flex flex-wrap gap-2 border-b border-gray-200 pb-2">
             <button id="navSolicitudes" onclick="cambiarPestana('solicitudes')"
                 class="tab-btn bg-gray-900 text-white text-xs font-bold px-4 py-2 rounded-xl transition">
@@ -110,6 +110,10 @@
             <button id="navEgresos" onclick="cambiarPestana('egresos')"
                 class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
                 <i class="fa-solid fa-arrow-down-short-wide mr-1"></i> Egresos
+            </button>
+            <button id="navReportes" onclick="cambiarPestana('reportes')"
+                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                <i class="fa-solid fa-chart-pie mr-1"></i> Reportes
             </button>
             <button id="navUsuarios" onclick="cambiarPestana('usuarios')"
                 class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
@@ -161,9 +165,8 @@
             </div>
         </div>
 
-        <!-- PESTAÑA 2: INSCRITOS (REGISTRO COMPLETO + EDICIÓN POR LÁPIZ) -->
+        <!-- PESTAÑA 2: INSCRITOS -->
         <div id="tabInscritos" class="tab-content hidden space-y-6">
-            <!-- Formulario para Registrar Nuevo Campamentista (Niño/Adulto) -->
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
                     <i class="fa-solid fa-user-plus text-green-600"></i> Inscribir Campamentista (Niño o Adulto)
@@ -189,7 +192,6 @@
                         <option value="Camping">Camping (Bs 220)</option>
                     </select>
 
-                    <!-- Campos Niños vs Adultos -->
                     <div class="md:col-span-3 flex items-center gap-4 bg-gray-50 p-3 rounded-xl border border-gray-200">
                         <label class="text-xs font-bold text-gray-700 flex items-center gap-2">
                             <input type="checkbox" id="newEsMenor" onchange="toggleFormMenor(this.checked)"
@@ -219,7 +221,6 @@
                 </form>
             </div>
 
-            <!-- Tabla con Modo Edición x Lápiz ✏️ -->
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <h3 class="font-bold text-gray-800 text-base mb-4">Directorio de Campamentistas</h3>
                 <div class="overflow-x-auto">
@@ -241,7 +242,7 @@
             </div>
         </div>
 
-        <!-- PESTAÑA 3: INGRESOS -->
+        <!-- PESTAÑA 3: INGRESOS CON BORRADO Y CONFIRMACIÓN -->
         <div id="tabIngresos" class="tab-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
             <h3 class="font-bold text-gray-800 text-base mb-4">Historial de Ingresos Confirmados</h3>
             <div class="overflow-x-auto">
@@ -253,6 +254,7 @@
                             <th class="p-2">Monto</th>
                             <th class="p-2">Observaciones</th>
                             <th class="p-2">Comprobante</th>
+                            <th class="p-2 text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="tblHistorialIngresos" class="divide-y divide-gray-100"></tbody>
@@ -260,7 +262,7 @@
             </div>
         </div>
 
-        <!-- PESTAÑA 4: EGRESOS -->
+        <!-- PESTAÑA 4: EGRESOS CON BORRADO Y CONFIRMACIÓN -->
         <div id="tabEgresos" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <h3 class="font-bold text-gray-800 text-base mb-4">Registrar Nuevo Egreso</h3>
@@ -292,6 +294,7 @@
                                 <th class="p-2">Categoría</th>
                                 <th class="p-2">Monto</th>
                                 <th class="p-2">Registrado por</th>
+                                <th class="p-2 text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="tblListaEgresos" class="divide-y divide-gray-100"></tbody>
@@ -300,7 +303,47 @@
             </div>
         </div>
 
-        <!-- PESTAÑA 5: ADMINISTRADORES Y EDICIÓN DE ROLES -->
+        <!-- PESTAÑA 5: REPORTES PERSONALIZADOS -->
+        <div id="tabReportes" class="tab-content hidden space-y-6">
+            <!-- Generador de Nuevo Reporte -->
+            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-plus-circle text-blue-600"></i> Crear y Guardar Reporte Personalizado
+                </h3>
+                <form onsubmit="guardarNuevoReporte(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <input type="text" id="repNombre"
+                        placeholder="Nombre del Reporte (Ej. Personas con Saldos Pendientes)" required
+                        class="p-2.5 border rounded-xl text-xs outline-none">
+                    <select id="repTipo" class="p-2.5 border rounded-xl text-xs outline-none">
+                        <option value="saldos">Campamentistas con Saldo Pendiente</option>
+                        <option value="celula">Cantidad de Inscritos por Célula</option>
+                        <option value="hospedaje">Distribución por Tipo de Hospedaje</option>
+                        <option value="tallas">Resumen de Tallas de Poleras</option>
+                    </select>
+                    <button type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2.5 rounded-xl transition shadow">+
+                        Guardar Reporte</button>
+                </form>
+            </div>
+
+            <!-- Reportes Guardados y Ejecución -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm col-span-1">
+                    <h4 class="font-bold text-gray-800 text-sm mb-3">Mis Reportes Guardados</h4>
+                    <div id="listaReportesGuardados" class="space-y-2"></div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm col-span-2">
+                    <h4 class="font-bold text-gray-800 text-sm mb-3" id="lblTituloResultadoReporte">Resultados del
+                        Reporte</h4>
+                    <div id="contenedorResultadoReporte" class="overflow-x-auto text-xs text-gray-600">
+                        <p class="text-gray-400 italic">Selecciona o ejecuta un reporte para ver sus datos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PESTAÑA 6: ADMINISTRADORES Y EDICIÓN DE ROLES -->
         <div id="tabUsuarios" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <h3 class="font-bold text-gray-800 text-base mb-4">Crear / Registrar Administrador</h3>
@@ -318,7 +361,6 @@
                 </form>
             </div>
 
-            <!-- Tabla de Administradores con Edición Directa de Rol -->
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <h3 class="font-bold text-gray-800 text-base mb-4">Administradores Registrados y Edición de Rol</h3>
                 <div class="overflow-x-auto">
@@ -337,7 +379,7 @@
             </div>
         </div>
 
-        <!-- PESTAÑA 6: CONFIGURACIÓN DE ROLES GRANULARES -->
+        <!-- PESTAÑA 7: CONFIGURACIÓN DE ROLES -->
         <div id="tabRoles" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <h3 class="font-bold text-gray-800 text-base mb-4">Configurador de Roles y Permisos Segmentados</h3>
@@ -355,6 +397,8 @@
                         <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
                                 id="permEgresos"> Módulo Egresos</label>
                         <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                id="permReportes"> Módulo Reportes</label>
+                        <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
                                 id="permUsuarios"> Módulo Administradores</label>
                         <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
                                 id="permRoles"> Módulo Permisos y Roles</label>
@@ -368,6 +412,115 @@
 
     </div>
 
+    <!-- MODAL EDITAR CAMPAMENTISTA (FORMULARIO COMPLETO) -->
+    <div id="modalEditCampamentista"
+        class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl overflow-y-auto max-h-[90vh]">
+            <div class="flex justify-between items-center mb-4 border-b pb-2">
+                <h3 class="font-bold text-gray-800 text-lg flex items-center gap-2">
+                    <i class="fa-solid fa-user-gear text-amber-500"></i> Modificar Datos de Campamentista
+                </h3>
+                <button onclick="cerrarModalCampamentista()" class="text-gray-400 hover:text-gray-600"><i
+                        class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <form onsubmit="confirmarYGuardarInscrito(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="hidden" id="editInsId">
+                <div>
+                    <label class="text-xs font-bold text-gray-600">C.I.</label>
+                    <input type="text" id="editInsCi" required
+                        class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-600">Nombre Completo</label>
+                    <input type="text" id="editInsNombre" required
+                        class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-600">Teléfono / WhatsApp</label>
+                    <input type="text" id="editInsTel" class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-600">Célula</label>
+                    <input type="text" id="editInsCelula" class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-600">Talla de Polera</label>
+                    <select id="editInsTalla" class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                        <option value="XS">XS</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-600">Hospedaje</label>
+                    <select id="editInsHospedaje" class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                        <option value="Colchon">Colchón (Bs 230)</option>
+                        <option value="Camping">Camping (Bs 220)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-600">Contacto de Emergencia</label>
+                    <input type="text" id="editInsEmergencia"
+                        class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-600">Alergias o Medicamentos</label>
+                    <input type="text" id="editInsAlergias" class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                </div>
+                <div class="md:col-span-2 border-t pt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-gray-600">Nombre del Tutor (Menores)</label>
+                        <input type="text" id="editInsTutorNom"
+                            class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-600">Teléfono del Tutor</label>
+                        <input type="text" id="editInsTutorTel"
+                            class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                    </div>
+                </div>
+
+                <div class="md:col-span-2 flex justify-end gap-2 pt-4 border-t">
+                    <button type="button" onclick="cerrarModalCampamentista()"
+                        class="bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2 rounded-xl">Cancelar</button>
+                    <button type="submit"
+                        class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs px-5 py-2 rounded-xl shadow">Guardar
+                        Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL CONFIRMACIÓN DE SEGURIDAD CON CONTRASEÑA -->
+    <div id="modalConfirmPass"
+        class="fixed inset-0 bg-gray-900/70 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="text-center mb-4">
+                <div
+                    class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-2 text-xl">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <h3 class="font-bold text-gray-900 text-base">Verificación de Seguridad</h3>
+                <p class="text-xs text-gray-500 mt-1">Ingresa tu contraseña de administrador para confirmar esta acción
+                    sensible.</p>
+            </div>
+
+            <div class="space-y-4">
+                <input type="password" id="inputPassConfirm" placeholder="Tu Contraseña Admin"
+                    class="w-full p-3 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-red-500">
+                <div class="flex gap-2">
+                    <button onclick="cancelarVerificacionSeguridad()"
+                        class="w-1/2 bg-gray-200 text-gray-700 text-xs font-bold py-2.5 rounded-xl">Cancelar</button>
+                    <button onclick="ejecutarAcciónProtegida()"
+                        class="w-1/2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-2.5 rounded-xl shadow">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         const SUPABASE_URL = 'https://bpwsdgkafjnsgfilbfgg.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwd3NkZ2thZmpuc2dmaWxiZmdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxODM1NzUsImV4cCI6MjEwNzc1OTU3NX0.rnSg8vNFpAuwNfECYwfyynERKwv3CJ7CGZRhAKbyDDM';
@@ -377,15 +530,14 @@
         let adminSesion = null;
         let permisosAdmin = {};
         let listaRolesGlobal = [];
+        let accionPendienteProtegida = null;
 
         async function iniciarSesionAdmin(e) {
             e.preventDefault();
             const user = document.getElementById('loginUser').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
 
-            const msgUint8 = new TextEncoder().encode(pass);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-            const hashHex = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+            const hashHex = await calcularSHA256(pass);
 
             const { data: admin } = await db.from('administradores').select('*, roles(*)').eq('usuario', user).eq('password_hash', hashHex).maybeSingle();
 
@@ -404,6 +556,12 @@
             cargarTodoElDashboard();
         }
 
+        async function calcularSHA256(texto) {
+            const msgUint8 = new TextEncoder().encode(texto);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+            return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
         function aplicarPermisosVisuales() {
             const esSuper = !adminSesion.rol_id || adminSesion.roles?.nombre === 'SuperAdmin';
 
@@ -411,6 +569,7 @@
             document.getElementById('navInscritos').style.display = (esSuper || permisosAdmin.inscritos) ? 'block' : 'none';
             document.getElementById('navIngresos').style.display = (esSuper || permisosAdmin.ingresos) ? 'block' : 'none';
             document.getElementById('navEgresos').style.display = (esSuper || permisosAdmin.egresos) ? 'block' : 'none';
+            document.getElementById('navReportes').style.display = (esSuper || permisosAdmin.reportes) ? 'block' : 'none';
             document.getElementById('navUsuarios').style.display = (esSuper || permisosAdmin.usuarios) ? 'block' : 'none';
             document.getElementById('navRoles').style.display = (esSuper || permisosAdmin.roles) ? 'block' : 'none';
         }
@@ -435,27 +594,27 @@
             document.getElementById('stEgresos').innerText = `Bs ${eg}`;
             document.getElementById('stBalance').innerText = `Bs ${ing - eg}`;
 
-            // Renderizar Inscritos (Modo Lectura por defecto + Lápiz ✏️)
+            // Renderizar Inscritos con Lápiz ✏️
             const tbodyIns = document.getElementById('tblTodosInscritos');
             tbodyIns.innerHTML = '';
             (inscritos || []).forEach(i => {
                 tbodyIns.innerHTML += `
-          <tr id="row_ins_${i.id}">
+          <tr>
             <td class="p-2 font-bold">${i.ci}</td>
-            <td class="p-2 font-semibold text-gray-800"><span id="val_nom_${i.id}">${i.nombre_completo}</span></td>
-            <td class="p-2"><span id="val_tel_${i.id}">${i.telefono || '-'}</span></td>
-            <td class="p-2"><span id="val_cel_${i.id}">${i.celula || '-'}</span></td>
-            <td class="p-2"><span id="val_tal_${i.id}">${i.talla_polera || '-'}</span></td>
+            <td class="p-2 font-semibold text-gray-800">${i.nombre_completo}</td>
+            <td class="p-2">${i.telefono || '-'}</td>
+            <td class="p-2">${i.celula || '-'}</td>
+            <td class="p-2">${i.talla_polera || '-'}</td>
             <td class="p-2">${i.tipo_hospedaje}</td>
-            <td class="p-2 text-center" id="action_ins_${i.id}">
-              <button onclick="activarModoEdicion('${i.id}', '${i.nombre_completo}', '${i.telefono || ''}', '${i.celula || ''}', '${i.talla_polera || ''}')" class="bg-amber-100 hover:bg-amber-200 text-amber-800 p-1.5 rounded-lg border border-amber-300 transition" title="Editar Campamentista">
+            <td class="p-2 text-center">
+              <button onclick="abrirModalEditarCampamentista('${i.id}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 rounded-lg border border-amber-300 transition" title="Editar con Formulario Completo">
                 <i class="fa-solid fa-pencil text-xs"></i>
               </button>
             </td>
           </tr>`;
             });
 
-            // Renderizar Ingresos
+            // Renderizar Ingresos con Borrado 🗑️
             const tbodyIng = document.getElementById('tblHistorialIngresos');
             tbodyIng.innerHTML = '';
             (pagos || []).forEach(p => {
@@ -466,10 +625,15 @@
             <td class="p-2 font-bold text-green-600">Bs ${p.monto}</td>
             <td class="p-2">${p.observaciones || '-'}</td>
             <td class="p-2"><a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline">Ver Foto</a></td>
+            <td class="p-2 text-center">
+              <button onclick="solicitarSeguridad('borrarIngreso', '${p.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200 transition">
+                <i class="fa-solid fa-trash text-xs"></i>
+              </button>
+            </td>
           </tr>`;
             });
 
-            // Renderizar Egresos
+            // Renderizar Egresos con Borrado 🗑️
             const tbodyEg = document.getElementById('tblListaEgresos');
             tbodyEg.innerHTML = '';
             (egresos || []).forEach(e => {
@@ -480,37 +644,189 @@
             <td class="p-2"><span class="bg-red-50 text-red-700 font-bold px-2 py-0.5 rounded text-[10px]">${e.categoria}</span></td>
             <td class="p-2 font-bold text-red-600">Bs ${e.monto}</td>
             <td class="p-2">${e.registrado_por || 'Admin'}</td>
+            <td class="p-2 text-center">
+              <button onclick="solicitarSeguridad('borrarEgreso', '${e.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200 transition">
+                <i class="fa-solid fa-trash text-xs"></i>
+              </button>
+            </td>
           </tr>`;
             });
 
             cargarPendientes();
+            cargarReportesGuardados();
             cargarRolesYAdmins();
         }
 
-        function activarModoEdicion(id, nom, tel, cel, tal) {
-            document.getElementById(`val_nom_${id}`).innerHTML = `<input type="text" id="ins_nom_${id}" value="${nom}" class="border rounded p-1 text-xs w-full bg-amber-50">`;
-            document.getElementById(`val_tel_${id}`).innerHTML = `<input type="text" id="ins_tel_${id}" value="${tel}" class="border rounded p-1 text-xs w-24 bg-amber-50">`;
-            document.getElementById(`val_cel_${id}`).innerHTML = `<input type="text" id="ins_cel_${id}" value="${cel}" class="border rounded p-1 text-xs w-24 bg-amber-50">`;
-            document.getElementById(`val_tal_${id}`).innerHTML = `<input type="text" id="ins_tal_${id}" value="${tal}" class="border rounded p-1 text-xs w-12 bg-amber-50">`;
+        // ABRIR FORMULARIO COMPLETO PARA EDITAR CAMPAMENTISTA
+        async function abrirModalEditarCampamentista(id) {
+            const { data: i } = await db.from('inscritos').select('*').eq('id', id).single();
+            if (!i) return;
 
-            document.getElementById(`action_ins_${id}`).innerHTML = `
-        <button onclick="guardarEdicionInscrito('${id}')" class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs font-bold mr-1">✓ Guardar</button>
-        <button onclick="cargarTodoElDashboard()" class="bg-gray-400 text-white px-2 py-1 rounded text-xs">✕</button>
-      `;
+            document.getElementById('editInsId').value = i.id;
+            document.getElementById('editInsCi').value = i.ci;
+            document.getElementById('editInsNombre').value = i.nombre_completo;
+            document.getElementById('editInsTel').value = i.telefono || '';
+            document.getElementById('editInsCelula').value = i.celula || '';
+            document.getElementById('editInsTalla').value = i.talla_polera || 'M';
+            document.getElementById('editInsHospedaje').value = i.tipo_hospedaje || 'Colchon';
+            document.getElementById('editInsEmergencia').value = i.contacto_emergencia || '';
+            document.getElementById('editInsAlergias').value = i.alergias_medicina || '';
+            document.getElementById('editInsTutorNom').value = i.tutor_nombre || '';
+            document.getElementById('editInsTutorTel').value = i.tutor_telefono || '';
+
+            document.getElementById('modalEditCampamentista').classList.remove('hidden');
         }
 
-        async function guardarEdicionInscrito(id) {
-            await db.from('inscritos').update({
-                nombre_completo: document.getElementById(`ins_nom_${id}`).value,
-                telefono: document.getElementById(`ins_tel_${id}`).value,
-                celula: document.getElementById(`ins_cel_${id}`).value,
-                talla_polera: document.getElementById(`ins_tal_${id}`).value
-            }).eq('id', id);
+        function cerrarModalCampamentista() {
+            document.getElementById('modalEditCampamentista').classList.add('hidden');
+        }
 
-            alert('Campamentista actualizado con éxito.');
+        function confirmarYGuardarInscrito(e) {
+            e.preventDefault();
+            solicitarSeguridad('guardarEdicionCompletaInscrito');
+        }
+
+        // VERIFICACIÓN CON CONTRASEÑA OBLIGATORIA
+        function solicitarSeguridad(tipoAccion, idParam = null) {
+            accionPendienteProtegida = { tipo: tipoAccion, id: idParam };
+            document.getElementById('inputPassConfirm').value = '';
+            document.getElementById('modalConfirmPass').classList.remove('hidden');
+        }
+
+        function cancelarVerificacionSeguridad() {
+            accionPendienteProtegida = null;
+            document.getElementById('modalConfirmPass').classList.add('hidden');
+        }
+
+        async function ejecutarAcciónProtegida() {
+            const passIngresada = document.getElementById('inputPassConfirm').value.trim();
+            const hashIngresado = await calcularSHA256(passIngresada);
+
+            if (hashIngresado !== adminSesion.password_hash) {
+                return alert('Contraseña incorrecta. Acción cancelada por seguridad.');
+            }
+
+            document.getElementById('modalConfirmPass').classList.add('hidden');
+
+            if (accionPendienteProtegida.tipo === 'guardarEdicionCompletaInscrito') {
+                const id = document.getElementById('editInsId').value;
+                await db.from('inscritos').update({
+                    ci: document.getElementById('editInsCi').value,
+                    nombre_completo: document.getElementById('editInsNombre').value,
+                    telefono: document.getElementById('editInsTel').value,
+                    celula: document.getElementById('editInsCelula').value,
+                    talla_polera: document.getElementById('editInsTalla').value,
+                    tipo_hospedaje: document.getElementById('editInsHospedaje').value,
+                    contacto_emergencia: document.getElementById('editInsEmergencia').value,
+                    alergias_medicina: document.getElementById('editInsAlergias').value,
+                    tutor_nombre: document.getElementById('editInsTutorNom').value,
+                    tutor_telefono: document.getElementById('editInsTutorTel').value
+                }).eq('id', id);
+
+                cerrarModalCampamentista();
+                alert('Campamentista actualizado con éxito.');
+            } else if (accionPendienteProtegida.tipo === 'borrarIngreso') {
+                await db.from('pagos').delete().eq('id', accionPendienteProtegida.id);
+                alert('Ingreso eliminado de la base de datos.');
+            } else if (accionPendienteProtegida.tipo === 'borrarEgreso') {
+                await db.from('egresos').delete().eq('id', accionPendienteProtegida.id);
+                alert('Egreso eliminado de la base de datos.');
+            } else if (accionPendienteProtegida.tipo === 'cambiarRolAdmin') {
+                await db.from('administradores').update({ rol_id: accionPendienteProtegida.id.rolId }).eq('id', accionPendienteProtegida.id.adminId);
+                alert('Rol del usuario actualizado.');
+            }
+
+            accionPendienteProtegida = null;
             cargarTodoElDashboard();
         }
 
+        // MÓDULO DE REPORTES PERSONALIZADOS
+        async function guardarNuevoReporte(e) {
+            e.preventDefault();
+            const nombre = document.getElementById('repNombre').value.trim();
+            const tipo = document.getElementById('repTipo').value;
+
+            await db.from('reportes_guardados').insert([{
+                nombre: nombre,
+                tipo_reporte: tipo,
+                creado_por: adminSesion?.nombre || 'Admin'
+            }]);
+
+            alert('Reporte personalizado guardado.');
+            e.target.reset();
+            cargarReportesGuardados();
+        }
+
+        async function cargarReportesGuardados() {
+            const { data: reps } = await db.from('reportes_guardados').select('*').order('created_at', { ascending: false });
+            const contenedor = document.getElementById('listaReportesGuardados');
+            contenedor.innerHTML = '';
+
+            (reps || []).forEach(r => {
+                contenedor.innerHTML += `
+          <div class="p-3 bg-gray-50 border rounded-xl flex justify-between items-center hover:bg-amber-50 transition">
+            <div>
+              <p class="font-bold text-xs text-gray-800">${r.nombre}</p>
+              <p class="text-[10px] text-gray-400">Tipo: ${r.tipo_reporte}</p>
+            </div>
+            <button onclick="ejecutarReporte('${r.nombre}', '${r.tipo_reporte}')" class="bg-gray-900 text-amber-400 font-bold px-3 py-1 rounded-lg text-xs">
+              Ver
+            </button>
+          </div>`;
+            });
+        }
+
+        async function ejecutarReporte(nombre, tipo) {
+            document.getElementById('lblTituloResultadoReporte').innerText = `Reporte: ${nombre}`;
+            const divRes = document.getElementById('contenedorResultadoReporte');
+
+            if (tipo === 'saldos') {
+                const { data: inscritos } = await db.from('inscritos').select('*');
+                const { data: pagos } = await db.from('pagos').select('*').eq('estado', 'Aprobado');
+
+                let html = `<table class="w-full text-left"><thead class="bg-gray-100"><tr><th class="p-2">C.I.</th><th class="p-2">Nombre</th><th class="p-2">Costo</th><th class="p-2">Abonado</th><th class="p-2">Saldo</th></tr></thead><tbody>`;
+
+                (inscritos || []).forEach(i => {
+                    let abonado = 0;
+                    (pagos || []).filter(p => p.inscrito_id === i.id).forEach(p => abonado += Number(p.monto));
+                    let costo = i.tipo_hospedaje === 'Camping' ? 220 : 230;
+                    let saldo = costo - abonado;
+
+                    if (saldo > 0) {
+                        html += `<tr class="border-b"><td class="p-2 font-bold">${i.ci}</td><td class="p-2">${i.nombre_completo}</td><td class="p-2">Bs ${costo}</td><td class="p-2 text-green-600">Bs ${abonado}</td><td class="p-2 text-red-600 font-bold">Bs ${saldo}</td></tr>`;
+                    }
+                });
+
+                html += `</tbody></table>`;
+                divRes.innerHTML = html;
+            } else if (tipo === 'celula') {
+                const { data: inscritos } = await db.from('inscritos').select('celula');
+                let conteo = {};
+                (inscritos || []).forEach(i => {
+                    let c = i.celula || 'Sin Célula';
+                    conteo[c] = (conteo[c] || 0) + 1;
+                });
+
+                let html = `<table class="w-full text-left"><thead class="bg-gray-100"><tr><th class="p-2">Nombre de Célula</th><th class="p-2">Total Campamentistas</th></tr></thead><tbody>`;
+                for (let key in conteo) {
+                    html += `<tr class="border-b"><td class="p-2 font-semibold">${key}</td><td class="p-2 font-bold text-blue-600">${conteo[key]}</td></tr>`;
+                }
+                html += `</tbody></table>`;
+                divRes.innerHTML = html;
+            } else if (tipo === 'hospedaje') {
+                const { data: inscritos } = await db.from('inscritos').select('tipo_hospedaje');
+                let col = 0, cam = 0;
+                (inscritos || []).forEach(i => i.tipo_hospedaje === 'Camping' ? cam++ : col++);
+
+                divRes.innerHTML = `
+          <div class="grid grid-cols-2 gap-4 text-center my-4">
+            <div class="p-4 bg-blue-50 rounded-xl border border-blue-200"><p class="text-xs font-bold text-blue-600">COLCHÓN (Bs 230)</p><h3 class="text-2xl font-black">${col}</h3></div>
+            <div class="p-4 bg-green-50 rounded-xl border border-green-200"><p class="text-xs font-bold text-green-600">CAMPING (Bs 220)</p><h3 class="text-2xl font-black">${cam}</h3></div>
+          </div>`;
+            }
+        }
+
+        // MÁS FUNCIONALIDADES
         async function crearNuevoCampamentista(e) {
             e.preventDefault();
             await db.from('inscritos').insert([{
@@ -527,7 +843,7 @@
                 alergias_medicina: document.getElementById('newAlergias').value.trim()
             }]);
 
-            alert('Campamentista registrado exitosamente.');
+            alert('Campamentista registrado.');
             e.target.reset();
             cargarTodoElDashboard();
         }
@@ -551,12 +867,12 @@
             <td class="p-2 font-semibold">${a.nombre}</td>
             <td class="p-2">${a.usuario}</td>
             <td class="p-2">
-              <select id="sel_rol_${a.id}" class="border border-gray-300 rounded p-1 text-xs bg-gray-50 outline-none">
+              <select id="sel_rol_${a.id}" class="border rounded p-1 text-xs bg-gray-50 outline-none">
                 ${optionsRoles}
               </select>
             </td>
             <td class="p-2 text-center">
-              <button onclick="guardarNuevoRolAdmin('${a.id}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2 py-1 rounded text-xs font-bold mr-1">
+              <button onclick="solicitarCambioRolAdmin('${a.id}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2 py-1 rounded text-xs font-bold">
                 <i class="fa-solid fa-floppy-disk"></i> Cambiar Rol
               </button>
             </td>
@@ -564,12 +880,9 @@
             });
         }
 
-        // Cambiar rol de un administrador ya creado
-        async function guardarNuevoRolAdmin(adminId) {
-            const nuevoRolId = document.getElementById(`sel_rol_${adminId}`).value;
-            await db.from('administradores').update({ rol_id: nuevoRolId }).eq('id', adminId);
-            alert('Rol de usuario actualizado correctamente.');
-            cargarRolesYAdmins();
+        function solicitarCambioRolAdmin(adminId) {
+            const rolId = document.getElementById(`sel_rol_${adminId}`).value;
+            solicitarSeguridad('cambiarRolAdmin', { adminId, rolId });
         }
 
         async function guardarAdmin(e) {
@@ -579,9 +892,7 @@
             const nombre = document.getElementById('adminNewNombre').value.trim();
             const rolId = document.getElementById('adminRolSelect').value;
 
-            const msgUint8 = new TextEncoder().encode(pass);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-            const hashHex = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+            const hashHex = await calcularSHA256(pass);
 
             await db.from('administradores').insert([{
                 nombre: nombre,
@@ -590,7 +901,7 @@
                 rol_id: rolId
             }]);
 
-            alert('Nuevo administrador creado.');
+            alert('Nuevo administrador registrado.');
             e.target.reset();
             cargarRolesYAdmins();
         }
@@ -602,12 +913,13 @@
                 inscritos: document.getElementById('permInscritos').checked,
                 ingresos: document.getElementById('permIngresos').checked,
                 egresos: document.getElementById('permEgresos').checked,
+                reportes: document.getElementById('permReportes').checked,
                 usuarios: document.getElementById('permUsuarios').checked,
                 roles: document.getElementById('permRoles').checked
             };
 
             await db.from('roles').insert([{ nombre: document.getElementById('rolNombre').value, permisos }]);
-            alert('Rol configurado exitosamente.');
+            alert('Rol configurado.');
             cargarRolesYAdmins();
         }
 
@@ -619,7 +931,7 @@
                 monto: document.getElementById('egMonto').value,
                 registrado_por: adminSesion?.nombre || 'Administración'
             }]);
-            alert('Egreso registrado correctamente.');
+            alert('Egreso registrado.');
             e.target.reset();
             cargarTodoElDashboard();
         }
