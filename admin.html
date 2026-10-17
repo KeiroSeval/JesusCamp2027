@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jesus Camp 2027 - Panel de Control Admin</title>
+    <title>Jesus Camp 2027 - Panel de Control Admin Avanzado</title>
 
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
@@ -113,7 +113,7 @@
             </button>
             <button id="navReportes" onclick="cambiarPestana('reportes')"
                 class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-chart-pie mr-1"></i> Reportes
+                <i class="fa-solid fa-chart-pie mr-1"></i> Reportes Avanzados
             </button>
             <button id="navUsuarios" onclick="cambiarPestana('usuarios')"
                 class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
@@ -242,7 +242,7 @@
             </div>
         </div>
 
-        <!-- PESTAÑA 3: INGRESOS CON BORRADO Y CONFIRMACIÓN -->
+        <!-- PESTAÑA 3: INGRESOS -->
         <div id="tabIngresos" class="tab-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
             <h3 class="font-bold text-gray-800 text-base mb-4">Historial de Ingresos Confirmados</h3>
             <div class="overflow-x-auto">
@@ -262,7 +262,7 @@
             </div>
         </div>
 
-        <!-- PESTAÑA 4: EGRESOS CON BORRADO Y CONFIRMACIÓN -->
+        <!-- PESTAÑA 4: EGRESOS -->
         <div id="tabEgresos" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <h3 class="font-bold text-gray-800 text-base mb-4">Registrar Nuevo Egreso</h3>
@@ -303,26 +303,89 @@
             </div>
         </div>
 
-        <!-- PESTAÑA 5: REPORTES PERSONALIZADOS -->
+        <!-- PESTAÑA 5: REPORTES PERSONALIZADOS Y AVANZADOS -->
         <div id="tabReportes" class="tab-content hidden space-y-6">
-            <!-- Generador de Nuevo Reporte -->
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-plus-circle text-blue-600"></i> Crear y Guardar Reporte Personalizado
+            <!-- Generador de Reporte Avanzado -->
+            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
+                <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-blue-600"></i> Diseñador de Reportes Personalizados
                 </h3>
-                <form onsubmit="guardarNuevoReporte(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <input type="text" id="repNombre"
-                        placeholder="Nombre del Reporte (Ej. Personas con Saldos Pendientes)" required
-                        class="p-2.5 border rounded-xl text-xs outline-none">
-                    <select id="repTipo" class="p-2.5 border rounded-xl text-xs outline-none">
-                        <option value="saldos">Campamentistas con Saldo Pendiente</option>
-                        <option value="celula">Cantidad de Inscritos por Célula</option>
-                        <option value="hospedaje">Distribución por Tipo de Hospedaje</option>
-                        <option value="tallas">Resumen de Tallas de Poleras</option>
-                    </select>
+
+                <form onsubmit="guardarNuevoReporteAvanzado(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="text" id="repNombre"
+                            placeholder="Nombre del Reporte (Ej: Resumen Financiero por Célula)" required
+                            class="p-2.5 border rounded-xl text-xs outline-none">
+                        <select id="repTipoFiltro" class="p-2.5 border rounded-xl text-xs outline-none"
+                            onchange="actualizarOpcionesColumnas(this.value)">
+                            <option value="campamentistas">Reporte Personalizado de Campamentistas</option>
+                            <option value="saldos">Campamentistas con Saldos Pendientes</option>
+                        </select>
+                    </div>
+
+                    <!-- Selección Granular de Columnas a Incluir -->
+                    <div>
+                        <label class="text-xs font-bold text-gray-600 block mb-2">1. Selecciona los Datos / Columnas a
+                            Incluir:</label>
+                        <div
+                            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 bg-gray-50 p-3 rounded-xl border border-gray-200 text-xs">
+                            <label class="flex items-center gap-1.5"><input type="checkbox" id="col_ci" checked>
+                                C.I.</label>
+                            <label class="flex items-center gap-1.5"><input type="checkbox" id="col_nombre" checked>
+                                Nombre</label>
+                            <label class="flex items-center gap-1.5"><input type="checkbox" id="col_tel" checked>
+                                Teléfono</label>
+                            <label class="flex items-center gap-1.5"><input type="checkbox" id="col_celula" checked>
+                                Célula</label>
+                            <label class="flex items-center gap-1.5"><input type="checkbox" id="col_talla" checked>
+                                Talla</label>
+                            <label class="flex items-center gap-1.5"><input type="checkbox" id="col_hospedaje" checked>
+                                Hospedaje</label>
+                            <label class="flex items-center gap-1.5"><input type="checkbox" id="col_monto_costo"
+                                    checked> Costo Total</label>
+                            <label class="flex items-center gap-1.5"><input type="checkbox" id="col_monto_abonado"
+                                    checked> Abonado</label>
+                            <label class="flex items-center gap-1.5"><input type="checkbox" id="col_monto_saldo"
+                                    checked> Saldo</label>
+                        </div>
+                    </div>
+
+                    <!-- Selección de Cálculo para Columnas Numéricas -->
+                    <div>
+                        <label class="text-xs font-bold text-gray-600 block mb-2">2. Configuración de Encabezados /
+                            Totales Numéricos (Suma / Promedio):</label>
+                        <div
+                            class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-blue-50/50 p-3 rounded-xl border border-blue-200 text-xs">
+                            <div>
+                                <span class="font-bold block mb-1">Columna Costo Total:</span>
+                                <select id="agg_costo" class="p-1.5 border rounded-lg text-xs w-full bg-white">
+                                    <option value="ninguno">Ninguno</option>
+                                    <option value="suma" selected>Suma Total</option>
+                                    <option value="promedio">Promedio</option>
+                                </select>
+                            </div>
+                            <div>
+                                <span class="font-bold block mb-1">Columna Abonado:</span>
+                                <select id="agg_abonado" class="p-1.5 border rounded-lg text-xs w-full bg-white">
+                                    <option value="ninguno">Ninguno</option>
+                                    <option value="suma" selected>Suma Total</option>
+                                    <option value="promedio">Promedio</option>
+                                </select>
+                            </div>
+                            <div>
+                                <span class="font-bold block mb-1">Columna Saldo:</span>
+                                <select id="agg_saldo" class="p-1.5 border rounded-lg text-xs w-full bg-white">
+                                    <option value="ninguno">Ninguno</option>
+                                    <option value="suma" selected>Suma Total</option>
+                                    <option value="promedio">Promedio</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
                     <button type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2.5 rounded-xl transition shadow">+
-                        Guardar Reporte</button>
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-6 py-2.5 rounded-xl transition shadow">+
+                        Guardar y Generar Reporte</button>
                 </form>
             </div>
 
@@ -337,7 +400,7 @@
                     <h4 class="font-bold text-gray-800 text-sm mb-3" id="lblTituloResultadoReporte">Resultados del
                         Reporte</h4>
                     <div id="contenedorResultadoReporte" class="overflow-x-auto text-xs text-gray-600">
-                        <p class="text-gray-400 italic">Selecciona o ejecuta un reporte para ver sus datos.</p>
+                        <p class="text-gray-400 italic">Selecciona un reporte de la lista para ejecutarlo.</p>
                     </div>
                 </div>
             </div>
@@ -412,7 +475,7 @@
 
     </div>
 
-    <!-- MODAL EDITAR CAMPAMENTISTA (FORMULARIO COMPLETO) -->
+    <!-- MODAL EDITAR CAMPAMENTISTA -->
     <div id="modalEditCampamentista"
         class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl overflow-y-auto max-h-[90vh]">
@@ -483,12 +546,50 @@
                     </div>
                 </div>
 
-                <div class="md:col-span-2 flex justify-end gap-2 pt-4 border-t">
-                    <button type="button" onclick="cerrarModalCampamentista()"
+                <div class="md:col-span-2 flex justify-between gap-2 pt-4 border-t">
+                    <button type="button"
+                        onclick="solicitarSeguridad('borrarCampamentista', document.getElementById('editInsId').value)"
+                        class="bg-red-100 text-red-700 hover:bg-red-200 text-xs font-bold px-4 py-2 rounded-xl border border-red-300">
+                        <i class="fa-solid fa-trash mr-1"></i> Eliminar Campamentista
+                    </button>
+                    <div class="flex gap-2">
+                        <button type="button" onclick="cerrarModalCampamentista()"
+                            class="bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2 rounded-xl">Cancelar</button>
+                        <button type="submit"
+                            class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs px-5 py-2 rounded-xl shadow">Guardar
+                            Cambios</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL EDITAR EGRESO -->
+    <div id="modalEditEgreso"
+        class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-pencil text-red-600"></i> Modificar Egreso / Gasto
+            </h3>
+            <form onsubmit="confirmarYGuardarEgreso(event)" class="space-y-3">
+                <input type="hidden" id="editEgId">
+                <input type="text" id="editEgConcepto" placeholder="Concepto" required
+                    class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                <select id="editEgCategoria" class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                    <option value="Alimentación">Alimentación</option>
+                    <option value="Logística">Logística</option>
+                    <option value="Sonido">Sonido / Iluminación</option>
+                    <option value="Transporte">Transporte</option>
+                    <option value="Otros">Otros Gastos</option>
+                </select>
+                <input type="number" step="0.01" id="editEgMonto" placeholder="Monto" required
+                    class="w-full p-2.5 border rounded-xl text-xs outline-none">
+                <div class="flex justify-end gap-2 pt-3">
+                    <button type="button" onclick="cerrarModalEgreso()"
                         class="bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2 rounded-xl">Cancelar</button>
                     <button type="submit"
-                        class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs px-5 py-2 rounded-xl shadow">Guardar
-                        Cambios</button>
+                        class="bg-red-600 text-white font-bold text-xs px-5 py-2 rounded-xl shadow">Guardar
+                        Egreso</button>
                 </div>
             </form>
         </div>
@@ -607,7 +708,7 @@
             <td class="p-2">${i.talla_polera || '-'}</td>
             <td class="p-2">${i.tipo_hospedaje}</td>
             <td class="p-2 text-center">
-              <button onclick="abrirModalEditarCampamentista('${i.id}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 rounded-lg border border-amber-300 transition" title="Editar con Formulario Completo">
+              <button onclick="abrirModalEditarCampamentista('${i.id}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 rounded-lg border border-amber-300 transition" title="Editar Campamentista">
                 <i class="fa-solid fa-pencil text-xs"></i>
               </button>
             </td>
@@ -626,14 +727,14 @@
             <td class="p-2">${p.observaciones || '-'}</td>
             <td class="p-2"><a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline">Ver Foto</a></td>
             <td class="p-2 text-center">
-              <button onclick="solicitarSeguridad('borrarIngreso', '${p.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200 transition">
+              <button onclick="solicitarSeguridad('borrarIngreso', '${p.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200 transition" title="Borrar Ingreso">
                 <i class="fa-solid fa-trash text-xs"></i>
               </button>
             </td>
           </tr>`;
             });
 
-            // Renderizar Egresos con Borrado 🗑️
+            // Renderizar Egresos con Edición ✏️ y Borrado 🗑️
             const tbodyEg = document.getElementById('tblListaEgresos');
             tbodyEg.innerHTML = '';
             (egresos || []).forEach(e => {
@@ -644,8 +745,11 @@
             <td class="p-2"><span class="bg-red-50 text-red-700 font-bold px-2 py-0.5 rounded text-[10px]">${e.categoria}</span></td>
             <td class="p-2 font-bold text-red-600">Bs ${e.monto}</td>
             <td class="p-2">${e.registrado_por || 'Admin'}</td>
-            <td class="p-2 text-center">
-              <button onclick="solicitarSeguridad('borrarEgreso', '${e.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200 transition">
+            <td class="p-2 text-center flex justify-center gap-1">
+              <button onclick="abrirModalEditarEgreso('${e.id}', '${e.concepto}', '${e.categoria}', '${e.monto}')" class="bg-amber-100 hover:bg-amber-200 text-amber-800 p-1.5 rounded-lg border border-amber-300 transition" title="Editar Egreso">
+                <i class="fa-solid fa-pencil text-xs"></i>
+              </button>
+              <button onclick="solicitarSeguridad('borrarEgreso', '${e.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200 transition" title="Borrar Egreso">
                 <i class="fa-solid fa-trash text-xs"></i>
               </button>
             </td>
@@ -657,7 +761,7 @@
             cargarRolesYAdmins();
         }
 
-        // ABRIR FORMULARIO COMPLETO PARA EDITAR CAMPAMENTISTA
+        // MODAL CAMPAMENTISTAS
         async function abrirModalEditarCampamentista(id) {
             const { data: i } = await db.from('inscritos').select('*').eq('id', id).single();
             if (!i) return;
@@ -684,6 +788,24 @@
         function confirmarYGuardarInscrito(e) {
             e.preventDefault();
             solicitarSeguridad('guardarEdicionCompletaInscrito');
+        }
+
+        // MODAL EGRESOS
+        function abrirModalEditarEgreso(id, concepto, categoria, monto) {
+            document.getElementById('editEgId').value = id;
+            document.getElementById('editEgConcepto').value = concepto;
+            document.getElementById('editEgCategoria').value = categoria;
+            document.getElementById('editEgMonto').value = monto;
+            document.getElementById('modalEditEgreso').classList.remove('hidden');
+        }
+
+        function cerrarModalEgreso() {
+            document.getElementById('modalEditEgreso').classList.add('hidden');
+        }
+
+        function confirmarYGuardarEgreso(e) {
+            e.preventDefault();
+            solicitarSeguridad('guardarEdicionEgreso');
         }
 
         // VERIFICACIÓN CON CONTRASEÑA OBLIGATORIA
@@ -725,35 +847,70 @@
 
                 cerrarModalCampamentista();
                 alert('Campamentista actualizado con éxito.');
+            } else if (accionPendienteProtegida.tipo === 'borrarCampamentista') {
+                await db.from('inscritos').delete().eq('id', accionPendienteProtegida.id);
+                cerrarModalCampamentista();
+                alert('Campamentista eliminado del registro.');
+            } else if (accionPendienteProtegida.tipo === 'guardarEdicionEgreso') {
+                const id = document.getElementById('editEgId').value;
+                await db.from('egresos').update({
+                    concepto: document.getElementById('editEgConcepto').value,
+                    categoria: document.getElementById('editEgCategoria').value,
+                    monto: document.getElementById('editEgMonto').value
+                }).eq('id', id);
+
+                cerrarModalEgreso();
+                alert('Egreso modificado exitosamente.');
             } else if (accionPendienteProtegida.tipo === 'borrarIngreso') {
                 await db.from('pagos').delete().eq('id', accionPendienteProtegida.id);
-                alert('Ingreso eliminado de la base de datos.');
+                alert('Ingreso eliminado.');
             } else if (accionPendienteProtegida.tipo === 'borrarEgreso') {
                 await db.from('egresos').delete().eq('id', accionPendienteProtegida.id);
-                alert('Egreso eliminado de la base de datos.');
+                alert('Egreso eliminado.');
             } else if (accionPendienteProtegida.tipo === 'cambiarRolAdmin') {
                 await db.from('administradores').update({ rol_id: accionPendienteProtegida.id.rolId }).eq('id', accionPendienteProtegida.id.adminId);
                 alert('Rol del usuario actualizado.');
+            } else if (accionPendienteProtegida.tipo === 'borrarAdmin') {
+                await db.from('administradores').delete().eq('id', accionPendienteProtegida.id);
+                alert('Administrador eliminado.');
             }
 
             accionPendienteProtegida = null;
             cargarTodoElDashboard();
         }
 
-        // MÓDULO DE REPORTES PERSONALIZADOS
-        async function guardarNuevoReporte(e) {
+        // GENERADOR DE REPORTES PERSONALIZADOS CON AGREGACIONES
+        async function guardarNuevoReporteAvanzado(e) {
             e.preventDefault();
             const nombre = document.getElementById('repNombre').value.trim();
-            const tipo = document.getElementById('repTipo').value;
+            const tipo = document.getElementById('repTipoFiltro').value;
+
+            const columnasConfig = {
+                ci: document.getElementById('col_ci').checked,
+                nombre: document.getElementById('col_nombre').checked,
+                telefono: document.getElementById('col_tel').checked,
+                celula: document.getElementById('col_celula').checked,
+                talla: document.getElementById('col_talla').checked,
+                hospedaje: document.getElementById('col_hospedaje').checked,
+                costo: document.getElementById('col_monto_costo').checked,
+                abonado: document.getElementById('col_monto_abonado').checked,
+                saldo: document.getElementById('col_monto_saldo').checked
+            };
+
+            const agregacionesConfig = {
+                costo: document.getElementById('agg_costo').value,
+                abonado: document.getElementById('agg_abonado').value,
+                saldo: document.getElementById('agg_saldo').value
+            };
 
             await db.from('reportes_guardados').insert([{
                 nombre: nombre,
                 tipo_reporte: tipo,
+                filtros: { columnas: columnasConfig, agregaciones: agregacionesConfig },
                 creado_por: adminSesion?.nombre || 'Admin'
             }]);
 
-            alert('Reporte personalizado guardado.');
-            e.target.reset();
+            alert('Reporte personalizado guardado con éxito.');
             cargarReportesGuardados();
         }
 
@@ -769,64 +926,96 @@
               <p class="font-bold text-xs text-gray-800">${r.nombre}</p>
               <p class="text-[10px] text-gray-400">Tipo: ${r.tipo_reporte}</p>
             </div>
-            <button onclick="ejecutarReporte('${r.nombre}', '${r.tipo_reporte}')" class="bg-gray-900 text-amber-400 font-bold px-3 py-1 rounded-lg text-xs">
-              Ver
+            <button onclick="ejecutarReporteGuardado('${r.id}')" class="bg-gray-900 hover:bg-black text-amber-400 font-bold px-3 py-1 rounded-lg text-xs">
+              Ejecutar
             </button>
           </div>`;
             });
         }
 
-        async function ejecutarReporte(nombre, tipo) {
-            document.getElementById('lblTituloResultadoReporte').innerText = `Reporte: ${nombre}`;
+        async function ejecutarReporteGuardado(reporteId) {
+            const { data: rep } = await db.from('reportes_guardados').select('*').eq('id', reporteId).single();
+            if (!rep) return;
+
+            document.getElementById('lblTituloResultadoReporte').innerText = `Reporte: ${rep.nombre}`;
             const divRes = document.getElementById('contenedorResultadoReporte');
 
-            if (tipo === 'saldos') {
-                const { data: inscritos } = await db.from('inscritos').select('*');
-                const { data: pagos } = await db.from('pagos').select('*').eq('estado', 'Aprobado');
+            const { data: inscritos } = await db.from('inscritos').select('*');
+            const { data: pagos } = await db.from('pagos').select('*').eq('estado', 'Aprobado');
 
-                let html = `<table class="w-full text-left"><thead class="bg-gray-100"><tr><th class="p-2">C.I.</th><th class="p-2">Nombre</th><th class="p-2">Costo</th><th class="p-2">Abonado</th><th class="p-2">Saldo</th></tr></thead><tbody>`;
+            const cols = rep.filtros?.columnas || {};
+            const aggs = rep.filtros?.agregaciones || {};
 
-                (inscritos || []).forEach(i => {
-                    let abonado = 0;
-                    (pagos || []).filter(p => p.inscrito_id === i.id).forEach(p => abonado += Number(p.monto));
-                    let costo = i.tipo_hospedaje === 'Camping' ? 220 : 230;
-                    let saldo = costo - abonado;
+            let totalCosto = 0, totalAbonado = 0, totalSaldo = 0, cantFilas = 0;
 
-                    if (saldo > 0) {
-                        html += `<tr class="border-b"><td class="p-2 font-bold">${i.ci}</td><td class="p-2">${i.nombre_completo}</td><td class="p-2">Bs ${costo}</td><td class="p-2 text-green-600">Bs ${abonado}</td><td class="p-2 text-red-600 font-bold">Bs ${saldo}</td></tr>`;
-                    }
-                });
+            let htmlHeader = `<table class="w-full text-left border-collapse"><thead class="bg-gray-100 font-bold border-b"><tr>`;
+            if (cols.ci) htmlHeader += `<th class="p-2">C.I.</th>`;
+            if (cols.nombre) htmlHeader += `<th class="p-2">Nombre</th>`;
+            if (cols.telefono) htmlHeader += `<th class="p-2">Teléfono</th>`;
+            if (cols.celula) htmlHeader += `<th class="p-2">Célula</th>`;
+            if (cols.talla) htmlHeader += `<th class="p-2">Talla</th>`;
+            if (cols.hospedaje) htmlHeader += `<th class="p-2">Hospedaje</th>`;
+            if (cols.costo) htmlHeader += `<th class="p-2">Costo Total</th>`;
+            if (cols.abonado) htmlHeader += `<th class="p-2">Abonado</th>`;
+            if (cols.saldo) htmlHeader += `<th class="p-2">Saldo</th>`;
+            htmlHeader += `</tr></thead><tbody>`;
 
-                html += `</tbody></table>`;
-                divRes.innerHTML = html;
-            } else if (tipo === 'celula') {
-                const { data: inscritos } = await db.from('inscritos').select('celula');
-                let conteo = {};
-                (inscritos || []).forEach(i => {
-                    let c = i.celula || 'Sin Célula';
-                    conteo[c] = (conteo[c] || 0) + 1;
-                });
+            let htmlRows = '';
 
-                let html = `<table class="w-full text-left"><thead class="bg-gray-100"><tr><th class="p-2">Nombre de Célula</th><th class="p-2">Total Campamentistas</th></tr></thead><tbody>`;
-                for (let key in conteo) {
-                    html += `<tr class="border-b"><td class="p-2 font-semibold">${key}</td><td class="p-2 font-bold text-blue-600">${conteo[key]}</td></tr>`;
-                }
-                html += `</tbody></table>`;
-                divRes.innerHTML = html;
-            } else if (tipo === 'hospedaje') {
-                const { data: inscritos } = await db.from('inscritos').select('tipo_hospedaje');
-                let col = 0, cam = 0;
-                (inscritos || []).forEach(i => i.tipo_hospedaje === 'Camping' ? cam++ : col++);
+            (inscritos || []).forEach(i => {
+                let abonado = 0;
+                (pagos || []).filter(p => p.inscrito_id === i.id).forEach(p => abonado += Number(p.monto));
+                let costo = i.tipo_hospedaje === 'Camping' ? 220 : 230;
+                let saldo = costo - abonado;
 
-                divRes.innerHTML = `
-          <div class="grid grid-cols-2 gap-4 text-center my-4">
-            <div class="p-4 bg-blue-50 rounded-xl border border-blue-200"><p class="text-xs font-bold text-blue-600">COLCHÓN (Bs 230)</p><h3 class="text-2xl font-black">${col}</h3></div>
-            <div class="p-4 bg-green-50 rounded-xl border border-green-200"><p class="text-xs font-bold text-green-600">CAMPING (Bs 220)</p><h3 class="text-2xl font-black">${cam}</h3></div>
-          </div>`;
+                if (rep.tipo_reporte === 'saldos' && saldo <= 0) return;
+
+                cantFilas++;
+                totalCosto += costo;
+                totalAbonado += abonado;
+                totalSaldo += saldo;
+
+                htmlRows += `<tr class="border-b">`;
+                if (cols.ci) htmlRows += `<td class="p-2 font-bold">${i.ci}</td>`;
+                if (cols.nombre) htmlRows += `<td class="p-2">${i.nombre_completo}</td>`;
+                if (cols.telefono) htmlRows += `<td class="p-2">${i.telefono || '-'}</td>`;
+                if (cols.celula) htmlRows += `<td class="p-2">${i.celula || '-'}</td>`;
+                if (cols.talla) htmlRows += `<td class="p-2">${i.talla_polera || '-'}</td>`;
+                if (cols.hospedaje) htmlRows += `<td class="p-2">${i.tipo_hospedaje}</td>`;
+                if (cols.costo) htmlRows += `<td class="p-2">Bs ${costo}</td>`;
+                if (cols.abonado) htmlRows += `<td class="p-2 text-green-600 font-bold">Bs ${abonado}</td>`;
+                if (cols.saldo) htmlRows += `<td class="p-2 text-red-600 font-bold">Bs ${saldo}</td>`;
+                htmlRows += `</tr>`;
+            });
+
+            // ENCABEZADOS Y TOTALES CALCULADOS DINÁMICAMENTE (SUMA / PROMEDIO)
+            let htmlFooter = `<tfoot class="bg-gray-100 font-bold border-t-2 border-gray-300"><tr>`;
+            if (cols.ci) htmlFooter += `<td class="p-2">Filtro: ${cantFilas} reg.</td>`;
+            if (cols.nombre) htmlFooter += `<td class="p-2">--</td>`;
+            if (cols.telefono) htmlFooter += `<td class="p-2">--</td>`;
+            if (cols.celula) htmlFooter += `<td class="p-2">--</td>`;
+            if (cols.talla) htmlFooter += `<td class="p-2">--</td>`;
+            if (cols.hospedaje) htmlFooter += `<td class="p-2">--</td>`;
+
+            if (cols.costo) {
+                let val = aggs.costo === 'suma' ? `Suma: Bs ${totalCosto}` : (aggs.costo === 'promedio' && cantFilas ? `Prom: Bs ${(totalCosto / cantFilas).toFixed(1)}` : '--');
+                htmlFooter += `<td class="p-2 text-blue-800">${val}</td>`;
             }
+            if (cols.abonado) {
+                let val = aggs.abonado === 'suma' ? `Suma: Bs ${totalAbonado}` : (aggs.abonado === 'promedio' && cantFilas ? `Prom: Bs ${(totalAbonado / cantFilas).toFixed(1)}` : '--');
+                htmlFooter += `<td class="p-2 text-green-800">${val}</td>`;
+            }
+            if (cols.saldo) {
+                let val = aggs.saldo === 'suma' ? `Suma: Bs ${totalSaldo}` : (aggs.saldo === 'promedio' && cantFilas ? `Prom: Bs ${(totalSaldo / cantFilas).toFixed(1)}` : '--');
+                htmlFooter += `<td class="p-2 text-red-800">${val}</td>`;
+            }
+
+            htmlFooter += `</tr></tfoot>`;
+
+            divRes.innerHTML = htmlHeader + htmlRows + `</tbody>` + htmlFooter + `</table>`;
         }
 
-        // MÁS FUNCIONALIDADES
+        // REGISTRO DE CAMPAMENTISTA
         async function crearNuevoCampamentista(e) {
             e.preventDefault();
             await db.from('inscritos').insert([{
@@ -843,11 +1032,12 @@
                 alergias_medicina: document.getElementById('newAlergias').value.trim()
             }]);
 
-            alert('Campamentista registrado.');
+            alert('Campamentista registrado exitosamente.');
             e.target.reset();
             cargarTodoElDashboard();
         }
 
+        // ADMINISTRADORES Y ROLES
         async function cargarRolesYAdmins() {
             const { data: roles } = await db.from('roles').select('*');
             listaRolesGlobal = roles || [];
@@ -871,9 +1061,12 @@
                 ${optionsRoles}
               </select>
             </td>
-            <td class="p-2 text-center">
-              <button onclick="solicitarCambioRolAdmin('${a.id}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2 py-1 rounded text-xs font-bold">
-                <i class="fa-solid fa-floppy-disk"></i> Cambiar Rol
+            <td class="p-2 text-center flex justify-center gap-1">
+              <button onclick="solicitarCambioRolAdmin('${a.id}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2 py-1 rounded text-xs font-bold" title="Guardar Rol">
+                <i class="fa-solid fa-floppy-disk"></i>
+              </button>
+              <button onclick="solicitarSeguridad('borrarAdmin', '${a.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 px-2 py-1 rounded text-xs font-bold border border-red-200" title="Eliminar Admin">
+                <i class="fa-solid fa-trash"></i>
               </button>
             </td>
           </tr>`;
@@ -919,7 +1112,7 @@
             };
 
             await db.from('roles').insert([{ nombre: document.getElementById('rolNombre').value, permisos }]);
-            alert('Rol configurado.');
+            alert('Rol configurado con éxito.');
             cargarRolesYAdmins();
         }
 
