@@ -11,181 +11,377 @@
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛺</text></svg>">
 
+    <!-- Fuentes y Estilos -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Glassmorphism y sombras suaves */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .hero-gradient {
+            background: radial-gradient(100% 100% at 50% 0%, rgba(30, 58, 138, 0.08) 0%, rgba(248, 250, 252, 1) 100%);
+        }
+
+        /* Toast Container */
+        #toastContainer {
+            position: fixed;
+            top: 1.25rem;
+            right: 1.25rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            pointer-events: none;
+        }
+
+        .toast-item {
+            pointer-events: auto;
+            transform: translateX(120%);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .toast-item.show {
+            transform: translateX(0);
+        }
+
+        /* File drop styling */
+        .file-dropzone {
+            border: 2px dashed #cbd5e1;
+            transition: all 0.2s ease;
+        }
+        .file-dropzone:hover {
+            border-color: #3b82f6;
+            background-color: #f8fafc;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+        }
+    </style>
 </head>
 
-<body class="bg-slate-100 min-h-screen text-gray-800 font-sans">
+<body class="bg-slate-50 min-h-screen text-slate-800 hero-gradient flex flex-col justify-between">
+
+    <!-- TOAST NOTIFICATIONS CONTAINER -->
+    <div id="toastContainer"></div>
 
     <!-- NAVBAR -->
-    <nav class="bg-gray-900 text-white p-4 shadow-md sticky top-0 z-50">
-        <div class="max-w-4xl mx-auto flex justify-between items-center">
-            <button onclick="regresarInicio()" class="flex items-center space-x-2 text-left focus:outline-none group">
-                <i class="fa-solid fa-campground text-amber-400 text-xl group-hover:scale-110 transition-transform"></i>
-                <span class="font-bold text-lg tracking-wide group-hover:text-amber-400 transition-colors">JESUS CAMP 2027</span>
+    <header class="bg-slate-900/95 backdrop-blur-md text-white sticky top-0 z-40 border-b border-slate-800 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
+            <button onclick="regresarInicio()" class="flex items-center space-x-3 text-left focus:outline-none group">
+                <div class="w-10 h-10 rounded-xl bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400 group-hover:scale-105 group-hover:bg-amber-400 group-hover:text-slate-950 transition-all duration-200">
+                    <i class="fa-solid fa-campground text-lg"></i>
+                </div>
+                <div>
+                    <span class="font-extrabold text-base tracking-wide text-white group-hover:text-amber-400 transition-colors flex items-center gap-1.5">
+                        JESUS CAMP <span class="text-amber-400 font-black">2027</span>
+                    </span>
+                    <span class="text-[10px] text-slate-400 block -mt-0.5 tracking-wider uppercase font-semibold">Portal Oficial</span>
+                </div>
             </button>
 
-            <div id="contenedorNavBoton">
+            <div id="contenedorNavBoton" class="flex items-center gap-2">
                 <a href="admin.html" id="btnNavAdmin"
-                    class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg border border-gray-700 transition">
-                    <i class="fa-solid fa-user-gear mr-1"></i> Panel Admin
+                    class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-3 py-2 rounded-xl border border-slate-700 transition flex items-center gap-1.5 font-semibold">
+                    <i class="fa-solid fa-user-shield text-amber-400 text-xs"></i>
+                    <span>Panel Admin</span>
                 </a>
                 <button onclick="regresarInicio()" id="btnNavInicio"
-                    class="hidden text-xs bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-3 py-2 rounded-lg transition shadow">
-                    <i class="fa-solid fa-house mr-1"></i> Regresar al Inicio
+                    class="hidden text-xs bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold px-3.5 py-2 rounded-xl transition shadow flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-left text-xs"></i>
+                    <span>Cerrar Sesión</span>
                 </button>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <main class="max-w-4xl mx-auto p-4 space-y-6">
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 w-full flex-grow space-y-6">
 
-        <!-- BÚSQUEDA DE PERFIL -->
-        <section id="secBusqueda"
-            class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 text-center max-w-md mx-auto mt-8">
-            <div
-                class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
-                <i class="fa-solid fa-id-card"></i>
+        <!-- BÚSQUEDA DE PERFIL / INGRESO -->
+        <section id="secBusqueda" class="max-w-md mx-auto my-8 sm:my-12">
+            <div class="glass-card p-6 sm:p-8 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-200 text-center relative overflow-hidden">
+                <!-- Acento superior -->
+                <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-amber-400"></div>
+
+                <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner border border-blue-100">
+                    <i class="fa-solid fa-id-card-clip"></i>
+                </div>
+
+                <span class="inline-block text-[11px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full mb-2">
+                    Acceso de Campamentistas
+                </span>
+                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">¡Bienvenido al Campamento!</h2>
+                <p class="text-xs text-slate-500 mt-1 mb-6 leading-relaxed">
+                    Ingresa tu número de Cédula de Identidad (C.I.) para consultar tu equipo, estado de pagos y carta de compromiso.
+                </p>
+
+                <form onsubmit="handleBuscarSubmit(event)" class="space-y-4 text-left">
+                    <div>
+                        <label for="inputCI" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                            Cédula de Identidad (C.I.)
+                        </label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                                <i class="fa-solid fa-hashtag text-sm"></i>
+                            </span>
+                            <input type="text" id="inputCI" required placeholder="ej. 13489470" autocomplete="off"
+                                class="w-full pl-10 pr-4 py-3.5 bg-slate-50 rounded-xl border border-slate-300 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 text-slate-900 text-center text-lg font-bold tracking-widest transition">
+                        </div>
+                    </div>
+
+                    <button type="submit" id="btnBuscarSubmit"
+                        class="w-full bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-extrabold py-3.5 px-4 rounded-xl shadow-lg shadow-blue-600/25 transition-all flex items-center justify-center gap-2 text-sm">
+                        <span id="btnBuscarSpinner" class="hidden"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
+                        <i id="btnBuscarIcon" class="fa-solid fa-arrow-right-to-bracket"></i>
+                        <span>Ingresar a mi Portal</span>
+                    </button>
+                </form>
+
+                <div id="msgBusqueda" class="hidden mt-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-xs font-medium text-left flex items-start gap-2">
+                    <i class="fa-solid fa-circle-exclamation mt-0.5 text-red-500"></i>
+                    <span id="msgBusquedaTexto">No se encontró ningún campamentista registrado con ese C.I.</span>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-center gap-2 text-[11px] text-slate-400">
+                    <i class="fa-solid fa-shield-halved text-slate-400"></i>
+                    <span>Tus datos están protegidos de forma segura</span>
+                </div>
             </div>
-            <h2 class="text-xl font-bold text-gray-900 mb-1">Ingreso de Campamentista</h2>
-            <p class="text-xs text-gray-500 mb-6">Ingresa tu C.I. para gestionar tu perfil, pagos y carta.</p>
-
-            <div class="space-y-3">
-                <input type="text" id="inputCI" placeholder="Tu C.I. (ej. 13489470)"
-                    class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-center text-lg font-semibold tracking-wider">
-                <button onclick="buscarCampamentista()"
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition">
-                    Ingresar al Portal
-                </button>
-            </div>
-            <p id="msgBusqueda" class="text-red-500 text-xs mt-3 hidden"></p>
         </section>
 
         <!-- VISTA DE PERFIL -->
         <div id="secPerfil" class="hidden space-y-6">
 
+            <!-- BANNER BIENVENIDA DEL USUARIO -->
+            <div class="glass-card p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center sm:items-start justify-between gap-4">
+                <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+                    <div id="usrAvatarIniciales" class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-black text-2xl flex items-center justify-center shadow-md shadow-blue-500/20">
+                        JC
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-1">
+                            <span id="badgeEsStaff" class="hidden text-[10px] font-extrabold bg-purple-100 text-purple-800 px-2.5 py-0.5 rounded-full border border-purple-200 flex items-center gap-1">
+                                <i class="fa-solid fa-star text-amber-400"></i> STAFF
+                            </span>
+                            <span id="badgeTipoInscripcion" class="text-[10px] font-bold bg-blue-50 text-blue-700 px-2.5 py-0.5 rounded-full border border-blue-200">
+                                Inscripción Estándar
+                            </span>
+                            <span id="badgeCi" class="text-[10px] font-mono font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
+                                C.I. -
+                            </span>
+                        </div>
+                        <h2 id="lblNombreCompleto" class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                            Nombre del Campamentista
+                        </h2>
+                        <p class="text-xs text-slate-500 flex items-center justify-center sm:justify-start gap-2 mt-0.5">
+                            <span id="lblCelulaUser"><i class="fa-solid fa-church text-slate-400 mr-1"></i> Célula: -</span>
+                            <span>•</span>
+                            <span id="lblTelefonoUser"><i class="fa-brands fa-whatsapp text-emerald-500 mr-1"></i> -</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="w-full sm:w-auto flex sm:flex-col items-center sm:items-end justify-between gap-1 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Estado de Cuenta</span>
+                    <span id="badgeEstadoFinanzas" class="text-xs font-extrabold px-3 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
+                        <i class="fa-solid fa-clock text-amber-500"></i> Saldo Pendiente
+                    </span>
+                </div>
+            </div>
+
             <!-- CARDS FINANZAS -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
-                    <div>
-                        <p class="text-[10px] font-semibold text-gray-400 uppercase">Costo Total</p>
-                        <h3 class="text-xl font-black text-gray-800" id="lblCosto">Bs 0</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+                <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Costo Total</span>
+                        <div class="w-7 h-7 bg-slate-100 text-slate-600 rounded-lg flex items-center justify-center text-xs"><i class="fa-solid fa-tag"></i></div>
                     </div>
-                    <div class="p-2.5 bg-gray-100 text-gray-600 rounded-xl"><i class="fa-solid fa-tag"></i></div>
+                    <div>
+                        <h3 class="text-xl sm:text-2xl font-black text-slate-800" id="lblCosto">Bs 0</h3>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Monto de tu plan</p>
+                    </div>
                 </div>
-                <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
-                    <div>
-                        <p class="text-[10px] font-semibold text-gray-400 uppercase">Abonado</p>
-                        <h3 class="text-xl font-black text-green-600" id="lblAbonado">Bs 0</h3>
+
+                <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[10px] font-extrabold text-emerald-600 uppercase tracking-wider">Abonado</span>
+                        <div class="w-7 h-7 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center text-xs"><i class="fa-solid fa-circle-check"></i></div>
                     </div>
-                    <div class="p-2.5 bg-green-50 text-green-600 rounded-xl"><i class="fa-solid fa-circle-check"></i></div>
+                    <div>
+                        <h3 class="text-xl sm:text-2xl font-black text-emerald-600" id="lblAbonado">Bs 0</h3>
+                        <p class="text-[10px] text-emerald-600 font-semibold mt-0.5" id="lblPorcentajePago">0% completado</p>
+                    </div>
                 </div>
-                <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
-                    <div>
-                        <p class="text-[10px] font-semibold text-gray-400 uppercase">Saldo</p>
-                        <h3 class="text-xl font-black text-red-600" id="lblSaldo">Bs 0</h3>
+
+                <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[10px] font-extrabold text-rose-500 uppercase tracking-wider">Saldo</span>
+                        <div class="w-7 h-7 bg-rose-50 text-rose-600 rounded-lg flex items-center justify-center text-xs"><i class="fa-solid fa-clock-rotate-left"></i></div>
                     </div>
-                    <div class="p-2.5 bg-red-50 text-red-600 rounded-xl"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                    <div>
+                        <h3 class="text-xl sm:text-2xl font-black text-rose-600" id="lblSaldo">Bs 0</h3>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Pendiente de pago</p>
+                    </div>
                 </div>
-                <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
-                    <div>
-                        <p class="text-[10px] font-semibold text-gray-400 uppercase">Equipo Asignado</p>
-                        <h3 class="text-sm font-black text-indigo-600" id="lblEquipo">Sin Asignar</h3>
+
+                <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[10px] font-extrabold text-indigo-500 uppercase tracking-wider">Equipo</span>
+                        <div class="w-7 h-7 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center text-xs"><i class="fa-solid fa-shield"></i></div>
                     </div>
-                    <div class="p-2.5 bg-indigo-50 text-indigo-600 rounded-xl"><i class="fa-solid fa-shield"></i></div>
+                    <div>
+                        <h3 class="text-base sm:text-lg font-black text-indigo-700 truncate" id="lblEquipo">Sin Asignar</h3>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Para competencias</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- NAVEGACIÓN PESTAÑAS PERFIL -->
-            <div class="flex flex-wrap gap-2 border-b border-gray-200 pb-2">
-                <button id="btnTabCarta" onclick="cambiarPestanaPerfil('carta')"
-                    class="tab-usr-btn bg-blue-600 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition shadow">
-                    <i class="fa-solid fa-file-signature mr-1"></i> Carta de Compromiso
-                </button>
-                <button id="btnTabDatos" onclick="cambiarPestanaPerfil('datos')"
-                    class="tab-usr-btn bg-white text-gray-600 hover:bg-gray-100 font-bold text-xs px-4 py-2.5 rounded-xl transition border border-gray-200">
-                    <i class="fa-solid fa-user mr-1"></i> Datos Personales
-                </button>
-                <button id="btnTabPago" onclick="cambiarPestanaPerfil('pago')"
-                    class="tab-usr-btn bg-white text-gray-600 hover:bg-gray-100 font-bold text-xs px-4 py-2.5 rounded-xl transition border border-gray-200">
-                    <i class="fa-solid fa-cloud-arrow-up mr-1"></i> Subir Comprobante
-                </button>
-                <button id="btnTabHistorial" onclick="cambiarPestanaPerfil('historial')"
-                    class="tab-usr-btn bg-white text-gray-600 hover:bg-gray-100 font-bold text-xs px-4 py-2.5 rounded-xl transition border border-gray-200">
-                    <i class="fa-solid fa-receipt mr-1"></i> Historial de Cuotas
-                </button>
+            <!-- NAVEGACIÓN PESTAÑAS PERFIL (Pill Tabs con Scroll Horizontal) -->
+            <div class="border-b border-slate-200 pb-2">
+                <nav class="flex space-x-2 overflow-x-auto py-1 no-scrollbar" aria-label="Tabs">
+                    <button id="btnTabCarta" onclick="cambiarPestanaPerfil('carta')"
+                        class="tab-usr-btn whitespace-nowrap bg-blue-600 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition shadow flex items-center gap-1.5 flex-shrink-0">
+                        <i class="fa-solid fa-file-signature"></i>
+                        <span>Carta de Compromiso</span>
+                    </button>
+                    <button id="btnTabDatos" onclick="cambiarPestanaPerfil('datos')"
+                        class="tab-usr-btn whitespace-nowrap bg-white text-slate-600 hover:bg-slate-100 font-bold text-xs px-4 py-2.5 rounded-xl transition border border-slate-200 flex items-center gap-1.5 flex-shrink-0">
+                        <i class="fa-solid fa-user"></i>
+                        <span>Mis Datos</span>
+                    </button>
+                    <button id="btnTabPago" onclick="cambiarPestanaPerfil('pago')"
+                        class="tab-usr-btn whitespace-nowrap bg-white text-slate-600 hover:bg-slate-100 font-bold text-xs px-4 py-2.5 rounded-xl transition border border-slate-200 flex items-center gap-1.5 flex-shrink-0">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <span>Subir Comprobante</span>
+                    </button>
+                    <button id="btnTabHistorial" onclick="cambiarPestanaPerfil('historial')"
+                        class="tab-usr-btn whitespace-nowrap bg-white text-slate-600 hover:bg-slate-100 font-bold text-xs px-4 py-2.5 rounded-xl transition border border-slate-200 flex items-center gap-1.5 flex-shrink-0">
+                        <i class="fa-solid fa-receipt"></i>
+                        <span>Historial de Pagos</span>
+                    </button>
+                </nav>
             </div>
 
-            <!-- CARTA DE COMPROMISO -->
+            <!-- CONTENIDO TAB 1: CARTA DE COMPROMISO -->
             <div id="tabUsrCarta" class="tab-usr-content space-y-4">
-                <div id="alertaCartaContenedor" class="rounded-xl p-4 border shadow-sm">
-                    <div class="flex flex-col md:flex-row items-center justify-between gap-3">
-                        <div class="flex items-center gap-3">
-                            <i id="iconoAlertaCarta" class="text-2xl"></i>
+                <div id="alertaCartaContenedor" class="rounded-2xl p-4 sm:p-5 border shadow-sm transition-colors">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                        <div class="flex items-start sm:items-center gap-3">
+                            <i id="iconoAlertaCarta" class="text-2xl mt-0.5 sm:mt-0"></i>
                             <div>
-                                <h4 id="tituloAlertaCarta" class="font-bold text-sm"></h4>
-                                <p id="descAlertaCarta" class="text-xs"></p>
+                                <h4 id="tituloAlertaCarta" class="font-extrabold text-sm"></h4>
+                                <p id="descAlertaCarta" class="text-xs mt-0.5"></p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-3">
-                    <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
-                        <i class="fa-solid fa-upload text-indigo-600"></i> Adjuntar o Actualizar Carta
-                    </h3>
-                    <p class="text-xs text-gray-500">Descarga la Carta de Compromiso, fírmala y sube una fotografía o documento PDF visible.</p>
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 pt-2">
-                        <input type="file" id="cartaArchivo" accept="image/*,.pdf"
-                            class="text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
-                        <button onclick="subirCartaCompromiso()"
-                            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-lg text-xs transition shadow">
-                            Subir para Revisión
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+                                <i class="fa-solid fa-upload text-indigo-600"></i> Adjuntar Carta Firmada
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-0.5">
+                                Puedes descargar el formato oficial, imprimirlo o firmarlo y adjuntar la foto o archivo PDF visible.
+                            </p>
+                        </div>
+                        <button onclick="abrirModalFormatoCarta()" type="button"
+                            class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs px-3.5 py-2 rounded-xl border border-indigo-200 transition flex items-center gap-1.5 self-start sm:self-auto">
+                            <i class="fa-solid fa-eye text-indigo-600"></i> Ver / Descargar Formato
                         </button>
                     </div>
-                    <div id="txtEstadoCarta" class="text-xs font-semibold mt-2"></div>
+
+                    <div class="file-dropzone p-6 rounded-2xl text-center bg-slate-50/50 cursor-pointer" onclick="document.getElementById('cartaArchivo').click()">
+                        <input type="file" id="cartaArchivo" accept="image/*,.pdf" class="hidden" onchange="actualizarPreviewCarta(this)">
+                        <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl">
+                            <i class="fa-solid fa-file-arrow-up"></i>
+                        </div>
+                        <p class="text-xs font-bold text-slate-700" id="lblCartaArchivoNombre">Haz clic aquí para seleccionar tu foto o archivo PDF</p>
+                        <p class="text-[10px] text-slate-400 mt-1">Formatos admitidos: JPG, PNG, WEBP o PDF (Máx. 10MB)</p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+                        <div id="txtEstadoCarta" class="text-xs font-semibold"></div>
+                        <button onclick="subirCartaCompromiso()" id="btnSubirCarta"
+                            class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-extrabold px-6 py-2.5 rounded-xl text-xs transition shadow-md shadow-indigo-600/20 flex items-center justify-center gap-2">
+                            <span id="spnSubirCarta" class="hidden"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
+                            <i id="icoSubirCarta" class="fa-solid fa-cloud-arrow-up"></i>
+                            <span>Subir para Revisión</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <!-- DATOS PERSONALES -->
-            <div id="tabUsrDatos" class="tab-usr-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
-                <div class="flex justify-between items-center mb-2">
-                    <h3 class="font-bold text-gray-800 text-lg flex items-center gap-2">
-                        <i class="fa-solid fa-user text-blue-600"></i> Información Inscrita
-                    </h3>
+            <!-- CONTENIDO TAB 2: DATOS PERSONALES -->
+            <div id="tabUsrDatos" class="tab-usr-content hidden bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-5">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-slate-100 pb-3">
+                    <div>
+                        <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+                            <i class="fa-solid fa-user-check text-blue-600"></i> Ficha de Registro del Campamentista
+                        </h3>
+                        <p class="text-xs text-slate-500 mt-0.5">Revisa la información con la que estás registrado en el sistema.</p>
+                    </div>
                     <div class="flex items-center gap-2">
                         <span id="badgeEdicion"
-                            class="hidden text-xs bg-amber-100 text-amber-800 font-semibold px-3 py-1 rounded-full border border-amber-300">
-                            Cambio en revisión
+                            class="hidden text-[11px] bg-amber-50 text-amber-800 font-bold px-3 py-1 rounded-full border border-amber-300 flex items-center gap-1">
+                            <i class="fa-solid fa-clock-rotate-left text-amber-600"></i> Solicitud en revisión
                         </span>
                         <button id="btnHabilitarEdicion" onclick="habilitarEdicion()"
-                            class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-xs px-3 py-1.5 rounded-lg border border-amber-300 transition flex items-center gap-1">
-                            <i class="fa-solid fa-pencil"></i> Editar Datos
+                            class="bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs px-3.5 py-2 rounded-xl border border-amber-300 transition flex items-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-pen-to-square"></i> Solicitar Corrección
                         </button>
                     </div>
                 </div>
 
                 <form id="formPerfil" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="text-xs font-bold text-gray-500">Nombre Completo</label>
+                        <label class="text-xs font-bold text-slate-600 block mb-1">Nombre Completo</label>
                         <input type="text" id="usrNombre" disabled
-                            class="w-full mt-1 p-2.5 bg-gray-100 border border-gray-200 rounded-lg text-gray-600 text-sm font-semibold">
+                            class="w-full p-2.5 bg-slate-100 border border-slate-200 rounded-xl text-slate-700 text-sm font-semibold cursor-not-allowed">
                     </div>
                     <div>
-                        <label class="text-xs font-bold text-gray-500">Teléfono / WhatsApp</label>
+                        <label class="text-xs font-bold text-slate-600 block mb-1">Teléfono / WhatsApp</label>
                         <input type="text" id="usrTelefono" disabled
-                            class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
+                            class="usr-input w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-600 transition">
                     </div>
                     <div>
-                        <label class="text-xs font-bold text-gray-500">Célula</label>
+                        <label class="text-xs font-bold text-slate-600 block mb-1">Célula</label>
                         <input type="text" id="usrCelula" disabled
-                            class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
+                            class="usr-input w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-600 transition">
                     </div>
                     <div>
-                        <label class="text-xs font-bold text-gray-500">Talla de Polera</label>
+                        <label class="text-xs font-bold text-slate-600 block mb-1">Talla de Polera</label>
                         <select id="usrTalla" disabled
-                            class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
+                            class="usr-input w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-600 transition">
                             <option value="XS">XS</option>
                             <option value="S">S</option>
                             <option value="M">M</option>
@@ -194,119 +390,254 @@
                         </select>
                     </div>
                     <div>
-                        <label class="text-xs font-bold text-gray-500">Tipo de Inscripción Solicitada</label>
+                        <label class="text-xs font-bold text-slate-600 block mb-1">Tipo de Inscripción</label>
                         <select id="usrTipoInscripcion" disabled
-                            class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none"></select>
+                            class="usr-input w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-600 transition"></select>
                     </div>
                     <div>
-                        <label class="text-xs font-bold text-gray-500">Actividad Favorita</label>
+                        <label class="text-xs font-bold text-slate-600 block mb-1">Actividad Favorita para el Campamento</label>
                         <select id="usrActividad" disabled
-                            class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
-                            <option value="Fútbol">Fútbol</option>
-                            <option value="Vóley">Vóley</option>
-                            <option value="Memorizar Versículos">Memorizar Versículos</option>
-                            <option value="Canto y Alabanza">Canto y Alabanza</option>
-                            <option value="Coreografía / Baile">Coreografía / Baile</option>
-                            <option value="Teatro / Dramatización">Teatro / Dramatización</option>
-                            <option value="Atletismo / Carreras">Atletismo / Carreras</option>
-                            <option value="Juegos de Mesa">Juegos de Mesa</option>
+                            class="usr-input w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-600 transition">
+                            <option value="Fútbol">Fútbol ⚽</option>
+                            <option value="Vóley">Vóley 🏐</option>
+                            <option value="Memorizar Versículos">Memorizar Versículos 📖</option>
+                            <option value="Canto y Alabanza">Canto y Alabanza 🎵</option>
+                            <option value="Coreografía / Baile">Coreografía / Baile 💃</option>
+                            <option value="Teatro / Dramatización">Teatro / Dramatización 🎭</option>
+                            <option value="Atletismo / Carreras">Atletismo / Carreras 🏃</option>
+                            <option value="Juegos de Mesa">Juegos de Mesa 🎲</option>
                         </select>
                     </div>
                     <div>
-                        <label class="text-xs font-bold text-gray-500">Habilidad o Talento Especial</label>
-                        <input type="text" id="usrHabilidad" disabled placeholder="Ej. Guitarra, canto..."
-                            class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
+                        <label class="text-xs font-bold text-slate-600 block mb-1">Habilidad o Talento Especial</label>
+                        <input type="text" id="usrHabilidad" disabled placeholder="Ej. Toco guitarra, canto..."
+                            class="usr-input w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-600 transition">
                     </div>
                     <div>
-                        <label class="text-xs font-bold text-gray-500">Contacto de Emergencia</label>
-                        <input type="text" id="usrEmergencia" disabled
-                            class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
+                        <label class="text-xs font-bold text-slate-600 block mb-1">Contacto de Emergencia (Nombre y Teléfono)</label>
+                        <input type="text" id="usrEmergencia" disabled placeholder="Ej. Mamá - 70000000"
+                            class="usr-input w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-600 transition">
                     </div>
                     <div class="md:col-span-2">
-                        <label class="text-xs font-bold text-gray-500">Alergias o Medicamentos</label>
+                        <label class="text-xs font-bold text-slate-600 block mb-1">Alergias o Medicamentos Requeridos</label>
                         <input type="text" id="usrAlergias" disabled placeholder="Ninguna"
-                            class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
+                            class="usr-input w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-600 transition">
                     </div>
 
                     <div id="secMenorEdad"
-                        class="hidden md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 bg-amber-50/50 p-4 rounded-xl border border-amber-200">
-                        <div class="md:col-span-2 font-bold text-xs text-amber-900 flex items-center gap-1">
-                            <i class="fa-solid fa-child-reaching"></i> Información de Tutor Legal
+                        class="hidden md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 bg-amber-50/70 p-4 rounded-2xl border border-amber-200">
+                        <div class="md:col-span-2 font-extrabold text-xs text-amber-900 flex items-center gap-1.5">
+                            <i class="fa-solid fa-child-reaching text-amber-600"></i> Información del Tutor Legal (Menor de Edad)
                         </div>
                         <div>
-                            <label class="text-xs font-bold text-gray-500">Nombre del Tutor</label>
+                            <label class="text-xs font-bold text-slate-600 block mb-1">Nombre Completo del Tutor</label>
                             <input type="text" id="usrTutorNombre" disabled
-                                class="usr-input w-full mt-1 p-2.5 bg-white border border-gray-200 rounded-lg text-sm outline-none">
+                                class="usr-input w-full p-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-amber-500 transition">
                         </div>
                         <div>
-                            <label class="text-xs font-bold text-gray-500">Teléfono del Tutor</label>
+                            <label class="text-xs font-bold text-slate-600 block mb-1">Teléfono del Tutor</label>
                             <input type="text" id="usrTutorTel" disabled
-                                class="usr-input w-full mt-1 p-2.5 bg-white border border-gray-200 rounded-lg text-sm outline-none">
+                                class="usr-input w-full p-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-amber-500 transition">
                         </div>
                     </div>
 
                     <div id="secBotonGuardar" class="hidden md:col-span-2 pt-2">
                         <button type="button" id="btnSolicitarCambio" onclick="solicitarCambioDatos()"
-                            class="w-full bg-gray-900 hover:bg-black text-amber-400 font-black text-sm px-5 py-3 rounded-xl transition shadow-lg border border-amber-400 flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-paper-plane text-amber-400"></i> Enviar Solicitud de Actualización
+                            class="w-full bg-slate-900 hover:bg-black text-amber-400 font-extrabold text-sm px-5 py-3 rounded-xl transition shadow-lg border border-amber-400/50 flex items-center justify-center gap-2">
+                            <span id="spnGuardarCambios" class="hidden"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
+                            <i id="icoGuardarCambios" class="fa-solid fa-paper-plane text-amber-400"></i>
+                            <span>Enviar Solicitud de Actualización al Administrador</span>
                         </button>
                     </div>
                 </form>
             </div>
 
-            <!-- SUBIR COMPROBANTE CON IMAGEN OBLIGATORIA -->
-            <div id="tabUsrPago" class="tab-usr-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-cloud-arrow-up text-green-600"></i> Subir Comprobante de Pago
-                </h3>
-                <div class="space-y-4 max-w-lg">
-                    <div>
-                        <label class="text-xs font-bold text-gray-500">Monto del Abono (Bs) *</label>
-                        <input type="number" id="pagoMonto" required placeholder="Ej. 50, 100"
-                            class="w-full mt-1 p-3 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-green-600 font-bold">
+            <!-- CONTENIDO TAB 3: SUBIR COMPROBANTE -->
+            <div id="tabUsrPago" class="tab-usr-content hidden space-y-4">
+                <!-- Tarjeta informativa de transferencia / QR -->
+                <div class="bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-blue-500/10 p-5 rounded-3xl border border-emerald-200">
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center flex-shrink-0 text-lg">
+                            <i class="fa-solid fa-building-columns"></i>
+                        </div>
+                        <div class="text-xs">
+                            <h4 class="font-extrabold text-slate-900 text-sm">Instrucciones de Pago</h4>
+                            <p class="text-slate-600 mt-0.5">
+                                Realiza tu transferencia bancaria o depósito a la cuenta oficial del campamento. Luego toma una captura legible del comprobante y súbela aquí. Tesorería verificará el abono y actualizará tu saldo en el sistema.
+                            </p>
+                        </div>
                     </div>
-                    <div>
-                        <label class="text-xs font-bold text-gray-700 flex items-center gap-1">
-                            Foto / Recibo del Comprobante (Obligatorio) *
-                        </label>
-                        <input type="file" id="pagoArchivo" accept="image/*,.pdf" required
-                            class="w-full mt-1 text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-gray-500">Observaciones (Opcional)</label>
-                        <input type="text" id="pagoObs" placeholder="Ej. Transferencia Banco Unión"
-                            class="w-full mt-1 p-3 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-green-600">
-                    </div>
-                    <button onclick="subirComprobante()"
-                        class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl text-sm transition shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-upload"></i> Enviar Pago a Tesorería
-                    </button>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <h3 class="font-extrabold text-slate-900 text-base mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-cloud-arrow-up text-emerald-600"></i> Registrar Nuevo Comprobante
+                    </h3>
+
+                    <form onsubmit="handleSubirComprobanteSubmit(event)" class="space-y-4 max-w-lg">
+                        <div>
+                            <label for="pagoMonto" class="text-xs font-bold text-slate-700 block mb-1">
+                                Monto Abonado (en Bolivianos) *
+                            </label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 font-black text-slate-400 text-sm">Bs</span>
+                                <input type="number" step="0.5" id="pagoMonto" required placeholder="ej. 50, 100" min="1"
+                                    class="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-600 font-extrabold text-slate-900">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-xs font-bold text-slate-700 block mb-1">
+                                Foto o Documento del Comprobante (Obligatorio) *
+                            </label>
+                            <div class="file-dropzone p-5 rounded-2xl text-center bg-slate-50 cursor-pointer" onclick="document.getElementById('pagoArchivo').click()">
+                                <input type="file" id="pagoArchivo" accept="image/*,.pdf" required class="hidden" onchange="actualizarPreviewComprobante(this)">
+                                <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center mx-auto mb-2 text-lg">
+                                    <i class="fa-solid fa-receipt"></i>
+                                </div>
+                                <p class="text-xs font-bold text-slate-700" id="lblPagoArchivoNombre">Haz clic para adjuntar comprobante</p>
+                                <p class="text-[10px] text-slate-400 mt-0.5">Captura de pantalla o PDF claro</p>
+                            </div>
+                            <!-- Miniatura si es imagen -->
+                            <div id="pagoPreviewContainer" class="hidden mt-2 p-2 bg-slate-100 rounded-xl flex items-center gap-3">
+                                <img id="pagoPreviewImg" src="" alt="Vista previa" class="w-14 h-14 object-cover rounded-lg border border-slate-200">
+                                <div class="text-xs truncate">
+                                    <p class="font-bold text-slate-800" id="pagoPreviewTexto"></p>
+                                    <span class="text-[10px] text-emerald-600 font-semibold">Listo para enviar</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="pagoObs" class="text-xs font-bold text-slate-700 block mb-1">
+                                Detalle u Observaciones (Opcional)
+                            </label>
+                            <input type="text" id="pagoObs" placeholder="Ej. Transferencia Banco Unión / Pago Cuota 1"
+                                class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-600">
+                        </div>
+
+                        <button type="submit" id="btnSubirPago"
+                            class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-extrabold py-3.5 rounded-xl text-sm transition shadow-lg shadow-emerald-600/25 flex items-center justify-center gap-2">
+                            <span id="spnSubirPago" class="hidden"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
+                            <i id="icoSubirPago" class="fa-solid fa-upload"></i>
+                            <span>Enviar Comprobante a Tesorería</span>
+                        </button>
+                    </form>
                 </div>
             </div>
 
-            <!-- HISTORIAL DE CUOTAS -->
-            <div id="tabUsrHistorial" class="tab-usr-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-receipt text-gray-600"></i> Historial de Cuotas
-                </h3>
+            <!-- CONTENIDO TAB 4: HISTORIAL DE CUOTAS -->
+            <div id="tabUsrHistorial" class="tab-usr-content hidden bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                    <div>
+                        <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+                            <i class="fa-solid fa-receipt text-slate-600"></i> Historial de Cuotas y Pagos
+                        </h3>
+                        <p class="text-xs text-slate-500 mt-0.5">Comprobantes enviados y su estado de aprobación por Tesorería.</p>
+                    </div>
+                    <button onclick="cambiarPestanaPerfil('pago')" class="text-xs font-bold text-emerald-600 hover:text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200 transition">
+                        + Nuevo Abono
+                    </button>
+                </div>
+
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-gray-600">
-                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                    <table class="w-full text-left text-xs text-slate-600">
+                        <thead class="bg-slate-50 text-slate-400 uppercase font-bold text-[10px] tracking-wider">
                             <tr>
-                                <th class="p-2">Fecha</th>
-                                <th class="p-2">Monto</th>
-                                <th class="p-2">Recibo</th>
-                                <th class="p-2">Estado</th>
+                                <th class="p-3 rounded-l-xl">Fecha</th>
+                                <th class="p-3">Monto</th>
+                                <th class="p-3">Recibo</th>
+                                <th class="p-3">Observación</th>
+                                <th class="p-3 rounded-r-xl">Estado</th>
                             </tr>
                         </thead>
-                        <tbody id="tblHistorialPagos" class="divide-y divide-gray-100"></tbody>
+                        <tbody id="tblHistorialPagos" class="divide-y divide-slate-100"></tbody>
                     </table>
+                </div>
+
+                <!-- Empty State si no hay pagos -->
+                <div id="historialEmptyState" class="hidden text-center py-8">
+                    <div class="w-12 h-12 bg-slate-100 text-slate-400 rounded-2xl flex items-center justify-center mx-auto mb-2 text-xl">
+                        <i class="fa-solid fa-file-invoice"></i>
+                    </div>
+                    <p class="text-xs font-bold text-slate-700">Aún no registraste ningún pago</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Sube tu primer comprobante de transferencia o cuota.</p>
+                    <button onclick="cambiarPestanaPerfil('pago')" class="mt-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition">
+                        Subir Comprobante Ahora
+                    </button>
                 </div>
             </div>
 
         </div>
 
     </main>
+
+    <!-- FOOTER -->
+    <footer class="mt-8 border-t border-slate-200 py-6 text-center text-xs text-slate-400 no-print">
+        <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <span class="flex items-center gap-1.5 font-semibold text-slate-500">
+                <i class="fa-solid fa-campground text-amber-500"></i> Jesus Camp 2027
+            </span>
+            <span>Sistema Oficial de Gestión y Acreditación</span>
+        </div>
+    </footer>
+
+    <!-- MODAL: FORMATO / MODELO DE CARTA DE COMPROMISO -->
+    <div id="modalFormatoCarta" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto space-y-4">
+            <div class="flex items-center justify-between border-b pb-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-file-lines"></i>
+                    </div>
+                    <h3 class="font-extrabold text-slate-900 text-base">Carta de Compromiso - Jesus Camp 2027</h3>
+                </div>
+                <button onclick="cerrarModalFormatoCarta()" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div id="documentoCartaImprimible" class="p-6 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-700 space-y-3 font-serif leading-relaxed">
+                <div class="text-center mb-4">
+                    <h4 class="font-bold text-sm tracking-wide uppercase text-slate-900">JESUS CAMP 2027</h4>
+                    <p class="text-[11px] font-sans text-slate-500">CARTA DE COMPROMISO Y CONSENTIMIENTO</p>
+                </div>
+
+                <p>
+                    Yo, <strong id="printCartaNombre" class="underline decoration-slate-400 font-sans">[Nombre Completo]</strong>, 
+                    con C.I. <strong id="printCartaCi" class="underline decoration-slate-400 font-sans">[C.I.]</strong>, 
+                    perteneciente a la célula <strong id="printCartaCelula" class="underline decoration-slate-400 font-sans">[Célula]</strong>, 
+                    por medio de la presente manifiesto mi compromiso formal de participación en el <strong>Jesus Camp 2027</strong>.
+                </p>
+
+                <p>
+                    Declaro comprometerme a respetar las normas de convivencia, los horarios de las actividades, las instrucciones del equipo de liderazgo y staff, así como a cuidar las instalaciones y mantener una actitud de respeto, comunión y servicio en todo momento.
+                </p>
+
+                <div class="pt-8 grid grid-cols-2 gap-8 text-center font-sans">
+                    <div>
+                        <div class="border-b border-slate-400 h-10 mb-1"></div>
+                        <p class="font-bold text-[11px] text-slate-800">Firma del Participante</p>
+                        <p class="text-[10px] text-slate-400">C.I.: <span id="printFirmaCi"></span></p>
+                    </div>
+                    <div>
+                        <div class="border-b border-slate-400 h-10 mb-1"></div>
+                        <p class="font-bold text-[11px] text-slate-800">Firma del Tutor (si aplica)</p>
+                        <p class="text-[10px] text-slate-400">Nombre / C.I.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                <button type="button" onclick="cerrarModalFormatoCarta()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-4 py-2.5 rounded-xl transition">
+                    Cerrar
+                </button>
+                <button type="button" onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-print"></i> Imprimir Formato
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script>
         const SUPABASE_URL = 'https://bpwsdgkafjnsgfilbfgg.supabase.co';
@@ -317,21 +648,118 @@
         let usuarioActual = null;
         let tiposInscripcionVisibles = [];
 
-        async function cargarTiposInscripcionPublicos() {
-            const { data } = await db.from('tipos_inscripcion')
-                .select('*')
-                .eq('es_visible', true)
-                .order('precio', { ascending: false });
-            
-            tiposInscripcionVisibles = data || [];
+        // TOAST NOTIFICATION SYSTEM
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            if (!container) {
+                alert(message);
+                return;
+            }
 
-            const selectUser = document.getElementById('usrTipoInscripcion');
-            if (selectUser) {
-                selectUser.innerHTML = '';
-                tiposInscripcionVisibles.forEach(t => {
-                    let label = t.es_manual ? `${t.nombre} (Precio personalizado)` : `${t.nombre} (Bs ${t.precio})`;
-                    selectUser.innerHTML += `<option value="${t.id}">${label}</option>`;
-                });
+            const toast = document.createElement('div');
+            toast.className = 'toast-item flex items-center gap-3 px-4 py-3 rounded-2xl shadow-xl text-xs font-bold border transition-all duration-300 max-w-sm';
+
+            let iconClass = 'fa-circle-info text-blue-500';
+            let bgClass = 'bg-white text-slate-800 border-slate-200';
+
+            if (type === 'success') {
+                iconClass = 'fa-circle-check text-emerald-500';
+                bgClass = 'bg-white text-slate-900 border-emerald-200 shadow-emerald-500/10';
+            } else if (type === 'error') {
+                iconClass = 'fa-circle-exclamation text-rose-500';
+                bgClass = 'bg-white text-slate-900 border-rose-200 shadow-rose-500/10';
+            } else if (type === 'warning') {
+                iconClass = 'fa-triangle-exclamation text-amber-500';
+                bgClass = 'bg-white text-slate-900 border-amber-200 shadow-amber-500/10';
+            }
+
+            toast.classList.add(...bgClass.split(' '));
+            toast.innerHTML = `
+                <i class="fa-solid ${iconClass} text-base flex-shrink-0"></i>
+                <span class="flex-grow leading-tight">${message}</span>
+            `;
+
+            container.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.add('show'));
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 350);
+            }, 4000);
+        }
+
+        // Preview handlers
+        function actualizarPreviewCarta(input) {
+            const lbl = document.getElementById('lblCartaArchivoNombre');
+            if (input.files && input.files[0]) {
+                lbl.innerText = 'Archivo seleccionado: ' + input.files[0].name;
+                lbl.classList.add('text-indigo-600');
+            } else {
+                lbl.innerText = 'Haz clic aquí para seleccionar tu foto o archivo PDF';
+                lbl.classList.remove('text-indigo-600');
+            }
+        }
+
+        function actualizarPreviewComprobante(input) {
+            const lbl = document.getElementById('lblPagoArchivoNombre');
+            const contPreview = document.getElementById('pagoPreviewContainer');
+            const imgPreview = document.getElementById('pagoPreviewImg');
+            const txtPreview = document.getElementById('pagoPreviewTexto');
+
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                lbl.innerText = 'Archivo: ' + file.name;
+                txtPreview.innerText = file.name;
+
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        imgPreview.src = e.target.result;
+                        contPreview.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    contPreview.classList.add('hidden');
+                }
+            } else {
+                lbl.innerText = 'Haz clic para adjuntar comprobante';
+                contPreview.classList.add('hidden');
+            }
+        }
+
+        function abrirModalFormatoCarta() {
+            if (usuarioActual) {
+                document.getElementById('printCartaNombre').innerText = usuarioActual.nombre_completo || '__________________';
+                document.getElementById('printCartaCi').innerText = usuarioActual.ci || '_________';
+                document.getElementById('printCartaCelula').innerText = usuarioActual.celula || '_________';
+                document.getElementById('printFirmaCi').innerText = usuarioActual.ci || '';
+            }
+            document.getElementById('modalFormatoCarta').classList.remove('hidden');
+        }
+
+        function cerrarModalFormatoCarta() {
+            document.getElementById('modalFormatoCarta').classList.add('hidden');
+        }
+
+        async function cargarTiposInscripcionPublicos() {
+            try {
+                const { data } = await db.from('tipos_inscripcion')
+                    .select('*')
+                    .eq('es_visible', true)
+                    .order('precio', { ascending: false });
+                
+                tiposInscripcionVisibles = data || [];
+
+                const selectUser = document.getElementById('usrTipoInscripcion');
+                if (selectUser) {
+                    selectUser.innerHTML = '';
+                    tiposInscripcionVisibles.forEach(t => {
+                        let label = t.es_manual ? `${t.nombre} (Precio personalizado)` : `${t.nombre} (Bs ${t.precio})`;
+                        selectUser.innerHTML += `<option value="${t.id}">${label}</option>`;
+                    });
+                }
+            } catch (err) {
+                console.error('Error cargando tipos:', err);
             }
         }
 
@@ -339,16 +767,19 @@
             document.querySelectorAll('.tab-usr-content').forEach(c => c.classList.add('hidden'));
             document.querySelectorAll('.tab-usr-btn').forEach(b => {
                 b.classList.remove('bg-blue-600', 'text-white', 'shadow');
-                b.classList.add('bg-white', 'text-gray-600');
+                b.classList.add('bg-white', 'text-slate-600');
             });
 
             const btn = document.getElementById(`btnTab${tab.charAt(0).toUpperCase() + tab.slice(1)}`);
             if (btn) {
-                btn.classList.remove('bg-white', 'text-gray-600');
+                btn.classList.remove('bg-white', 'text-slate-600');
                 btn.classList.add('bg-blue-600', 'text-white', 'shadow');
             }
 
-            document.getElementById(`tabUsr${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.remove('hidden');
+            const tabContent = document.getElementById(`tabUsr${tab.charAt(0).toUpperCase() + tab.slice(1)}`);
+            if (tabContent) {
+                tabContent.classList.remove('hidden');
+            }
         }
 
         function regresarInicio() {
@@ -358,29 +789,53 @@
             document.getElementById('secBusqueda').classList.remove('hidden');
             document.getElementById('btnNavAdmin').classList.remove('hidden');
             document.getElementById('btnNavInicio').classList.add('hidden');
+            document.getElementById('msgBusqueda').classList.add('hidden');
+        }
+
+        function handleBuscarSubmit(e) {
+            e.preventDefault();
+            buscarCampamentista();
         }
 
         async function buscarCampamentista() {
             const ciInput = document.getElementById('inputCI').value.trim();
             if (!ciInput) return;
 
-            await cargarTiposInscripcionPublicos();
+            const btnSpinner = document.getElementById('btnBuscarSpinner');
+            const btnIcon = document.getElementById('btnBuscarIcon');
+            const btnSubmit = document.getElementById('btnBuscarSubmit');
 
-            const { data: inscrito, error } = await db
-                .from('inscritos')
-                .select('*, tipos_inscripcion(*)')
-                .ilike('ci', ciInput)
-                .maybeSingle();
+            btnSpinner.classList.remove('hidden');
+            btnIcon.classList.add('hidden');
+            btnSubmit.disabled = true;
 
-            if (error || !inscrito) {
-                document.getElementById('msgBusqueda').innerText = 'No se encontró ningún campamentista registrado con ese C.I.';
-                document.getElementById('msgBusqueda').classList.remove('hidden');
-                return;
+            try {
+                await cargarTiposInscripcionPublicos();
+
+                const { data: inscrito, error } = await db
+                    .from('inscritos')
+                    .select('*, tipos_inscripcion(*)')
+                    .ilike('ci', ciInput)
+                    .maybeSingle();
+
+                if (error || !inscrito) {
+                    document.getElementById('msgBusquedaTexto').innerText = 'No se encontró ningún campamentista registrado con el C.I. "' + ciInput + '". Verifica que esté bien escrito o consulta con tu líder.';
+                    document.getElementById('msgBusqueda').classList.remove('hidden');
+                    return;
+                }
+
+                document.getElementById('msgBusqueda').classList.add('hidden');
+                usuarioActual = inscrito;
+                showToast(`¡Bienvenido(a), ${usuarioActual.nombre_completo.split(' ')[0]}!`, 'success');
+                await cargarPerfil();
+            } catch (err) {
+                console.error(err);
+                showToast('Error de conexión al buscar tus datos. Inténtalo de nuevo.', 'error');
+            } finally {
+                btnSpinner.classList.add('hidden');
+                btnIcon.classList.remove('hidden');
+                btnSubmit.disabled = false;
             }
-
-            document.getElementById('msgBusqueda').classList.add('hidden');
-            usuarioActual = inscrito;
-            cargarPerfil();
         }
 
         async function cargarPerfil() {
@@ -390,6 +845,24 @@
             document.getElementById('btnNavAdmin').classList.add('hidden');
             document.getElementById('btnNavInicio').classList.remove('hidden');
 
+            // Header del perfil
+            document.getElementById('lblNombreCompleto').innerText = usuarioActual.nombre_completo;
+            const iniciales = usuarioActual.nombre_completo.split(' ').filter(Boolean).map(n => n[0]).slice(0, 2).join('').toUpperCase();
+            document.getElementById('usrAvatarIniciales').innerText = iniciales || 'JC';
+
+            document.getElementById('badgeCi').innerText = `C.I. ${usuarioActual.ci}`;
+            document.getElementById('lblCelulaUser').innerHTML = `<i class="fa-solid fa-church text-slate-400 mr-1"></i> Célula: ${usuarioActual.celula || 'No especificada'}`;
+            document.getElementById('lblTelefonoUser').innerHTML = `<i class="fa-brands fa-whatsapp text-emerald-500 mr-1"></i> ${usuarioActual.telefono || 'Sin teléfono'}`;
+
+            if (usuarioActual.es_staff) {
+                document.getElementById('badgeEsStaff').classList.remove('hidden');
+            } else {
+                document.getElementById('badgeEsStaff').classList.add('hidden');
+            }
+
+            document.getElementById('badgeTipoInscripcion').innerText = usuarioActual.tipos_inscripcion?.nombre || 'Inscripción Estándar';
+
+            // Inputs Formulario Datos
             document.getElementById('usrNombre').value = usuarioActual.nombre_completo;
             document.getElementById('usrTelefono').value = usuarioActual.telefono || '';
             document.getElementById('usrCelula').value = usuarioActual.celula || '';
@@ -411,75 +884,113 @@
             document.getElementById('usrEmergencia').value = usuarioActual.contacto_emergencia || '';
             document.getElementById('usrAlergias').value = usuarioActual.alergias_medicina || '';
 
-            document.getElementById('lblEquipo').innerText = usuarioActual.equipo || 'Sin Asignar';
+            // Iconos y colores de equipo
+            const eq = usuarioActual.equipo || 'Sin Asignar';
+            let eqIcon = 'fa-shield';
+            if (eq.includes('Águilas')) eqIcon = 'fa-feather';
+            if (eq.includes('Leones')) eqIcon = 'fa-paw';
+            if (eq.includes('Búfalos')) eqIcon = 'fa-mountain';
+            if (eq.includes('Ciervos')) eqIcon = 'fa-tree';
+
+            document.getElementById('lblEquipo').innerHTML = `<i class="fa-solid ${eqIcon} mr-1 text-indigo-500"></i> ${eq}`;
 
             if (usuarioActual.es_menor) {
                 document.getElementById('secMenorEdad').classList.remove('hidden');
                 document.getElementById('usrTutorNombre').value = usuarioActual.tutor_nombre || '';
                 document.getElementById('usrTutorTel').value = usuarioActual.tutor_telefono || '';
+            } else {
+                document.getElementById('secMenorEdad').classList.add('hidden');
             }
 
+            // Alerta Carta de Compromiso
             const contAlerta = document.getElementById('alertaCartaContenedor');
             const iconoAlerta = document.getElementById('iconoAlertaCarta');
             const tituloAlerta = document.getElementById('tituloAlertaCarta');
             const descAlerta = document.getElementById('descAlertaCarta');
             const txtEstado = document.getElementById('txtEstadoCarta');
 
-            contAlerta.classList.remove('hidden', 'bg-amber-50', 'border-amber-500', 'bg-blue-50', 'border-blue-500', 'bg-green-50', 'border-green-500', 'bg-red-50', 'border-red-500');
+            contAlerta.className = 'rounded-2xl p-4 sm:p-5 border shadow-sm transition-colors';
 
             const estado = usuarioActual.estado_carta || (usuarioActual.carta_compromiso_url ? 'En Revisión' : 'Pendiente');
 
             if (estado === 'Aprobada') {
-                contAlerta.classList.add('bg-green-50', 'border-green-500');
-                iconoAlerta.className = 'fa-solid fa-circle-check text-green-600 text-2xl';
-                tituloAlerta.className = 'font-bold text-sm text-green-900';
+                contAlerta.classList.add('bg-emerald-50', 'border-emerald-300');
+                iconoAlerta.className = 'fa-solid fa-circle-check text-emerald-600 text-2xl';
+                tituloAlerta.className = 'font-black text-sm text-emerald-950';
                 tituloAlerta.innerText = 'Carta de Compromiso Aprobada';
-                descAlerta.className = 'text-xs text-green-700';
-                descAlerta.innerText = 'Tu carta de compromiso ha sido verificada y aprobada.';
-                txtEstado.innerHTML = `<span class="text-green-600 flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Carta Aprobada: <a href="${usuarioActual.carta_compromiso_url}" target="_blank" class="underline text-blue-600 font-bold">Ver Documento</a></span>`;
+                descAlerta.className = 'text-xs text-emerald-700 font-medium';
+                descAlerta.innerText = 'Tu carta de compromiso ha sido verificada y aceptada por el comité organizador.';
+                txtEstado.innerHTML = `<span class="text-emerald-700 flex items-center gap-1.5 font-bold"><i class="fa-solid fa-circle-check text-emerald-600"></i> Documento Aprobado: <a href="${usuarioActual.carta_compromiso_url}" target="_blank" class="underline text-blue-600 hover:text-blue-800">Ver Archivo</a></span>`;
             } else if (estado === 'En Revisión') {
-                contAlerta.classList.add('bg-blue-50', 'border-blue-500');
+                contAlerta.classList.add('bg-blue-50', 'border-blue-300');
                 iconoAlerta.className = 'fa-solid fa-clock-rotate-left text-blue-600 text-2xl';
-                tituloAlerta.className = 'font-bold text-sm text-blue-900';
-                tituloAlerta.innerText = 'Carta en Revisión';
-                descAlerta.className = 'text-xs text-blue-700';
-                descAlerta.innerText = 'Tu carta fue subida y está siendo revisada por un administrador.';
-                txtEstado.innerHTML = `<span class="text-blue-600 flex items-center gap-1"><i class="fa-solid fa-spinner fa-spin"></i> Carta en Revisión: <a href="${usuarioActual.carta_compromiso_url}" target="_blank" class="underline font-bold">Ver Documento Enviado</a></span>`;
+                tituloAlerta.className = 'font-black text-sm text-blue-950';
+                tituloAlerta.innerText = 'Carta de Compromiso en Revisión';
+                descAlerta.className = 'text-xs text-blue-700 font-medium';
+                descAlerta.innerText = 'Tu documento fue recibido y el equipo de registro lo está revisando.';
+                txtEstado.innerHTML = `<span class="text-blue-700 flex items-center gap-1.5 font-bold"><i class="fa-solid fa-circle-notch fa-spin text-blue-600"></i> En Proceso de Revisión: <a href="${usuarioActual.carta_compromiso_url}" target="_blank" class="underline hover:text-blue-900">Ver Carta Enviada</a></span>`;
             } else if (estado === 'Rechazada') {
-                contAlerta.classList.add('bg-red-50', 'border-red-500');
-                iconoAlerta.className = 'fa-solid fa-triangle-exclamation text-red-600 text-2xl';
-                tituloAlerta.className = 'font-bold text-sm text-red-900';
+                contAlerta.classList.add('bg-rose-50', 'border-rose-300');
+                iconoAlerta.className = 'fa-solid fa-triangle-exclamation text-rose-600 text-2xl';
+                tituloAlerta.className = 'font-black text-sm text-rose-950';
                 tituloAlerta.innerText = 'Carta Observada / Rechazada';
-                descAlerta.className = 'text-xs text-red-700';
-                descAlerta.innerText = 'Por favor vuelve a subir tu carta de compromiso con la firma legible.';
-                txtEstado.innerHTML = `<span class="text-red-600 flex items-center gap-1"><i class="fa-solid fa-circle-xmark"></i> Documento Rechazado. Sube una nueva foto.</span>`;
+                descAlerta.className = 'text-xs text-rose-700 font-medium';
+                descAlerta.innerText = 'Por favor vuelve a subir tu carta asegurándote de que la firma sea clara y legible.';
+                txtEstado.innerHTML = `<span class="text-rose-600 flex items-center gap-1.5 font-bold"><i class="fa-solid fa-circle-xmark"></i> Documento Observado. Por favor sube un nuevo archivo legible.</span>`;
             } else {
-                contAlerta.classList.add('bg-amber-50', 'border-amber-500');
+                contAlerta.classList.add('bg-amber-50', 'border-amber-300');
                 iconoAlerta.className = 'fa-solid fa-file-contract text-amber-600 text-2xl';
-                tituloAlerta.className = 'font-bold text-sm text-amber-900';
+                tituloAlerta.className = 'font-black text-sm text-amber-950';
                 tituloAlerta.innerText = 'Carta de Compromiso Requerida';
-                descAlerta.className = 'text-xs text-amber-700';
-                descAlerta.innerText = 'Para completar tu inscripción debes adjuntar tu carta firmada.';
-                txtEstado.innerHTML = `<span class="text-red-500 flex items-center gap-1"><i class="fa-solid fa-circle-xmark"></i> Carta no adjuntada.</span>`;
+                descAlerta.className = 'text-xs text-amber-800 font-medium';
+                descAlerta.innerText = 'Para completar tu acreditación oficial al campamento, debes firmar y adjuntar tu carta.';
+                txtEstado.innerHTML = `<span class="text-amber-700 flex items-center gap-1.5 font-bold"><i class="fa-solid fa-circle-xmark text-amber-600"></i> Aún no has adjuntado tu carta firmada.</span>`;
             }
 
-            const { data: pagos } = await db.from('pagos').select('*').eq('inscrito_id', usuarioActual.id);
+            // Historial de Pagos y Finanzas
+            const { data: pagos } = await db.from('pagos').select('*').eq('inscrito_id', usuarioActual.id).order('fecha', { ascending: false });
 
             let totalAprobado = 0;
             const tbody = document.getElementById('tblHistorialPagos');
+            const emptyState = document.getElementById('historialEmptyState');
             tbody.innerHTML = '';
 
-            (pagos || []).forEach(p => {
-                if (p.estado === 'Aprobado') totalAprobado += Number(p.monto);
-                let colorEstado = p.estado === 'Aprobado' ? 'bg-green-100 text-green-700' : (p.estado === 'Pendiente' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700');
-                tbody.innerHTML += `
-          <tr>
-            <td class="p-2">${new Date(p.fecha).toLocaleDateString()}</td>
-            <td class="p-2 font-bold">Bs ${p.monto}</td>
-            <td class="p-2"><a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline">Ver Foto</a></td>
-            <td class="p-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${colorEstado}">${p.estado}</span></td>
-          </tr>`;
-            });
+            if (!pagos || pagos.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                pagos.forEach(p => {
+                    if (p.estado === 'Aprobado') totalAprobado += Number(p.monto);
+                    let colorEstado = 'bg-slate-100 text-slate-700';
+                    let iconState = 'fa-clock';
+
+                    if (p.estado === 'Aprobado') {
+                        colorEstado = 'bg-emerald-100 text-emerald-800 border border-emerald-200';
+                        iconState = 'fa-circle-check text-emerald-600';
+                    } else if (p.estado === 'Pendiente') {
+                        colorEstado = 'bg-amber-100 text-amber-800 border border-amber-200';
+                        iconState = 'fa-hourglass-half text-amber-600';
+                    } else if (p.estado === 'Rechazado') {
+                        colorEstado = 'bg-rose-100 text-rose-800 border border-rose-200';
+                        iconState = 'fa-circle-xmark text-rose-600';
+                    }
+
+                    tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50/80 transition">
+                        <td class="p-3 font-medium text-slate-700">${new Date(p.fecha).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
+                        <td class="p-3 font-extrabold text-slate-900">Bs ${p.monto}</td>
+                        <td class="p-3">
+                            ${p.comprobante_url ? `<a href="${p.comprobante_url}" target="_blank" class="inline-flex items-center gap-1 font-bold text-blue-600 hover:underline"><i class="fa-solid fa-image text-xs"></i> Ver</a>` : '-'}
+                        </td>
+                        <td class="p-3 text-slate-500">${p.observaciones || 'Abono de cuota'}</td>
+                        <td class="p-3">
+                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black ${colorEstado}">
+                                <i class="fa-solid ${iconState} text-[9px]"></i> ${p.estado}
+                            </span>
+                        </td>
+                    </tr>`;
+                });
+            }
 
             let costoTotal = 140;
             if (usuarioActual.tipos_inscripcion) {
@@ -490,27 +1001,55 @@
                 }
             }
 
+            const saldo = Math.max(0, costoTotal - totalAprobado);
+            const porcentaje = costoTotal > 0 ? Math.min(100, Math.round((totalAprobado / costoTotal) * 100)) : 100;
+
             document.getElementById('lblCosto').innerText = `Bs ${costoTotal}`;
             document.getElementById('lblAbonado').innerText = `Bs ${totalAprobado}`;
-            document.getElementById('lblSaldo').innerText = `Bs ${costoTotal - totalAprobado}`;
+            document.getElementById('lblSaldo').innerText = `Bs ${saldo}`;
+            document.getElementById('lblPorcentajePago').innerText = `${porcentaje}% completado`;
 
+            const badgeFinanzas = document.getElementById('badgeEstadoFinanzas');
+            if (saldo <= 0) {
+                badgeFinanzas.className = 'text-xs font-extrabold px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-300 flex items-center gap-1';
+                badgeFinanzas.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600"></i> 100% Pagado';
+            } else {
+                badgeFinanzas.className = 'text-xs font-extrabold px-3 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-300 flex items-center gap-1';
+                badgeFinanzas.innerHTML = `<i class="fa-solid fa-clock text-amber-600"></i> Saldo Bs ${saldo}`;
+            }
+
+            // Solicitud de edición pendiente
             const { data: edicion } = await db.from('solicitudes_edicion').select('*').eq('inscrito_id', usuarioActual.id).eq('estado', 'Pendiente').maybeSingle();
             if (edicion) {
                 document.getElementById('badgeEdicion').classList.remove('hidden');
                 document.getElementById('btnHabilitarEdicion').disabled = true;
+                document.getElementById('btnHabilitarEdicion').classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                document.getElementById('badgeEdicion').classList.add('hidden');
+                document.getElementById('btnHabilitarEdicion').disabled = false;
+                document.getElementById('btnHabilitarEdicion').classList.remove('opacity-50', 'cursor-not-allowed');
             }
         }
 
         function habilitarEdicion() {
             document.querySelectorAll('.usr-input').forEach(i => {
                 i.disabled = false;
-                i.classList.remove('bg-gray-50');
-                i.classList.add('bg-white', 'border-amber-400');
+                i.classList.remove('bg-slate-50');
+                i.classList.add('bg-white', 'border-amber-400', 'ring-2', 'ring-amber-200');
             });
             document.getElementById('secBotonGuardar').classList.remove('hidden');
+            showToast('Campos habilitados. Realiza los cambios y presiona Guardar.', 'info');
         }
 
         async function solicitarCambioDatos() {
+            const btn = document.getElementById('btnSolicitarCambio');
+            const spn = document.getElementById('spnGuardarCambios');
+            const ico = document.getElementById('icoGuardarCambios');
+
+            btn.disabled = true;
+            spn.classList.remove('hidden');
+            ico.classList.add('hidden');
+
             const tipoInscripcionVal = document.getElementById('usrTipoInscripcion').value;
 
             const datos = {
@@ -523,44 +1062,88 @@
                 habilidad_especial: document.getElementById('usrHabilidad').value.trim() || null,
                 contacto_emergencia: document.getElementById('usrEmergencia').value.trim() || null,
                 alergias_medicina: document.getElementById('usrAlergias').value.trim() || null,
-                tutor_nombre: document.getElementById('usrTutorNombre').value.trim() || null,
-                tutor_telefono: document.getElementById('usrTutorTel').value.trim() || null
+                tutor_nombre: document.getElementById('usrTutorNombre')?.value.trim() || null,
+                tutor_telefono: document.getElementById('usrTutorTel')?.value.trim() || null
             };
 
-            const { data, error } = await db.from('solicitudes_edicion').insert([datos]);
+            try {
+                const { error } = await db.from('solicitudes_edicion').insert([datos]);
 
-            if (error) {
-                console.error('Error Supabase:', error);
-                alert('Error al enviar la solicitud: ' + error.message);
-                return;
+                if (error) {
+                    console.error('Error Supabase:', error);
+                    showToast('Error al enviar la solicitud: ' + error.message, 'error');
+                    return;
+                }
+
+                showToast('¡Tu solicitud de actualización ha sido enviada con éxito para revisión!', 'success');
+                document.getElementById('secBotonGuardar').classList.add('hidden');
+                document.querySelectorAll('.usr-input').forEach(i => {
+                    i.disabled = true;
+                    i.classList.remove('bg-white', 'border-amber-400', 'ring-2', 'ring-amber-200');
+                    i.classList.add('bg-slate-50');
+                });
+                await cargarPerfil();
+            } catch (err) {
+                console.error(err);
+                showToast('Error de red al enviar la solicitud.', 'error');
+            } finally {
+                btn.disabled = false;
+                spn.classList.add('hidden');
+                ico.classList.remove('hidden');
             }
-
-            alert('Tu solicitud de actualización ha sido enviada con éxito para revisión del Administrador.');
-            cargarPerfil();
         }
 
         async function subirCartaCompromiso() {
             const fileInput = document.getElementById('cartaArchivo');
-            if (fileInput.files.length === 0) return alert('Por favor selecciona la foto o PDF de tu carta.');
+            if (fileInput.files.length === 0) {
+                return showToast('Por favor selecciona la foto o PDF de tu carta.', 'warning');
+            }
 
-            const file = fileInput.files[0];
-            const fileName = `carta_${Date.now()}_${file.name}`;
+            const btn = document.getElementById('btnSubirCarta');
+            const spn = document.getElementById('spnSubirCarta');
+            const ico = document.getElementById('icoSubirCarta');
 
-            const { data: uploadData, error: uploadErr } = await db.storage.from('cartas').upload(fileName, file);
-            if (uploadErr) return alert('Error al subir carta: ' + uploadErr.message);
+            btn.disabled = true;
+            spn.classList.remove('hidden');
+            ico.classList.add('hidden');
 
-            const { data: urlData } = db.storage.from('cartas').getPublicUrl(fileName);
+            try {
+                const file = fileInput.files[0];
+                const fileName = `carta_${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
 
-            await db.from('inscritos').update({
-                carta_compromiso_url: urlData.publicUrl,
-                estado_carta: 'En Revisión'
-            }).eq('id', usuarioActual.id);
+                const { data: uploadData, error: uploadErr } = await db.storage.from('cartas').upload(fileName, file);
+                if (uploadErr) {
+                    showToast('Error al subir carta: ' + uploadErr.message, 'error');
+                    return;
+                }
 
-            usuarioActual.carta_compromiso_url = urlData.publicUrl;
-            usuarioActual.estado_carta = 'En Revisión';
+                const { data: urlData } = db.storage.from('cartas').getPublicUrl(fileName);
 
-            alert('Carta de compromiso subida. Ha quedado en revisión.');
-            cargarPerfil();
+                await db.from('inscritos').update({
+                    carta_compromiso_url: urlData.publicUrl,
+                    estado_carta: 'En Revisión'
+                }).eq('id', usuarioActual.id);
+
+                usuarioActual.carta_compromiso_url = urlData.publicUrl;
+                usuarioActual.estado_carta = 'En Revisión';
+
+                showToast('¡Carta de compromiso subida con éxito! Ha quedado en revisión.', 'success');
+                fileInput.value = '';
+                actualizarPreviewCarta(fileInput);
+                await cargarPerfil();
+            } catch (err) {
+                console.error(err);
+                showToast('Error inesperado al subir la carta.', 'error');
+            } finally {
+                btn.disabled = false;
+                spn.classList.add('hidden');
+                ico.classList.remove('hidden');
+            }
+        }
+
+        function handleSubirComprobanteSubmit(e) {
+            e.preventDefault();
+            subirComprobante();
         }
 
         async function subirComprobante() {
@@ -568,26 +1151,51 @@
             const fileInput = document.getElementById('pagoArchivo');
 
             if (!monto || fileInput.files.length === 0) {
-                return alert('⚠️ Por favor ingresa el monto y adjunta OBLIGATORIAMENTE la foto o recibo del comprobante.');
+                return showToast('Por favor ingresa el monto y adjunta la foto del comprobante.', 'warning');
             }
 
-            const file = fileInput.files[0];
-            const fileName = `${Date.now()}_${file.name}`;
+            const btn = document.getElementById('btnSubirPago');
+            const spn = document.getElementById('spnSubirPago');
+            const ico = document.getElementById('icoSubirPago');
 
-            const { data: uploadData, error: uploadErr } = await db.storage.from('comprobantes').upload(fileName, file);
-            if (uploadErr) return alert('Error al subir comprobante: ' + uploadErr.message);
+            btn.disabled = true;
+            spn.classList.remove('hidden');
+            ico.classList.add('hidden');
 
-            const { data: urlData } = db.storage.from('comprobantes').getPublicUrl(fileName);
+            try {
+                const file = fileInput.files[0];
+                const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
 
-            await db.from('pagos').insert([{
-                inscrito_id: usuarioActual.id,
-                monto: monto,
-                comprobante_url: urlData.publicUrl,
-                observaciones: document.getElementById('pagoObs').value
-            }]);
+                const { data: uploadData, error: uploadErr } = await db.storage.from('comprobantes').upload(fileName, file);
+                if (uploadErr) {
+                    showToast('Error al subir comprobante: ' + uploadErr.message, 'error');
+                    return;
+                }
 
-            alert('Comprobante enviado exitosamente a Tesorería para verificación.');
-            cargarPerfil();
+                const { data: urlData } = db.storage.from('comprobantes').getPublicUrl(fileName);
+
+                await db.from('pagos').insert([{
+                    inscrito_id: usuarioActual.id,
+                    monto: monto,
+                    comprobante_url: urlData.publicUrl,
+                    observaciones: document.getElementById('pagoObs').value.trim() || null
+                }]);
+
+                showToast('¡Comprobante enviado exitosamente a Tesorería!', 'success');
+                document.getElementById('pagoMonto').value = '';
+                document.getElementById('pagoObs').value = '';
+                fileInput.value = '';
+                actualizarPreviewComprobante(fileInput);
+                await cargarPerfil();
+                cambiarPestanaPerfil('historial');
+            } catch (err) {
+                console.error(err);
+                showToast('Error inesperado al enviar el comprobante.', 'error');
+            } finally {
+                btn.disabled = false;
+                spn.classList.add('hidden');
+                ico.classList.remove('hidden');
+            }
         }
     </script>
 </body>
