@@ -16,7 +16,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 
-<body class="bg-slate-100 min-h-screen text-gray-800 font-sans">
+<body class="bg-slate-100 min-h-screen text-gray-800 font-sans relative pb-16">
 
     <!-- NAVBAR -->
     <nav class="bg-gray-900 text-white p-4 shadow-md sticky top-0 z-50">
@@ -64,6 +64,17 @@
 
         <!-- VISTA DE PERFIL -->
         <div id="secPerfil" class="hidden space-y-6">
+
+            <!-- ALERTA DE PERFIL INCOMPLETO -->
+            <div id="alertaPerfilIncompleto" class="hidden bg-amber-50 border-l-4 border-amber-500 p-4 rounded-xl shadow-sm">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-triangle-exclamation text-amber-600 text-xl"></i>
+                    <div>
+                        <h4 class="font-bold text-sm text-amber-900">¡Información Incompleta!</h4>
+                        <p class="text-xs text-amber-700">Por favor revisa y completa tus datos personales (teléfono, fecha de nacimiento, contacto de emergencia, etc.) para formalizar tu registro.</p>
+                    </div>
+                </div>
+            </div>
 
             <!-- CARDS FINANZAS -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
@@ -139,7 +150,7 @@
                     <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 pt-2">
                         <input type="file" id="cartaArchivo" accept="image/*,.pdf"
                             class="text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
-                        <button onclick="subirCartaCompromiso()"
+                        <button id="btnSubirCarta" onclick="subirCartaCompromiso()"
                             class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-lg text-xs transition shadow">
                             Subir para Revisión
                         </button>
@@ -156,8 +167,8 @@
                     </h3>
                     <div class="flex items-center gap-2">
                         <span id="badgeEdicion"
-                            class="hidden text-xs bg-amber-100 text-amber-800 font-semibold px-3 py-1 rounded-full border border-amber-300">
-                            Cambio en revisión
+                            class="hidden text-xs bg-amber-100 text-amber-800 font-bold px-3 py-1 rounded-full border border-amber-300">
+                            🔒 Edición Bloqueada (Cambio en Revisión)
                         </span>
                         <button id="btnHabilitarEdicion" onclick="habilitarEdicion()"
                             class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-xs px-3 py-1.5 rounded-lg border border-amber-300 transition flex items-center gap-1">
@@ -170,22 +181,38 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500">Nombre Completo</label>
                         <input type="text" id="usrNombre" disabled
-                            class="w-full mt-1 p-2.5 bg-gray-100 border border-gray-200 rounded-lg text-gray-600 text-sm font-semibold">
+                            class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none font-semibold">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500">Teléfono / WhatsApp</label>
-                        <input type="text" id="usrTelefono" disabled
+                        <input type="text" id="usrTelefono" disabled placeholder="Sin registrar"
                             class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
                     </div>
                     <div>
+                        <label class="text-xs font-bold text-gray-500">Fecha de Nacimiento (dd/mm/yyyy)</label>
+                        <div class="relative mt-1">
+                            <input type="date" id="usrFechaNac" disabled onchange="actualizarVistaFechaNacimiento()"
+                                class="usr-input w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
+                            <span id="usrFechaNacFmt" class="block mt-1 text-xs font-bold text-indigo-700 bg-indigo-50 px-2 py-1 rounded border border-indigo-100">
+                                Formato Latino: <span id="txtFechaFmtVal">-</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500">Edad Calculada</label>
+                        <input type="text" id="usrEdadText" disabled readonly placeholder="Selecciona tu fecha de nacimiento"
+                            class="w-full mt-1 p-2.5 bg-gray-100 border border-gray-200 rounded-lg text-sm font-bold text-indigo-900">
+                    </div>
+                    <div>
                         <label class="text-xs font-bold text-gray-500">Célula</label>
-                        <input type="text" id="usrCelula" disabled
+                        <input type="text" id="usrCelula" disabled placeholder="Sin registrar"
                             class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500">Talla de Polera</label>
                         <select id="usrTalla" disabled
                             class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
+                            <option value="">-- Seleccionar --</option>
                             <option value="XS">XS</option>
                             <option value="S">S</option>
                             <option value="M">M</option>
@@ -203,6 +230,7 @@
                         <label class="text-xs font-bold text-gray-500">Actividad Favorita</label>
                         <select id="usrActividad" disabled
                             class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
+                            <option value="">-- Seleccionar --</option>
                             <option value="Fútbol">Fútbol</option>
                             <option value="Vóley">Vóley</option>
                             <option value="Memorizar Versículos">Memorizar Versículos</option>
@@ -215,12 +243,12 @@
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500">Habilidad o Talento Especial</label>
-                        <input type="text" id="usrHabilidad" disabled placeholder="Ej. Guitarra, canto..."
+                        <input type="text" id="usrHabilidad" disabled placeholder="Sin registrar"
                             class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500">Contacto de Emergencia</label>
-                        <input type="text" id="usrEmergencia" disabled
+                        <input type="text" id="usrEmergencia" disabled placeholder="Sin registrar"
                             class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
                     </div>
                     <div class="md:col-span-2">
@@ -232,16 +260,16 @@
                     <div id="secMenorEdad"
                         class="hidden md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 bg-amber-50/50 p-4 rounded-xl border border-amber-200">
                         <div class="md:col-span-2 font-bold text-xs text-amber-900 flex items-center gap-1">
-                            <i class="fa-solid fa-child-reaching"></i> Información de Tutor Legal
+                            <i class="fa-solid fa-child-reaching"></i> Información de Tutor Legal (Requerido para Menores de Edad)
                         </div>
                         <div>
                             <label class="text-xs font-bold text-gray-500">Nombre del Tutor</label>
-                            <input type="text" id="usrTutorNombre" disabled
+                            <input type="text" id="usrTutorNombre" disabled placeholder="Nombre del Tutor"
                                 class="usr-input w-full mt-1 p-2.5 bg-white border border-gray-200 rounded-lg text-sm outline-none">
                         </div>
                         <div>
                             <label class="text-xs font-bold text-gray-500">Teléfono del Tutor</label>
-                            <input type="text" id="usrTutorTel" disabled
+                            <input type="text" id="usrTutorTel" disabled placeholder="Teléfono del Tutor"
                                 class="usr-input w-full mt-1 p-2.5 bg-white border border-gray-200 rounded-lg text-sm outline-none">
                         </div>
                     </div>
@@ -249,18 +277,26 @@
                     <div id="secBotonGuardar" class="hidden md:col-span-2 pt-2">
                         <button type="button" id="btnSolicitarCambio" onclick="solicitarCambioDatos()"
                             class="w-full bg-gray-900 hover:bg-black text-white font-black text-sm px-5 py-3 rounded-xl transition shadow-lg border border-amber-400 flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-paper-plane text-amber-400" style="color: white;"></i> Enviar Solicitud de Actualización
+                            <i class="fa-solid fa-paper-plane text-amber-400"></i> Enviar Solicitud de Actualización
                         </button>
                     </div>
                 </form>
             </div>
 
-            <!-- SUBIR COMPROBANTE CON IMAGEN OBLIGATORIA -->
+            <!-- SUBIR COMPROBANTE -->
             <div id="tabUsrPago" class="tab-usr-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <button onclick="verQrPagoModal()" class="w-full mb-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 font-bold py-3 rounded-xl border border-indigo-200 text-xs transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-qrcode text-indigo-600 text-base"></i> Ver / Descargar QR Oficial para Transferencia
+                </button>
+
                 <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
                     <i class="fa-solid fa-cloud-arrow-up text-green-600"></i> Subir Comprobante de Pago
                 </h3>
+
                 <div class="space-y-4 max-w-lg">
+                    <div id="msgPagoBloqueado" class="hidden bg-amber-50 border border-amber-300 text-amber-900 p-3 rounded-xl text-xs font-bold">
+                        ⚠️ Tienes un abono pendiente de revisión por el tesorero. Podrás subir otro pago cuando este sea procesado.
+                    </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500">Monto del Abono (Bs) *</label>
                         <input type="number" id="pagoMonto" required placeholder="Ej. 50, 100"
@@ -278,7 +314,7 @@
                         <input type="text" id="pagoObs" placeholder="Ej. Transferencia Banco Unión"
                             class="w-full mt-1 p-3 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-green-600">
                     </div>
-                    <button onclick="subirComprobante()"
+                    <button id="btnEnviarComprobante" onclick="subirComprobante()"
                         class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl text-sm transition shadow-lg flex items-center justify-center gap-2">
                         <i class="fa-solid fa-upload"></i> Enviar Pago a Tesorería
                     </button>
@@ -309,6 +345,49 @@
 
     </main>
 
+    <!-- BOTÓN FLOTANTE Y MODAL DE AYUDA / CONSULTAS -->
+    <button onclick="abrirModalAyuda()" class="fixed bottom-5 right-5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold p-3.5 rounded-full shadow-2xl flex items-center gap-2 border-2 border-white z-40 transition hover:scale-105 text-xs">
+        <i class="fa-solid fa-headset text-lg"></i>
+        <span class="hidden sm:inline">Solicitar Ayuda / Encargados</span>
+    </button>
+
+    <div id="modalAyudaConsultas" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
+                    <i class="fa-solid fa-headset text-indigo-600"></i> Encargados de Atención
+                </h3>
+                <button onclick="cerrarModalAyuda()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <p class="text-xs text-gray-500">Si tienes dudas sobre tus pagos o inscripción, puedes contactar a cualquiera de los siguientes encargados:</p>
+
+            <div id="listaAdminsAyuda" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
+
+            <div class="pt-2 border-t text-right">
+                <button onclick="cerrarModalAyuda()" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL MOSTRAR QR CON BOTÓN DE DESCARGA -->
+    <div id="modalVerQr" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center space-y-4">
+            <h3 class="font-bold text-gray-800 text-base flex items-center justify-center gap-2">
+                <i class="fa-solid fa-qrcode text-indigo-600"></i> QR Oficial de Pago
+            </h3>
+            <div id="contImagenQr" class="bg-gray-50 p-2 rounded-xl border flex justify-center items-center min-h-[200px]">
+                <p class="text-xs text-gray-400">Cargando código QR...</p>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="cerrarModalQr()" class="w-1/2 bg-gray-200 text-gray-700 font-bold text-xs py-2.5 rounded-xl">Cerrar</button>
+                <a id="btnDescargarQr" href="#" download="QR_JC2027.png" target="_blank" class="w-1/2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2.5 rounded-xl flex items-center justify-center gap-1 shadow">
+                    <i class="fa-solid fa-download"></i> Descargar QR
+                </a>
+            </div>
+        </div>
+    </div>
+
     <script>
         const SUPABASE_URL = 'https://bpwsdgkafjnsgfilbfgg.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwd3NkZ2thZmpuc2dmaWxiZmdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxODM1NzUsImV4cCI6MjEwNzc1OTU3NX0.rnSg8vNFpAuwNfECYwfyynERKwv3CJ7CGZRhAKbyDDM';
@@ -317,6 +396,82 @@
 
         let usuarioActual = null;
         let tiposInscripcionVisibles = [];
+
+        function formatearFechaLatina(fechaStr) {
+            if (!fechaStr) return '-';
+            const partes = fechaStr.split('T')[0].split('-');
+            if (partes.length === 3) return `${partes[2]}/${partes[1]}/${partes[0]}`;
+            return fechaStr;
+        }
+
+        function actualizarVistaFechaNacimiento() {
+            const rawVal = document.getElementById('usrFechaNac').value;
+            document.getElementById('txtFechaFmtVal').innerText = formatearFechaLatina(rawVal);
+            calcularEdadDesdeFecha('usrFechaNac', 'usrEdadText', 'secMenorEdad');
+        }
+
+        async function optimizarYComprimirImagen(archivo, maxDimension = 1600, calidad = 0.8) {
+            if (!archivo.type.startsWith('image/')) return archivo;
+
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(archivo);
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = () => {
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > maxDimension || height > maxDimension) {
+                            if (width > height) {
+                                height = Math.round((height * maxDimension) / width);
+                                width = maxDimension;
+                            } else {
+                                width = Math.round((width * maxDimension) / height);
+                                height = maxDimension;
+                            }
+                        }
+
+                        const canvas = document.createElement('canvas');
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        canvas.toBlob((blob) => {
+                            if (!blob) return resolve(archivo);
+                            const compressedFile = new File([blob], archivo.name.replace(/\.[^/.]+$/, ".jpg"), {
+                                type: 'image/jpeg',
+                                lastModified: Date.now()
+                            });
+                            resolve(compressedFile);
+                        }, 'image/jpeg', calidad);
+                    };
+                    img.onerror = () => resolve(archivo);
+                };
+                reader.onerror = () => resolve(archivo);
+            });
+        }
+
+        function calcularEdadDesdeFecha(inputId, targetTextId, secMenorId) {
+            const val = document.getElementById(inputId).value;
+            if (!val) return;
+
+            const hoy = new Date();
+            const nac = new Date(val);
+            let edad = hoy.getFullYear() - nac.getFullYear();
+            const m = hoy.getMonth() - nac.getMonth();
+            if (m < 0 || (m === 0 && hoy.getDate() < nac.getDate())) edad--;
+
+            document.getElementById(targetTextId).value = `${edad} años`;
+
+            const secMenor = document.getElementById(secMenorId);
+            if (secMenor) {
+                if (edad < 18) secMenor.classList.remove('hidden');
+                else secMenor.classList.add('hidden');
+            }
+        }
 
         async function cargarTiposInscripcionPublicos() {
             const { data } = await db.from('tipos_inscripcion')
@@ -328,7 +483,7 @@
 
             const selectUser = document.getElementById('usrTipoInscripcion');
             if (selectUser) {
-                selectUser.innerHTML = '';
+                selectUser.innerHTML = '<option value="">-- Seleccionar --</option>';
                 tiposInscripcionVisibles.forEach(t => {
                     let label = t.es_manual ? `${t.nombre} (Precio personalizado)` : `${t.nombre} (Bs ${t.precio})`;
                     selectUser.innerHTML += `<option value="${t.id}">${label}</option>`;
@@ -391,10 +546,20 @@
             document.getElementById('btnNavAdmin').classList.add('hidden');
             document.getElementById('btnNavInicio').classList.remove('hidden');
 
-            document.getElementById('usrNombre').value = usuarioActual.nombre_completo;
+            const incompleto = !usuarioActual.telefono || !usuarioActual.fecha_nacimiento || !usuarioActual.talla_polera || !usuarioActual.contacto_emergencia;
+            if (incompleto) {
+                document.getElementById('alertaPerfilIncompleto').classList.remove('hidden');
+            } else {
+                document.getElementById('alertaPerfilIncompleto').classList.add('hidden');
+            }
+
+            document.getElementById('usrNombre').value = usuarioActual.nombre_completo || '';
             document.getElementById('usrTelefono').value = usuarioActual.telefono || '';
+            document.getElementById('usrFechaNac').value = usuarioActual.fecha_nacimiento || '';
+            actualizarVistaFechaNacimiento();
+
             document.getElementById('usrCelula').value = usuarioActual.celula || '';
-            document.getElementById('usrTalla').value = usuarioActual.talla_polera || 'S';
+            document.getElementById('usrTalla').value = usuarioActual.talla_polera || '';
 
             const selectUser = document.getElementById('usrTipoInscripcion');
             if (usuarioActual.tipo_inscripcion_id) {
@@ -407,7 +572,7 @@
             }
             selectUser.value = usuarioActual.tipo_inscripcion_id || '';
 
-            document.getElementById('usrActividad').value = usuarioActual.actividad_favorita || 'Fútbol';
+            document.getElementById('usrActividad').value = usuarioActual.actividad_favorita || '';
             document.getElementById('usrHabilidad').value = usuarioActual.habilidad_especial || '';
             document.getElementById('usrEmergencia').value = usuarioActual.contacto_emergencia || '';
             document.getElementById('usrAlergias').value = usuarioActual.alergias_medicina || '';
@@ -438,6 +603,7 @@
                 descAlerta.className = 'text-xs text-green-700';
                 descAlerta.innerText = 'Tu carta de compromiso ha sido verificada y aprobada.';
                 txtEstado.innerHTML = `<span class="text-green-600 flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Carta Aprobada: <a href="${usuarioActual.carta_compromiso_url}" target="_blank" class="underline text-blue-600 font-bold">Ver Documento</a></span>`;
+                document.getElementById('btnSubirCarta').disabled = false;
             } else if (estado === 'En Revisión') {
                 contAlerta.classList.add('bg-blue-50', 'border-blue-500');
                 iconoAlerta.className = 'fa-solid fa-clock-rotate-left text-blue-600 text-2xl';
@@ -446,6 +612,8 @@
                 descAlerta.className = 'text-xs text-blue-700';
                 descAlerta.innerText = 'Tu carta fue subida y está siendo revisada por un administrador.';
                 txtEstado.innerHTML = `<span class="text-blue-600 flex items-center gap-1"><i class="fa-solid fa-spinner fa-spin"></i> Carta en Revisión: <a href="${usuarioActual.carta_compromiso_url}" target="_blank" class="underline font-bold">Ver Documento Enviado</a></span>`;
+                document.getElementById('btnSubirCarta').disabled = true;
+                document.getElementById('btnSubirCarta').title = "Tienes una carta pendiente de revisión.";
             } else if (estado === 'Rechazada') {
                 contAlerta.classList.add('bg-red-50', 'border-red-500');
                 iconoAlerta.className = 'fa-solid fa-triangle-exclamation text-red-600 text-2xl';
@@ -454,6 +622,7 @@
                 descAlerta.className = 'text-xs text-red-700';
                 descAlerta.innerText = 'Por favor vuelve a subir tu carta de compromiso con la firma legible.';
                 txtEstado.innerHTML = `<span class="text-red-600 flex items-center gap-1"><i class="fa-solid fa-circle-xmark"></i> Documento Rechazado. Sube una nueva foto.</span>`;
+                document.getElementById('btnSubirCarta').disabled = false;
             } else {
                 contAlerta.classList.add('bg-amber-50', 'border-amber-500');
                 iconoAlerta.className = 'fa-solid fa-file-contract text-amber-600 text-2xl';
@@ -462,25 +631,43 @@
                 descAlerta.className = 'text-xs text-amber-700';
                 descAlerta.innerText = 'Para completar tu inscripción debes adjuntar tu carta firmada.';
                 txtEstado.innerHTML = `<span class="text-red-500 flex items-center gap-1"><i class="fa-solid fa-circle-xmark"></i> Carta no adjuntada.</span>`;
+                document.getElementById('btnSubirCarta').disabled = false;
             }
 
             const { data: pagos } = await db.from('pagos').select('*').eq('inscrito_id', usuarioActual.id);
 
             let totalAprobado = 0;
+            let tienePagoPendiente = false;
+
             const tbody = document.getElementById('tblHistorialPagos');
             tbody.innerHTML = '';
 
             (pagos || []).forEach(p => {
                 if (p.estado === 'Aprobado') totalAprobado += Number(p.monto);
+                if (p.estado === 'Pendiente') tienePagoPendiente = true;
+
                 let colorEstado = p.estado === 'Aprobado' ? 'bg-green-100 text-green-700' : (p.estado === 'Pendiente' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700');
                 tbody.innerHTML += `
           <tr>
-            <td class="p-2">${new Date(p.fecha).toLocaleDateString()}</td>
+            <td class="p-2">${new Date(p.created_at || p.fecha).toLocaleDateString()} ${new Date(p.created_at || p.fecha).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</td>
             <td class="p-2 font-bold">Bs ${p.monto}</td>
-            <td class="p-2"><a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline">Ver Foto</a></td>
+            <td class="p-2"><a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline font-bold">Ver Foto</a></td>
             <td class="p-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${colorEstado}">${p.estado}</span></td>
           </tr>`;
             });
+
+            const btnEnviarComprobante = document.getElementById('btnEnviarComprobante');
+            const msgPagoBloqueado = document.getElementById('msgPagoBloqueado');
+
+            if (tienePagoPendiente) {
+                btnEnviarComprobante.disabled = true;
+                btnEnviarComprobante.classList.add('opacity-50', 'cursor-not-allowed');
+                msgPagoBloqueado.classList.remove('hidden');
+            } else {
+                btnEnviarComprobante.disabled = false;
+                btnEnviarComprobante.classList.remove('opacity-50', 'cursor-not-allowed');
+                msgPagoBloqueado.classList.add('hidden');
+            }
 
             let costoTotal = 140;
             if (usuarioActual.tipos_inscripcion) {
@@ -495,11 +682,31 @@
             document.getElementById('lblAbonado').innerText = `Bs ${totalAprobado}`;
             document.getElementById('lblSaldo').innerText = `Bs ${costoTotal - totalAprobado}`;
 
+            // CONTROL DE BLOQUEO DE EDICIÓN DE DATOS
             const { data: edicion } = await db.from('solicitudes_edicion').select('*').eq('inscrito_id', usuarioActual.id).eq('estado', 'Pendiente').maybeSingle();
+            const btnEdit = document.getElementById('btnHabilitarEdicion');
+            const badgeEdic = document.getElementById('badgeEdicion');
+
             if (edicion) {
-                document.getElementById('badgeEdicion').classList.remove('hidden');
-                document.getElementById('btnHabilitarEdicion').disabled = true;
+                badgeEdic.classList.remove('hidden');
+                btnEdit.disabled = true;
+                btnEdit.classList.add('opacity-50', 'cursor-not-allowed');
+                btnEdit.title = 'Ya tienes una solicitud de modificación en revisión por los administradores.';
+                deshabilitarFormularioPerfil();
+            } else {
+                badgeEdic.classList.add('hidden');
+                btnEdit.disabled = false;
+                btnEdit.classList.remove('opacity-50', 'cursor-not-allowed');
             }
+        }
+
+        function deshabilitarFormularioPerfil() {
+            document.querySelectorAll('.usr-input').forEach(i => {
+                i.disabled = true;
+                i.classList.add('bg-gray-50');
+                i.classList.remove('bg-white', 'border-amber-400');
+            });
+            document.getElementById('secBotonGuardar').classList.add('hidden');
         }
 
         function habilitarEdicion() {
@@ -516,7 +723,9 @@
 
             const datos = {
                 inscrito_id: usuarioActual.id,
+                nombre_completo: document.getElementById('usrNombre').value.trim() || null,
                 telefono: document.getElementById('usrTelefono').value.trim() || null,
+                fecha_nacimiento: document.getElementById('usrFechaNac').value || null,
                 celula: document.getElementById('usrCelula').value.trim() || null,
                 talla_polera: document.getElementById('usrTalla').value || null,
                 tipo_inscripcion_id: tipoInscripcionVal ? tipoInscripcionVal : null,
@@ -531,7 +740,6 @@
             const { data, error } = await db.from('solicitudes_edicion').insert([datos]);
 
             if (error) {
-                console.error('Error Supabase:', error);
                 alert('Error al enviar la solicitud: ' + error.message);
                 return;
             }
@@ -544,7 +752,7 @@
             const fileInput = document.getElementById('cartaArchivo');
             if (fileInput.files.length === 0) return alert('Por favor selecciona la foto o PDF de tu carta.');
 
-            const file = fileInput.files[0];
+            let file = await optimizarYComprimirImagen(fileInput.files[0]);
             const fileName = `carta_${Date.now()}_${file.name}`;
 
             const { data: uploadData, error: uploadErr } = await db.storage.from('cartas').upload(fileName, file);
@@ -572,7 +780,7 @@
                 return alert('⚠️ Por favor ingresa el monto y adjunta OBLIGATORIAMENTE la foto o recibo del comprobante.');
             }
 
-            const file = fileInput.files[0];
+            let file = await optimizarYComprimirImagen(fileInput.files[0]);
             const fileName = `${Date.now()}_${file.name}`;
 
             const { data: uploadData, error: uploadErr } = await db.storage.from('comprobantes').upload(fileName, file);
@@ -589,6 +797,57 @@
 
             alert('Comprobante enviado exitosamente a Tesorería para verificación.');
             cargarPerfil();
+        }
+
+        async function abrirModalAyuda() {
+            const { data: admins } = await db.from('administradores').select('nombre, telefono, roles(nombre)');
+            const cont = document.getElementById('listaAdminsAyuda');
+            cont.innerHTML = '';
+
+            (admins || []).forEach(a => {
+                let telClean = (a.telefono || '').replace(/\D/g, '');
+                let btnWp = telClean 
+                    ? `<a href="https://wa.me/${telClean}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-3 py-1.5 rounded-lg flex items-center gap-1 shadow transition">
+                         <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp
+                       </a>`
+                    : `<span class="text-[10px] text-gray-400 font-semibold italic">Sin número</span>`;
+
+                cont.innerHTML += `
+                    <div class="p-3 bg-indigo-50/60 rounded-xl border border-indigo-100 flex items-center justify-between">
+                        <div>
+                            <h5 class="font-bold text-xs text-indigo-950">${a.nombre}</h5>
+                            <span class="text-[10px] text-indigo-600 font-bold uppercase">${a.roles?.nombre || 'Encargado de Campamento'}</span>
+                        </div>
+                        ${btnWp}
+                    </div>
+                `;
+            });
+
+            document.getElementById('modalAyudaConsultas').classList.remove('hidden');
+        }
+
+        function cerrarModalAyuda() {
+            document.getElementById('modalAyudaConsultas').classList.add('hidden');
+        }
+
+        async function verQrPagoModal() {
+            document.getElementById('modalVerQr').classList.remove('hidden');
+            const { data } = await db.from('configuracion_sistema').select('valor').eq('clave', 'qr_pago_url').maybeSingle();
+            const cont = document.getElementById('contImagenQr');
+            const btnDesc = document.getElementById('btnDescargarQr');
+
+            if (data && data.valor) {
+                cont.innerHTML = `<img src="${data.valor}" class="max-h-72 object-contain rounded-lg shadow-sm">`;
+                btnDesc.href = data.valor;
+                btnDesc.classList.remove('hidden');
+            } else {
+                cont.innerHTML = `<p class="text-xs text-amber-700 font-semibold p-4">No se ha subido ningún código QR aún. Por favor consulta con un encargado.</p>`;
+                btnDesc.classList.add('hidden');
+            }
+        }
+
+        function cerrarModalQr() {
+            document.getElementById('modalVerQr').classList.add('hidden');
         }
     </script>
 </body>
