@@ -806,17 +806,17 @@
 
             (admins || []).forEach(a => {
                 let telClean = (a.telefono || '').replace(/\D/g, '');
-                let btnWp = telClean 
-                    ? `<a href="https://wa.me/${telClean}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-3 py-1.5 rounded-lg flex items-center gap-1 shadow transition">
-                         <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp
+                                let btnWp = telClean
+                                        ? `<a href="https://wa.me/${telClean}" target="_blank" rel="noopener noreferrer" class="inline-flex shrink-0 items-center justify-center gap-1.5 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 text-white font-bold text-xs px-3 py-2 rounded-lg shadow-sm transition whitespace-nowrap">
+                                                 <i class="fa-brands fa-whatsapp text-base"></i> WhatsApp
                        </a>`
                     : `<span class="text-[10px] text-gray-400 font-semibold italic">Sin número</span>`;
 
                 cont.innerHTML += `
-                    <div class="p-3 bg-indigo-50/60 rounded-xl border border-indigo-100 flex items-center justify-between">
-                        <div>
-                            <h5 class="font-bold text-xs text-indigo-950">${a.nombre}</h5>
-                            <span class="text-[10px] text-indigo-600 font-bold uppercase">${a.roles?.nombre || 'Encargado de Campamento'}</span>
+                    <div class="p-3 bg-indigo-50/60 rounded-xl border border-indigo-100 flex items-center justify-between gap-3">
+                        <div class="min-w-0">
+                            <h5 class="font-bold text-sm leading-snug text-indigo-950 break-words">${a.nombre}</h5>
+                            <span class="text-[9px] text-indigo-600 font-semibold uppercase">${a.roles?.nombre || 'Encargado de Campamento'}</span>
                         </div>
                         ${btnWp}
                     </div>
