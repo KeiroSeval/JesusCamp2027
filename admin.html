@@ -366,15 +366,20 @@
                             class="p-2.5 border rounded-xl text-xs bg-white">
                         <input type="text" id="newNombre" placeholder="Nombre Completo" required
                             class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="date" id="newFechaNac"
-                            onchange="calcularEdadDesdeFecha('newFechaNac', 'newEdadVal', 'newSecTutor')"
+                        <input type="text" id="newFechaNac" placeholder="Fecha de nacimiento (dd/mm/yyyy)"
+                            inputmode="numeric" maxlength="10"
+                            oninput="calcularEdadDesdeFecha('newFechaNac', 'newEdadVal', 'newSecTutor')"
                             class="p-2.5 border rounded-xl text-xs bg-white">
                         <input type="text" id="newEdadVal" readonly placeholder="Edad Calculada"
                             class="p-2.5 border rounded-xl text-xs bg-gray-100 font-bold text-indigo-900">
                         <input type="text" id="newTel" placeholder="Teléfono / WhatsApp"
                             class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="text" id="newCelula" placeholder="Célula"
-                            class="p-2.5 border rounded-xl text-xs bg-white">
+                        <div class="space-y-2">
+                            <select id="newCelula" class="select-celula p-2.5 border rounded-xl text-xs bg-white w-full"
+                                onchange="actualizarCampoOtraCelula(this, 'newCelulaOtra')"></select>
+                            <input type="text" id="newCelulaOtra" placeholder="Escribe el nombre de la célula"
+                                class="hidden p-2.5 border rounded-xl text-xs bg-white w-full">
+                        </div>
 
                         <select id="newTalla" class="p-2.5 border rounded-xl text-xs bg-white">
                             <option value="">-- Select Talla --</option>
@@ -1043,8 +1048,9 @@
                         </div>
                         <div>
                             <label class="text-xs font-bold text-gray-600">Fecha de Nacimiento (dd/mm/yyyy)</label>
-                            <input type="date" id="editInsFechaNac"
-                                onchange="calcularEdadDesdeFecha('editInsFechaNac', 'editInsEdadVal', 'editSecTutor')"
+                            <input type="text" id="editInsFechaNac" placeholder="dd/mm/yyyy"
+                                inputmode="numeric" maxlength="10"
+                                oninput="calcularEdadDesdeFecha('editInsFechaNac', 'editInsEdadVal', 'editSecTutor')"
                                 class="w-full p-2 border rounded-xl text-xs outline-none">
                         </div>
                         <div>
@@ -1059,8 +1065,10 @@
                         </div>
                         <div>
                             <label class="text-xs font-bold text-gray-600">Célula</label>
-                            <input type="text" id="editInsCelula"
-                                class="w-full p-2 border rounded-xl text-xs outline-none">
+                            <select id="editInsCelula" class="select-celula w-full p-2 border rounded-xl text-xs bg-white"
+                                onchange="actualizarCampoOtraCelula(this, 'editInsCelulaOtra')"></select>
+                            <input type="text" id="editInsCelulaOtra" placeholder="Escribe el nombre de la célula"
+                                class="hidden w-full mt-2 p-2 border rounded-xl text-xs outline-none">
                         </div>
                     </div>
                 </div>
@@ -1224,6 +1232,44 @@
         let solicitudesEdicionGlobal = [];
         let accionPendienteProtegida = null;
         let instanciaGrafico = null;
+        const CELULAS_PREDEFINIDAS = [
+            'Alfa y Omega', 'Armadura de Dios', 'Beth Shalom', 'Ejercito de Dios', 'Gaditas',
+            'Generación de Fuego', 'Getsemaní', 'Hijas del Rey', 'Talita Cumi', 'Segadores', 'Ninguna'
+        ];
+
+        function inicializarSelectoresCelula() {
+            const opciones = CELULAS_PREDEFINIDAS.map(celula => `<option value="${celula}">${celula}</option>`).join('');
+            document.querySelectorAll('.select-celula').forEach(select => {
+                select.innerHTML = `<option value="">-- Seleccione Célula --</option>${opciones}<option value="Otra">Otra</option>`;
+            });
+        }
+
+        function actualizarCampoOtraCelula(select, inputId) {
+            const input = document.getElementById(inputId);
+            const esOtra = select.value === 'Otra';
+            input.classList.toggle('hidden', !esOtra);
+            input.required = esOtra;
+        }
+
+        function asignarCelula(selectId, inputId, valor) {
+            const select = document.getElementById(selectId);
+            const input = document.getElementById(inputId);
+            const celula = valor || '';
+            const esPredefinida = CELULAS_PREDEFINIDAS.includes(celula);
+
+            select.value = esPredefinida ? celula : (celula ? 'Otra' : '');
+            input.value = esPredefinida ? '' : celula;
+            actualizarCampoOtraCelula(select, inputId);
+        }
+
+        function obtenerCelula(selectId, inputId) {
+            const select = document.getElementById(selectId);
+            return select.value === 'Otra'
+                ? document.getElementById(inputId).value.trim()
+                : select.value;
+        }
+
+        inicializarSelectoresCelula();
 
         function formatearFechaLatina(fechaStr) {
             if (!fechaStr) return '-';
@@ -1232,15 +1278,38 @@
             return fechaStr;
         }
 
+        function convertirFechaNacimientoISO(valor) {
+            if (!valor) return null;
+            const coincidencia = valor.trim().match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+            if (!coincidencia) return null;
+
+            const [, diaTexto, mesTexto, anioTexto] = coincidencia;
+            const dia = Number(diaTexto);
+            const mes = Number(mesTexto);
+            const anio = Number(anioTexto);
+            const fecha = new Date(anio, mes - 1, dia);
+            if (fecha.getFullYear() !== anio || fecha.getMonth() !== mes - 1 || fecha.getDate() !== dia) return null;
+
+            return `${anioTexto}-${mesTexto}-${diaTexto}`;
+        }
+
+        function calcularEdad(fechaISO) {
+            const [anio, mes, dia] = fechaISO.split('-').map(Number);
+            const hoy = new Date();
+            let edad = hoy.getFullYear() - anio;
+            if (hoy.getMonth() + 1 < mes || (hoy.getMonth() + 1 === mes && hoy.getDate() < dia)) edad--;
+            return edad;
+        }
+
         function calcularEdadDesdeFecha(inputId, targetTextId, secMenorId) {
             const val = document.getElementById(inputId).value;
-            if (!val) return;
+            const fechaISO = convertirFechaNacimientoISO(val);
+            if (!fechaISO) {
+                document.getElementById(targetTextId).value = '';
+                return;
+            }
 
-            const hoy = new Date();
-            const nac = new Date(val);
-            let edad = hoy.getFullYear() - nac.getFullYear();
-            const m = hoy.getMonth() - nac.getMonth();
-            if (m < 0 || (m === 0 && hoy.getDate() < nac.getDate())) edad--;
+            const edad = calcularEdad(fechaISO);
 
             document.getElementById(targetTextId).value = `${edad} años`;
 
@@ -1573,7 +1642,10 @@
                 const updatePayload = {};
                 if (sol.nombre_completo) updatePayload.nombre_completo = sol.nombre_completo;
                 if (sol.telefono !== undefined) updatePayload.telefono = sol.telefono;
-                if (sol.fecha_nacimiento !== undefined) updatePayload.fecha_nacimiento = sol.fecha_nacimiento;
+                if (sol.fecha_nacimiento !== undefined) {
+                    updatePayload.fecha_nacimiento = sol.fecha_nacimiento;
+                    updatePayload.es_menor = sol.fecha_nacimiento ? calcularEdad(sol.fecha_nacimiento) < 18 : false;
+                }
                 if (sol.celula !== undefined) updatePayload.celula = sol.celula;
                 if (sol.talla_polera !== undefined) updatePayload.talla_polera = sol.talla_polera;
                 if (sol.tipo_inscripcion_id !== undefined && sol.tipo_inscripcion_id !== null) updatePayload.tipo_inscripcion_id = sol.tipo_inscripcion_id;
@@ -2329,7 +2401,7 @@
             document.getElementById('editInsId').value = i.id;
             document.getElementById('editInsCi').value = i.ci;
             document.getElementById('editInsNombre').value = i.nombre_completo;
-            document.getElementById('editInsFechaNac').value = i.fecha_nacimiento || '';
+            document.getElementById('editInsFechaNac').value = i.fecha_nacimiento ? formatearFechaLatina(i.fecha_nacimiento) : '';
             if (i.fecha_nacimiento) {
                 calcularEdadDesdeFecha('editInsFechaNac', 'editInsEdadVal', 'editSecTutor');
             } else {
@@ -2337,7 +2409,7 @@
             }
 
             document.getElementById('editInsTel').value = i.telefono || '';
-            document.getElementById('editInsCelula').value = i.celula || '';
+            asignarCelula('editInsCelula', 'editInsCelulaOtra', i.celula);
             document.getElementById('editInsEquipo').value = i.equipo || 'Sin Asignar';
             document.getElementById('editInsTalla').value = i.talla_polera || '';
             document.getElementById('editInsTipoInscripcion').value = i.tipo_inscripcion_id || '';
@@ -2362,6 +2434,11 @@
 
         function confirmarYGuardarInscrito(e) {
             e.preventDefault();
+            const fechaIngresada = document.getElementById('editInsFechaNac').value.trim();
+            if (fechaIngresada && !convertirFechaNacimientoISO(fechaIngresada)) {
+                alert('Ingresa una fecha válida con formato dd/mm/yyyy.');
+                return;
+            }
             solicitarSeguridad('guardarEdicionCompletaInscrito');
         }
 
@@ -2388,16 +2465,8 @@
                 const id = document.getElementById('editInsId').value;
                 const nom = document.getElementById('editInsNombre').value;
 
-                let fechaNacVal = document.getElementById('editInsFechaNac').value || null;
-                let esMenorVal = false;
-                if (fechaNacVal) {
-                    const hoy = new Date();
-                    const nac = new Date(fechaNacVal);
-                    let ed = hoy.getFullYear() - nac.getFullYear();
-                    const m = hoy.getMonth() - nac.getMonth();
-                    if (m < 0 || (m === 0 && hoy.getDate() < nac.getDate())) ed--;
-                    if (ed < 18) esMenorVal = true;
-                }
+                const fechaNacVal = convertirFechaNacimientoISO(document.getElementById('editInsFechaNac').value.trim());
+                const esMenorVal = fechaNacVal ? calcularEdad(fechaNacVal) < 18 : false;
 
                 await db.from('inscritos').update({
                     ci: document.getElementById('editInsCi').value,
@@ -2405,7 +2474,7 @@
                     fecha_nacimiento: fechaNacVal,
                     es_menor: esMenorVal,
                     telefono: document.getElementById('editInsTel').value,
-                    celula: document.getElementById('editInsCelula').value,
+                    celula: obtenerCelula('editInsCelula', 'editInsCelulaOtra') || null,
                     equipo: document.getElementById('editInsEquipo').value,
                     talla_polera: document.getElementById('editInsTalla').value,
                     tipo_inscripcion_id: document.getElementById('editInsTipoInscripcion').value,
@@ -2458,19 +2527,16 @@
         async function crearNuevoCampamentista(e) {
             e.preventDefault();
             const nom = document.getElementById('newNombre').value.trim();
-            let fechaNacVal = document.getElementById('newFechaNac').value || null;
-            let esMenorVal = false;
-
-            if (fechaNacVal) {
-                const hoy = new Date();
-                const nac = new Date(fechaNacVal);
-                let ed = hoy.getFullYear() - nac.getFullYear();
-                const m = hoy.getMonth() - nac.getMonth();
-                if (m < 0 || (m === 0 && hoy.getDate() < nac.getDate())) ed--;
-                if (ed < 18) esMenorVal = true;
-            } else {
-                esMenorVal = document.getElementById('newEsMenor').checked;
+            const celula = obtenerCelula('newCelula', 'newCelulaOtra');
+            const fechaNacimientoEntrada = document.getElementById('newFechaNac').value.trim();
+            const fechaNacVal = convertirFechaNacimientoISO(fechaNacimientoEntrada);
+            if (fechaNacimientoEntrada && !fechaNacVal) {
+                alert('Ingresa una fecha válida con formato dd/mm/yyyy.');
+                return;
             }
+            const esMenorVal = fechaNacVal
+                ? calcularEdad(fechaNacVal) < 18
+                : document.getElementById('newEsMenor').checked;
 
             await db.from('inscritos').insert([{
                 ci: document.getElementById('newCi').value.trim(),
@@ -2478,7 +2544,7 @@
                 fecha_nacimiento: fechaNacVal,
                 es_menor: esMenorVal,
                 telefono: document.getElementById('newTel').value.trim(),
-                celula: document.getElementById('newCelula').value.trim(),
+                celula: celula || null,
                 equipo: document.getElementById('newEquipo').value,
                 talla_polera: document.getElementById('newTalla').value,
                 tipo_inscripcion_id: document.getElementById('newTipoInscripcion').value || null,
@@ -2496,6 +2562,7 @@
             await registrarLogAuditoria('Nuevo Registro', 'Inscritos', `Inscribió a: ${nom}`);
             alert('Registro guardado exitosamente.');
             e.target.reset();
+            actualizarCampoOtraCelula(document.getElementById('newCelula'), 'newCelulaOtra');
             toggleFormulario('formContenedorCampamentista');
             cargarTodoElDashboard();
         }

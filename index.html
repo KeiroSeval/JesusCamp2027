@@ -177,6 +177,14 @@
                     </div>
                 </div>
 
+                <div id="panelCambioPendiente" class="hidden rounded-xl border border-amber-300 bg-amber-50 p-4 space-y-3" role="status">
+                    <div>
+                        <h4 class="font-bold text-sm text-amber-900">Modificación en revisión</h4>
+                        <p class="text-xs text-amber-800">No puedes enviar otra solicitud hasta que esta sea aprobada o rechazada. Así quedarían los datos si se aprueba:</p>
+                    </div>
+                    <div id="listaCambiosPendientes" class="space-y-2"></div>
+                </div>
+
                 <form id="formPerfil" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="text-xs font-bold text-gray-500">Nombre Completo</label>
@@ -190,13 +198,9 @@
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500">Fecha de Nacimiento (dd/mm/yyyy)</label>
-                        <div class="relative mt-1">
-                            <input type="date" id="usrFechaNac" disabled onchange="actualizarVistaFechaNacimiento()"
-                                class="usr-input w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
-                            <span id="usrFechaNacFmt" class="block mt-1 text-xs font-bold text-indigo-700 bg-indigo-50 px-2 py-1 rounded border border-indigo-100">
-                                Formato Latino: <span id="txtFechaFmtVal">-</span>
-                            </span>
-                        </div>
+                        <input type="text" id="usrFechaNac" disabled placeholder="dd/mm/yyyy" inputmode="numeric" maxlength="10"
+                            oninput="actualizarVistaFechaNacimiento()"
+                            class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500">Edad Calculada</label>
@@ -205,8 +209,10 @@
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500">Célula</label>
-                        <input type="text" id="usrCelula" disabled placeholder="Sin registrar"
-                            class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
+                        <select id="usrCelula" disabled class="usr-input select-celula w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none"
+                            onchange="actualizarCampoOtraCelula(this, 'usrCelulaOtra')"></select>
+                        <input type="text" id="usrCelulaOtra" disabled placeholder="Escribe el nombre de la célula"
+                            class="usr-input hidden w-full mt-2 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500">Talla de Polera</label>
@@ -395,6 +401,44 @@
         const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let usuarioActual = null;
+        const CELULAS_PREDEFINIDAS = [
+            'Alfa y Omega', 'Armadura de Dios', 'Beth Shalom', 'Ejercito de Dios', 'Gaditas',
+            'Generación de Fuego', 'Getsemaní', 'Hijas del Rey', 'Talita Cumi', 'Segadores', 'Ninguna'
+        ];
+
+        function inicializarSelectoresCelula() {
+            const opciones = CELULAS_PREDEFINIDAS.map(celula => `<option value="${celula}">${celula}</option>`).join('');
+            document.querySelectorAll('.select-celula').forEach(select => {
+                select.innerHTML = `<option value="">-- Seleccione Célula --</option>${opciones}<option value="Otra">Otra</option>`;
+            });
+        }
+
+        function actualizarCampoOtraCelula(select, inputId) {
+            const input = document.getElementById(inputId);
+            const esOtra = select.value === 'Otra';
+            input.classList.toggle('hidden', !esOtra);
+            input.required = esOtra;
+        }
+
+        function asignarCelula(selectId, inputId, valor) {
+            const select = document.getElementById(selectId);
+            const input = document.getElementById(inputId);
+            const celula = valor || '';
+            const esPredefinida = CELULAS_PREDEFINIDAS.includes(celula);
+
+            select.value = esPredefinida ? celula : (celula ? 'Otra' : '');
+            input.value = esPredefinida ? '' : celula;
+            actualizarCampoOtraCelula(select, inputId);
+        }
+
+        function obtenerCelula(selectId, inputId) {
+            const select = document.getElementById(selectId);
+            return select.value === 'Otra'
+                ? document.getElementById(inputId).value.trim()
+                : select.value;
+        }
+
+        inicializarSelectoresCelula();
         let tiposInscripcionVisibles = [];
 
         function formatearFechaLatina(fechaStr) {
@@ -404,10 +448,48 @@
             return fechaStr;
         }
 
+        function convertirFechaNacimientoISO(valor) {
+            if (!valor) return null;
+            const coincidencia = valor.trim().match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+            if (!coincidencia) return null;
+
+            const [, diaTexto, mesTexto, anioTexto] = coincidencia;
+            const dia = Number(diaTexto);
+            const mes = Number(mesTexto);
+            const anio = Number(anioTexto);
+            const fecha = new Date(anio, mes - 1, dia);
+            if (fecha.getFullYear() !== anio || fecha.getMonth() !== mes - 1 || fecha.getDate() !== dia) return null;
+
+            return `${anioTexto}-${mesTexto}-${diaTexto}`;
+        }
+
+        function calcularEdad(fechaISO) {
+            const [anio, mes, dia] = fechaISO.split('-').map(Number);
+            const hoy = new Date();
+            let edad = hoy.getFullYear() - anio;
+            if (hoy.getMonth() + 1 < mes || (hoy.getMonth() + 1 === mes && hoy.getDate() < dia)) edad--;
+            return edad;
+        }
+
         function actualizarVistaFechaNacimiento() {
-            const rawVal = document.getElementById('usrFechaNac').value;
-            document.getElementById('txtFechaFmtVal').innerText = formatearFechaLatina(rawVal);
-            calcularEdadDesdeFecha('usrFechaNac', 'usrEdadText', 'secMenorEdad');
+            const rawVal = document.getElementById('usrFechaNac').value.trim();
+            const edadInput = document.getElementById('usrEdadText');
+            const secMenor = document.getElementById('secMenorEdad');
+            const fechaISO = convertirFechaNacimientoISO(rawVal);
+
+            if (!rawVal) {
+                edadInput.value = '';
+                return;
+            }
+            if (!fechaISO) {
+                edadInput.value = 'Usa dd/mm/yyyy';
+                return;
+            }
+
+            const edad = calcularEdad(fechaISO);
+            edadInput.value = `${edad} años`;
+            if (edad < 18) secMenor.classList.remove('hidden');
+            else secMenor.classList.add('hidden');
         }
 
         async function optimizarYComprimirImagen(archivo, maxDimension = 1600, calidad = 0.8) {
@@ -452,25 +534,6 @@
                 };
                 reader.onerror = () => resolve(archivo);
             });
-        }
-
-        function calcularEdadDesdeFecha(inputId, targetTextId, secMenorId) {
-            const val = document.getElementById(inputId).value;
-            if (!val) return;
-
-            const hoy = new Date();
-            const nac = new Date(val);
-            let edad = hoy.getFullYear() - nac.getFullYear();
-            const m = hoy.getMonth() - nac.getMonth();
-            if (m < 0 || (m === 0 && hoy.getDate() < nac.getDate())) edad--;
-
-            document.getElementById(targetTextId).value = `${edad} años`;
-
-            const secMenor = document.getElementById(secMenorId);
-            if (secMenor) {
-                if (edad < 18) secMenor.classList.remove('hidden');
-                else secMenor.classList.add('hidden');
-            }
         }
 
         async function cargarTiposInscripcionPublicos() {
@@ -555,10 +618,12 @@
 
             document.getElementById('usrNombre').value = usuarioActual.nombre_completo || '';
             document.getElementById('usrTelefono').value = usuarioActual.telefono || '';
-            document.getElementById('usrFechaNac').value = usuarioActual.fecha_nacimiento || '';
+            document.getElementById('usrFechaNac').value = usuarioActual.fecha_nacimiento
+                ? formatearFechaLatina(usuarioActual.fecha_nacimiento)
+                : '';
             actualizarVistaFechaNacimiento();
 
-            document.getElementById('usrCelula').value = usuarioActual.celula || '';
+            asignarCelula('usrCelula', 'usrCelulaOtra', usuarioActual.celula);
             document.getElementById('usrTalla').value = usuarioActual.talla_polera || '';
 
             const selectUser = document.getElementById('usrTipoInscripcion');
@@ -692,12 +757,72 @@
                 btnEdit.disabled = true;
                 btnEdit.classList.add('opacity-50', 'cursor-not-allowed');
                 btnEdit.title = 'Ya tienes una solicitud de modificación en revisión por los administradores.';
+                mostrarCambiosPendientes(edicion);
                 deshabilitarFormularioPerfil();
             } else {
                 badgeEdic.classList.add('hidden');
                 btnEdit.disabled = false;
                 btnEdit.classList.remove('opacity-50', 'cursor-not-allowed');
+                document.getElementById('panelCambioPendiente').classList.add('hidden');
             }
+        }
+
+        function mostrarCambiosPendientes(edicion) {
+            const panel = document.getElementById('panelCambioPendiente');
+            const lista = document.getElementById('listaCambiosPendientes');
+            const campos = [
+                ['nombre_completo', 'Nombre completo'], ['telefono', 'Teléfono'],
+                ['fecha_nacimiento', 'Fecha de nacimiento'], ['celula', 'Célula'],
+                ['talla_polera', 'Talla de polera'], ['tipo_inscripcion_id', 'Tipo de inscripción'],
+                ['actividad_favorita', 'Actividad favorita'], ['habilidad_especial', 'Habilidad o talento'],
+                ['contacto_emergencia', 'Contacto de emergencia'], ['alergias_medicina', 'Alergias o medicamentos'],
+                ['tutor_nombre', 'Nombre del tutor'], ['tutor_telefono', 'Teléfono del tutor']
+            ];
+            const selectorTipo = document.getElementById('usrTipoInscripcion');
+            lista.replaceChildren();
+
+            campos.forEach(([campo, etiqueta]) => {
+                const actual = usuarioActual[campo] ?? '';
+                const propuesto = edicion[campo] ?? '';
+                if (String(actual) === String(propuesto)) return;
+
+                const mostrarValor = (valor) => {
+                    if (!valor) return 'Sin registrar';
+                    if (campo === 'fecha_nacimiento') return formatearFechaLatina(valor);
+                    if (campo === 'tipo_inscripcion_id') {
+                        const opcion = Array.from(selectorTipo.options).find(item => item.value === valor);
+                        return opcion?.textContent || valor;
+                    }
+                    return valor;
+                };
+
+                const fila = document.createElement('div');
+                fila.className = 'rounded-lg border border-amber-200 bg-white p-3';
+                const titulo = document.createElement('p');
+                titulo.className = 'text-xs font-bold text-gray-700 mb-2';
+                titulo.textContent = etiqueta;
+                const valores = document.createElement('div');
+                valores.className = 'grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs';
+
+                const valorActual = document.createElement('p');
+                valorActual.className = 'text-gray-500';
+                valorActual.textContent = `Actual: ${mostrarValor(actual)}`;
+                const valorPropuesto = document.createElement('p');
+                valorPropuesto.className = 'font-bold text-amber-800 bg-amber-100 rounded px-2 py-1';
+                valorPropuesto.textContent = `Si se aprueba: ${mostrarValor(propuesto)}`;
+
+                valores.append(valorActual, valorPropuesto);
+                fila.append(titulo, valores);
+                lista.append(fila);
+            });
+
+            if (!lista.childElementCount) {
+                const mensaje = document.createElement('p');
+                mensaje.className = 'text-xs text-amber-800';
+                mensaje.textContent = 'La solicitud no contiene cambios visibles en estos datos.';
+                lista.append(mensaje);
+            }
+            panel.classList.remove('hidden');
         }
 
         function deshabilitarFormularioPerfil() {
@@ -720,13 +845,24 @@
 
         async function solicitarCambioDatos() {
             const tipoInscripcionVal = document.getElementById('usrTipoInscripcion').value;
+            const fechaNacEntrada = document.getElementById('usrFechaNac').value.trim();
+            const fechaNacimientoISO = convertirFechaNacimientoISO(fechaNacEntrada);
+            if (fechaNacEntrada && !fechaNacimientoISO) {
+                alert('Ingresa una fecha válida con formato dd/mm/yyyy.');
+                return;
+            }
+            const celula = obtenerCelula('usrCelula', 'usrCelulaOtra');
+            if (document.getElementById('usrCelula').value === 'Otra' && !celula) {
+                alert('Escribe el nombre de la célula seleccionada como "Otra".');
+                return;
+            }
 
             const datos = {
                 inscrito_id: usuarioActual.id,
                 nombre_completo: document.getElementById('usrNombre').value.trim() || null,
                 telefono: document.getElementById('usrTelefono').value.trim() || null,
-                fecha_nacimiento: document.getElementById('usrFechaNac').value || null,
-                celula: document.getElementById('usrCelula').value.trim() || null,
+                fecha_nacimiento: fechaNacimientoISO,
+                celula: celula || null,
                 talla_polera: document.getElementById('usrTalla').value || null,
                 tipo_inscripcion_id: tipoInscripcionVal ? tipoInscripcionVal : null,
                 actividad_favorita: document.getElementById('usrActividad').value || null,
@@ -736,6 +872,21 @@
                 tutor_nombre: document.getElementById('usrTutorNombre').value.trim() || null,
                 tutor_telefono: document.getElementById('usrTutorTel').value.trim() || null
             };
+
+            const camposEditables = Object.keys(datos).filter(campo => campo !== 'inscrito_id');
+            const hayCambios = camposEditables.some(campo => {
+                const valorActual = usuarioActual[campo] ?? '';
+                const valorPropuesto = datos[campo] ?? '';
+                if (campo === 'fecha_nacimiento') {
+                    return String(valorActual).split('T')[0] !== String(valorPropuesto).split('T')[0];
+                }
+                return String(valorActual).trim() !== String(valorPropuesto).trim();
+            });
+
+            if (!hayCambios) {
+                alert('No se detectaron cambios en tus datos. No se envió ninguna solicitud.');
+                return;
+            }
 
             const { data, error } = await db.from('solicitudes_edicion').insert([datos]);
 
