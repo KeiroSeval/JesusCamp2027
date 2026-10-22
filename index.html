@@ -52,7 +52,7 @@
             <p class="text-xs text-gray-500 mb-6">Ingresa tu C.I. para gestionar tu perfil, pagos y carta.</p>
 
             <div class="space-y-3">
-                <input type="text" id="inputCI" placeholder="Tu C.I. (ej. 87654321)"
+                <input type="text" id="inputCI" inputmode="numeric" autocomplete="off" maxlength="24" placeholder="Tu C.I. (ej. 87654321)"
                     class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-center text-lg font-semibold tracking-wider">
                 <button onclick="buscarCampamentista()"
                     class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition">
@@ -148,7 +148,7 @@
                     </h3>
                     <p class="text-xs text-gray-500">Descarga la Carta de Compromiso, fírmala y sube una fotografía o documento PDF visible.</p>
                     <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 pt-2">
-                        <input type="file" id="cartaArchivo" accept="image/*,.pdf"
+                        <input type="file" id="cartaArchivo" accept="image/jpeg,image/png,image/webp,application/pdf"
                             class="text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
                         <button id="btnSubirCarta" onclick="subirCartaCompromiso()"
                             class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-lg text-xs transition shadow">
@@ -312,7 +312,7 @@
                         <label class="text-xs font-bold text-gray-700 flex items-center gap-1">
                             Foto / Recibo del Comprobante (Obligatorio) *
                         </label>
-                        <input type="file" id="pagoArchivo" accept="image/*,.pdf" required
+                        <input type="file" id="pagoArchivo" accept="image/jpeg,image/png,image/webp,application/pdf" required
                             class="w-full mt-1 text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
                     </div>
                     <div>
@@ -405,6 +405,50 @@
             'Alfa y Omega', 'Armadura de Dios', 'Beth Shalom', 'Ejercito de Dios', 'Gaditas',
             'Generación de Fuego', 'Getsemaní', 'Hijas del Rey', 'Talita Cumi', 'Segadores', 'Ninguna'
         ];
+        const TIPOS_ARCHIVO_ADMITIDOS = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
+
+        function validarArchivo(file) {
+            if (!file || !TIPOS_ARCHIVO_ADMITIDOS.includes(file.type)) {
+                alert('Selecciona una imagen PNG, JPG, WebP o un documento PDF.');
+                return false;
+            }
+            if (file.size > 10 * 1024 * 1024) {
+                alert('El archivo supera el límite de 10 MB.');
+                return false;
+            }
+            return true;
+        }
+
+        function nombreArchivoAleatorio(file) {
+            const extensionPorTipo = {
+                'image/jpeg': 'jpg',
+                'image/png': 'png',
+                'image/webp': 'webp',
+                'application/pdf': 'pdf'
+            };
+            return `${crypto.randomUUID()}.${extensionPorTipo[file.type]}`;
+        }
+
+        function escaparHtml(valor) {
+            return String(valor ?? '').replace(/[&<>"']/g, caracter => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            })[caracter]);
+        }
+
+        function urlArchivoSegura(valor) {
+            try {
+                const url = new URL(valor);
+                return url.protocol === 'https:' && url.origin === new URL(SUPABASE_URL).origin
+                    ? url.href
+                    : '';
+            } catch {
+                return '';
+            }
+        }
 
         function inicializarSelectoresCelula() {
             const opciones = CELULAS_PREDEFINIDAS.map(celula => `<option value="${celula}">${celula}</option>`).join('');
@@ -549,7 +593,7 @@
                 selectUser.innerHTML = '<option value="">-- Seleccionar --</option>';
                 tiposInscripcionVisibles.forEach(t => {
                     let label = t.es_manual ? `${t.nombre} (Precio personalizado)` : `${t.nombre} (Bs ${t.precio})`;
-                    selectUser.innerHTML += `<option value="${t.id}">${label}</option>`;
+                    selectUser.innerHTML += `<option value="${escaparHtml(t.id)}">${escaparHtml(label)}</option>`;
                 });
             }
         }
@@ -581,23 +625,34 @@
 
         async function buscarCampamentista() {
             const ciInput = document.getElementById('inputCI').value.trim();
-            if (!ciInput) return;
+            const mensaje = document.getElementById('msgBusqueda');
+            if (!/^[a-zA-Z0-9.-]{4,24}$/.test(ciInput)) {
+                mensaje.textContent = 'Ingresa un C.I. válido de 4 a 24 caracteres.';
+                mensaje.classList.remove('hidden');
+                return;
+            }
 
             await cargarTiposInscripcionPublicos();
 
             const { data: inscrito, error } = await db
                 .from('inscritos')
                 .select('*, tipos_inscripcion(*)')
-                .ilike('ci', ciInput)
+                .eq('ci', ciInput)
                 .maybeSingle();
 
-            if (error || !inscrito) {
-                document.getElementById('msgBusqueda').innerText = 'No se encontró ningún campamentista registrado con ese C.I.';
-                document.getElementById('msgBusqueda').classList.remove('hidden');
+            if (error) {
+                console.error('Error consultando el perfil del campamentista:', error);
+                mensaje.textContent = 'No se pudo consultar el registro. Revisa tu conexión e inténtalo nuevamente.';
+                mensaje.classList.remove('hidden');
+                return;
+            }
+            if (!inscrito) {
+                mensaje.textContent = 'No se encontró ningún campamentista registrado con ese C.I.';
+                mensaje.classList.remove('hidden');
                 return;
             }
 
-            document.getElementById('msgBusqueda').classList.add('hidden');
+            mensaje.classList.add('hidden');
             usuarioActual = inscrito;
             cargarPerfil();
         }
@@ -632,7 +687,7 @@
                 if (!existeEnSelect && usuarioActual.tipos_inscripcion) {
                     const t = usuarioActual.tipos_inscripcion;
                     let label = t.es_manual ? `${t.nombre} (Asignado Admin)` : `${t.nombre} (Bs ${t.precio})`;
-                    selectUser.innerHTML += `<option value="${t.id}" selected>${label}</option>`;
+                    selectUser.innerHTML += `<option value="${escaparHtml(t.id)}" selected>${escaparHtml(label)}</option>`;
                 }
             }
             selectUser.value = usuarioActual.tipo_inscripcion_id || '';
@@ -661,22 +716,24 @@
             const estado = usuarioActual.estado_carta || (usuarioActual.carta_compromiso_url ? 'En Revisión' : 'Pendiente');
 
             if (estado === 'Aprobada') {
+                const cartaUrl = urlArchivoSegura(usuarioActual.carta_compromiso_url);
                 contAlerta.classList.add('bg-green-50', 'border-green-500');
                 iconoAlerta.className = 'fa-solid fa-circle-check text-green-600 text-2xl';
                 tituloAlerta.className = 'font-bold text-sm text-green-900';
                 tituloAlerta.innerText = 'Carta de Compromiso Aprobada';
                 descAlerta.className = 'text-xs text-green-700';
                 descAlerta.innerText = 'Tu carta de compromiso ha sido verificada y aprobada.';
-                txtEstado.innerHTML = `<span class="text-green-600 flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Carta Aprobada: <a href="${usuarioActual.carta_compromiso_url}" target="_blank" class="underline text-blue-600 font-bold">Ver Documento</a></span>`;
+                txtEstado.innerHTML = `<span class="text-green-600 flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Carta Aprobada: ${cartaUrl ? `<a href="${escaparHtml(cartaUrl)}" target="_blank" rel="noopener noreferrer" class="underline text-blue-600 font-bold">Ver Documento</a>` : 'Documento no disponible'}</span>`;
                 document.getElementById('btnSubirCarta').disabled = false;
             } else if (estado === 'En Revisión') {
+                const cartaUrl = urlArchivoSegura(usuarioActual.carta_compromiso_url);
                 contAlerta.classList.add('bg-blue-50', 'border-blue-500');
                 iconoAlerta.className = 'fa-solid fa-clock-rotate-left text-blue-600 text-2xl';
                 tituloAlerta.className = 'font-bold text-sm text-blue-900';
                 tituloAlerta.innerText = 'Carta en Revisión';
                 descAlerta.className = 'text-xs text-blue-700';
                 descAlerta.innerText = 'Tu carta fue subida y está siendo revisada por un administrador.';
-                txtEstado.innerHTML = `<span class="text-blue-600 flex items-center gap-1"><i class="fa-solid fa-spinner fa-spin"></i> Carta en Revisión: <a href="${usuarioActual.carta_compromiso_url}" target="_blank" class="underline font-bold">Ver Documento Enviado</a></span>`;
+                txtEstado.innerHTML = `<span class="text-blue-600 flex items-center gap-1"><i class="fa-solid fa-spinner fa-spin"></i> Carta en Revisión: ${cartaUrl ? `<a href="${escaparHtml(cartaUrl)}" target="_blank" rel="noopener noreferrer" class="underline font-bold">Ver Documento Enviado</a>` : 'Documento no disponible'}</span>`;
                 document.getElementById('btnSubirCarta').disabled = true;
                 document.getElementById('btnSubirCarta').title = "Tienes una carta pendiente de revisión.";
             } else if (estado === 'Rechazada') {
@@ -712,12 +769,13 @@
                 if (p.estado === 'Pendiente') tienePagoPendiente = true;
 
                 let colorEstado = p.estado === 'Aprobado' ? 'bg-green-100 text-green-700' : (p.estado === 'Pendiente' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700');
+                const comprobanteUrl = urlArchivoSegura(p.comprobante_url);
                 tbody.innerHTML += `
           <tr>
             <td class="p-2">${new Date(p.created_at || p.fecha).toLocaleDateString()} ${new Date(p.created_at || p.fecha).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</td>
-            <td class="p-2 font-bold">Bs ${p.monto}</td>
-            <td class="p-2"><a href="${p.comprobante_url}" target="_blank" class="text-blue-600 underline font-bold">Ver Foto</a></td>
-            <td class="p-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${colorEstado}">${p.estado}</span></td>
+            <td class="p-2 font-bold">Bs ${escaparHtml(p.monto)}</td>
+            <td class="p-2">${comprobanteUrl ? `<a href="${escaparHtml(comprobanteUrl)}" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline font-bold">Ver Foto</a>` : 'Sin archivo'}</td>
+            <td class="p-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${colorEstado}">${escaparHtml(p.estado)}</span></td>
           </tr>`;
             });
 
@@ -903,8 +961,10 @@
             const fileInput = document.getElementById('cartaArchivo');
             if (fileInput.files.length === 0) return alert('Por favor selecciona la foto o PDF de tu carta.');
 
-            let file = await optimizarYComprimirImagen(fileInput.files[0]);
-            const fileName = `carta_${Date.now()}_${file.name}`;
+            const archivoOriginal = fileInput.files[0];
+            if (!validarArchivo(archivoOriginal)) return;
+            let file = await optimizarYComprimirImagen(archivoOriginal);
+            const fileName = `carta_${nombreArchivoAleatorio(file)}`;
 
             const { data: uploadData, error: uploadErr } = await db.storage.from('cartas').upload(fileName, file);
             if (uploadErr) return alert('Error al subir carta: ' + uploadErr.message);
@@ -931,8 +991,10 @@
                 return alert('⚠️ Por favor ingresa el monto y adjunta OBLIGATORIAMENTE la foto o recibo del comprobante.');
             }
 
-            let file = await optimizarYComprimirImagen(fileInput.files[0]);
-            const fileName = `${Date.now()}_${file.name}`;
+            const archivoOriginal = fileInput.files[0];
+            if (!validarArchivo(archivoOriginal)) return;
+            let file = await optimizarYComprimirImagen(archivoOriginal);
+            const fileName = `pago_${nombreArchivoAleatorio(file)}`;
 
             const { data: uploadData, error: uploadErr } = await db.storage.from('comprobantes').upload(fileName, file);
             if (uploadErr) return alert('Error al subir comprobante: ' + uploadErr.message);
@@ -966,8 +1028,8 @@
                 cont.innerHTML += `
                     <div class="p-3 bg-indigo-50/60 rounded-xl border border-indigo-100 flex items-center justify-between gap-3">
                         <div class="min-w-0">
-                            <h5 class="font-bold text-sm leading-snug text-indigo-950 break-words">${a.nombre}</h5>
-                            <span class="text-[9px] text-indigo-600 font-semibold uppercase">${a.roles?.nombre || 'Encargado de Campamento'}</span>
+                            <h5 class="font-bold text-sm leading-snug text-indigo-950 break-words">${escaparHtml(a.nombre)}</h5>
+                            <span class="text-[9px] text-indigo-600 font-semibold uppercase">${escaparHtml(a.roles?.nombre || 'Encargado de Campamento')}</span>
                         </div>
                         ${btnWp}
                     </div>
@@ -987,9 +1049,11 @@
             const cont = document.getElementById('contImagenQr');
             const btnDesc = document.getElementById('btnDescargarQr');
 
-            if (data && data.valor) {
-                cont.innerHTML = `<img src="${data.valor}" class="max-h-72 object-contain rounded-lg shadow-sm">`;
-                btnDesc.href = data.valor;
+            if (data && data.valor && urlArchivoSegura(data.valor)) {
+                const qrUrl = urlArchivoSegura(data.valor);
+                cont.innerHTML = `<img src="${escaparHtml(qrUrl)}" alt="Código QR de pago" class="max-h-72 object-contain rounded-lg shadow-sm">`;
+                btnDesc.href = qrUrl;
+                btnDesc.rel = 'noopener noreferrer';
                 btnDesc.classList.remove('hidden');
             } else {
                 cont.innerHTML = `<p class="text-xs text-amber-700 font-semibold p-4">No se ha subido ningún código QR aún. Por favor consulta con un encargado.</p>`;
