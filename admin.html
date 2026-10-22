@@ -955,6 +955,58 @@
         </div>
     </div>
 
+    <div id="modalPerfilAdmin"
+        class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b pb-2">
+                <div>
+                    <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
+                        <i class="fa-solid fa-user-gear text-amber-500"></i> Mi perfil
+                    </h3>
+                    <p class="text-xs text-gray-500 mt-1">Actualiza tus datos de acceso y contacto.</p>
+                </div>
+                <button type="button" onclick="cerrarModalPerfilAdmin()" aria-label="Cerrar perfil"
+                    class="text-gray-400 hover:text-gray-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <form onsubmit="guardarPerfilAdmin(event)" class="space-y-3 text-xs">
+                <div>
+                    <label for="perfilAdminNombre" class="font-bold text-gray-600">Nombre completo</label>
+                    <input type="text" id="perfilAdminNombre" required maxlength="120"
+                        class="w-full p-2.5 border rounded-xl font-semibold">
+                </div>
+                <div>
+                    <label for="perfilAdminUsuario" class="font-bold text-gray-600">Usuario de acceso</label>
+                    <input type="text" id="perfilAdminUsuario" required maxlength="60" autocomplete="username"
+                        class="w-full p-2.5 border rounded-xl font-semibold">
+                </div>
+                <div>
+                    <label for="perfilAdminTelefono" class="font-bold text-gray-600">Teléfono / WhatsApp</label>
+                    <input type="tel" id="perfilAdminTelefono" maxlength="30"
+                        class="w-full p-2.5 border rounded-xl font-semibold">
+                </div>
+                <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
+                    <label for="perfilAdminNuevaPass" class="font-bold text-amber-900 block mb-1">Cambiar contraseña (opcional)</label>
+                    <input type="password" id="perfilAdminNuevaPass" minlength="4" autocomplete="new-password"
+                        placeholder="Déjalo en blanco para mantener la actual"
+                        class="w-full p-2 border rounded-xl bg-white">
+                    <p class="text-[10px] text-amber-800 mt-1">Si la cambias, usa al menos 4 caracteres.</p>
+                </div>
+                <p id="perfilAdminError" class="hidden text-red-600 font-semibold" role="alert"></p>
+                <div class="flex justify-end gap-2 border-t pt-3">
+                    <button type="button" onclick="cerrarModalPerfilAdmin()"
+                        class="bg-gray-200 text-gray-700 font-bold px-4 py-2 rounded-xl">Cancelar</button>
+                    <button type="submit" id="btnGuardarPerfilAdmin"
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-2 rounded-xl shadow">
+                        Guardar perfil
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- MODAL COMPARATIVO DE CAMBIOS SOLICITADOS -->
     <div id="modalVerCambiosSolicitados"
         class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
@@ -1902,6 +1954,81 @@
             alert('Administrador actualizado con éxito.');
             cerrarModalEditAdmin();
             cargarRolesYAdmins();
+        }
+
+        function abrirModalPerfilAdmin() {
+            if (!adminSesion?.id) {
+                alert('Inicia sesión nuevamente para editar tu perfil.');
+                return;
+            }
+
+            document.getElementById('perfilAdminNombre').value = adminSesion.nombre || '';
+            document.getElementById('perfilAdminUsuario').value = adminSesion.usuario || '';
+            document.getElementById('perfilAdminTelefono').value = adminSesion.telefono || '';
+            document.getElementById('perfilAdminNuevaPass').value = '';
+            document.getElementById('perfilAdminError').classList.add('hidden');
+            document.getElementById('perfilAdminError').textContent = '';
+            document.getElementById('modalPerfilAdmin').classList.remove('hidden');
+        }
+
+        function cerrarModalPerfilAdmin() {
+            document.getElementById('modalPerfilAdmin').classList.add('hidden');
+        }
+
+        async function guardarPerfilAdmin(e) {
+            e.preventDefault();
+            if (!adminSesion?.id) {
+                alert('Tu sesión no está disponible. Inicia sesión nuevamente.');
+                return;
+            }
+
+            const boton = document.getElementById('btnGuardarPerfilAdmin');
+            const mensajeError = document.getElementById('perfilAdminError');
+            const nombre = document.getElementById('perfilAdminNombre').value.trim();
+            const usuario = document.getElementById('perfilAdminUsuario').value.trim();
+            const telefono = document.getElementById('perfilAdminTelefono').value.trim();
+            const nuevaPass = document.getElementById('perfilAdminNuevaPass').value;
+            const payload = { nombre, usuario, telefono };
+
+            if (nuevaPass) {
+                if (nuevaPass.length < 4) {
+                    mensajeError.textContent = 'La contraseña debe tener al menos 4 caracteres.';
+                    mensajeError.classList.remove('hidden');
+                    return;
+                }
+                payload.password_hash = await calcularSHA256(nuevaPass);
+            }
+
+            boton.disabled = true;
+            boton.textContent = 'Guardando…';
+            mensajeError.classList.add('hidden');
+            mensajeError.textContent = '';
+
+            try {
+                const { data, error } = await db.from('administradores')
+                    .update(payload)
+                    .eq('id', adminSesion.id)
+                    .select('id, nombre, usuario, telefono, password_hash')
+                    .single();
+
+                if (error) throw error;
+                if (!data) throw new Error('No se recibió confirmación del cambio.');
+
+                const nombreAnterior = adminSesion.nombre;
+                adminSesion = { ...adminSesion, ...data };
+                document.getElementById('txtAdminInfo').innerText = data.nombre;
+                await registrarLogAuditoria('Actualización de perfil', 'Mi Perfil', `Actualizó sus datos de acceso${nuevaPass ? ' y contraseña' : ''}.`);
+                cerrarModalPerfilAdmin();
+                alert('Tu perfil se actualizó correctamente.');
+                if (nombreAnterior !== data.nombre) cargarAuditoriaLogs();
+            } catch (error) {
+                console.error('Error actualizando el perfil del administrador:', error);
+                mensajeError.textContent = `No se pudo guardar el perfil: ${error.message || 'error de conexión'}`;
+                mensajeError.classList.remove('hidden');
+            } finally {
+                boton.disabled = false;
+                boton.textContent = 'Guardar perfil';
+            }
         }
 
         function prepararCrearRol() {
