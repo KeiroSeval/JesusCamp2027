@@ -674,105 +674,71 @@
 
         <div id="tabReportes" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
-                <div class="flex justify-between items-center border-b pb-3">
+                <div class="border-b pb-3">
                     <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
-                        <i class="fa-solid fa-chart-line text-blue-600"></i> Generador de Reportes Dinámicos
+                        <i class="fa-solid fa-table-cells text-blue-600"></i> Reportes dinámicos
                     </h3>
+                    <p class="text-xs text-gray-500 mt-1">Combina variables en filas y columnas, y elige qué valor resumir.</p>
                 </div>
 
                 <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-4">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                         <div>
-                            <label class="text-[10px] font-bold text-gray-500 uppercase block">Variable de
-                                Agrupación:</label>
-                            <select id="repVariableSelect"
-                                class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold text-indigo-900">
-                                <option value="talla_polera">👕 Pedido Logístico de Poleras (Tallas)</option>
-                                <option value="equipo">🛡️ Resumen y Balance por Equipo</option>
-                                <option value="celula">📱 Balance Financiero por Célula</option>
-                                <option value="estado_carta">📜 Estado de Cartas de Compromiso</option>
-                                <option value="actividad_favorita">⚽ Interés en Actividades y Deportes</option>
-                                <option value="es_staff">⭐ Distribución (Staff vs Campamentista)</option>
-                                <option value="tipo_inscripcion">🏷️ Tipos de Inscripción Seleccionados</option>
-                                <option value="es_menor">🧒 Rango de Edad (Mayores / Menores)</option>
-                                <option value="estado_financiero">💰 Resumen de Estado de Pago</option>
+                            <label for="repFilaSelect" class="text-[10px] font-bold text-gray-500 uppercase block">Filas (agrupar por)</label>
+                            <select id="repFilaSelect" onchange="normalizarDimensionesReporte('fila')" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold text-indigo-900"></select>
+                        </div>
+                        <div>
+                            <label for="repSubfilaSelect" class="text-[10px] font-bold text-gray-500 uppercase block">Subfilas (opcional)</label>
+                            <select id="repSubfilaSelect" onchange="normalizarDimensionesReporte('subfila')" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold"></select>
+                        </div>
+                        <div>
+                            <label for="repColumnaSelect" class="text-[10px] font-bold text-gray-500 uppercase block">Columnas (opcional)</label>
+                            <select id="repColumnaSelect" onchange="normalizarDimensionesReporte('columna')" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold"></select>
+                        </div>
+                        <div>
+                            <label for="repValorSelect" class="text-[10px] font-bold text-gray-500 uppercase block">Valores (resumir)</label>
+                            <select id="repValorSelect" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold"></select>
+                        </div>
+                        <div>
+                            <label for="repGraficoTipo" class="text-[10px] font-bold text-gray-500 uppercase block">Visualización</label>
+                            <select id="repGraficoTipo" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold">
+                                <option value="bar">Barras</option>
+                                <option value="line">Líneas</option>
+                                <option value="pie">Torta (totales por fila)</option>
+                                <option value="doughnut">Dona (totales por fila)</option>
                             </select>
                         </div>
-
-                        <div>
-                            <label class="text-[10px] font-bold text-gray-500 uppercase block">Tipo de Gráfico
-                                Principal:</label>
-                            <select id="repGraficoTipo"
-                                class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold">
-                                <option value="pie">Gráfico de Torta (Pie)</option>
-                                <option value="bar">Gráfico de Barras (Bar)</option>
-                                <option value="doughnut">Dona (Doughnut)</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label class="text-[10px] font-bold text-gray-500 uppercase block">Plantilla Personalizada
-                                Guardada:</label>
-                            <div class="flex gap-2">
-                                <select id="selReportePlantillas" onchange="cargarPlantillaReporte(this.value)"
-                                    class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold text-emerald-800">
-                                    <option value="">-- Cargar Plantilla --</option>
-                                </select>
-                            </div>
-                        </div>
+                        <label id="repFiltroDeudores" class="flex items-center gap-2 text-xs font-semibold text-amber-900 bg-amber-50 border border-amber-200 rounded-xl p-2.5 self-end">
+                            <input type="checkbox" id="repSoloDeudores" class="rounded">
+                            Solo personas con saldo pendiente
+                        </label>
                     </div>
 
                     <div class="flex flex-col sm:flex-row justify-between items-center gap-2 pt-2">
-                        <div class="flex items-center gap-2 w-full sm:w-auto">
-                            <input type="text" id="txtNombrePlantilla"
-                                placeholder="Nombre de plantilla (Ej. Pedidos de Poleras)"
-                                class="p-2 border rounded-xl text-xs w-full sm:w-64">
+                        <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                            <select id="selReportePlantillas" onchange="cargarPlantillaReporte(this.value)"
+                                class="p-2 border rounded-xl text-xs bg-white font-bold text-emerald-800">
+                                <option value="">-- Cargar plantilla --</option>
+                            </select>
+                            <input type="text" id="txtNombrePlantilla" placeholder="Nombre de plantilla"
+                                class="p-2 border rounded-xl text-xs w-full sm:w-48">
                             <button onclick="guardarPlantillaReporte()"
                                 class="bg-slate-800 hover:bg-slate-900 text-amber-400 font-bold px-4 py-2 rounded-xl text-xs transition whitespace-nowrap">
-                                <i class="fa-solid fa-bookmark mr-1"></i> Guardar Plantilla
+                                <i class="fa-solid fa-bookmark mr-1"></i> Guardar configuración
                             </button>
                         </div>
                         <button onclick="generarReporteGrafico()"
                             class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow transition">
-                            <i class="fa-solid fa-chart-pie mr-1"></i> Generar Reporte
+                            <i class="fa-solid fa-rotate mr-1"></i> Actualizar reporte
                         </button>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                    <div class="bg-slate-50 p-4 rounded-xl border border-gray-200">
-                        <h4 class="font-bold text-gray-800 text-xs uppercase mb-3 border-b pb-1">Conteo y Métricas del
-                            Reporte</h4>
-                        <div id="contenedorResumenVariables" class="overflow-x-auto text-xs">
-                            <p class="text-gray-400 italic">Haz clic en "Generar Reporte" para procesar la información.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-slate-50 p-4 rounded-xl border border-gray-200 flex flex-col items-center justify-center min-h-[300px]">
-                        <h4 class="font-bold text-gray-800 text-xs uppercase mb-3 border-b pb-1 w-full text-left">
-                            Visualización Gráfica</h4>
-                        <div class="w-full max-w-xs mx-auto">
-                            <canvas id="canvasGraficoReporte"></canvas>
-                        </div>
-                    </div>
+                <div id="contenedorResumenVariables" class="overflow-x-auto text-xs">
+                    <p class="text-gray-400 italic">Configura el reporte y selecciona «Actualizar reporte».</p>
                 </div>
-
-                <!-- SECCIÓN DONDE SIEMPRE SE ENLISTAN TODAS LAS PERSONAS -->
-                <div class="bg-white p-4 rounded-xl border border-gray-200 space-y-3 mt-4">
-                    <h4
-                        class="font-bold text-gray-800 text-xs uppercase border-b pb-2 flex items-center justify-between">
-                        <span>📋 Lista Nominal Completa (Ordenada por la Variable Seleccionada)</span>
-                        <span id="txtTotalEnlistados"
-                            class="bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-full text-[10px]">0
-                            Inscritos</span>
-                    </h4>
-
-                    <div id="contenedorListaNominal" class="overflow-x-auto">
-                        <p class="text-gray-400 italic text-xs">Genera el reporte para ver la lista nominal detallada.
-                        </p>
-                    </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-gray-200 min-h-[300px]">
+                    <div class="h-72"><canvas id="canvasGraficoReporte"></canvas></div>
                 </div>
             </div>
         </div>
@@ -1232,6 +1198,29 @@
         let solicitudesEdicionGlobal = [];
         let accionPendienteProtegida = null;
         let instanciaGrafico = null;
+        const CAMPOS_REPORTE = [
+            { id: 'nombre_completo', label: 'Nombre de persona' },
+            { id: 'equipo', label: 'Equipo' },
+            { id: 'celula', label: 'Célula' },
+            { id: 'tipo_inscripcion', label: 'Tipo de inscripción' },
+            { id: 'estado_carta', label: 'Estado de carta' },
+            { id: 'talla_polera', label: 'Talla de polera' },
+            { id: 'actividad_favorita', label: 'Actividad favorita' },
+            { id: 'es_staff', label: 'Rol (staff / campamentista)' },
+            { id: 'es_menor', label: 'Edad (menor / mayor)' },
+            { id: 'rango_edad', label: 'Rango de edad' },
+            { id: 'estado_financiero', label: 'Estado financiero' },
+            { id: 'habilidad_especial', label: 'Habilidad / talento' }
+        ];
+        const VALORES_REPORTE = [
+            { id: 'personas', label: 'Cantidad de personas' },
+            { id: 'nombres_personas', label: 'Lista de nombres de personas' },
+            { id: 'monto_pagado', label: 'Total pagado (Bs)', financiero: true },
+            { id: 'promedio_pagado', label: 'Promedio pagado por persona (Bs)', financiero: true },
+            { id: 'precio_inscripcion', label: 'Total de inscripciones (Bs)', financiero: true },
+            { id: 'promedio_inscripcion', label: 'Precio promedio de inscripción (Bs)', financiero: true },
+            { id: 'saldo_pendiente', label: 'Saldo pendiente total (Bs)', financiero: true }
+        ];
         const CELULAS_PREDEFINIDAS = [
             'Alfa y Omega', 'Armadura de Dios', 'Beth Shalom', 'Ejercito de Dios', 'Gaditas',
             'Generación de Fuego', 'Getsemaní', 'Hijas del Rey', 'Talita Cumi', 'Segadores', 'Ninguna'
@@ -1992,6 +1981,7 @@
             await cargarTiposInscripcion();
             aplicarPermisosVisuales();
             cargarTodoElDashboard();
+            inicializarCatalogoReportes();
             cargarPlantillasSelect();
             await registrarLogAuditoria('Inicio de Sesión', 'Acceso', 'El administrador ingresó al sistema.');
         }
@@ -2228,8 +2218,12 @@
             if (!nombre) return alert('Ingresa un nombre para identificar la plantilla.');
 
             const config = {
-                variable: document.getElementById('repVariableSelect').value,
-                grafico: document.getElementById('repGraficoTipo').value
+                fila: document.getElementById('repFilaSelect').value,
+                subfila: document.getElementById('repSubfilaSelect').value,
+                columna: document.getElementById('repColumnaSelect').value,
+                valor: document.getElementById('repValorSelect').value,
+                grafico: document.getElementById('repGraficoTipo').value,
+                soloDeudores: document.getElementById('repSoloDeudores').checked
             };
 
             let plantillas = JSON.parse(localStorage.getItem('jc2027_plantillas_reportes') || '{}');
@@ -2249,7 +2243,7 @@
             select.innerHTML = '<option value="">-- Cargar Plantilla --</option>';
 
             Object.keys(plantillas).forEach(p => {
-                select.innerHTML += `<option value="${p}">${p}</option>`;
+                select.innerHTML += `<option value="${escaparHtmlReporte(p)}">${escaparHtmlReporte(p)}</option>`;
             });
         }
 
@@ -2259,139 +2253,314 @@
             const c = plantillas[nombre];
             if (!c) return;
 
-            document.getElementById('repVariableSelect').value = c.variable;
-            document.getElementById('repGraficoTipo').value = c.grafico;
+            document.getElementById('repFilaSelect').value = c.fila || c.variable || 'equipo';
+            document.getElementById('repSubfilaSelect').value = c.subfila || '';
+            document.getElementById('repColumnaSelect').value = c.columna || '';
+            document.getElementById('repValorSelect').value = c.valor || 'personas';
+            document.getElementById('repGraficoTipo').value = c.grafico || 'bar';
+            document.getElementById('repSoloDeudores').checked = !!c.soloDeudores;
+            normalizarDimensionesReporte('plantilla');
 
             generarReporteGrafico();
         }
 
+        function escaparHtmlReporte(valor) {
+            return String(valor ?? '').replace(/[&<>"']/g, caracter => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            })[caracter]);
+        }
+
+        function inicializarCatalogoReportes() {
+            const puedeVerFinanzas = !adminSesion?.rol_id || adminSesion.roles?.nombre === 'SuperAdmin' || permisosAdmin.verFinanzas;
+            const campos = CAMPOS_REPORTE.map(campo =>
+                `<option value="${campo.id}">${campo.label}</option>`
+            ).join('');
+
+            document.getElementById('repFilaSelect').innerHTML = campos;
+            document.getElementById('repSubfilaSelect').innerHTML = `<option value="">Sin subfilas</option>${campos}`;
+            document.getElementById('repColumnaSelect').innerHTML = `<option value="">Sin columnas</option>${campos}`;
+            document.getElementById('repValorSelect').innerHTML = VALORES_REPORTE
+                .filter(valor => puedeVerFinanzas || !valor.financiero)
+                .map(valor => `<option value="${valor.id}">${valor.label}</option>`)
+                .join('');
+
+            document.getElementById('repFilaSelect').value = 'equipo';
+            document.getElementById('repSubfilaSelect').value = '';
+            document.getElementById('repFiltroDeudores').classList.toggle('hidden', !puedeVerFinanzas);
+            document.getElementById('repValorSelect').value = 'personas';
+        }
+
+        function normalizarDimensionesReporte(origen) {
+            const dimensiones = [
+                ['fila', document.getElementById('repFilaSelect')],
+                ['subfila', document.getElementById('repSubfilaSelect')],
+                ['columna', document.getElementById('repColumnaSelect')]
+            ];
+            const elegidas = new Set();
+            dimensiones.forEach(([id, select]) => {
+                if (!select.value) return;
+                if (elegidas.has(select.value)) {
+                    if (id === origen) select.value = '';
+                    else {
+                        const alternativa = [...select.options].find(option => option.value && !elegidas.has(option.value));
+                        select.value = alternativa?.value || '';
+                    }
+                }
+                if (select.value) elegidas.add(select.value);
+            });
+        }
+
+        function obtenerCostoInscripcionReporte(inscrito) {
+            return Number(inscrito.tipos_inscripcion?.es_manual
+                ? inscrito.precio_personalizado || 0
+                : inscrito.tipos_inscripcion?.precio || 140);
+        }
+
+        function obtenerValorCampoReporte(inscrito, campo, pagosPorInscrito) {
+            const pagos = pagosPorInscrito.get(inscrito.id) || [];
+            const pagado = pagos.reduce((total, pago) => total + (Number(pago.monto) || 0), 0);
+            const costo = obtenerCostoInscripcionReporte(inscrito);
+
+            switch (campo) {
+                case 'tipo_inscripcion': return inscrito.tipos_inscripcion?.nombre || 'Estándar';
+                case 'es_staff': return inscrito.es_staff ? 'Staff' : 'Campamentista';
+                case 'es_menor': return inscrito.es_menor ? 'Menor de edad' : 'Mayor de edad';
+                case 'rango_edad': {
+                    const edad = inscrito.fecha_nacimiento ? calcularEdad(inscrito.fecha_nacimiento) : null;
+                    if (edad === null || Number.isNaN(edad)) return 'Sin fecha registrada';
+                    if (edad <= 12) return '12 años o menos';
+                    if (edad <= 17) return '13 a 17 años';
+                    if (edad <= 25) return '18 a 25 años';
+                    return '26 años o más';
+                }
+                case 'estado_carta': return inscrito.estado_carta || (inscrito.carta_compromiso_url ? 'En Revisión' : 'Pendiente');
+                case 'estado_financiero':
+                    if (pagado >= costo) return 'Totalmente pagado';
+                    if (pagado > 0) return 'Abono parcial';
+                    return 'Sin abonos (pendiente)';
+                default: return inscrito[campo] || 'Sin especificar / vacío';
+            }
+        }
+
+        function obtenerValorMetricaReporte(inscrito, metrica, pagosPorInscrito) {
+            const pagado = (pagosPorInscrito.get(inscrito.id) || [])
+                .reduce((total, pago) => total + (Number(pago.monto) || 0), 0);
+            const costo = obtenerCostoInscripcionReporte(inscrito);
+
+            switch (metrica) {
+                case 'monto_pagado': return pagado;
+                case 'promedio_pagado': return pagado;
+                case 'precio_inscripcion': return costo;
+                case 'promedio_inscripcion': return costo;
+                case 'saldo_pendiente': return Math.max(0, costo - pagado);
+                default: return 1;
+            }
+        }
+
+        function resumirGrupoReporte(registros, metrica, pagosPorInscrito) {
+            if (metrica === 'nombres_personas') {
+                return registros.map(inscrito => inscrito.nombre_completo || 'Sin nombre registrado')
+                    .sort((a, b) => a.localeCompare(b, 'es'))
+                    .join(', ');
+            }
+            const total = registros.reduce((suma, inscrito) =>
+                suma + obtenerValorMetricaReporte(inscrito, metrica, pagosPorInscrito), 0);
+            return metrica === 'promedio_pagado' || metrica === 'promedio_inscripcion'
+                ? (registros.length ? total / registros.length : 0)
+                : total;
+        }
+
+        function formatearMetricaReporte(valor, metrica) {
+            if (metrica === 'nombres_personas') return escaparHtmlReporte(valor || '—');
+            const numero = Number(valor) || 0;
+            return metrica === 'personas'
+                ? numero.toLocaleString('es-BO')
+                : `Bs ${numero.toLocaleString('es-BO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+
         async function generarReporteGrafico() {
-            const variable = document.getElementById('repVariableSelect').value;
+            const fila = document.getElementById('repFilaSelect').value;
+            const subfila = document.getElementById('repSubfilaSelect').value;
+            const columna = document.getElementById('repColumnaSelect').value;
+            const metrica = document.getElementById('repValorSelect').value;
             const tipoGrafico = document.getElementById('repGraficoTipo').value;
-
-            const { data: inscritos } = await db.from('inscritos').select('*, tipos_inscripcion(*)');
-            const { data: pagos } = await db.from('pagos').select('*').eq('estado', 'Aprobado');
-
+            const soloDeudores = document.getElementById('repSoloDeudores').checked;
             const divResumen = document.getElementById('contenedorResumenVariables');
-            const divListaNominal = document.getElementById('contenedorListaNominal');
+            const puedeVerFinanzas = !adminSesion?.rol_id || adminSesion.roles?.nombre === 'SuperAdmin' || permisosAdmin.verFinanzas;
+            const valorConfigurado = VALORES_REPORTE.find(valor => valor.id === metrica);
 
-            let conteo = {};
-            let montos = {};
+            if (!valorConfigurado || (valorConfigurado.financiero && !puedeVerFinanzas) || (soloDeudores && !puedeVerFinanzas)) {
+                alert('No tienes permiso para consultar métricas financieras.');
+                return;
+            }
 
-            (inscritos || []).forEach(i => {
-                let key = '-';
-                if (variable === 'tipo_inscripcion') key = i.tipos_inscripcion?.nombre || 'Estándar';
-                else if (variable === 'es_staff') key = i.es_staff ? 'STAFF' : 'Campamentista';
-                else if (variable === 'es_menor') key = i.es_menor ? 'Menor de Edad' : 'Mayor de Edad';
-                else if (variable === 'estado_financiero') {
-                    let costo = i.tipos_inscripcion?.es_manual ? (i.precio_personalizado || 0) : (i.tipos_inscripcion?.precio || 140);
-                    let misPagos = pagos ? pagos.filter(p => p.inscrito_id === i.id) : [];
-                    let totalAbonado = misPagos.reduce((sum, p) => sum + Number(p.monto), 0);
-
-                    if (totalAbonado >= costo) key = 'Totalmente Pagado';
-                    else if (totalAbonado > 0) key = 'Abono Parcial';
-                    else key = 'Sin Abonos (Pendiente)';
-                } else key = i[variable] || 'Sin Especificar / Vacío';
-
-                if (!conteo[key]) {
-                    conteo[key] = 0;
-                    montos[key] = 0;
+            divResumen.innerHTML = '<p class="text-gray-500 italic">Procesando reporte…</p>';
+            try {
+                const { data: inscritos, error: errorInscritos } = await db.from('inscritos').select('*, tipos_inscripcion(*)');
+                if (errorInscritos) throw errorInscritos;
+                let pagos = [];
+                if (valorConfigurado.financiero || fila === 'estado_financiero' || subfila === 'estado_financiero' ||
+                    columna === 'estado_financiero' || soloDeudores) {
+                    const resultadoPagos = await db.from('pagos').select('inscrito_id, monto').eq('estado', 'Aprobado');
+                    if (resultadoPagos.error) throw resultadoPagos.error;
+                    pagos = resultadoPagos.data || [];
                 }
 
-                conteo[key]++;
+                const pagosPorInscrito = new Map();
+                (pagos || []).forEach(pago => {
+                    if (!pagosPorInscrito.has(pago.inscrito_id)) pagosPorInscrito.set(pago.inscrito_id, []);
+                    pagosPorInscrito.get(pago.inscrito_id).push(pago);
+                });
 
-                let misPagos = pagos ? pagos.filter(p => p.inscrito_id === i.id) : [];
-                let abonado = misPagos.reduce((sum, p) => sum + Number(p.monto), 0);
-                montos[key] += abonado;
-            });
+                const grupos = new Map();
+                const columnas = new Set();
+                const inscritosFiltrados = (inscritos || []).filter(inscrito => {
+                    if (!soloDeudores) return true;
+                    const abonado = (pagosPorInscrito.get(inscrito.id) || [])
+                        .reduce((total, pago) => total + (Number(pago.monto) || 0), 0);
+                    return obtenerCostoInscripcionReporte(inscrito) - abonado > 0;
+                });
+                inscritosFiltrados.forEach(inscrito => {
+                    const nombreFila = obtenerValorCampoReporte(inscrito, fila, pagosPorInscrito);
+                    const nombreSubfila = subfila
+                        ? obtenerValorCampoReporte(inscrito, subfila, pagosPorInscrito)
+                        : '';
+                    const nombreColumna = columna
+                        ? obtenerValorCampoReporte(inscrito, columna, pagosPorInscrito)
+                        : 'Total';
+                    const claveFila = JSON.stringify([nombreFila, nombreSubfila]);
+                    columnas.add(nombreColumna);
+                    if (!grupos.has(claveFila)) grupos.set(claveFila, {
+                        principal: nombreFila,
+                        secundaria: nombreSubfila,
+                        registros: [],
+                        columnas: new Map()
+                    });
+                    const gruposFila = grupos.get(claveFila);
+                    gruposFila.registros.push(inscrito);
+                    const celdasFila = gruposFila.columnas;
+                    if (!celdasFila.has(nombreColumna)) celdasFila.set(nombreColumna, []);
+                    celdasFila.get(nombreColumna).push(inscrito);
+                });
 
-            let labels = Object.keys(conteo);
-            let totalPersonasGlobal = (inscritos || []).length;
+                const filasOrdenadas = [...grupos.entries()].sort(([, a], [, b]) =>
+                    a.principal.localeCompare(b.principal, 'es') ||
+                    a.secundaria.localeCompare(b.secundaria, 'es')
+                );
+                const columnasOrdenadas = [...columnas].sort((a, b) => a.localeCompare(b, 'es'));
+                const registrosPorColumna = new Map(columnasOrdenadas.map(nombre => [nombre, []]));
+                const filasPorGrupoPrincipal = new Map();
+                const resumenPorFila = new Map();
+                const matriz = new Map();
+                filasOrdenadas.forEach(([claveFila, grupo]) => {
+                    const valoresFila = new Map();
+                    columnasOrdenadas.forEach(nombreColumna => {
+                        const registros = grupo.columnas.get(nombreColumna) || [];
+                        const valor = resumirGrupoReporte(registros, metrica, pagosPorInscrito);
+                        valoresFila.set(nombreColumna, valor);
+                        registrosPorColumna.get(nombreColumna).push(...registros);
+                    });
+                    matriz.set(claveFila, valoresFila);
+                    resumenPorFila.set(claveFila, resumirGrupoReporte(grupo.registros, metrica, pagosPorInscrito));
+                    if (!filasPorGrupoPrincipal.has(grupo.principal)) filasPorGrupoPrincipal.set(grupo.principal, []);
+                    filasPorGrupoPrincipal.get(grupo.principal).push(grupo);
+                });
 
-            let htmlResumen = `
-            <table class="w-full text-left border-collapse my-2">
-                <thead class="bg-gray-200 font-bold text-gray-700">
-                    <tr>
-                        <th class="p-2 border">Categoría / Grupo</th>
-                        <th class="p-2 border text-center">Cantidad Total</th>
-                        <th class="p-2 border text-center">% Porcentaje</th>
-                    </tr>
-                </thead>
-                <tbody>`;
+                const totalPorColumna = new Map(columnasOrdenadas.map(nombre => [
+                    nombre,
+                    resumirGrupoReporte(registrosPorColumna.get(nombre), metrica, pagosPorInscrito)
+                ]));
+                const totalGeneral = resumirGrupoReporte(inscritosFiltrados, metrica, pagosPorInscrito);
+                const nombreFila = CAMPOS_REPORTE.find(campo => campo.id === fila)?.label || 'Filas';
+                const nombreSubfila = CAMPOS_REPORTE.find(campo => campo.id === subfila)?.label || 'Subfilas';
+                const nombreColumna = CAMPOS_REPORTE.find(campo => campo.id === columna)?.label || 'Total';
+                let html = `<table class="w-full text-left border-collapse my-2 min-w-max">
+                    <thead class="bg-gray-100 text-gray-700"><tr>
+                        <th class="p-2 border">${escaparHtmlReporte(nombreFila)}</th>
+                        ${subfila ? `<th class="p-2 border">${escaparHtmlReporte(nombreSubfila)}</th>` : ''}
+                        ${columnasOrdenadas.map(nombre => `<th class="p-2 border text-right">${escaparHtmlReporte(nombre)}</th>`).join('')}
+                        <th class="p-2 border text-right bg-indigo-50">Total</th>
+                    </tr></thead><tbody>`;
 
-            labels.forEach(k => {
-                let pct = totalPersonasGlobal > 0 ? ((conteo[k] / totalPersonasGlobal) * 100).toFixed(1) : 0;
-                htmlResumen += `<tr>
-                    <td class="p-2 border font-bold text-indigo-950">${k}</td>
-                    <td class="p-2 border font-black text-center text-blue-700 bg-blue-50/50">${conteo[k]}</td>
-                    <td class="p-2 border font-semibold text-center text-gray-600">${pct}%</td>
-                </tr>`;
-            });
+                const principalesVistos = new Set();
+                filasOrdenadas.forEach(([claveFila, grupo]) => {
+                    const esNuevaPrincipal = !principalesVistos.has(grupo.principal);
+                    principalesVistos.add(grupo.principal);
+                    html += `<tr><th class="p-2 border text-left font-bold text-indigo-950">${esNuevaPrincipal ? escaparHtmlReporte(grupo.principal) : ''}</th>`;
+                    if (subfila) {
+                        html += `<td class="p-2 border ${grupo.secundaria ? 'pl-6 text-gray-700' : 'font-semibold'}">${escaparHtmlReporte(grupo.secundaria || 'Sin especificar / vacío')}</td>`;
+                    }
+                    columnasOrdenadas.forEach(columnaActual => {
+                        html += `<td class="p-2 border ${metrica === 'nombres_personas' ? 'text-left whitespace-normal min-w-[14rem]' : 'text-right'}">${formatearMetricaReporte(matriz.get(claveFila).get(columnaActual), metrica)}</td>`;
+                    });
+                    html += `<td class="p-2 border ${metrica === 'nombres_personas' ? 'text-left whitespace-normal min-w-[14rem]' : 'text-right'} font-bold bg-indigo-50">${formatearMetricaReporte(resumenPorFila.get(claveFila), metrica)}</td></tr>`;
+                    const gruposPrincipal = filasPorGrupoPrincipal.get(grupo.principal);
+                    const indiceGrupo = gruposPrincipal.indexOf(grupo);
+                    if (subfila && indiceGrupo === gruposPrincipal.length - 1) {
+                        html += `<tr class="bg-indigo-50/50 font-bold"><td class="p-2 border text-right" colspan="2">Total ${escaparHtmlReporte(grupo.principal)}</td>`;
+                        columnasOrdenadas.forEach(nombreColumnaActual => {
+                            const registros = gruposPrincipal.flatMap(item => item.columnas.get(nombreColumnaActual) || []);
+                            html += `<td class="p-2 border ${metrica === 'nombres_personas' ? 'text-left whitespace-normal min-w-[14rem]' : 'text-right'}">${formatearMetricaReporte(resumirGrupoReporte(registros, metrica, pagosPorInscrito), metrica)}</td>`;
+                        });
+                        const registrosPrincipal = gruposPrincipal.flatMap(item => item.registros);
+                        html += `<td class="p-2 border ${metrica === 'nombres_personas' ? 'text-left whitespace-normal min-w-[14rem]' : 'text-right'}">${formatearMetricaReporte(resumirGrupoReporte(registrosPrincipal, metrica, pagosPorInscrito), metrica)}</td></tr>`;
+                    }
+                });
 
-            htmlResumen += `</tbody></table>`;
-            divResumen.innerHTML = htmlResumen;
+                html += `<tr class="bg-gray-100 font-extrabold"><th class="p-2 border text-left">Total general</th>`;
+                if (subfila) html += '<th class="p-2 border"></th>';
+                columnasOrdenadas.forEach(columnaActual => {
+                    html += `<td class="p-2 border ${metrica === 'nombres_personas' ? 'text-left whitespace-normal min-w-[14rem]' : 'text-right'}">${formatearMetricaReporte(totalPorColumna.get(columnaActual), metrica)}</td>`;
+                });
+                html += `<td class="p-2 border ${metrica === 'nombres_personas' ? 'text-left whitespace-normal min-w-[14rem]' : 'text-right'} text-indigo-800">${formatearMetricaReporte(totalGeneral, metrica)}</td></tr></tbody></table>`;
+                html += `<p class="text-[11px] text-gray-500 mt-2">${inscritosFiltrados.length} personas${soloDeudores ? ' con saldo pendiente' : ''} · ${filasOrdenadas.length} grupos en filas${subfila ? ` · subfilas: ${escaparHtmlReporte(nombreSubfila)}` : ''}${columna ? ` · columnas: ${escaparHtmlReporte(nombreColumna)}` : ''} · ${escaparHtmlReporte(valorConfigurado.label)}</p>`;
+                divResumen.innerHTML = html;
 
-            // DIBUJAR GRÁFICO
-            const ctx = document.getElementById('canvasGraficoReporte').getContext('2d');
-            if (instanciaGrafico) instanciaGrafico.destroy();
+                if (instanciaGrafico) instanciaGrafico.destroy();
+                const colores = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#6366f1', '#14b8a6', '#f97316', '#64748b'];
+                const etiquetasGrafico = filasOrdenadas.map(([, grupo]) =>
+                    subfila ? `${grupo.principal} / ${grupo.secundaria || 'Sin especificar'}` : grupo.principal
+                );
+                const datasets = tipoGrafico === 'pie' || tipoGrafico === 'doughnut'
+                    ? [{
+                        label: valorConfigurado.label,
+                        data: filasOrdenadas.map(([clave]) => metrica === 'nombres_personas'
+                            ? grupos.get(clave).registros.length
+                            : resumenPorFila.get(clave)),
+                        backgroundColor: filasOrdenadas.map((_, indice) => colores[indice % colores.length])
+                    }]
+                    : columnasOrdenadas.map((nombre, indice) => ({
+                        label: nombre,
+                        data: filasOrdenadas.map(([clave]) => metrica === 'nombres_personas'
+                            ? (grupos.get(clave).columnas.get(nombre) || []).length
+                            : matriz.get(clave).get(nombre)),
+                        backgroundColor: colores[indice % colores.length],
+                        borderColor: colores[indice % colores.length],
+                        borderWidth: tipoGrafico === 'line' ? 2 : 0,
+                        fill: false
+                    }));
 
-            const colores = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#6366f1', '#14b8a6', '#f97316'];
-
-            instanciaGrafico = new Chart(ctx, {
-                type: tipoGrafico,
-                data: {
-                    labels: labels,
-                    datasets: [{ label: 'Cantidad', data: labels.map(k => conteo[k]), backgroundColor: colores }]
-                },
-                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-            });
-
-            // RENDERIZAR SIEMPRE LA LISTA NOMINAL COMPLETA DE PERSONAS
-            let listaOrdenadaNominal = [...(inscritos || [])].sort((a, b) => {
-                let valA = a[variable] || '';
-                let valB = b[variable] || '';
-                if (variable === 'tipo_inscripcion') {
-                    valA = a.tipos_inscripcion?.nombre || '';
-                    valB = b.tipos_inscripcion?.nombre || '';
-                }
-                return valA.toString().localeCompare(valB.toString());
-            });
-
-            document.getElementById('txtTotalEnlistados').innerText = `${listaOrdenadaNominal.length} Inscritos`;
-
-            let htmlLista = `
-            <table class="w-full text-left border-collapse text-xs">
-                <thead class="bg-gray-100 font-bold text-gray-600 uppercase">
-                    <tr>
-                        <th class="p-2 border">C.I.</th>
-                        <th class="p-2 border">Campamentista / Staff</th>
-                        <th class="p-2 border text-indigo-900 font-extrabold bg-indigo-50">${variable.replace('_', ' ').toUpperCase()}</th>
-                        <th class="p-2 border">Célula</th>
-                        <th class="p-2 border">Equipo</th>
-                        <th class="p-2 border">Teléfono</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200">`;
-
-            listaOrdenadaNominal.forEach(p => {
-                let valVariable = '-';
-                if (variable === 'tipo_inscripcion') valVariable = p.tipos_inscripcion?.nombre || 'Estándar';
-                else if (variable === 'es_staff') valVariable = p.es_staff ? '⭐ STAFF' : 'Campamentista';
-                else if (variable === 'es_menor') valVariable = p.es_menor ? 'Menor' : 'Mayor';
-                else valVariable = p[variable] || 'Sin registrar';
-
-                htmlLista += `<tr>
-                    <td class="p-2 border font-bold text-gray-700">${p.ci}</td>
-                    <td class="p-2 border font-semibold text-gray-900">${p.nombre_completo}</td>
-                    <td class="p-2 border font-bold text-indigo-800 bg-indigo-50/30">${valVariable}</td>
-                    <td class="p-2 border">${p.celula || '-'}</td>
-                    <td class="p-2 border font-semibold">${p.equipo || 'Sin Asignar'}</td>
-                    <td class="p-2 border font-mono text-gray-600">${p.telefono || '-'}</td>
-                </tr>`;
-            });
-
-            htmlLista += `</tbody></table>`;
-            divListaNominal.innerHTML = htmlLista;
+                instanciaGrafico = new Chart(document.getElementById('canvasGraficoReporte').getContext('2d'), {
+                    type: tipoGrafico,
+                    data: { labels: etiquetasGrafico, datasets },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: tipoGrafico === 'bar' || tipoGrafico === 'line'
+                            ? { y: { beginAtZero: true } }
+                            : {},
+                        plugins: { legend: { position: 'bottom' } }
+                    }
+                });
+            } catch (error) {
+                console.error('Error generando reporte:', error);
+                divResumen.innerHTML = '<p class="text-red-600 font-semibold">No se pudo generar el reporte. Revisa la conexión y vuelve a intentarlo.</p>';
+                alert(`No se pudo generar el reporte: ${error.message || 'error de conexión o consulta'}`);
+            }
         }
 
         async function abrirModalEditarCampamentista(id) {
