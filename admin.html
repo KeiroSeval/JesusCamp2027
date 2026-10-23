@@ -45,6 +45,65 @@
             box-shadow: 0 4px 10px rgb(17 24 39 / 14%);
         }
 
+        .admin-workspace.sidebar-collapsed {
+            grid-template-columns: 5rem minmax(0, 1fr);
+        }
+
+        .admin-workspace.sidebar-collapsed .admin-sidebar {
+            padding: .75rem .5rem;
+            border-radius: 1rem;
+        }
+
+        .admin-workspace.sidebar-collapsed .admin-sidebar > p {
+            display: none;
+        }
+
+        .admin-workspace.sidebar-collapsed .admin-sidebar nav {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            gap: .5rem;
+        }
+
+        .admin-workspace.sidebar-collapsed .admin-sidebar .tab-btn {
+            min-width: 0;
+            min-height: 4.25rem;
+            flex-direction: column;
+            justify-content: center;
+            gap: .35rem;
+            padding: .5rem .2rem;
+            border-color: transparent;
+            border-radius: .75rem;
+            font-size: .625rem;
+            line-height: 1;
+            text-align: center;
+            white-space: normal;
+        }
+
+        .admin-sidebar .tab-btn > i {
+            margin: 0;
+            font-size: 1.125rem;
+        }
+
+        .admin-sidebar .tab-label {
+            display: block;
+        }
+
+        .admin-workspace.sidebar-collapsed .admin-sidebar .tab-btn[aria-current="page"] {
+            background: #f3f4f6;
+            color: #111827;
+            border-color: transparent;
+            box-shadow: none;
+        }
+
+        .admin-workspace.sidebar-collapsed .admin-sidebar .tab-btn[aria-current="page"] > i {
+            color: #111827;
+        }
+
+        #secDashboard.sidebar-collapsed {
+            max-width: none;
+        }
+
         @media (max-width: 767px) {
             .admin-workspace {
                 grid-template-columns: minmax(0, 1fr);
@@ -69,6 +128,14 @@
                 min-width: max-content;
                 justify-content: center;
             }
+
+            .admin-workspace.sidebar-collapsed {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .admin-workspace.sidebar-collapsed .admin-sidebar {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -78,9 +145,16 @@
     <!-- NAVBAR -->
     <nav class="bg-gray-900 text-white p-4 shadow-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <span class="font-bold text-lg tracking-wide flex items-center gap-2">
-                <i class="fa-solid fa-shield-halved text-amber-400"></i> ADMIN JC2027
-            </span>
+            <div class="flex items-center gap-3">
+                <button id="btnToggleSidebar" type="button" onclick="toggleAdminSidebar()" aria-label="Ocultar menú"
+                    aria-controls="adminSidebar" aria-expanded="true"
+                    class="hidden text-white hover:bg-gray-700 px-2.5 py-2 rounded-lg transition">
+                    <i id="iconToggleSidebar" class="fa-solid fa-bars"></i>
+                </button>
+                <span class="font-bold text-lg tracking-wide flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-amber-400"></i> ADMIN JC2027
+                </span>
+            </div>
             <div class="flex items-center gap-3">
                 <button id="btnPerfilAdmin" onclick="abrirModalPerfilAdmin()"
                     class="hidden text-xs bg-gray-800 hover:bg-gray-700 text-amber-400 font-bold px-3 py-1.5 rounded-lg border border-gray-700 transition flex items-center gap-1">
@@ -184,48 +258,48 @@
         </div>
 
         <div class="admin-workspace">
-            <aside class="admin-sidebar bg-white border border-gray-200 rounded-2xl shadow-sm p-3">
+            <aside id="adminSidebar" class="admin-sidebar bg-white border border-gray-200 rounded-2xl shadow-sm p-3">
                 <p class="hidden md:block px-3 pt-1 pb-2 text-[10px] font-extrabold uppercase tracking-widest text-gray-400">Módulos</p>
                 <nav aria-label="Módulos de administración" class="flex flex-wrap gap-2">
-            <button id="navSolicitudes" onclick="cambiarPestana('solicitudes')"
+            <button id="navSolicitudes" title="Pendientes" aria-label="Pendientes" onclick="cambiarPestana('solicitudes')"
                 aria-current="page" class="tab-btn bg-gray-900 text-white text-xs font-bold px-4 py-2 rounded-xl transition">
-                <i class="fa-solid fa-clock-rotate-left mr-1"></i> Pendientes
+                <i class="fa-solid fa-clock-rotate-left mr-1"></i><span class="tab-label">Pendientes</span>
             </button>
-            <button id="navInscritos" onclick="cambiarPestana('inscritos')"
+            <button id="navInscritos" title="Lista de Inscritos y Staff" aria-label="Lista de Inscritos y Staff" onclick="cambiarPestana('inscritos')"
                 class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-users mr-1"></i> Lista de Inscritos & Staff
+                <i class="fa-solid fa-users mr-1"></i><span class="tab-label">Inscritos & Staff</span>
             </button>
-            <button id="navCampos" onclick="cambiarPestana('campos')"
+            <button id="navCampos" title="Campos y SQL" aria-label="Campos y SQL" onclick="cambiarPestana('campos')"
                 class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-sliders mr-1"></i> Campos & SQL
+                <i class="fa-solid fa-sliders mr-1"></i><span class="tab-label">Campos & SQL</span>
             </button>
-            <button id="navCategorias" onclick="cambiarPestana('categorias')"
+            <button id="navCategorias" title="Tipos de Inscripción" aria-label="Tipos de Inscripción" onclick="cambiarPestana('categorias')"
                 class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-tags mr-1"></i> Tipos de Inscripción
+                <i class="fa-solid fa-tags mr-1"></i><span class="tab-label">Categorías</span>
             </button>
-            <button id="navIngresos" onclick="cambiarPestana('ingresos')"
+            <button id="navIngresos" title="Ingresos y QR" aria-label="Ingresos y QR" onclick="cambiarPestana('ingresos')"
                 class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-file-invoice-dollar mr-1"></i> Ingresos & QR
+                <i class="fa-solid fa-file-invoice-dollar mr-1"></i><span class="tab-label">Ingresos & QR</span>
             </button>
-            <button id="navEgresos" onclick="cambiarPestana('egresos')"
+            <button id="navEgresos" title="Egresos" aria-label="Egresos" onclick="cambiarPestana('egresos')"
                 class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-arrow-down-short-wide mr-1"></i> Egresos
+                <i class="fa-solid fa-arrow-down-short-wide mr-1"></i><span class="tab-label">Egresos</span>
             </button>
-            <button id="navReportes" onclick="cambiarPestana('reportes')"
+            <button id="navReportes" title="Reportes Avanzados" aria-label="Reportes Avanzados" onclick="cambiarPestana('reportes')"
                 class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-chart-pie mr-1"></i> Reportes Avanzados
+                <i class="fa-solid fa-chart-pie mr-1"></i><span class="tab-label">Reportes</span>
             </button>
-            <button id="navUsuarios" onclick="cambiarPestana('usuarios')"
+            <button id="navUsuarios" title="Administradores" aria-label="Administradores" onclick="cambiarPestana('usuarios')"
                 class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-user-shield mr-1"></i> Administradores
+                <i class="fa-solid fa-user-shield mr-1"></i><span class="tab-label">Administradores</span>
             </button>
-            <button id="navRoles" onclick="cambiarPestana('roles')"
+            <button id="navRoles" title="Permisos y Roles" aria-label="Permisos y Roles" onclick="cambiarPestana('roles')"
                 class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-key mr-1"></i> Permisos y Roles
+                <i class="fa-solid fa-key mr-1"></i><span class="tab-label">Permisos y Roles</span>
             </button>
-            <button id="navAuditoria" onclick="cambiarPestana('auditoria')"
+            <button id="navAuditoria" title="Auditoría y Logs" aria-label="Auditoría y Logs" onclick="cambiarPestana('auditoria')"
                 class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-clipboard-list mr-1"></i> Auditoría / Logs
+                <i class="fa-solid fa-clipboard-list mr-1"></i><span class="tab-label">Auditoría</span>
             </button>
                 </nav>
             </aside>
@@ -405,117 +479,207 @@
                         </div>
                     </div>
                     <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_tel"
-                                onchange="renderizarTablaInscritos()" checked> Teléfono</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_celula"
-                                onchange="renderizarTablaInscritos()" checked> Célula</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_talla"
-                                onchange="renderizarTablaInscritos()" checked> Talla Polera</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_actividad"
-                                onchange="renderizarTablaInscritos()"> Actividad</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_alergias"
-                                onchange="renderizarTablaInscritos()"> Alergias</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_tutor"
-                                onchange="renderizarTablaInscritos()"> Tutor Legal</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_ci"
+                                data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> C.I.</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_nombre"
+                                data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> Nombre</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_fecha"
+                                data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> Fecha nac. / Edad</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_rol"
+                                data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> Rol</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_inscripcion"
+                                data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> Inscripción</label>
                         <label class="flex items-center gap-1"><input type="checkbox" id="col_saldo"
-                            onchange="renderizarTablaInscritos()" checked> Saldo</label>
+                                data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> Saldo</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_equipo"
+                                data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> Equipo</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_tel"
+                                data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> Teléfono</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_celula"
+                                data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> Célula</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_talla"
+                                data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> Talla Polera</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_actividad"
+                                data-columna-inscritos onchange="actualizarColumnasInscritos()"> Actividad</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_habilidad"
+                                data-columna-inscritos onchange="actualizarColumnasInscritos()"> Habilidad / talento</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_nadar"
+                                data-columna-inscritos onchange="actualizarColumnasInscritos()"> Sabe nadar</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_menor"
+                                data-columna-inscritos onchange="actualizarColumnasInscritos()"> Menor de edad</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_emergencia"
+                                data-columna-inscritos onchange="actualizarColumnasInscritos()"> Contacto de emergencia</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_alergias"
+                                data-columna-inscritos onchange="actualizarColumnasInscritos()"> Alergias</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_tutor"
+                                data-columna-inscritos onchange="actualizarColumnasInscritos()"> Tutor Legal</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" id="col_carta"
+                                data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> Carta</label>
                     </div>
                 </div>
 
                 <div id="formContenedorCampamentista"
                     class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
-                    <h4 class="font-bold text-gray-700 text-xs uppercase mb-3 border-b pb-1">Nuevo Registro</h4>
-                    <form onsubmit="crearNuevoCampamentista(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <input type="text" id="newCi" placeholder="C.I. (Obligatorio)" required
-                            class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="text" id="newNombre" placeholder="Nombre Completo" required
-                            class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="text" id="newFechaNac" placeholder="Fecha de nacimiento (dd/mm/yyyy)"
-                            inputmode="numeric" maxlength="10"
-                            oninput="calcularEdadDesdeFecha('newFechaNac', 'newEdadVal', 'newSecTutor')"
-                            class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="text" id="newEdadVal" readonly placeholder="Edad Calculada"
-                            class="p-2.5 border rounded-xl text-xs bg-gray-100 font-bold text-indigo-900">
-                        <input type="text" id="newTel" placeholder="Teléfono / WhatsApp"
-                            class="p-2.5 border rounded-xl text-xs bg-white">
-                        <div class="space-y-2">
-                            <select id="newCelula" class="select-celula p-2.5 border rounded-xl text-xs bg-white w-full"
-                                onchange="actualizarCampoOtraCelula(this, 'newCelulaOtra')"></select>
-                            <input type="text" id="newCelulaOtra" placeholder="Escribe el nombre de la célula"
-                                class="hidden p-2.5 border rounded-xl text-xs bg-white w-full">
-                        </div>
+                    <div class="mb-4 border-b border-gray-200 pb-3">
+                        <h4 class="font-bold text-gray-800 text-base">Inscribir campamentista o staff</h4>
+                        <p class="text-xs text-gray-500 mt-1">Completa los datos en cada sección. Los campos con * son obligatorios.</p>
+                    </div>
+                    <form onsubmit="crearNuevoCampamentista(event)" class="space-y-4">
+                        <section class="bg-white p-4 rounded-xl border border-gray-200">
+                            <h5 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-user text-blue-600"></i> Datos personales
+                            </h5>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="newCi" class="text-xs font-bold text-gray-600">C.I. *</label>
+                                    <input type="text" id="newCi" required
+                                        class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                                <div>
+                                    <label for="newNombre" class="text-xs font-bold text-gray-600">Nombre completo *</label>
+                                    <input type="text" id="newNombre" required
+                                        class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                                <div>
+                                    <label for="newFechaNac" class="text-xs font-bold text-gray-600">Fecha de nacimiento (dd/mm/yyyy)</label>
+                                    <input type="text" id="newFechaNac" placeholder="dd/mm/yyyy" inputmode="numeric" maxlength="10"
+                                        oninput="calcularEdadDesdeFecha('newFechaNac', 'newEdadVal', 'newSecTutor')"
+                                        class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                                <div>
+                                    <label for="newEdadVal" class="text-xs font-bold text-gray-600">Edad calculada</label>
+                                    <input type="text" id="newEdadVal" readonly placeholder="Se calcula con la fecha de nacimiento"
+                                        class="w-full mt-1 p-2.5 bg-gray-100 border border-gray-200 rounded-lg text-sm font-bold text-indigo-900">
+                                </div>
+                                <div>
+                                    <label for="newTel" class="text-xs font-bold text-gray-600">Teléfono / WhatsApp</label>
+                                    <input type="text" id="newTel"
+                                        class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                                <div>
+                                    <label for="newCelula" class="text-xs font-bold text-gray-600">Célula</label>
+                                    <select id="newCelula" class="select-celula w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-indigo-500"
+                                        onchange="actualizarCampoOtraCelula(this, 'newCelulaOtra')"></select>
+                                    <label for="newCelulaOtra" class="hidden mt-2 text-xs font-bold text-gray-600">Nombre de la célula</label>
+                                    <input type="text" id="newCelulaOtra" placeholder="Escribe el nombre de la célula"
+                                        class="hidden w-full mt-2 p-2.5 border border-gray-300 rounded-lg text-sm bg-white">
+                                </div>
+                            </div>
+                        </section>
 
-                        <select id="newTalla" class="p-2.5 border rounded-xl text-xs bg-white">
-                            <option value="">-- Select Talla --</option>
-                            <option value="XS">Talla XS</option>
-                            <option value="S">Talla S</option>
-                            <option value="M">Talla M</option>
-                            <option value="L">Talla L</option>
-                            <option value="XL">Talla XL</option>
-                        </select>
+                        <section class="bg-white p-4 rounded-xl border border-gray-200">
+                            <h5 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-ticket text-indigo-600"></i> Inscripción y asignación
+                            </h5>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="newTalla" class="text-xs font-bold text-gray-600">Talla de polera</label>
+                                    <select id="newTalla" class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white">
+                                        <option value="">-- Seleccionar --</option>
+                                        <option value="XS">XS</option>
+                                        <option value="S">S</option>
+                                        <option value="M">M</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="newTipoInscripcion" class="text-xs font-bold text-gray-600">Tipo de inscripción</label>
+                                    <select id="newTipoInscripcion" onchange="evaluarPrecioManual(this.value, 'newDivPrecioManual')"
+                                        class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white font-bold text-indigo-900"></select>
+                                </div>
+                                <div id="newDivPrecioManual" class="hidden">
+                                    <label for="newPrecioManual" class="text-xs font-bold text-amber-800">Precio personalizado (Bs)</label>
+                                    <input type="number" id="newPrecioManual"
+                                        class="w-full mt-1 p-2.5 border border-amber-300 rounded-lg text-sm bg-amber-50 font-bold">
+                                </div>
+                                <div>
+                                    <label for="newEquipo" class="text-xs font-bold text-gray-600">Equipo</label>
+                                    <select id="newEquipo" class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white">
+                                        <option value="Sin Asignar">Sin asignar</option>
+                                        <option value="Búfalos">Búfalos 🦬</option>
+                                        <option value="Águilas">Águilas 🦅</option>
+                                        <option value="Leones">Leones 🦁</option>
+                                        <option value="Ciervos">Ciervos 🦌</option>
+                                    </select>
+                                </div>
+                                <div class="md:col-span-2 flex flex-wrap items-center gap-4 bg-purple-50 p-3 rounded-lg border border-purple-200">
+                                    <label class="text-xs font-bold text-purple-900 flex items-center gap-2">
+                                        <input type="checkbox" id="newEsStaff" class="rounded text-purple-600">
+                                        Pertenece al staff
+                                    </label>
+                                    <label class="text-xs font-bold text-gray-700 flex items-center gap-2">
+                                        <input type="checkbox" id="newEsMenor" class="rounded text-blue-600">
+                                        Es menor de edad
+                                    </label>
+                                </div>
+                                <div id="newSecTutor"
+                                    class="hidden md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 bg-amber-50/50 p-3 rounded-lg border border-amber-200">
+                                    <div>
+                                        <label for="newTutorNombre" class="text-xs font-bold text-gray-600">Nombre del tutor legal</label>
+                                        <input type="text" id="newTutorNombre"
+                                            class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white">
+                                    </div>
+                                    <div>
+                                        <label for="newTutorTel" class="text-xs font-bold text-gray-600">Teléfono del tutor</label>
+                                        <input type="text" id="newTutorTel"
+                                            class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white">
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
 
-                        <select id="newTipoInscripcion" onchange="evaluarPrecioManual(this.value, 'newDivPrecioManual')"
-                            class="p-2.5 border rounded-xl text-xs bg-white font-bold text-indigo-900"></select>
+                        <section class="bg-white p-4 rounded-xl border border-gray-200">
+                            <h5 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-heart-pulse text-rose-600"></i> Salud y seguridad
+                            </h5>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="newActividad" class="text-xs font-bold text-gray-600">Actividad favorita</label>
+                                    <select id="newActividad" class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white">
+                                        <option value="">-- Seleccionar --</option>
+                                        <option value="Fútbol">Fútbol</option>
+                                        <option value="Vóley">Vóley</option>
+                                        <option value="Memorizar Versículos">Memorizar Versículos</option>
+                                        <option value="Canto y Alabanza">Canto y Alabanza</option>
+                                        <option value="Coreografía / Baile">Coreografía / Baile</option>
+                                        <option value="Teatro / Dramatización">Teatro / Dramatización</option>
+                                        <option value="Atletismo / Carreras">Atletismo / Carreras</option>
+                                        <option value="Juegos de Mesa">Juegos de Mesa</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="newHabilidad" class="text-xs font-bold text-gray-600">Habilidad o talento especial</label>
+                                    <input type="text" id="newHabilidad"
+                                        class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                                <div>
+                                    <label for="newSabeNadar" class="text-xs font-bold text-gray-600">¿Sabe nadar? *</label>
+                                    <select id="newSabeNadar" required
+                                        class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-indigo-500">
+                                        <option value="">-- Seleccionar --</option>
+                                        <option value="true">Sí</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="newEmergencia" class="text-xs font-bold text-gray-600">Contacto de emergencia</label>
+                                    <input type="text" id="newEmergencia"
+                                        class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label for="newAlergias" class="text-xs font-bold text-gray-600">Alergias o medicamentos</label>
+                                    <input type="text" id="newAlergias"
+                                        class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                            </div>
+                        </section>
 
-                        <div id="newDivPrecioManual" class="hidden">
-                            <input type="number" id="newPrecioManual" placeholder="Precio Especial (Bs)"
-                                class="p-2.5 border rounded-xl text-xs bg-amber-50 w-full font-bold">
-                        </div>
-
-                        <select id="newEquipo" class="p-2.5 border rounded-xl text-xs bg-white">
-                            <option value="Sin Asignar">Equipo: Sin Asignar</option>
-                            <option value="Búfalos">Búfalos 🦬</option>
-                            <option value="Águilas">Águilas 🦅</option>
-                            <option value="Leones">Leones 🦁</option>
-                            <option value="Ciervos">Ciervos 🦌</option>
-                        </select>
-
-                        <select id="newActividad" class="p-2.5 border rounded-xl text-xs bg-white">
-                            <option value="">-- Actividad Favorita --</option>
-                            <option value="Fútbol">Fútbol</option>
-                            <option value="Vóley">Vóley</option>
-                            <option value="Memorizar Versículos">Memorizar Versículos</option>
-                            <option value="Canto y Alabanza">Canto y Alabanza</option>
-                            <option value="Coreografía / Baile">Coreografía / Baile</option>
-                            <option value="Teatro / Dramatización">Teatro / Dramatización</option>
-                            <option value="Atletismo / Carreras">Atletismo / Carreras</option>
-                            <option value="Juegos de Mesa">Juegos de Mesa</option>
-                        </select>
-
-                        <input type="text" id="newHabilidad" placeholder="Habilidad o Talento"
-                            class="p-2.5 border rounded-xl text-xs bg-white">
-
-                        <div
-                            class="md:col-span-3 flex items-center gap-6 bg-white p-3 rounded-xl border border-gray-200">
-                            <label class="text-xs font-bold text-gray-700 flex items-center gap-2">
-                                <input type="checkbox" id="newEsStaff" class="rounded text-purple-600">
-                                ⭐ Pertenece a la Categoría/Rol de STAFF
-                            </label>
-                            <label class="text-xs font-bold text-gray-700 flex items-center gap-2">
-                                <input type="checkbox" id="newEsMenor" class="rounded text-blue-600">
-                                ¿Es Menor de Edad?
-                            </label>
-                        </div>
-
-                        <div id="newSecTutor"
-                            class="hidden md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-4 bg-amber-50/50 p-3 rounded-xl border border-amber-200">
-                            <input type="text" id="newTutorNombre" placeholder="Nombre del Tutor"
-                                class="p-2.5 border rounded-xl text-xs bg-white">
-                            <input type="text" id="newTutorTel" placeholder="Teléfono del Tutor"
-                                class="p-2.5 border rounded-xl text-xs bg-white">
-                        </div>
-
-                        <input type="text" id="newEmergencia" placeholder="Contacto de Emergencia"
-                            class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="text" id="newAlergias" placeholder="Alergias o Medicamentos"
-                            class="p-2.5 border rounded-xl text-xs bg-white md:col-span-2">
-
-                        <div class="md:col-span-3 flex justify-end gap-2">
+                        <div class="flex flex-col-reverse sm:flex-row justify-end gap-2">
                             <button type="button" onclick="toggleFormulario('formContenedorCampamentista')"
-                                class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                                class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold text-sm px-5 py-2.5 rounded-xl">Cancelar</button>
                             <button type="submit"
-                                class="bg-green-600 text-white font-bold text-xs px-6 py-2 rounded-xl transition shadow">+
-                                Guardar Registro</button>
+                                class="bg-green-600 hover:bg-green-700 text-white font-bold text-sm px-6 py-2.5 rounded-xl transition shadow">Guardar inscripción</button>
                         </div>
                     </form>
                 </div>
@@ -1228,6 +1392,14 @@
                 <div id="tabModalSalud" class="space-y-3 hidden">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
+                            <label for="editInsSabeNadar" class="text-xs font-bold text-gray-600">¿Sabe nadar? *</label>
+                            <select id="editInsSabeNadar" class="w-full p-2 border rounded-xl text-xs bg-white">
+                                <option value="">-- Seleccionar --</option>
+                                <option value="true">Sí</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+                        <div>
                             <label class="text-xs font-bold text-gray-600">Habilidad / Talento</label>
                             <input type="text" id="editInsHabilidad"
                                 class="w-full p-2 border rounded-xl text-xs outline-none">
@@ -1409,6 +1581,7 @@
             const input = document.getElementById(inputId);
             const esOtra = select.value === 'Otra';
             input.classList.toggle('hidden', !esOtra);
+            document.querySelector(`label[for="${inputId}"]`)?.classList.toggle('hidden', !esOtra);
             input.required = esOtra;
         }
 
@@ -1607,6 +1780,7 @@
                 talla_polera: 'Talla Polera',
                 actividad_favorita: 'Actividad',
                 habilidad_especial: 'Habilidad / Talento',
+                sabe_nadar: '¿Sabe nadar?',
                 contacto_emergencia: 'Contacto Emergencia',
                 alergias_medicina: 'Alergias',
                 tutor_nombre: 'Nombre Tutor',
@@ -1615,8 +1789,16 @@
 
             Object.keys(mapaCampos).forEach(key => {
                 if (sol[key] !== undefined && sol[key] !== null && sol[key] !== ins[key]) {
-                    let valActual = key === 'fecha_nacimiento' ? formatearFechaLatina(ins[key]) : (ins[key] || '(Vacío)');
-                    let valNuevo = key === 'fecha_nacimiento' ? formatearFechaLatina(sol[key]) : sol[key];
+                    let valActual = key === 'fecha_nacimiento'
+                        ? formatearFechaLatina(ins[key])
+                        : key === 'sabe_nadar'
+                            ? (ins[key] === true ? 'Sí' : ins[key] === false ? 'No' : '(Vacío)')
+                            : (ins[key] || '(Vacío)');
+                    let valNuevo = key === 'fecha_nacimiento'
+                        ? formatearFechaLatina(sol[key])
+                        : key === 'sabe_nadar'
+                            ? (sol[key] === true ? 'Sí' : 'No')
+                            : sol[key];
 
                     cont.innerHTML += `
                         <div class="grid grid-cols-2 gap-2 p-2 border-b items-center">
@@ -1823,6 +2005,7 @@
                 if (sol.tipo_inscripcion_id !== undefined && sol.tipo_inscripcion_id !== null) updatePayload.tipo_inscripcion_id = sol.tipo_inscripcion_id;
                 if (sol.actividad_favorita !== undefined) updatePayload.actividad_favorita = sol.actividad_favorita;
                 if (sol.habilidad_especial !== undefined) updatePayload.habilidad_especial = sol.habilidad_especial;
+                if (sol.sabe_nadar !== undefined) updatePayload.sabe_nadar = sol.sabe_nadar;
                 if (sol.contacto_emergencia !== undefined) updatePayload.contacto_emergencia = sol.contacto_emergencia;
                 if (sol.alergias_medicina !== undefined) updatePayload.alergias_medicina = sol.alergias_medicina;
                 if (sol.tutor_nombre !== undefined) updatePayload.tutor_nombre = sol.tutor_nombre;
@@ -1872,6 +2055,19 @@
             };
             document.getElementById('tituloModuloActivo').textContent = titulos[tab][0];
             document.getElementById('descripcionModuloActivo').textContent = titulos[tab][1];
+        }
+
+        function toggleAdminSidebar() {
+            const workspace = document.querySelector('.admin-workspace');
+            const dashboard = document.getElementById('secDashboard');
+            const boton = document.getElementById('btnToggleSidebar');
+            const icono = document.getElementById('iconToggleSidebar');
+            const oculto = workspace.classList.toggle('sidebar-collapsed');
+            dashboard.classList.toggle('sidebar-collapsed', oculto);
+            boton.setAttribute('aria-expanded', String(!oculto));
+            boton.setAttribute('aria-label', oculto ? 'Mostrar menú' : 'Ocultar menú');
+            icono.classList.toggle('fa-bars', !oculto);
+            icono.classList.toggle('fa-xmark', oculto);
         }
 
         function cambiarPestanaModal(pestana) {
@@ -2259,9 +2455,11 @@
 
             adminSesion = admin;
             permisosAdmin = admin.roles?.permisos || {};
+            cargarColumnasInscritosPerfil();
 
             document.getElementById('secLogin').classList.add('hidden');
             document.getElementById('secDashboard').classList.remove('hidden');
+            document.getElementById('btnToggleSidebar').classList.remove('hidden');
             document.getElementById('txtAdminInfo').innerText = `${admin.nombre}`;
             document.getElementById('btnPerfilAdmin').classList.remove('hidden');
             document.getElementById('btnCerrarSesion').classList.remove('hidden');
@@ -2387,15 +2585,70 @@
             cargarAuditoriaLogs();
         }
 
+        function claveColumnasInscritosPerfil() {
+            const perfil = adminSesion?.id || adminSesion?.usuario;
+            return perfil ? `jc2027_columnas_inscritos_${perfil}` : null;
+        }
+
+        function cargarColumnasInscritosPerfil() {
+            const clave = claveColumnasInscritosPerfil();
+            if (!clave) return;
+
+            try {
+                const guardado = localStorage.getItem(clave);
+                if (!guardado) return;
+                const configuracion = JSON.parse(guardado);
+                if (!configuracion || typeof configuracion !== 'object' || Array.isArray(configuracion)) {
+                    throw new Error('La configuración de columnas guardada no tiene un formato válido.');
+                }
+                document.querySelectorAll('[data-columna-inscritos]').forEach(casilla => {
+                    if (typeof configuracion[casilla.id] === 'boolean') {
+                        casilla.checked = configuracion[casilla.id];
+                    }
+                });
+            } catch (error) {
+                console.error('No se pudo cargar la configuración de columnas del perfil:', error);
+                alert('No se pudo cargar la configuración guardada de columnas.');
+            }
+        }
+
+        function actualizarColumnasInscritos() {
+            const clave = claveColumnasInscritosPerfil();
+            if (clave) {
+                const configuracion = Object.fromEntries(
+                    Array.from(document.querySelectorAll('[data-columna-inscritos]'))
+                        .map(casilla => [casilla.id, casilla.checked])
+                );
+                try {
+                    localStorage.setItem(clave, JSON.stringify(configuracion));
+                } catch (error) {
+                    console.error('No se pudo guardar la configuración de columnas del perfil:', error);
+                    alert('No se pudo guardar la configuración de columnas en este navegador.');
+                }
+            }
+            renderizarTablaInscritos();
+        }
+
         function renderizarTablaInscritos() {
+            const showCi = document.getElementById('col_ci').checked;
+            const showNombre = document.getElementById('col_nombre').checked;
+            const showFecha = document.getElementById('col_fecha').checked;
+            const showRol = document.getElementById('col_rol').checked;
+            const showInscripcion = document.getElementById('col_inscripcion').checked;
             const showTel = document.getElementById('col_tel').checked;
             const showCelula = document.getElementById('col_celula').checked;
             const showTalla = document.getElementById('col_talla').checked;
             const showActividad = document.getElementById('col_actividad').checked;
+            const showHabilidad = document.getElementById('col_habilidad').checked;
+            const showSabeNadar = document.getElementById('col_nadar').checked;
+            const showMenor = document.getElementById('col_menor').checked;
+            const showEmergencia = document.getElementById('col_emergencia').checked;
             const showAlergias = document.getElementById('col_alergias').checked;
             const showTutor = document.getElementById('col_tutor').checked;
+            const showCarta = document.getElementById('col_carta').checked;
             const campoOrden = document.getElementById('selOrdenInscritos').value;
             const showSaldo = document.getElementById('col_saldo').checked || campoOrden === 'saldo';
+            const showEquipo = document.getElementById('col_equipo').checked;
             const busqueda = (document.getElementById('txtBuscarInscrito')?.value || '').toLowerCase().trim();
 
             const abonadoPorInscrito = new Map();
@@ -2435,20 +2688,24 @@
             const thead = document.getElementById('theadInscritos');
             thead.innerHTML = `
             <tr>
-                <th class="p-2">C.I.</th>
-                <th class="p-2">Nombre Completo</th>
-                <th class="p-2">Fecha Nac. (dd/mm/yyyy) / Edad</th>
-                <th class="p-2">Tipo / Rol</th>
-                <th class="p-2">Inscripción</th>
+                ${showCi ? '<th class="p-2">C.I.</th>' : ''}
+                ${showNombre ? '<th class="p-2">Nombre Completo</th>' : ''}
+                ${showFecha ? '<th class="p-2">Fecha Nac. (dd/mm/yyyy) / Edad</th>' : ''}
+                ${showRol ? '<th class="p-2">Tipo / Rol</th>' : ''}
+                ${showInscripcion ? '<th class="p-2">Inscripción</th>' : ''}
                 ${showSaldo ? '<th class="p-2">Saldo</th>' : ''}
-                <th class="p-2">Equipo</th>
+                ${showEquipo ? '<th class="p-2">Equipo</th>' : ''}
                 ${showTel ? '<th class="p-2">Teléfono</th>' : ''}
                 ${showCelula ? '<th class="p-2">Célula</th>' : ''}
                 ${showTalla ? '<th class="p-2">Talla</th>' : ''}
                 ${showActividad ? '<th class="p-2">Actividad</th>' : ''}
+                ${showHabilidad ? '<th class="p-2">Habilidad / talento</th>' : ''}
+                ${showSabeNadar ? '<th class="p-2">Sabe nadar</th>' : ''}
+                ${showMenor ? '<th class="p-2">Edad</th>' : ''}
+                ${showEmergencia ? '<th class="p-2">Contacto de emergencia</th>' : ''}
                 ${showAlergias ? '<th class="p-2">Alergias</th>' : ''}
                 ${showTutor ? '<th class="p-2">Tutor</th>' : ''}
-                <th class="p-2">Carta</th>
+                ${showCarta ? '<th class="p-2">Carta</th>' : ''}
                 <th class="p-2 text-center">Acciones</th>
             </tr>`;
 
@@ -2482,20 +2739,24 @@
 
                 tbodyIns.innerHTML += `
           <tr>
-            <td class="p-2 font-bold">${escaparHtml(i.ci)}</td>
-            <td class="p-2 font-semibold text-gray-800">${escaparHtml(i.nombre_completo)}</td>
-            <td class="p-2 font-mono text-[11px]">${escaparHtml(i.fecha_nacimiento ? `${formatearFechaLatina(i.fecha_nacimiento)} (${edadTxt})` : '-')}</td>
-            <td class="p-2">${badgeRol}</td>
-            <td class="p-2 font-bold text-indigo-900">${escaparHtml(i.tipos_inscripcion?.nombre || 'Estándar')}</td>
+            ${showCi ? `<td class="p-2 font-bold">${escaparHtml(i.ci)}</td>` : ''}
+            ${showNombre ? `<td class="p-2 font-semibold text-gray-800">${escaparHtml(i.nombre_completo)}</td>` : ''}
+            ${showFecha ? `<td class="p-2 font-mono text-[11px]">${escaparHtml(i.fecha_nacimiento ? `${formatearFechaLatina(i.fecha_nacimiento)} (${edadTxt})` : '-')}</td>` : ''}
+            ${showRol ? `<td class="p-2">${badgeRol}</td>` : ''}
+            ${showInscripcion ? `<td class="p-2 font-bold text-indigo-900">${escaparHtml(i.tipos_inscripcion?.nombre || 'Estándar')}</td>` : ''}
             ${showSaldo ? `<td class="p-2 font-bold ${saldoColor}">Bs ${saldoFormateado}</td>` : ''}
-            <td class="p-2 font-bold text-indigo-700">${escaparHtml(i.equipo || 'Sin Asignar')}</td>
+            ${showEquipo ? `<td class="p-2 font-bold text-indigo-700">${escaparHtml(i.equipo || 'Sin Asignar')}</td>` : ''}
             ${showTel ? `<td class="p-2">${escaparHtml(i.telefono || '-')}</td>` : ''}
             ${showCelula ? `<td class="p-2">${escaparHtml(i.celula || '-')}</td>` : ''}
             ${showTalla ? `<td class="p-2 font-bold">${escaparHtml(i.talla_polera || '-')}</td>` : ''}
             ${showActividad ? `<td class="p-2">${escaparHtml(i.actividad_favorita || '-')}</td>` : ''}
+            ${showHabilidad ? `<td class="p-2">${escaparHtml(i.habilidad_especial || '-')}</td>` : ''}
+            ${showSabeNadar ? `<td class="p-2">${i.sabe_nadar === true ? 'Sí' : i.sabe_nadar === false ? 'No' : '-'}</td>` : ''}
+            ${showMenor ? `<td class="p-2">${i.es_menor ? 'Menor' : 'Mayor'}</td>` : ''}
+            ${showEmergencia ? `<td class="p-2">${escaparHtml(i.contacto_emergencia || '-')}</td>` : ''}
             ${showAlergias ? `<td class="p-2 text-red-600 font-semibold">${escaparHtml(i.alergias_medicina || '-')}</td>` : ''}
             ${showTutor ? `<td class="p-2">${i.tutor_nombre ? `${escaparHtml(i.tutor_nombre)} (${escaparHtml(i.tutor_telefono || '')})` : '-'}</td>` : ''}
-            <td class="p-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${colorBadge}">${escaparHtml(estadoCarta)}</span></td>
+            ${showCarta ? `<td class="p-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${colorBadge}">${escaparHtml(estadoCarta)}</span></td>` : ''}
             <td class="p-2 text-center">
               <button onclick="abrirModalEditarCampamentista(decodeURIComponent('${argumentoSeguroJs(i.id)}'))" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 rounded-lg border border-amber-300 transition" title="Editar">
                 <i class="fa-solid fa-pencil text-xs"></i>
@@ -2878,6 +3139,9 @@
             document.getElementById('editInsEsStaff').checked = !!i.es_staff;
             document.getElementById('editInsActividad').value = i.actividad_favorita || '';
             document.getElementById('editInsHabilidad').value = i.habilidad_especial || '';
+            document.getElementById('editInsSabeNadar').value = typeof i.sabe_nadar === 'boolean'
+                ? String(i.sabe_nadar)
+                : '';
             document.getElementById('editInsEstadoCarta').value = i.estado_carta || 'Pendiente';
             document.getElementById('editInsEmergencia').value = i.contacto_emergencia || '';
             document.getElementById('editInsAlergias').value = i.alergias_medicina || '';
@@ -2895,6 +3159,13 @@
 
         function confirmarYGuardarInscrito(e) {
             e.preventDefault();
+            const sabeNadarVal = document.getElementById('editInsSabeNadar').value;
+            if (sabeNadarVal !== 'true' && sabeNadarVal !== 'false') {
+                cambiarPestanaModal('salud');
+                document.getElementById('editInsSabeNadar').focus();
+                alert('Indica si sabe nadar.');
+                return;
+            }
             const fechaIngresada = document.getElementById('editInsFechaNac').value.trim();
             if (fechaIngresada && !convertirFechaNacimientoISO(fechaIngresada)) {
                 alert('Ingresa una fecha válida con formato dd/mm/yyyy.');
@@ -2953,6 +3224,7 @@
                     es_staff: document.getElementById('editInsEsStaff').checked,
                     actividad_favorita: document.getElementById('editInsActividad').value,
                     habilidad_especial: document.getElementById('editInsHabilidad').value,
+                    sabe_nadar: document.getElementById('editInsSabeNadar').value === 'true',
                     estado_carta: document.getElementById('editInsEstadoCarta').value,
                     contacto_emergencia: document.getElementById('editInsEmergencia').value,
                     alergias_medicina: document.getElementById('editInsAlergias').value,
@@ -3023,6 +3295,7 @@
                 es_staff: document.getElementById('newEsStaff').checked,
                 actividad_favorita: document.getElementById('newActividad').value,
                 habilidad_especial: document.getElementById('newHabilidad').value.trim(),
+                sabe_nadar: document.getElementById('newSabeNadar').value === 'true',
                 tutor_nombre: document.getElementById('newTutorNombre').value.trim(),
                 tutor_telefono: document.getElementById('newTutorTel').value.trim(),
                 contacto_emergencia: document.getElementById('newEmergencia').value.trim(),

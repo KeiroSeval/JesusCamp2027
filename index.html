@@ -253,6 +253,15 @@
                             class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
                     </div>
                     <div>
+                        <label for="usrSabeNadar" class="text-xs font-bold text-gray-500">¿Sabes nadar? *</label>
+                        <select id="usrSabeNadar" disabled required
+                            class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
+                            <option value="">-- Selecciona una opción --</option>
+                            <option value="true">Sí</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                    <div>
                         <label class="text-xs font-bold text-gray-500">Contacto de Emergencia</label>
                         <input type="text" id="usrEmergencia" disabled placeholder="Sin registrar"
                             class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
@@ -664,7 +673,8 @@
             document.getElementById('btnNavAdmin').classList.add('hidden');
             document.getElementById('btnNavInicio').classList.remove('hidden');
 
-            const incompleto = !usuarioActual.telefono || !usuarioActual.fecha_nacimiento || !usuarioActual.talla_polera || !usuarioActual.contacto_emergencia;
+            const incompleto = !usuarioActual.telefono || !usuarioActual.fecha_nacimiento || !usuarioActual.talla_polera ||
+                !usuarioActual.contacto_emergencia || typeof usuarioActual.sabe_nadar !== 'boolean';
             if (incompleto) {
                 document.getElementById('alertaPerfilIncompleto').classList.remove('hidden');
             } else {
@@ -694,6 +704,9 @@
 
             document.getElementById('usrActividad').value = usuarioActual.actividad_favorita || '';
             document.getElementById('usrHabilidad').value = usuarioActual.habilidad_especial || '';
+            document.getElementById('usrSabeNadar').value = typeof usuarioActual.sabe_nadar === 'boolean'
+                ? String(usuarioActual.sabe_nadar)
+                : '';
             document.getElementById('usrEmergencia').value = usuarioActual.contacto_emergencia || '';
             document.getElementById('usrAlergias').value = usuarioActual.alergias_medicina || '';
 
@@ -833,6 +846,7 @@
                 ['fecha_nacimiento', 'Fecha de nacimiento'], ['celula', 'Célula'],
                 ['talla_polera', 'Talla de polera'], ['tipo_inscripcion_id', 'Tipo de inscripción'],
                 ['actividad_favorita', 'Actividad favorita'], ['habilidad_especial', 'Habilidad o talento'],
+                ['sabe_nadar', '¿Sabe nadar?'],
                 ['contacto_emergencia', 'Contacto de emergencia'], ['alergias_medicina', 'Alergias o medicamentos'],
                 ['tutor_nombre', 'Nombre del tutor'], ['tutor_telefono', 'Teléfono del tutor']
             ];
@@ -845,6 +859,7 @@
                 if (String(actual) === String(propuesto)) return;
 
                 const mostrarValor = (valor) => {
+                    if (campo === 'sabe_nadar') return valor === true ? 'Sí' : valor === false ? 'No' : 'Sin registrar';
                     if (!valor) return 'Sin registrar';
                     if (campo === 'fecha_nacimiento') return formatearFechaLatina(valor);
                     if (campo === 'tipo_inscripcion_id') {
@@ -914,6 +929,12 @@
                 alert('Escribe el nombre de la célula seleccionada como "Otra".');
                 return;
             }
+            const sabeNadarVal = document.getElementById('usrSabeNadar').value;
+            if (sabeNadarVal !== 'true' && sabeNadarVal !== 'false') {
+                alert('Indica si sabes nadar.');
+                document.getElementById('usrSabeNadar').focus();
+                return;
+            }
 
             const datos = {
                 inscrito_id: usuarioActual.id,
@@ -925,6 +946,7 @@
                 tipo_inscripcion_id: tipoInscripcionVal ? tipoInscripcionVal : null,
                 actividad_favorita: document.getElementById('usrActividad').value || null,
                 habilidad_especial: document.getElementById('usrHabilidad').value.trim() || null,
+                sabe_nadar: sabeNadarVal === 'true',
                 contacto_emergencia: document.getElementById('usrEmergencia').value.trim() || null,
                 alergias_medicina: document.getElementById('usrAlergias').value.trim() || null,
                 tutor_nombre: document.getElementById('usrTutorNombre').value.trim() || null,

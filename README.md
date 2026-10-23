@@ -11,3 +11,17 @@ El portal usa Supabase directamente desde el navegador. Las validaciones de esta
 - Mantén únicamente la clave publicable/anon en el frontend; nunca agregues una clave `service_role`. Configura HTTPS y cabeceras de seguridad (incluida una Content Security Policy) en el hosting.
 
 La configuración SQL, RLS, Auth y Storage de Supabase no está incluida en este repositorio, por lo que debe revisarse y desplegarse por separado.
+
+## Campo obligatorio sobre natación
+
+Antes de usar la pregunta «¿Sabe nadar?» en los formularios, ejecuta esta migración en Supabase SQL Editor:
+
+```sql
+ALTER TABLE public.inscritos
+    ADD COLUMN IF NOT EXISTS sabe_nadar boolean;
+
+ALTER TABLE public.solicitudes_edicion
+    ADD COLUMN IF NOT EXISTS sabe_nadar boolean;
+```
+
+Las columnas aceptan `NULL` para conservar los registros existentes; las nuevas inscripciones y las actualizaciones desde el portal requieren elegir «Sí» o «No».
