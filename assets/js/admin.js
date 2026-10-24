@@ -38,6 +38,7 @@ let listaPagosGlobal = [];
 let solicitudesEdicionGlobal = [];
 let accionPendienteProtegida = null;
 let instanciaGrafico = null;
+<<<<<<< HEAD
 let moduloAdminActivo = 'solicitudes';
 let modelosCartaActuales = { adultos: null, menores: null };
 const CLAVE_DESCARGA_CARTA_HABILITADA = 'carta_descarga_habilitada';
@@ -52,6 +53,8 @@ const CLAVES_MODELO_CARTA = {
     adultos: 'carta_modelo_mayores_url',
     menores: 'carta_modelo_menores_url'
 };
+=======
+>>>>>>> parent of 70cd88c (Add letter module)
 const CAMPOS_REPORTE = [
     { id: 'nombre_completo', label: 'Nombre de persona' },
     { id: 'equipo', label: 'Equipo' },
@@ -251,20 +254,17 @@ async function guardarQrSistema() {
     let file = await optimizarYComprimirImagen(archivoOriginal);
     const fileName = `qr_oficial_${nombreArchivoAleatorio(file)}`;
 
-    const { error: uploadErr } = await db.storage.from('comprobantes').upload(fileName, file);
+    const { data: uploadData, error: uploadErr } = await db.storage.from('comprobantes').upload(fileName, file);
     if (uploadErr) return alert('Error subiendo QR: ' + uploadErr.message);
 
     const { data: urlData } = db.storage.from('comprobantes').getPublicUrl(fileName);
 
-    const { error: configError } = await db.from('configuracion_sistema')
-        .upsert({ clave: 'qr_pago_url', valor: urlData.publicUrl }, { onConflict: 'clave' });
-    if (configError) return alert('El archivo se subió, pero no se pudo guardar la configuración del QR: ' + configError.message);
-
+    await db.from('configuracion_sistema').upsert({ clave: 'qr_pago_url', valor: urlData.publicUrl });
     await registrarLogAuditoria('Actualización QR', 'Ingresos', 'Cambió la imagen del QR oficial de pago');
-    await cargarQrActualAdmin();
     alert('Código QR actualizado correctamente.');
 }
 
+<<<<<<< HEAD
 async function cargarQrActualAdmin() {
     const boton = document.getElementById('btnVerQrActualAdmin');
     const preview = document.getElementById('previewQrActualAdmin');
@@ -710,6 +710,8 @@ async function subirCartaPorAdmin(event) {
     }
 }
 
+=======
+>>>>>>> parent of 70cd88c (Add letter module)
 async function registrarLogAuditoria(accion, modulo, detalle) {
     try {
         await db.from('auditoria_logs').insert([{
@@ -724,17 +726,13 @@ async function registrarLogAuditoria(accion, modulo, detalle) {
 }
 
 async function cargarAuditoriaLogs() {
-    const { data: logs, error } = await db.from('auditoria_logs')
-        .select('created_at,admin_nombre,modulo,accion,detalle')
-        .order('created_at', { ascending: false })
-        .limit(50);
-    if (error) throw error;
+    const { data: logs } = await db.from('auditoria_logs').select('*').order('created_at', { ascending: false }).limit(50);
     const tbody = document.getElementById('tblLogsAuditoria');
     if (!tbody) return;
 
     tbody.innerHTML = '';
     (logs || []).forEach(l => {
-        const fechaFmt = l.created_at ? new Date(l.created_at).toLocaleString() : '-';
+        const fechaFmt = new Date(l.created_at || l.fecha).toLocaleString();
         tbody.innerHTML += `
             <tr>
                 <td class="p-2 font-mono text-gray-500">${fechaFmt}</td>
@@ -916,23 +914,11 @@ async function guardarCobroDirecto(e) {
 }
 
 async function cargarPendientes() {
-    const [pagosResult, edicionesResult] = await Promise.all([
-        db.from('pagos')
-            .select('id,monto,fecha,comprobante_url,inscritos(nombre_completo)')
-            .eq('estado', 'Pendiente'),
-        db.from('solicitudes_edicion')
-            .select('id,fecha,inscrito_id,nombre_completo,telefono,fecha_nacimiento,celula,talla_polera,tipo_inscripcion_id,actividad_favorita,habilidad_especial,sabe_nadar,contacto_emergencia,alergias_medicina,tutor_nombre,tutor_telefono,inscritos(id,nombre_completo,ci,telefono,fecha_nacimiento,celula,talla_polera,tipo_inscripcion_id,actividad_favorita,habilidad_especial,sabe_nadar,contacto_emergencia,alergias_medicina,tutor_nombre,tutor_telefono)')
-            .eq('estado', 'Pendiente')
-    ]);
-    const pagosPend = pagosResult.data;
-    const pagosError = pagosResult.error;
-    if (pagosError) throw pagosError;
+    const { data: pagosPend } = await db.from('pagos').select('*, inscritos(nombre_completo)').eq('estado', 'Pendiente');
     const tbodyP = document.getElementById('tblPagosPendientes');
     tbodyP.innerHTML = '';
     (pagosPend || []).forEach(p => {
-        const fechaFmt = p.fecha
-            ? new Date(p.fecha).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })
-            : '-';
+        const fechaFmt = new Date(p.created_at || p.fecha).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' });
         const nombreInscrito = p.inscritos?.nombre_completo || 'Usuario';
         const comprobanteUrl = urlArchivoSegura(p.comprobante_url);
         tbodyP.innerHTML += `
@@ -948,17 +934,13 @@ async function cargarPendientes() {
   </tr>`;
     });
 
-    const edicPend = edicionesResult.data;
-    const edicionesError = edicionesResult.error;
-    if (edicionesError) throw edicionesError;
+    const { data: edicPend } = await db.from('solicitudes_edicion').select('*, inscritos(*)').eq('estado', 'Pendiente');
     solicitudesEdicionGlobal = edicPend || [];
     const tbodyE = document.getElementById('tblEdicionesPendientes');
     tbodyE.innerHTML = '';
 
     solicitudesEdicionGlobal.forEach(e => {
-        const fechaFmt = e.fecha
-            ? new Date(e.fecha).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })
-            : '-';
+        const fechaFmt = new Date(e.created_at || e.fecha).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' });
         tbodyE.innerHTML += `
   <tr>
     <td class="p-2 font-mono text-[10px] text-gray-500">${escaparHtml(fechaFmt)}</td>
@@ -975,6 +957,25 @@ async function cargarPendientes() {
   </tr>`;
     });
 
+    const { data: cartasPend } = await db.from('inscritos').select('*').eq('estado_carta', 'En Revisión');
+    const tbodyC = document.getElementById('tblCartasPendientes');
+    tbodyC.innerHTML = '';
+    (cartasPend || []).forEach(c => {
+        const fechaFmt = new Date(c.updated_at || c.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' });
+        const cartaUrl = urlArchivoSegura(c.carta_compromiso_url);
+        tbodyC.innerHTML += `
+  <tr>
+    <td class="p-2 font-mono text-[10px] text-gray-500">${escaparHtml(fechaFmt)}</td>
+    <td class="p-2 font-bold">${escaparHtml(c.ci)}</td>
+    <td class="p-2 font-semibold">${escaparHtml(c.nombre_completo)}</td>
+    <td class="p-2">${escaparHtml(c.celula || '-')}</td>
+    <td class="p-2">${cartaUrl ? `<a href="${escaparHtml(cartaUrl)}" target="_blank" rel="noopener noreferrer" class="text-indigo-600 font-bold underline">Ver Carta</a>` : 'Sin archivo'}</td>
+    <td class="p-2 text-center flex justify-center gap-1">
+      <button onclick="procesarCarta(decodeURIComponent('${argumentoSeguroJs(c.id)}'), 'Aprobada', decodeURIComponent('${argumentoSeguroJs(c.nombre_completo)}'))" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs font-bold">Aprobar ✓</button>
+      <button onclick="procesarCarta(decodeURIComponent('${argumentoSeguroJs(c.id)}'), 'Rechazada', decodeURIComponent('${argumentoSeguroJs(c.nombre_completo)}'))" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs font-bold">Rechazar ✕</button>
+    </td>
+  </tr>`;
+    });
 }
 
 async function procesarEdicion(idSol, estado) {
@@ -1009,15 +1010,19 @@ async function procesarEdicion(idSol, estado) {
     cargarTodoElDashboard();
 }
 
+<<<<<<< HEAD
 async function cambiarPestana(tab) {
     const pestanasPermitidas = ['solicitudes', 'cartas', 'anuncios', 'inscritos', 'campos', 'categorias', 'ingresos', 'egresos', 'reportes', 'usuarios', 'roles', 'auditoria'];
+=======
+function cambiarPestana(tab) {
+    const pestanasPermitidas = ['solicitudes', 'inscritos', 'campos', 'categorias', 'ingresos', 'egresos', 'reportes', 'usuarios', 'roles', 'auditoria'];
+>>>>>>> parent of 70cd88c (Add letter module)
     if (!pestanasPermitidas.includes(tab)) return;
 
     const sufijo = tab.charAt(0).toUpperCase() + tab.slice(1);
     const btnActivo = document.getElementById(`nav${sufijo}`);
     const contenidoActivo = document.getElementById(`tab${sufijo}`);
     if (!btnActivo || !contenidoActivo || getComputedStyle(btnActivo).display === 'none') return;
-    moduloAdminActivo = tab;
 
     document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
     document.querySelectorAll('.tab-btn').forEach(b => {
@@ -1033,7 +1038,6 @@ async function cambiarPestana(tab) {
 
     const titulos = {
         solicitudes: ['Pendientes', 'Revisa y gestiona las tareas que requieren atención.'],
-        cartas: ['Cartas de compromiso', 'Administra las cartas recibidas y los modelos vigentes por edad.'],
         inscritos: ['Inscritos y staff', 'Consulta, organiza y administra los registros del campamento.'],
         campos: ['Campos y SQL', 'Configura los datos personalizados del formulario.'],
         categorias: ['Tipos de inscripción', 'Administra modalidades, precios y visibilidad.'],
@@ -1046,7 +1050,6 @@ async function cambiarPestana(tab) {
     };
     document.getElementById('tituloModuloActivo').textContent = titulos[tab][0];
     document.getElementById('descripcionModuloActivo').textContent = titulos[tab][1];
-    await cargarContenidoPestana(tab);
 }
 
 function toggleAdminSidebar() {
@@ -1128,10 +1131,7 @@ async function guardarTipoInscripcion(e) {
 }
 
 async function cargarTiposInscripcion() {
-    const { data, error } = await db.from('tipos_inscripcion')
-        .select('id,nombre,precio,es_manual,es_visible')
-        .order('precio', { ascending: false });
-    if (error) throw error;
+    const { data } = await db.from('tipos_inscripcion').select('*').order('precio', { ascending: false });
     tiposInscripcionGlobal = data || [];
 
     const selectNew = document.getElementById('newTipoInscripcion');
@@ -1390,8 +1390,11 @@ async function guardarRol(e) {
     const permisos = {
         verFinanzas: document.getElementById('permVerFinanzas').checked,
         solicitudes: document.getElementById('permSolicitudes').checked,
+<<<<<<< HEAD
         cartas: document.getElementById('permCartas').checked,
         anuncios: document.getElementById('permAnuncios').checked,
+=======
+>>>>>>> parent of 70cd88c (Add letter module)
         inscritosVer: document.getElementById('permInscritosVer').checked,
         inscritosCrear: document.getElementById('permInscritosCrear').checked,
         inscritosEditar: document.getElementById('permInscritosEditar').checked,
@@ -1421,7 +1424,7 @@ async function guardarRol(e) {
 
     alert('Rol guardado correctamente.');
     toggleFormulario('formContenedorRol');
-    await cargarRolesYAdmins('roles');
+    cargarRolesYAdmins();
 }
 
 function evaluarPrecioManual(tipoId, idDivTarget) {
@@ -1461,11 +1464,14 @@ async function iniciarSesionAdmin(e) {
     document.getElementById('btnPerfilAdmin').classList.remove('hidden');
     document.getElementById('btnCerrarSesion').classList.remove('hidden');
 
+    await cargarTiposInscripcion();
     aplicarPermisosVisuales();
     const primeraPestanaDisponible = Array.from(document.querySelectorAll('.tab-btn'))
         .find(boton => getComputedStyle(boton).display !== 'none');
-    if (primeraPestanaDisponible) await cambiarPestana(primeraPestanaDisponible.id.replace(/^nav/, '').toLowerCase());
-    await cargarResumenDashboard();
+    if (primeraPestanaDisponible) cambiarPestana(primeraPestanaDisponible.id.replace(/^nav/, '').toLowerCase());
+    cargarTodoElDashboard();
+    inicializarCatalogoReportes();
+    cargarPlantillasSelect();
     await registrarLogAuditoria('Inicio de Sesión', 'Acceso', 'El administrador ingresó al sistema.');
 }
 
@@ -1482,8 +1488,11 @@ function aplicarPermisosVisuales() {
     document.getElementById('contTarjetasFinanzas').style.display = puedeVerFinanzas ? 'grid' : 'none';
 
     document.getElementById('navSolicitudes').style.display = (esSuper || permisosAdmin.solicitudes) ? 'block' : 'none';
+<<<<<<< HEAD
     document.getElementById('navCartas').style.display = (esSuper || permisosAdmin.cartas) ? 'block' : 'none';
     document.getElementById('navAnuncios').style.display = (esSuper || permisosAdmin.anuncios) ? 'block' : 'none';
+=======
+>>>>>>> parent of 70cd88c (Add letter module)
     document.getElementById('navInscritos').style.display = (esSuper || permisosAdmin.inscritosVer) ? 'block' : 'none';
     document.getElementById('navCategorias').style.display = (esSuper || permisosAdmin.categorias) ? 'block' : 'none';
     document.getElementById('navIngresos').style.display = (esSuper || permisosAdmin.ingresosVer) ? 'block' : 'none';
@@ -1495,51 +1504,43 @@ function aplicarPermisosVisuales() {
 }
 
 async function cargarTodoElDashboard() {
-    await cargarResumenDashboard();
-    await cargarContenidoPestana(moduloAdminActivo);
-}
+    const { data: inscritos } = await db.from('inscritos').select('*, tipos_inscripcion(*)');
+    listaInscritosGlobal = inscritos || [];
 
-async function cargarResumenDashboard() {
-    try {
-        const puedeVerFinanzas = !adminSesion?.rol_id ||
-            adminSesion.roles?.nombre === 'SuperAdmin' || permisosAdmin.verFinanzas;
-        const consultas = [
-            db.from('inscritos').select('id', { count: 'exact', head: true }),
-            db.from('inscritos').select('id', { count: 'exact', head: true }).eq('es_staff', true)
-        ];
-        if (puedeVerFinanzas) {
-            consultas.push(
-                db.from('pagos').select('monto').eq('estado', 'Aprobado'),
-                db.from('egresos').select('monto')
-            );
-        }
-        const resultados = await Promise.all(consultas);
-        const [totalResult, staffResult, pagosResult, egresosResult] = resultados;
-        if (totalResult.error) throw totalResult.error;
-        if (staffResult.error) throw staffResult.error;
+    const { data: pagos } = await db.from('pagos').select('*, inscritos(nombre_completo)').eq('estado', 'Aprobado');
+    listaPagosGlobal = pagos || [];
 
-        const staff = staffResult.count || 0;
-        const total = totalResult.count || 0;
-        document.getElementById('stCampamentistas').innerText = total - staff;
-        document.getElementById('stStaff').innerText = staff;
-        document.getElementById('stTotalGeneral').innerText = total;
+    const { data: egresos } = await db.from('egresos').select('*');
 
-        if (puedeVerFinanzas) {
-            if (pagosResult.error) throw pagosResult.error;
-            if (egresosResult.error) throw egresosResult.error;
-            const ingresos = (pagosResult.data || []).reduce((total, pago) => total + Number(pago.monto || 0), 0);
-            const egresos = (egresosResult.data || []).reduce((total, egreso) => total + Number(egreso.monto || 0), 0);
-            document.getElementById('stIngresos').innerText = `Bs ${ingresos}`;
-            document.getElementById('stEgresos').innerText = `Bs ${egresos}`;
-            document.getElementById('stBalance').innerText = `Bs ${ingresos - egresos}`;
-        }
+    let cntStaff = 0;
+    let cntCampamentistas = 0;
 
-    } catch (error) {
-        console.error('Error cargando el resumen del panel:', error);
-        alert('No se pudo actualizar el resumen del panel: ' + error.message);
+    listaInscritosGlobal.forEach(i => {
+        if (i.es_staff) cntStaff++;
+        else cntCampamentistas++;
+    });
+
+    document.getElementById('stCampamentistas').innerText = cntCampamentistas;
+    document.getElementById('stStaff').innerText = cntStaff;
+    document.getElementById('stTotalGeneral').innerText = listaInscritosGlobal.length;
+
+    let ing = 0, eg = 0;
+    listaPagosGlobal.forEach(p => ing += Number(p.monto));
+    (egresos || []).forEach(e => eg += Number(e.monto));
+
+    document.getElementById('stIngresos').innerText = `Bs ${ing}`;
+    document.getElementById('stEgresos').innerText = `Bs ${eg}`;
+    document.getElementById('stBalance').innerText = `Bs ${ing - eg}`;
+
+    const selectPagoAdmin = document.getElementById('pagoAdminInscrito');
+    if (selectPagoAdmin) {
+        selectPagoAdmin.innerHTML = '<option value="">-- Seleccionar Campamentista --</option>';
+        listaInscritosGlobal.forEach(i => {
+            selectPagoAdmin.innerHTML += `<option value="${escaparHtml(i.id)}">${escaparHtml(i.nombre_completo)} (CI: ${escaparHtml(i.ci)})</option>`;
+        });
     }
-}
 
+<<<<<<< HEAD
 async function cargarContenidoPestana(tab) {
     try {
         switch (tab) {
@@ -1646,6 +1647,56 @@ async function cargarContenidoPestana(tab) {
         console.error(`Error cargando el módulo ${tab}:`, error);
         alert(`No se pudo cargar el módulo: ${error.message}`);
     }
+=======
+    renderizarTablaInscritos();
+
+    const tbodyIng = document.getElementById('tblHistorialIngresos');
+    tbodyIng.innerHTML = '';
+    listaPagosGlobal.forEach(p => {
+        const comprobanteUrl = urlArchivoSegura(p.comprobante_url);
+        tbodyIng.innerHTML += `
+  <tr>
+    <td class="p-2">${new Date(p.created_at || p.fecha).toLocaleDateString()} ${new Date(p.created_at || p.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+    <td class="p-2 font-semibold">${escaparHtml(p.inscritos?.nombre_completo || 'Pago Directo')}</td>
+    <td class="p-2 font-bold text-green-600">Bs ${escaparHtml(p.monto)}</td>
+    <td class="p-2">${escaparHtml(p.observaciones || '-')}</td>
+    <td class="p-2">${comprobanteUrl ? `<a href="${escaparHtml(comprobanteUrl)}" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline font-bold">Ver Foto</a>` : 'Sin Foto'}</td>
+    <td class="p-2 text-center flex justify-center gap-1">
+      <button onclick="abrirModalEditarIngreso(decodeURIComponent('${argumentoSeguroJs(p.id)}'))" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 rounded-lg border border-amber-300">
+        <i class="fa-solid fa-pencil text-xs"></i>
+      </button>
+      <button onclick="solicitarSeguridad('borrarIngreso', decodeURIComponent('${argumentoSeguroJs(p.id)}'))" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200">
+        <i class="fa-solid fa-trash text-xs"></i>
+      </button>
+    </td>
+  </tr>`;
+    });
+
+    const tbodyEg = document.getElementById('tblListaEgresos');
+    tbodyEg.innerHTML = '';
+    (egresos || []).forEach(e => {
+        tbodyEg.innerHTML += `
+  <tr>
+    <td class="p-2">${new Date(e.created_at || e.fecha).toLocaleDateString()}</td>
+    <td class="p-2 font-semibold text-gray-800">${escaparHtml(e.concepto)}</td>
+    <td class="p-2"><span class="bg-red-50 text-red-700 font-bold px-2 py-0.5 rounded text-[10px]">${escaparHtml(e.categoria)}</span></td>
+    <td class="p-2 font-bold text-red-600">Bs ${escaparHtml(e.monto)}</td>
+    <td class="p-2">${escaparHtml(e.registrado_por || 'Admin')}</td>
+    <td class="p-2 text-center flex justify-center gap-1">
+      <button onclick="abrirModalEditarEgreso(decodeURIComponent('${argumentoSeguroJs(e.id)}'), decodeURIComponent('${argumentoSeguroJs(e.concepto)}'), decodeURIComponent('${argumentoSeguroJs(e.categoria)}'), decodeURIComponent('${argumentoSeguroJs(e.monto)}'))" class="bg-amber-100 hover:bg-amber-200 text-amber-800 p-1.5 rounded-lg border border-amber-300">
+        <i class="fa-solid fa-pencil text-xs"></i>
+      </button>
+      <button onclick="solicitarSeguridad('borrarEgreso', decodeURIComponent('${argumentoSeguroJs(e.id)}'))" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-lg border border-red-200">
+        <i class="fa-solid fa-trash text-xs"></i>
+      </button>
+    </td>
+  </tr>`;
+    });
+
+    cargarPendientes();
+    cargarRolesYAdmins();
+    cargarAuditoriaLogs();
+>>>>>>> parent of 70cd88c (Add letter module)
 }
 
 function claveColumnasInscritosPerfil() {
@@ -2374,10 +2425,8 @@ async function crearNuevoCampamentista(e) {
     cargarTodoElDashboard();
 }
 
-async function cargarRolesYAdmins(tab = 'usuarios') {
-    const { data: roles, error: rolesError } = await db.from('roles')
-        .select(tab === 'roles' ? 'id,nombre,permisos' : 'id,nombre');
-    if (rolesError) throw rolesError;
+async function cargarRolesYAdmins() {
+    const { data: roles } = await db.from('roles').select('*');
     listaRolesGlobal = roles || [];
 
     const selectRol = document.getElementById('adminRolSelect');
@@ -2386,10 +2435,8 @@ async function cargarRolesYAdmins(tab = 'usuarios') {
         listaRolesGlobal.forEach(r => selectRol.innerHTML += `<option value="${escaparHtml(r.id)}">${escaparHtml(r.nombre)}</option>`);
     }
 
-    if (tab === 'usuarios') {
-    const { data: admins, error: adminsError } = await db.from('administradores')
-        .select('id,nombre,usuario,telefono,rol_id,roles(nombre)');
-    if (adminsError) throw adminsError;
+    const { data: admins } = await db.from('administradores')
+        .select('id, nombre, usuario, telefono, rol_id, roles(*)');
     listaAdminsGlobal = admins || [];
 
     const tbodyA = document.getElementById('tblListaAdmins');
@@ -2412,8 +2459,6 @@ async function cargarRolesYAdmins(tab = 'usuarios') {
         </td>
       </tr>`;
         });
-    }
-        return;
     }
 
     const tbodyR = document.getElementById('tblListaRolesExistentes');
@@ -2449,8 +2494,11 @@ function cargarRolParaEditar(id, nombre, permisosEncoded) {
 
     document.getElementById('permVerFinanzas').checked = !!permisos.verFinanzas;
     document.getElementById('permSolicitudes').checked = !!permisos.solicitudes;
+<<<<<<< HEAD
     document.getElementById('permCartas').checked = !!permisos.cartas;
     document.getElementById('permAnuncios').checked = !!permisos.anuncios;
+=======
+>>>>>>> parent of 70cd88c (Add letter module)
     document.getElementById('permInscritosVer').checked = !!permisos.inscritosVer;
     document.getElementById('permInscritosCrear').checked = !!permisos.inscritosCrear;
     document.getElementById('permInscritosEditar').checked = !!permisos.inscritosEditar;
@@ -2471,14 +2519,10 @@ function cargarRolParaEditar(id, nombre, permisosEncoded) {
 }
 
 async function procesarCarta(id, nuevoEstado, nombre) {
-    const { error } = await db.from('inscritos').update({ estado_carta: nuevoEstado }).eq('id', id);
-    if (error) {
-        console.error('Error actualizando el estado de la carta:', error);
-        return alert('No se pudo actualizar el estado de la carta: ' + error.message);
-    }
-    await registrarLogAuditoria('Revisión Carta', 'Cartas', `Marcó la carta de ${nombre} como: ${nuevoEstado}`);
+    await db.from('inscritos').update({ estado_carta: nuevoEstado }).eq('id', id);
+    await registrarLogAuditoria('Revisión Carta', 'Pendientes', `Marcó la carta de ${nombre} como: ${nuevoEstado}`);
     alert(`Carta marcada como: ${nuevoEstado}`);
-    await cargarModuloCartas();
+    cargarTodoElDashboard();
 }
 
 async function procesarPago(id, estado, nombre, monto) {
