@@ -4,6 +4,8 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let usuarioActual = null;
+let modeloCartaUsuario = null;
+const CLAVE_DESCARGA_CARTA_HABILITADA = 'carta_descarga_habilitada';
 const CELULAS_PREDEFINIDAS = [
     'Alfa y Omega', 'Armadura de Dios', 'Beth Shalom', 'Ejercito de Dios', 'Gaditas',
     'Generación de Fuego', 'Getsemaní', 'Hijas del Rey', 'Talita Cumi', 'Segadores', 'Ninguna'
@@ -260,6 +262,81 @@ async function buscarCampamentista() {
     cargarPerfil();
 }
 
+async function cargarModeloCartaCampamentista() {
+    const mensaje = document.getElementById('msgModeloCarta');
+    const enlace = document.getElementById('btnModeloCarta');
+    modeloCartaUsuario = null;
+    enlace.disabled = true;
+    const esMenor = typeof usuarioActual.es_menor === 'boolean'
+        ? usuarioActual.es_menor
+        : usuarioActual.fecha_nacimiento
+            ? calcularEdad(usuarioActual.fecha_nacimiento) < 18
+            : null;
+    if (esMenor === null) {
+        mensaje.textContent = 'No se pudo determinar el modelo de carta por falta de fecha de nacimiento.';
+        enlace.disabled = true;
+        return;
+    }
+
+    const clave = esMenor ? 'carta_modelo_menores_url' : 'carta_modelo_mayores_url';
+    const { data, error } = await db.from('configuracion_sistema')
+        .select('clave,valor')
+        .in('clave', [clave, CLAVE_DESCARGA_CARTA_HABILITADA]);
+    if (error) {
+        console.error('Error consultando el modelo de carta de compromiso:', error);
+        mensaje.textContent = 'No se pudo cargar el modelo de carta. Inténtalo nuevamente más tarde.';
+        enlace.disabled = true;
+        return;
+    }
+
+    const configuracion = data || [];
+    const urlModelo = urlArchivoSegura(configuracion.find(item => item.clave === clave)?.valor);
+    const descargaHabilitada = ['true', '1', 'si', 'sí'].includes(
+        String(configuracion.find(item => item.clave === CLAVE_DESCARGA_CARTA_HABILITADA)?.valor || '').toLowerCase()
+    );
+    if (!urlModelo) {
+        mensaje.textContent = 'El modelo de carta correspondiente aún no está disponible. Consulta con un encargado.';
+        enlace.disabled = true;
+        return;
+    }
+
+    modeloCartaUsuario = { url: urlModelo, esMenor };
+    enlace.disabled = !descargaHabilitada;
+    mensaje.textContent = esMenor
+        ? 'Usa el modelo de carta para menores de 18 años.'
+        : 'Usa el modelo de carta para mayores de 18 años.';
+    if (!descargaHabilitada) {
+        mensaje.textContent += ' La descarga aún no está habilitada.';
+    }
+}
+
+async function descargarModeloCartaUsuario() {
+    if (!modeloCartaUsuario || document.getElementById('btnModeloCarta').disabled) return;
+
+    try {
+        const response = await fetch(modeloCartaUsuario.url);
+        if (!response.ok) throw new Error(`No se pudo descargar el modelo (HTTP ${response.status}).`);
+        const archivo = await response.blob();
+        const extensionPorTipo = {
+            'application/pdf': 'pdf',
+            'image/jpeg': 'jpg',
+            'image/png': 'png',
+            'image/webp': 'webp'
+        };
+        const extension = extensionPorTipo[archivo.type] || 'pdf';
+        const enlaceTemporal = document.createElement('a');
+        enlaceTemporal.href = URL.createObjectURL(archivo);
+        enlaceTemporal.download = `modelo-carta-${modeloCartaUsuario.esMenor ? 'menores' : 'mayores'}.${extension}`;
+        document.body.appendChild(enlaceTemporal);
+        enlaceTemporal.click();
+        enlaceTemporal.remove();
+        setTimeout(() => URL.revokeObjectURL(enlaceTemporal.href), 1000);
+    } catch (error) {
+        console.error('Error descargando el modelo de carta:', error);
+        alert('No se pudo descargar el modelo de carta. Inténtalo nuevamente más tarde.');
+    }
+}
+
 async function cargarPerfil() {
     document.getElementById('secBusqueda').classList.add('hidden');
     document.getElementById('secPerfil').classList.remove('hidden');
@@ -363,7 +440,26 @@ async function cargarPerfil() {
         document.getElementById('btnSubirCarta').disabled = false;
     }
 
-    const { data: pagos } = await db.from('pagos').select('*').eq('inscrito_id', usuarioActual.id);
+    const modeloCartaPromise = cargarModeloCartaCampamentista();
+    const [pagosResult, edicionResult] = await Promise.all([
+        db.from('pagos')
+            .select('monto,estado,comprobante_url,fecha')
+            .eq('inscrito_id', usuarioActual.id),
+        db.from('solicitudes_edicion')
+            .select('*')
+            .eq('inscrito_id', usuarioActual.id)
+            .eq('estado', 'Pendiente')
+            .maybeSingle(),
+        modeloCartaPromise
+    ]);
+    if (pagosResult.error || edicionResult.error) {
+        const error = pagosResult.error || edicionResult.error;
+        console.error('Error cargando pagos o solicitudes pendientes del campamentista:', error);
+        alert('No se pudieron cargar todos los datos del perfil: ' + error.message);
+        return;
+    }
+    const pagos = pagosResult.data || [];
+    const edicion = edicionResult.data;
 
     let totalAprobado = 0;
     let tienePagoPendiente = false;
@@ -379,7 +475,7 @@ async function cargarPerfil() {
         const comprobanteUrl = urlArchivoSegura(p.comprobante_url);
         tbody.innerHTML += `
   <tr>
-    <td class="p-2">${new Date(p.created_at || p.fecha).toLocaleDateString()} ${new Date(p.created_at || p.fecha).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</td>
+    <td class="p-2">${p.fecha ? `${new Date(p.fecha).toLocaleDateString()} ${new Date(p.fecha).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}` : '-'}</td>
     <td class="p-2 font-bold">Bs ${escaparHtml(p.monto)}</td>
     <td class="p-2">${comprobanteUrl ? `<a href="${escaparHtml(comprobanteUrl)}" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline font-bold">Ver Foto</a>` : 'Sin archivo'}</td>
     <td class="p-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${colorEstado}">${escaparHtml(p.estado)}</span></td>
@@ -413,7 +509,6 @@ async function cargarPerfil() {
     document.getElementById('lblSaldo').innerText = `Bs ${costoTotal - totalAprobado}`;
 
     // CONTROL DE BLOQUEO DE EDICIÓN DE DATOS
-    const { data: edicion } = await db.from('solicitudes_edicion').select('*').eq('inscrito_id', usuarioActual.id).eq('estado', 'Pendiente').maybeSingle();
     const btnEdit = document.getElementById('btnHabilitarEdicion');
     const badgeEdic = document.getElementById('badgeEdicion');
 
