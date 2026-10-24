@@ -6,6 +6,13 @@ const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let usuarioActual = null;
 let modeloCartaUsuario = null;
 const CLAVE_DESCARGA_CARTA_HABILITADA = 'carta_descarga_habilitada';
+const CLAVES_ANUNCIO_REGLAMENTO = {
+    titulo: 'anuncio_reglamento_titulo',
+    descripcion: 'anuncio_reglamento_descripcion',
+    archivo: 'anuncio_reglamento_archivo_url'
+};
+const CLAVE_ANUNCIOS_PUBLICADOS = 'anuncios_publicados';
+let anunciosPortal = [];
 const CELULAS_PREDEFINIDAS = [
     'Alfa y Omega', 'Armadura de Dios', 'Beth Shalom', 'Ejercito de Dios', 'Gaditas',
     'Generación de Fuego', 'Getsemaní', 'Hijas del Rey', 'Talita Cumi', 'Segadores', 'Ninguna'
@@ -55,6 +62,139 @@ function urlArchivoSegura(valor) {
     }
 }
 
+async function cargarAnuncioReglamento() {
+    const { data, error } = await db.from('configuracion_sistema')
+        .select('clave,valor')
+        .in('clave', [CLAVE_ANUNCIOS_PUBLICADOS, ...Object.values(CLAVES_ANUNCIO_REGLAMENTO)]);
+    if (error) {
+        console.error('Error cargando anuncios del portal:', error);
+        const seccion = document.getElementById('seccionAnuncios');
+        const contenedor = document.getElementById('listaAnunciosUsuario');
+        if (seccion && contenedor) {
+            contenedor.textContent = 'No se pudieron cargar los anuncios. Intenta actualizar la página.';
+            seccion.classList.remove('hidden');
+        }
+        return;
+    }
+
+    const configuracion = Object.fromEntries((data || []).map(item => [item.clave, item.valor]));
+    const valorGuardado = configuracion[CLAVE_ANUNCIOS_PUBLICADOS];
+    if (valorGuardado !== undefined && valorGuardado !== null) {
+        try {
+            anunciosPortal = Array.isArray(valorGuardado)
+                ? valorGuardado
+                : JSON.parse(valorGuardado || '[]');
+            if (!Array.isArray(anunciosPortal)) anunciosPortal = [];
+        } catch (parseError) {
+            console.error('No se pudo interpretar la lista de anuncios:', parseError);
+            anunciosPortal = [];
+        }
+    } else {
+        const archivo = urlArchivoSegura(configuracion[CLAVES_ANUNCIO_REGLAMENTO.archivo]);
+        anunciosPortal = archivo ? [{
+            id: 'reglamento-legacy',
+            tipo: 'reglamento',
+            equipo: '',
+            titulo: configuracion[CLAVES_ANUNCIO_REGLAMENTO.titulo] || 'Reglamento y recomendaciones',
+            descripcion: configuracion[CLAVES_ANUNCIO_REGLAMENTO.descripcion] || 'Consulta el reglamento y las recomendaciones del campamento.',
+            archivoUrl: archivo
+        }] : [];
+    }
+    renderizarAnunciosUsuario();
+}
+
+function normalizarEquipoAnuncio(equipo) {
+    return String(equipo || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
+}
+
+function renderizarAnunciosUsuario(equipoUsuario = usuarioActual?.equipo || '') {
+    const seccion = document.getElementById('seccionAnuncios');
+    const contenedor = document.getElementById('listaAnunciosUsuario');
+    if (!seccion || !contenedor) return;
+    contenedor.replaceChildren();
+
+    const equipoNormalizado = normalizarEquipoAnuncio(equipoUsuario);
+    const visibles = anunciosPortal.filter(anuncio => {
+        const equipoAnuncio = normalizarEquipoAnuncio(anuncio.equipo);
+        return !equipoAnuncio || (equipoNormalizado && equipoAnuncio === equipoNormalizado);
+    });
+    seccion.classList.toggle('hidden', visibles.length === 0);
+
+    visibles.forEach(anuncio => {
+        const archivoUrl = urlArchivoSegura(anuncio.archivoUrl);
+        const tipo = ({ reglamento: 'Reglamento', futbol: 'Fútbol', voley: 'Vóley' })[anuncio.tipo] || 'Anuncio';
+        const icono = ({ reglamento: 'fa-book-open', futbol: 'fa-futbol', voley: 'fa-volleyball' })[anuncio.tipo] || 'fa-bullhorn';
+        const articulo = document.createElement('article');
+        articulo.className = 'overflow-hidden rounded-2xl border border-amber-300 bg-white shadow-xl';
+        articulo.innerHTML = `
+            <div class="bg-gradient-to-r from-indigo-950 via-indigo-800 to-blue-700 p-5 text-white sm:p-7">
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="flex min-w-0 items-start gap-4">
+                        <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-amber-400 text-2xl text-indigo-950 shadow-lg">
+                            <i class="fa-solid ${icono}"></i>
+                        </span>
+                        <div class="min-w-0">
+                            <div class="flex flex-wrap gap-2">
+                                <span class="inline-flex items-center gap-1 rounded-full bg-amber-300 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-indigo-950">
+                                    <i class="fa-solid fa-star"></i> ${escaparHtml(tipo)}
+                                </span>
+                                ${anuncio.equipo ? `<span class="rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-bold text-white">${escaparHtml(anuncio.equipo)}</span>` : ''}
+                            </div>
+                            <h2 class="mt-2 break-words text-xl font-black sm:text-2xl">${escaparHtml(anuncio.titulo || tipo)}</h2>
+                            <p class="mt-2 max-w-2xl whitespace-pre-line break-words text-sm leading-relaxed text-indigo-100">${escaparHtml(anuncio.descripcion || '')}</p>
+                        </div>
+                    </div>
+                    ${archivoUrl ? `<div class="flex shrink-0 flex-wrap gap-2 sm:pl-4">
+                        <button type="button" data-action="view" class="rounded-xl border border-white/40 bg-white/10 px-4 py-2.5 text-xs font-bold text-white transition hover:bg-white/20">
+                            <i class="fa-solid fa-eye mr-1"></i> Ver archivo
+                        </button>
+                        <button type="button" data-action="download" class="rounded-xl bg-amber-400 px-4 py-2.5 text-xs font-black text-indigo-950 shadow transition hover:bg-amber-300">
+                            <i class="fa-solid fa-download mr-1"></i> Descargar
+                        </button>
+                    </div>` : ''}
+                </div>
+            </div>`;
+        articulo.querySelector('[data-action="view"]')?.addEventListener('click', () => {
+            window.open(archivoUrl, '_blank', 'noopener,noreferrer');
+        });
+        articulo.querySelector('[data-action="download"]')?.addEventListener('click', () => {
+            descargarArchivoAnuncio(archivoUrl, anuncio.titulo || tipo);
+        });
+        contenedor.appendChild(articulo);
+    });
+}
+
+async function descargarArchivoAnuncio(url, nombre) {
+    if (!url) return;
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`No se pudo descargar el archivo (HTTP ${response.status}).`);
+        const archivo = await response.blob();
+        const extensionPorTipo = {
+            'application/pdf': 'pdf',
+            'image/jpeg': 'jpg',
+            'image/png': 'png',
+            'image/webp': 'webp'
+        };
+        const extension = extensionPorTipo[archivo.type]
+            || url.split('?')[0].split('.').pop().toLowerCase()
+            || 'pdf';
+        const enlaceTemporal = document.createElement('a');
+        enlaceTemporal.href = URL.createObjectURL(archivo);
+        const nombreSeguro = String(nombre).normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'anuncio';
+        enlaceTemporal.download = `${nombreSeguro}.${extension}`;
+        document.body.appendChild(enlaceTemporal);
+        enlaceTemporal.click();
+        enlaceTemporal.remove();
+        setTimeout(() => URL.revokeObjectURL(enlaceTemporal.href), 1000);
+    } catch (error) {
+        console.error('Error descargando el archivo del anuncio:', error);
+        alert('No se pudo descargar el archivo. Inténtalo nuevamente más tarde.');
+    }
+}
+
 function inicializarSelectoresCelula() {
     const opciones = CELULAS_PREDEFINIDAS.map(celula => `<option value="${celula}">${celula}</option>`).join('');
     document.querySelectorAll('.select-celula').forEach(select => {
@@ -88,6 +228,7 @@ function obtenerCelula(selectId, inputId) {
 }
 
 inicializarSelectoresCelula();
+cargarAnuncioReglamento();
 let tiposInscripcionVisibles = [];
 
 function formatearFechaLatina(fechaStr) {
@@ -221,6 +362,7 @@ function cambiarPestanaPerfil(tab) {
 
 function regresarInicio() {
     usuarioActual = null;
+    renderizarAnunciosUsuario('');
     document.getElementById('inputCI').value = '';
     document.getElementById('secPerfil').classList.add('hidden');
     document.getElementById('secBusqueda').classList.remove('hidden');
@@ -338,6 +480,7 @@ async function descargarModeloCartaUsuario() {
 }
 
 async function cargarPerfil() {
+    renderizarAnunciosUsuario(usuarioActual?.equipo || '');
     document.getElementById('secBusqueda').classList.add('hidden');
     document.getElementById('secPerfil').classList.remove('hidden');
 

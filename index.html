@@ -11,7 +11,7 @@
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛺</text></svg>">
 
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.13/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/portal.css">
@@ -41,6 +41,14 @@
     </nav>
 
     <main class="portal-main space-y-6">
+
+        <section id="seccionAnuncios" class="hidden space-y-4" aria-label="Anuncios del campamento">
+            <div class="flex items-center gap-2 px-1">
+                <i class="fa-solid fa-bullhorn text-amber-500"></i>
+                <h2 class="text-sm font-black uppercase tracking-wider text-indigo-950">Anuncios importantes</h2>
+            </div>
+            <div id="listaAnunciosUsuario" class="grid gap-4"></div>
+        </section>
 
         <!-- BÚSQUEDA DE PERFIL -->
         <section id="secBusqueda"

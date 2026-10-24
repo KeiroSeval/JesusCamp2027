@@ -41,6 +41,13 @@ let instanciaGrafico = null;
 let moduloAdminActivo = 'solicitudes';
 let modelosCartaActuales = { adultos: null, menores: null };
 const CLAVE_DESCARGA_CARTA_HABILITADA = 'carta_descarga_habilitada';
+const CLAVES_ANUNCIO_REGLAMENTO = {
+    titulo: 'anuncio_reglamento_titulo',
+    descripcion: 'anuncio_reglamento_descripcion',
+    archivo: 'anuncio_reglamento_archivo_url'
+};
+const CLAVE_ANUNCIOS_PUBLICADOS = 'anuncios_publicados';
+let anunciosPublicados = [];
 const CLAVES_MODELO_CARTA = {
     adultos: 'carta_modelo_mayores_url',
     menores: 'carta_modelo_menores_url'
@@ -444,6 +451,202 @@ async function cargarModuloCartas() {
     }
 }
 
+function leerAnunciosConfigurados(valor) {
+    if (Array.isArray(valor)) return valor;
+    if (typeof valor !== 'string' || !valor.trim()) return [];
+    const parsed = JSON.parse(valor);
+    return Array.isArray(parsed) ? parsed : [];
+}
+
+async function cargarModuloAnuncios() {
+    const mensaje = document.getElementById('msgListaAnuncios');
+    mensaje.textContent = 'Cargando anuncios...';
+    mensaje.classList.remove('hidden');
+
+    const { data, error } = await db.from('configuracion_sistema')
+        .select('clave,valor')
+        .in('clave', [CLAVE_ANUNCIOS_PUBLICADOS, ...Object.values(CLAVES_ANUNCIO_REGLAMENTO)]);
+    if (error) throw error;
+
+    const configuracion = Object.fromEntries((data || []).map(item => [item.clave, item.valor]));
+    const valorGuardado = configuracion[CLAVE_ANUNCIOS_PUBLICADOS];
+    if (valorGuardado !== undefined && valorGuardado !== null) {
+        try {
+            anunciosPublicados = leerAnunciosConfigurados(valorGuardado);
+        } catch (parseError) {
+            console.error('No se pudo interpretar la lista de anuncios guardada:', parseError);
+            throw new Error('La lista de anuncios tiene un formato inválido. No se modificó.');
+        }
+    } else {
+        const legacyUrl = urlArchivoSegura(configuracion[CLAVES_ANUNCIO_REGLAMENTO.archivo]);
+        anunciosPublicados = legacyUrl ? [{
+            id: 'reglamento-legacy',
+            tipo: 'reglamento',
+            equipo: '',
+            titulo: configuracion[CLAVES_ANUNCIO_REGLAMENTO.titulo] || 'Reglamento y recomendaciones',
+            descripcion: configuracion[CLAVES_ANUNCIO_REGLAMENTO.descripcion] || 'Consulta el reglamento y las recomendaciones del campamento.',
+            archivoUrl: legacyUrl
+        }] : [];
+    }
+
+    renderizarAnunciosAdmin();
+    limpiarFormularioAnuncio();
+}
+
+function etiquetaTipoAnuncio(tipo) {
+    return ({ reglamento: 'Reglamento', futbol: 'Fútbol', voley: 'Vóley' })[tipo] || 'Anuncio';
+}
+
+function renderizarAnunciosAdmin() {
+    const contenedor = document.getElementById('listaAnunciosAdmin');
+    const mensaje = document.getElementById('msgListaAnuncios');
+    contenedor.innerHTML = '';
+    if (!anunciosPublicados.length) {
+        mensaje.textContent = 'Aún no hay anuncios publicados. Crea el primero desde el formulario.';
+        mensaje.classList.remove('hidden');
+        return;
+    }
+
+    mensaje.classList.add('hidden');
+    contenedor.innerHTML = anunciosPublicados.map(anuncio => {
+        const archivoUrl = urlArchivoSegura(anuncio.archivoUrl);
+        const equipo = anuncio.equipo || 'Todos los equipos';
+        return `<article class="flex flex-col gap-3 rounded-xl border border-gray-200 bg-gray-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div class="min-w-0">
+                <div class="mb-1 flex flex-wrap gap-2">
+                    <span class="rounded-full bg-indigo-100 px-2 py-1 text-[10px] font-black text-indigo-800">${escaparHtml(etiquetaTipoAnuncio(anuncio.tipo))}</span>
+                    <span class="rounded-full bg-amber-100 px-2 py-1 text-[10px] font-bold text-amber-900">${escaparHtml(equipo)}</span>
+                </div>
+                <h4 class="truncate text-sm font-black text-gray-900">${escaparHtml(anuncio.titulo)}</h4>
+                <p class="mt-1 whitespace-pre-line text-xs text-gray-600">${escaparHtml(anuncio.descripcion)}</p>
+                <p class="mt-1 text-[10px] font-semibold ${archivoUrl ? 'text-green-700' : 'text-gray-400'}">${archivoUrl ? 'Archivo adjunto disponible' : 'Sin archivo adjunto'}</p>
+            </div>
+            <div class="flex shrink-0 gap-2">
+                ${archivoUrl ? `<button type="button" onclick="verAnuncioAdmin(decodeURIComponent('${argumentoSeguroJs(anuncio.id)}'))" class="rounded-lg border border-indigo-200 bg-white px-3 py-2 text-xs font-bold text-indigo-700 hover:bg-indigo-50">Ver archivo</button>` : ''}
+                <button type="button" onclick="editarAnuncio(decodeURIComponent('${argumentoSeguroJs(anuncio.id)}'))" class="rounded-lg bg-amber-100 px-3 py-2 text-xs font-bold text-amber-900 hover:bg-amber-200">Editar</button>
+                <button type="button" onclick="eliminarAnuncio(decodeURIComponent('${argumentoSeguroJs(anuncio.id)}'))" class="rounded-lg bg-red-100 px-3 py-2 text-xs font-bold text-red-800 hover:bg-red-200">Eliminar</button>
+            </div>
+        </article>`;
+    }).join('');
+}
+
+function limpiarFormularioAnuncio() {
+    document.getElementById('formAnuncio').reset();
+    document.getElementById('anuncioIdEditando').value = '';
+    document.getElementById('anuncioTipo').value = 'reglamento';
+    document.getElementById('anuncioEquipo').value = '';
+    document.getElementById('btnVerAnuncioAdmin').disabled = true;
+    document.getElementById('msgAnuncioAdmin').textContent = 'Adjunta un archivo o edita el texto.';
+    document.getElementById('btnCancelarEdicionAnuncio').classList.add('hidden');
+    document.getElementById('btnGuardarAnuncio').innerHTML = '<i class="fa-solid fa-plus mr-1"></i> Publicar anuncio';
+}
+
+function editarAnuncio(id) {
+    const anuncio = anunciosPublicados.find(item => String(item.id) === String(id));
+    if (!anuncio) return;
+
+    document.getElementById('anuncioIdEditando').value = anuncio.id;
+    document.getElementById('anuncioTipo').value = anuncio.tipo || 'reglamento';
+    document.getElementById('anuncioEquipo').value = anuncio.equipo || '';
+    document.getElementById('anuncioTitulo').value = anuncio.titulo || '';
+    document.getElementById('anuncioDescripcion').value = anuncio.descripcion || '';
+    document.getElementById('anuncioArchivo').value = '';
+    document.getElementById('btnVerAnuncioAdmin').disabled = !urlArchivoSegura(anuncio.archivoUrl);
+    document.getElementById('msgAnuncioAdmin').textContent = anuncio.archivoUrl
+        ? 'Deja el archivo vacío para conservar el archivo actual.'
+        : 'Este anuncio no tiene un archivo adjunto.';
+    document.getElementById('btnCancelarEdicionAnuncio').classList.remove('hidden');
+    document.getElementById('btnGuardarAnuncio').innerHTML = '<i class="fa-solid fa-floppy-disk mr-1"></i> Guardar cambios';
+    document.getElementById('formAnuncio').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function verAnuncioAdmin(id) {
+    const anuncio = anunciosPublicados.find(item => String(item.id) === String(id));
+    const url = urlArchivoSegura(anuncio?.archivoUrl);
+    if (!url) return alert('Este anuncio no tiene un archivo disponible.');
+    window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+async function guardarAnunciosConfigurados() {
+    const { error } = await db.from('configuracion_sistema').upsert({
+        clave: CLAVE_ANUNCIOS_PUBLICADOS,
+        valor: JSON.stringify(anunciosPublicados)
+    }, { onConflict: 'clave' });
+    if (error) throw error;
+}
+
+async function guardarAnuncio(event) {
+    event.preventDefault();
+    const id = document.getElementById('anuncioIdEditando').value;
+    const tipo = document.getElementById('anuncioTipo').value;
+    const equipo = document.getElementById('anuncioEquipo').value;
+    const titulo = document.getElementById('anuncioTitulo').value.trim();
+    const descripcion = document.getElementById('anuncioDescripcion').value.trim();
+    const archivo = document.getElementById('anuncioArchivo').files[0];
+    const boton = document.getElementById('btnGuardarAnuncio');
+    const actual = anunciosPublicados.find(item => String(item.id) === String(id));
+    const listaAnterior = anunciosPublicados;
+
+    if (!titulo || !descripcion) return alert('Completa el título y el mensaje del anuncio.');
+    if (archivo && !validarArchivo(archivo)) return;
+    if (tipo === 'reglamento' && !archivo && !urlArchivoSegura(actual?.archivoUrl)) {
+        return alert('Adjunta el archivo del reglamento para publicar este anuncio.');
+    }
+
+    boton.disabled = true;
+    try {
+        let archivoUrl = urlArchivoSegura(actual?.archivoUrl) || null;
+        if (archivo) {
+            const nombre = `anuncios/${tipo}_${nombreArchivoAleatorio(archivo)}`;
+            const { error: uploadError } = await db.storage.from('cartas').upload(nombre, archivo);
+            if (uploadError) throw uploadError;
+            archivoUrl = db.storage.from('cartas').getPublicUrl(nombre).data.publicUrl;
+        }
+
+        const anuncio = {
+            id: actual?.id || crypto.randomUUID(),
+            tipo,
+            equipo,
+            titulo,
+            descripcion,
+            archivoUrl
+        };
+        if (actual) anunciosPublicados = anunciosPublicados.map(item => item.id === actual.id ? anuncio : item);
+        else anunciosPublicados = [anuncio, ...anunciosPublicados];
+
+        await guardarAnunciosConfigurados();
+        await registrarLogAuditoria(actual ? 'Edición de anuncio' : 'Creación de anuncio', 'Anuncios', `${actual ? 'Editó' : 'Publicó'} "${titulo}" para ${equipo || 'todos los equipos'}.`);
+        renderizarAnunciosAdmin();
+        limpiarFormularioAnuncio();
+        alert('Anuncio guardado correctamente.');
+    } catch (error) {
+        anunciosPublicados = listaAnterior;
+        renderizarAnunciosAdmin();
+        console.error('Error guardando el anuncio:', error);
+        alert('No se pudo guardar el anuncio: ' + error.message);
+    } finally {
+        boton.disabled = false;
+    }
+}
+
+async function eliminarAnuncio(id) {
+    const anuncio = anunciosPublicados.find(item => String(item.id) === String(id));
+    if (!anuncio || !confirm(`¿Eliminar el anuncio "${anuncio.titulo}"?`)) return;
+
+    const listaAnterior = anunciosPublicados;
+    anunciosPublicados = anunciosPublicados.filter(item => String(item.id) !== String(id));
+    try {
+        await guardarAnunciosConfigurados();
+        await registrarLogAuditoria('Eliminación de anuncio', 'Anuncios', `Eliminó "${anuncio.titulo}".`);
+        renderizarAnunciosAdmin();
+        limpiarFormularioAnuncio();
+    } catch (error) {
+        anunciosPublicados = listaAnterior;
+        console.error('Error eliminando el anuncio:', error);
+        alert('No se pudo eliminar el anuncio: ' + error.message);
+    }
+}
+
 async function actualizarDisponibilidadDescargaCarta(habilitada) {
     const toggle = document.getElementById('toggleDescargaModeloCarta');
     toggle.disabled = true;
@@ -807,7 +1010,7 @@ async function procesarEdicion(idSol, estado) {
 }
 
 async function cambiarPestana(tab) {
-    const pestanasPermitidas = ['solicitudes', 'cartas', 'inscritos', 'campos', 'categorias', 'ingresos', 'egresos', 'reportes', 'usuarios', 'roles', 'auditoria'];
+    const pestanasPermitidas = ['solicitudes', 'cartas', 'anuncios', 'inscritos', 'campos', 'categorias', 'ingresos', 'egresos', 'reportes', 'usuarios', 'roles', 'auditoria'];
     if (!pestanasPermitidas.includes(tab)) return;
 
     const sufijo = tab.charAt(0).toUpperCase() + tab.slice(1);
@@ -1188,6 +1391,7 @@ async function guardarRol(e) {
         verFinanzas: document.getElementById('permVerFinanzas').checked,
         solicitudes: document.getElementById('permSolicitudes').checked,
         cartas: document.getElementById('permCartas').checked,
+        anuncios: document.getElementById('permAnuncios').checked,
         inscritosVer: document.getElementById('permInscritosVer').checked,
         inscritosCrear: document.getElementById('permInscritosCrear').checked,
         inscritosEditar: document.getElementById('permInscritosEditar').checked,
@@ -1279,6 +1483,7 @@ function aplicarPermisosVisuales() {
 
     document.getElementById('navSolicitudes').style.display = (esSuper || permisosAdmin.solicitudes) ? 'block' : 'none';
     document.getElementById('navCartas').style.display = (esSuper || permisosAdmin.cartas) ? 'block' : 'none';
+    document.getElementById('navAnuncios').style.display = (esSuper || permisosAdmin.anuncios) ? 'block' : 'none';
     document.getElementById('navInscritos').style.display = (esSuper || permisosAdmin.inscritosVer) ? 'block' : 'none';
     document.getElementById('navCategorias').style.display = (esSuper || permisosAdmin.categorias) ? 'block' : 'none';
     document.getElementById('navIngresos').style.display = (esSuper || permisosAdmin.ingresosVer) ? 'block' : 'none';
@@ -1343,6 +1548,9 @@ async function cargarContenidoPestana(tab) {
                 break;
             case 'cartas':
                 await cargarModuloCartas();
+                break;
+            case 'anuncios':
+                await cargarModuloAnuncios();
                 break;
             case 'inscritos': {
                 const [inscritosResult, pagosResult] = await Promise.all([
@@ -2242,6 +2450,7 @@ function cargarRolParaEditar(id, nombre, permisosEncoded) {
     document.getElementById('permVerFinanzas').checked = !!permisos.verFinanzas;
     document.getElementById('permSolicitudes').checked = !!permisos.solicitudes;
     document.getElementById('permCartas').checked = !!permisos.cartas;
+    document.getElementById('permAnuncios').checked = !!permisos.anuncios;
     document.getElementById('permInscritosVer').checked = !!permisos.inscritosVer;
     document.getElementById('permInscritosCrear').checked = !!permisos.inscritosCrear;
     document.getElementById('permInscritosEditar').checked = !!permisos.inscritosEditar;
