@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 # Jesus Camp 2027
 
+=======
+<<<<<<< HEAD
+
+=======
+# Jesus Camp 2027
+
+>>>>>>> 19b85df (Update the entire file structure)
 Jesus Camp 2027 es una aplicación web para apoyar la organización y administración
 del campamento. Reúne en un mismo sistema la gestión de inscripciones, participantes,
 pagos y tareas administrativas.
@@ -32,3 +40,7 @@ La configuración de la base de datos, las políticas de acceso, autenticación 
 almacenamiento de Supabase se administran fuera de este repositorio. Antes de usar
 datos reales, deben revisarse y protegerse especialmente los datos personales,
 financieros y de menores.
+<<<<<<< HEAD
+=======
+>>>>>>> 17ace31 (Update the entire file structure)
+>>>>>>> 19b85df (Update the entire file structure)
