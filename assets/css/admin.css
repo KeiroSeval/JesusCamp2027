@@ -1,0 +1,125 @@
+.admin-workspace {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr);
+    align-items: start;
+    gap: 1.25rem;
+}
+
+.admin-sidebar {
+    position: sticky;
+    top: 4rem;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+}
+
+#secDashboard {
+    padding-top: 0;
+}
+
+.admin-sidebar .tab-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 2.75rem;
+    text-align: left;
+}
+
+.admin-sidebar .tab-btn[aria-current="page"] {
+    background: #111827;
+    color: #fff;
+    border-color: #111827;
+    box-shadow: 0 4px 10px rgb(17 24 39 / 14%);
+}
+
+.admin-workspace.sidebar-collapsed {
+    grid-template-columns: 5rem minmax(0, 1fr);
+}
+
+.admin-workspace.sidebar-collapsed .admin-sidebar {
+    padding: .75rem .5rem;
+    border-radius: 1rem;
+}
+
+.admin-workspace.sidebar-collapsed .admin-sidebar > p {
+    display: none;
+}
+
+.admin-workspace.sidebar-collapsed .admin-sidebar nav {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: .5rem;
+}
+
+.admin-workspace.sidebar-collapsed .admin-sidebar .tab-btn {
+    min-width: 0;
+    min-height: 4.25rem;
+    flex-direction: column;
+    justify-content: center;
+    gap: .35rem;
+    padding: .5rem .2rem;
+    border-color: transparent;
+    border-radius: .75rem;
+    font-size: .625rem;
+    line-height: 1;
+    text-align: center;
+    white-space: normal;
+}
+
+.admin-sidebar .tab-btn > i {
+    margin: 0;
+    font-size: 1.125rem;
+}
+
+.admin-sidebar .tab-label {
+    display: block;
+}
+
+.admin-workspace.sidebar-collapsed .admin-sidebar .tab-btn[aria-current="page"] {
+    background: #f3f4f6;
+    color: #111827;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.admin-workspace.sidebar-collapsed .admin-sidebar .tab-btn[aria-current="page"] > i {
+    color: #111827;
+}
+
+#secDashboard.sidebar-collapsed {
+    max-width: none;
+}
+
+@media (max-width: 767px) {
+    .admin-workspace {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1rem;
+    }
+
+    .admin-sidebar {
+        position: static;
+        max-height: none;
+    }
+
+    .admin-sidebar nav {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: .5rem;
+        padding-bottom: .25rem;
+    }
+
+    .admin-sidebar .tab-btn {
+        width: auto;
+        min-width: max-content;
+        justify-content: center;
+    }
+
+    .admin-workspace.sidebar-collapsed {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .admin-workspace.sidebar-collapsed .admin-sidebar {
+        display: none;
+    }
+}

@@ -1,0 +1,13 @@
+.portal-navbar__inner {
+    display: flex;
+    max-width: 56rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-inline: auto;
+}
+
+.portal-main {
+    max-width: 56rem;
+    margin-inline: auto;
+    padding: 1rem;
+}
