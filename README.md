@@ -1,27 +1,34 @@
-# JesusCamp2027
+# Jesus Camp 2027
 
-## Seguridad antes de publicar
+Jesus Camp 2027 es una aplicación web para apoyar la organización y administración
+del campamento. Reúne en un mismo sistema la gestión de inscripciones, participantes,
+pagos y tareas administrativas.
 
-El portal usa Supabase directamente desde el navegador. Las validaciones de esta interfaz ayudan a evitar errores y contenido malicioso, pero no sustituyen controles del servidor. Antes de usar datos reales:
+## Objetivo
 
-- Activa y prueba políticas RLS en todas las tablas. No confíes en los permisos visuales del panel: solo las políticas de Supabase pueden impedir consultas o cambios no autorizados.
-- Sustituye el acceso administrativo propio basado en SHA-256 por Supabase Auth y aplica las operaciones de administración mediante políticas asociadas a usuarios autenticados. SHA-256 sin sal ni derivación de clave no es un almacenamiento seguro de contraseñas; solicita a cada administrador que restablezca su contraseña al migrar.
-- Restringe los buckets `cartas` y `comprobantes` y guárdalos como privados. El portal actual usa URL públicas; cambiar a buckets privados requiere implementar URLs firmadas con autorización y actualizar la forma de visualizarlas.
-- Limita la búsqueda pública de participantes: el C.I. por sí solo no acredita identidad y los datos personales, financieros y de menores no deben quedar expuestos por políticas de lectura pública. Usa un mecanismo de acceso verificado en el servidor.
-- Mantén únicamente la clave publicable/anon en el frontend; nunca agregues una clave `service_role`. Configura HTTPS y cabeceras de seguridad (incluida una Content Security Policy) en el hosting.
+Facilitar a los campamentistas la consulta y actualización de su información, y ofrecer
+al equipo organizador herramientas para supervisar los registros y coordinar la
+operación del campamento.
 
-La configuración SQL, RLS, Auth y Storage de Supabase no está incluida en este repositorio, por lo que debe revisarse y desplegarse por separado.
+## Funcionalidades principales
 
-## Campo obligatorio sobre natación
+- **Portal del campamentista** (`index.html`): permite buscar un perfil por C.I.,
+  consultar el estado de inscripción y pagos, gestionar datos personales y la carta
+  de compromiso, y enviar comprobantes.
+- **Panel administrativo** (`admin.html`): reúne la revisión de solicitudes, la
+  administración de inscritos y staff, categorías de inscripción, ingresos y egresos,
+  reportes, usuarios, roles y auditoría.
 
-Antes de usar la pregunta «¿Sabe nadar?» en los formularios, ejecuta esta migración en Supabase SQL Editor:
+## Estructura y tecnologías
 
-```sql
-ALTER TABLE public.inscritos
-    ADD COLUMN IF NOT EXISTS sabe_nadar boolean;
+- `index.html` y `admin.html` contienen las interfaces del portal y del panel.
+- `assets/css/` y `assets/js/` mantienen separados los estilos y la lógica de cada
+  interfaz.
+- La aplicación utiliza HTML, CSS y JavaScript, Tailwind CSS y el cliente de Supabase
+  para interactuar con los servicios de datos y archivos.
+- `manifest.json` describe la aplicación web instalable.
 
-ALTER TABLE public.solicitudes_edicion
-    ADD COLUMN IF NOT EXISTS sabe_nadar boolean;
-```
-
-Las columnas aceptan `NULL` para conservar los registros existentes; las nuevas inscripciones y las actualizaciones desde el portal requieren elegir «Sí» o «No».
+La configuración de la base de datos, las políticas de acceso, autenticación y
+almacenamiento de Supabase se administran fuera de este repositorio. Antes de usar
+datos reales, deben revisarse y protegerse especialmente los datos personales,
+financieros y de menores.
