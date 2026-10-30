@@ -546,7 +546,7 @@ async function procesarEdicion(idSol, estado) {
 }
 
 function cambiarPestana(tab) {
-    const pestanasPermitidas = ['solicitudes', 'inscritos', 'campos', 'categorias', 'ingresos', 'egresos', 'reportes', 'usuarios', 'roles', 'auditoria'];
+    const pestanasPermitidas = ['solicitudes', 'inscritos', 'campos', 'categorias', 'ingresos', 'egresos', 'reportes', 'usuarios', 'roles', 'auditoria', 'reglas'];
     if (!pestanasPermitidas.includes(tab)) return;
 
     const sufijo = tab.charAt(0).toUpperCase() + tab.slice(1);
@@ -576,10 +576,15 @@ function cambiarPestana(tab) {
         reportes: ['Reportes avanzados', 'Explora y organiza los datos del campamento.'],
         usuarios: ['Administradores', 'Gestiona las cuentas de acceso al panel.'],
         roles: ['Permisos y roles', 'Configura el acceso de cada rol administrativo.'],
-        auditoria: ['Auditoría y logs', 'Consulta las acciones registradas en el panel.']
+        auditoria: ['Auditoría y logs', 'Consulta las acciones registradas en el panel.'],
+        reglas: ['Reglas y recomendaciones', 'Consulta y administra el documento oficial del campamento.'],
+
     };
     document.getElementById('tituloModuloActivo').textContent = titulos[tab][0];
     document.getElementById('descripcionModuloActivo').textContent = titulos[tab][1];
+    if (tab === 'reglas') {
+        cargarDocumentoReglasAdmin();
+    }
 }
 
 function toggleAdminSidebar() {
@@ -934,7 +939,8 @@ async function guardarRol(e) {
         reportesVer: document.getElementById('permReportesVer').checked,
         reportesCrear: document.getElementById('permReportesCrear').checked,
         usuarios: document.getElementById('permUsuarios').checked,
-        roles: document.getElementById('permRoles').checked
+        roles: document.getElementById('permRoles').checked,
+        reglas: document.getElementById('permReglas').checked,
     };
 
     const payload = { nombre, permisos };
@@ -1021,6 +1027,7 @@ function aplicarPermisosVisuales() {
     document.getElementById('navUsuarios').style.display = (esSuper || permisosAdmin.usuarios) ? 'block' : 'none';
     document.getElementById('navRoles').style.display = (esSuper || permisosAdmin.roles) ? 'block' : 'none';
     document.getElementById('navAuditoria').style.display = esSuper ? 'block' : 'none';
+    document.getElementById('navReglas').style.display = (esSuper || permisosAdmin.reglas) ? 'block' : 'none';
 }
 
 async function cargarTodoElDashboard() {
@@ -1920,6 +1927,7 @@ function cargarRolParaEditar(id, nombre, permisosEncoded) {
     document.getElementById('permReportesCrear').checked = !!permisos.reportesCrear;
     document.getElementById('permUsuarios').checked = !!permisos.usuarios;
     document.getElementById('permRoles').checked = !!permisos.roles;
+    document.getElementById('permReglas').checked = !!permisos.reglas;
 
     document.getElementById('formContenedorRol').classList.remove('hidden');
 }
@@ -1935,6 +1943,121 @@ async function procesarPago(id, estado, nombre, monto) {
     await db.from('pagos').update({ estado: estado }).eq('id', id);
     await registrarLogAuditoria('Revisión Pago', 'Pendientes', `Marcó abono de Bs ${monto} de ${nombre} como: ${estado}`);
     cargarTodoElDashboard();
+}
+
+const REGLAS_BUCKET = 'documentos-campamento';
+const REGLAS_PATH = 'reglas-y-recomendaciones.pdf';
+
+async function cargarDocumentoReglasAdmin() {
+    const estado = document.getElementById('estadoReglasAdmin');
+    const visor = document.getElementById('visorReglasAdmin');
+    const btnVer = document.getElementById('btnVerReglasAdmin');
+    const btnDescargar = document.getElementById('btnDescargarReglasAdmin');
+
+    const { data, error } = db.storage.from(REGLAS_BUCKET).getPublicUrl(REGLAS_PATH);
+
+    if (error || !data?.publicUrl) {
+        estado.textContent = 'No existe un documento publicado.';
+        estado.className = 'text-xs text-amber-700';
+        visor.src = 'about:blank';
+        btnVer.classList.add('hidden');
+        btnDescargar.classList.add('hidden');
+        return;
+    }
+
+    const url = urlArchivoSegura(data.publicUrl);
+
+    if (!url) {
+        estado.textContent = 'La URL del documento no es válida.';
+        estado.className = 'text-xs text-red-600';
+        return;
+    }
+
+    const urlConVersion = `${url}?v=${Date.now()}`;
+
+    estado.textContent = 'Documento publicado correctamente.';
+    estado.className = 'text-xs text-green-600 font-semibold';
+    visor.src = `${urlConVersion}#toolbar=1`;
+    btnVer.href = urlConVersion;
+    btnVer.classList.remove('hidden');
+    btnDescargar.classList.remove('hidden');
+}
+
+async function subirDocumentoReglas() {
+    const input = document.getElementById('archivoReglasCampamento');
+    const archivo = input.files[0];
+
+    if (!archivo) {
+        alert('Selecciona el archivo PDF.');
+        return;
+    }
+
+    if (archivo.type !== 'application/pdf') {
+        alert('Solo se permiten archivos PDF.');
+        return;
+    }
+
+    if (archivo.size > 10 * 1024 * 1024) {
+        alert('El documento no puede superar los 10 MB.');
+        return;
+    }
+
+    const { error } = await db.storage.from(REGLAS_BUCKET).upload(
+        REGLAS_PATH,
+        archivo,
+        {
+            cacheControl: '3600',
+            upsert: true,
+            contentType: 'application/pdf'
+        }
+    );
+
+    if (error) {
+        alert('No se pudo subir el documento: ' + error.message);
+        return;
+    }
+
+    await registrarLogAuditoria(
+        'Actualización de documento',
+        'Reglas y recomendaciones',
+        'Subió o reemplazó el documento oficial de reglas y recomendaciones.'
+    );
+
+    input.value = '';
+    await cargarDocumentoReglasAdmin();
+    alert('Documento actualizado correctamente.');
+}
+
+async function descargarDocumentoReglasAdmin() {
+    const { data } = db.storage
+        .from(REGLAS_BUCKET)
+        .getPublicUrl(REGLAS_PATH);
+
+    const url = urlArchivoSegura(data?.publicUrl);
+
+    if (!url) {
+        alert('No hay un documento publicado.');
+        return;
+    }
+
+    const respuesta = await fetch(url);
+
+    if (!respuesta.ok) {
+        alert('No se pudo descargar el documento.');
+        return;
+    }
+
+    const blob = await respuesta.blob();
+    const objetoUrl = URL.createObjectURL(blob);
+    const enlace = document.createElement('a');
+
+    enlace.href = objetoUrl;
+    enlace.download = 'Reglas_y_recomendaciones_JC2027.pdf';
+    document.body.appendChild(enlace);
+    enlace.click();
+    enlace.remove();
+
+    setTimeout(() => URL.revokeObjectURL(objetoUrl), 1000);
 }
 
 function cerrarSesion() { location.reload(); }

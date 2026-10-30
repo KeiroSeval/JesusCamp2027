@@ -69,7 +69,8 @@
             </div>
             <div>
                 <label class="text-xs font-bold text-gray-600">Contraseña</label>
-                <input type="password" id="loginPass" required autocomplete="current-password" maxlength="128" placeholder="••••••••"
+                <input type="password" id="loginPass" required autocomplete="current-password" maxlength="128"
+                    placeholder="••••••••"
                     class="w-full mt-1 p-3 border border-gray-300 rounded-xl text-sm outline-none">
             </div>
             <button type="submit"
@@ -84,930 +85,1106 @@
 
         <div class="admin-workspace">
             <aside id="adminSidebar" class="admin-sidebar bg-white border border-gray-200 rounded-2xl shadow-sm p-3">
-                <p class="hidden md:block px-3 pt-1 pb-2 text-[10px] font-extrabold uppercase tracking-widest text-gray-400">Módulos</p>
+                <p
+                    class="hidden md:block px-3 pt-1 pb-2 text-[10px] font-extrabold uppercase tracking-widest text-gray-400">
+                    Módulos</p>
                 <nav aria-label="Módulos de administración" class="flex flex-wrap gap-2">
-            <button id="navSolicitudes" title="Pendientes" aria-label="Pendientes" onclick="cambiarPestana('solicitudes')"
-                aria-current="page" class="tab-btn bg-gray-900 text-white text-xs font-bold px-4 py-2 rounded-xl transition">
-                <i class="fa-solid fa-clock-rotate-left mr-1"></i><span class="tab-label">Pendientes</span>
-            </button>
-            <button id="navInscritos" title="Lista de Inscritos y Staff" aria-label="Lista de Inscritos y Staff" onclick="cambiarPestana('inscritos')"
-                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-users mr-1"></i><span class="tab-label">Inscritos & Staff</span>
-            </button>
-            <button id="navCampos" title="Campos y SQL" aria-label="Campos y SQL" onclick="cambiarPestana('campos')"
-                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-sliders mr-1"></i><span class="tab-label">Campos & SQL</span>
-            </button>
-            <button id="navCategorias" title="Tipos de Inscripción" aria-label="Tipos de Inscripción" onclick="cambiarPestana('categorias')"
-                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-tags mr-1"></i><span class="tab-label">Categorías</span>
-            </button>
-            <button id="navIngresos" title="Ingresos y QR" aria-label="Ingresos y QR" onclick="cambiarPestana('ingresos')"
-                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-file-invoice-dollar mr-1"></i><span class="tab-label">Ingresos & QR</span>
-            </button>
-            <button id="navEgresos" title="Egresos" aria-label="Egresos" onclick="cambiarPestana('egresos')"
-                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-arrow-down-short-wide mr-1"></i><span class="tab-label">Egresos</span>
-            </button>
-            <button id="navReportes" title="Reportes Avanzados" aria-label="Reportes Avanzados" onclick="cambiarPestana('reportes')"
-                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-chart-pie mr-1"></i><span class="tab-label">Reportes</span>
-            </button>
-            <button id="navUsuarios" title="Administradores" aria-label="Administradores" onclick="cambiarPestana('usuarios')"
-                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-user-shield mr-1"></i><span class="tab-label">Administradores</span>
-            </button>
-            <button id="navRoles" title="Permisos y Roles" aria-label="Permisos y Roles" onclick="cambiarPestana('roles')"
-                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-key mr-1"></i><span class="tab-label">Permisos y Roles</span>
-            </button>
-            <button id="navAuditoria" title="Auditoría y Logs" aria-label="Auditoría y Logs" onclick="cambiarPestana('auditoria')"
-                class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
-                <i class="fa-solid fa-clipboard-list mr-1"></i><span class="tab-label">Auditoría</span>
-            </button>
+                    <button id="navSolicitudes" title="Pendientes" aria-label="Pendientes"
+                        onclick="cambiarPestana('solicitudes')" aria-current="page"
+                        class="tab-btn bg-gray-900 text-white text-xs font-bold px-4 py-2 rounded-xl transition">
+                        <i class="fa-solid fa-clock-rotate-left mr-1"></i><span class="tab-label">Pendientes</span>
+                    </button>
+                    <button id="navInscritos" title="Lista de Inscritos y Staff" aria-label="Lista de Inscritos y Staff"
+                        onclick="cambiarPestana('inscritos')"
+                        class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                        <i class="fa-solid fa-users mr-1"></i><span class="tab-label">Inscritos & Staff</span>
+                    </button>
+                    <button id="navCampos" title="Campos y SQL" aria-label="Campos y SQL"
+                        onclick="cambiarPestana('campos')"
+                        class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                        <i class="fa-solid fa-sliders mr-1"></i><span class="tab-label">Campos & SQL</span>
+                    </button>
+                    <button id="navCategorias" title="Tipos de Inscripción" aria-label="Tipos de Inscripción"
+                        onclick="cambiarPestana('categorias')"
+                        class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                        <i class="fa-solid fa-tags mr-1"></i><span class="tab-label">Categorías</span>
+                    </button>
+                    <button id="navIngresos" title="Ingresos y QR" aria-label="Ingresos y QR"
+                        onclick="cambiarPestana('ingresos')"
+                        class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                        <i class="fa-solid fa-file-invoice-dollar mr-1"></i><span class="tab-label">Ingresos & QR</span>
+                    </button>
+                    <button id="navEgresos" title="Egresos" aria-label="Egresos" onclick="cambiarPestana('egresos')"
+                        class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                        <i class="fa-solid fa-arrow-down-short-wide mr-1"></i><span class="tab-label">Egresos</span>
+                    </button>
+                    <button id="navReportes" title="Reportes Avanzados" aria-label="Reportes Avanzados"
+                        onclick="cambiarPestana('reportes')"
+                        class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                        <i class="fa-solid fa-chart-pie mr-1"></i><span class="tab-label">Reportes</span>
+                    </button>
+                    <button id="navUsuarios" title="Administradores" aria-label="Administradores"
+                        onclick="cambiarPestana('usuarios')"
+                        class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                        <i class="fa-solid fa-user-shield mr-1"></i><span class="tab-label">Administradores</span>
+                    </button>
+                    <button id="navRoles" title="Permisos y Roles" aria-label="Permisos y Roles"
+                        onclick="cambiarPestana('roles')"
+                        class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                        <i class="fa-solid fa-key mr-1"></i><span class="tab-label">Permisos y Roles</span>
+                    </button>
+                    <button id="navAuditoria" title="Auditoría y Logs" aria-label="Auditoría y Logs"
+                        onclick="cambiarPestana('auditoria')"
+                        class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                        <i class="fa-solid fa-clipboard-list mr-1"></i><span class="tab-label">Auditoría</span>
+                    </button>
+                    <button id="navReglas" title="Reglas y recomendaciones" aria-label="Reglas y recomendaciones"
+                        onclick="cambiarPestana('reglas')"
+                        class="tab-btn bg-white text-gray-600 hover:bg-gray-100 text-xs font-bold px-4 py-2 rounded-xl transition border border-gray-200">
+                        <i class="fa-solid fa-book-open mr-1"></i>
+                        <span class="tab-label">Reglas y recomendaciones</span>
+                    </button>
                 </nav>
             </aside>
             <main class="admin-workspace-content min-w-0 space-y-6">
-        <!-- MÉTRICAS DE PARTICIPANTES -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div
-                class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-blue-600 flex justify-between items-center">
-                <div>
-                    <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Campamentistas</p>
-                    <h3 class="text-2xl font-black text-gray-900 mt-0.5" id="stCampamentistas">0</h3>
-                </div>
-                <div class="p-3 bg-blue-50 text-blue-600 rounded-xl"><i class="fa-solid fa-person-hiking text-lg"></i>
-                </div>
-            </div>
+                <!-- MÉTRICAS DE PARTICIPANTES -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div
+                        class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-blue-600 flex justify-between items-center">
+                        <div>
+                            <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Campamentistas
+                            </p>
+                            <h3 class="text-2xl font-black text-gray-900 mt-0.5" id="stCampamentistas">0</h3>
+                        </div>
+                        <div class="p-3 bg-blue-50 text-blue-600 rounded-xl"><i
+                                class="fa-solid fa-person-hiking text-lg"></i>
+                        </div>
+                    </div>
 
-            <div
-                class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-purple-600 flex justify-between items-center">
-                <div>
-                    <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Staff Totales</p>
-                    <h3 class="text-2xl font-black text-purple-700 mt-0.5" id="stStaff">0</h3>
-                </div>
-                <div class="p-3 bg-purple-50 text-purple-600 rounded-xl"><i class="fa-solid fa-user-shield text-lg"></i>
-                </div>
-            </div>
+                    <div
+                        class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-purple-600 flex justify-between items-center">
+                        <div>
+                            <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Staff Totales
+                            </p>
+                            <h3 class="text-2xl font-black text-purple-700 mt-0.5" id="stStaff">0</h3>
+                        </div>
+                        <div class="p-3 bg-purple-50 text-purple-600 rounded-xl"><i
+                                class="fa-solid fa-user-shield text-lg"></i>
+                        </div>
+                    </div>
 
-            <div
-                class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-emerald-600 flex justify-between items-center bg-emerald-50/20">
-                <div>
-                    <p class="text-[10px] font-extrabold text-emerald-800 uppercase tracking-wider">Total General
-                        Participantes</p>
-                    <h3 class="text-2xl font-black text-emerald-600 mt-0.5" id="stTotalGeneral">0</h3>
+                    <div
+                        class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-emerald-600 flex justify-between items-center bg-emerald-50/20">
+                        <div>
+                            <p class="text-[10px] font-extrabold text-emerald-800 uppercase tracking-wider">Total
+                                General
+                                Participantes</p>
+                            <h3 class="text-2xl font-black text-emerald-600 mt-0.5" id="stTotalGeneral">0</h3>
+                        </div>
+                        <div class="p-3 bg-emerald-100 text-emerald-700 rounded-xl"><i
+                                class="fa-solid fa-users text-lg"></i>
+                        </div>
+                    </div>
                 </div>
-                <div class="p-3 bg-emerald-100 text-emerald-700 rounded-xl"><i class="fa-solid fa-users text-lg"></i>
-                </div>
-            </div>
-        </div>
 
-        <!-- FINANZAS -->
-        <div id="contTarjetasFinanzas" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div id="cardTotalIngresos"
-                class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-green-600">
-                <p class="text-xs font-bold text-gray-400 uppercase">Total Ingresos</p>
-                <h3 class="text-2xl font-black text-green-600 mt-1" id="stIngresos">Bs 0</h3>
-            </div>
-            <div id="cardTotalEgresos"
-                class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-red-600">
-                <p class="text-xs font-bold text-gray-400 uppercase">Total Egresos</p>
-                <h3 class="text-2xl font-black text-red-600 mt-1" id="stEgresos">Bs 0</h3>
-            </div>
-            <div id="cardBalanceNeto"
-                class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-amber-500 bg-amber-50/30">
-                <p class="text-xs font-bold text-amber-800 uppercase">Balance Neto</p>
-                <h3 class="text-2xl font-black text-amber-600 mt-1" id="stBalance">Bs 0</h3>
-            </div>
-        </div>
+                <!-- FINANZAS -->
+                <div id="contTarjetasFinanzas" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div id="cardTotalIngresos"
+                        class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-green-600">
+                        <p class="text-xs font-bold text-gray-400 uppercase">Total Ingresos</p>
+                        <h3 class="text-2xl font-black text-green-600 mt-1" id="stIngresos">Bs 0</h3>
+                    </div>
+                    <div id="cardTotalEgresos"
+                        class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-red-600">
+                        <p class="text-xs font-bold text-gray-400 uppercase">Total Egresos</p>
+                        <h3 class="text-2xl font-black text-red-600 mt-1" id="stEgresos">Bs 0</h3>
+                    </div>
+                    <div id="cardBalanceNeto"
+                        class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm border-l-4 border-amber-500 bg-amber-50/30">
+                        <p class="text-xs font-bold text-amber-800 uppercase">Balance Neto</p>
+                        <h3 class="text-2xl font-black text-amber-600 mt-1" id="stBalance">Bs 0</h3>
+                    </div>
+                </div>
                 <div class="border-b border-gray-200 pb-3">
                     <h2 id="tituloModuloActivo" class="text-xl font-black text-gray-900">Pendientes</h2>
-                    <p id="descripcionModuloActivo" class="text-xs text-gray-500 mt-1">Revisa y gestiona las tareas que requieren atención.</p>
+                    <p id="descripcionModuloActivo" class="text-xs text-gray-500 mt-1">Revisa y gestiona las tareas que
+                        requieren atención.</p>
                 </div>
 
-        <!-- PESTAÑA 1: PENDIENTES -->
-        <div id="tabSolicitudes" class="tab-content space-y-6">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                    <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-receipt text-amber-500"></i> Comprobantes Pendientes
-                    </h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs text-gray-600">
-                            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                                <tr>
-                                    <th class="p-2">Fecha y Hora</th>
-                                    <th class="p-2">Inscrito</th>
-                                    <th class="p-2">Monto</th>
-                                    <th class="p-2">Recibo</th>
-                                    <th class="p-2">Acción</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tblPagosPendientes" class="divide-y divide-gray-100"></tbody>
-                        </table>
+                <!-- PESTAÑA 1: PENDIENTES -->
+                <div id="tabSolicitudes" class="tab-content space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                            <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-receipt text-amber-500"></i> Comprobantes Pendientes
+                            </h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs text-gray-600">
+                                    <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                                        <tr>
+                                            <th class="p-2">Fecha y Hora</th>
+                                            <th class="p-2">Inscrito</th>
+                                            <th class="p-2">Monto</th>
+                                            <th class="p-2">Recibo</th>
+                                            <th class="p-2">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tblPagosPendientes" class="divide-y divide-gray-100"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                            <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-user-pen text-blue-500"></i> Cambios de Datos Pendientes
+                            </h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs text-gray-600">
+                                    <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                                        <tr>
+                                            <th class="p-2">Fecha y Hora</th>
+                                            <th class="p-2">Inscrito</th>
+                                            <th class="p-2">Solicitud</th>
+                                            <th class="p-2 text-center">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tblEdicionesPendientes" class="divide-y divide-gray-100"></tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                    <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-user-pen text-blue-500"></i> Cambios de Datos Pendientes
-                    </h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs text-gray-600">
-                            <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                                <tr>
-                                    <th class="p-2">Fecha y Hora</th>
-                                    <th class="p-2">Inscrito</th>
-                                    <th class="p-2">Solicitud</th>
-                                    <th class="p-2 text-center">Acción</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tblEdicionesPendientes" class="divide-y divide-gray-100"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-file-signature text-indigo-600"></i> Cartas de Compromiso Pendientes
-                </h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-gray-600">
-                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                            <tr>
-                                <th class="p-2">Fecha Actualización</th>
-                                <th class="p-2">C.I.</th>
-                                <th class="p-2">Campamentista</th>
-                                <th class="p-2">Célula</th>
-                                <th class="p-2">Documento</th>
-                                <th class="p-2 text-center">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tblCartasPendientes" class="divide-y divide-gray-100"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- PESTAÑA CAMPOS DE FORMULARIO & SCRIPTS SQL -->
-        <div id="tabCampos" class="tab-content hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-6">
-                <div class="flex justify-between items-center border-b pb-3">
-                    <div>
-                        <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
-                            <i class="fa-solid fa-cubes-stacked text-indigo-600"></i> Módulo de Granularidad de Datos
+                    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                        <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-file-signature text-indigo-600"></i> Cartas de Compromiso Pendientes
                         </h3>
-                        <p class="text-xs text-gray-500">Configura nuevos campos personalizados y genera el script SQL
-                            automáticamente para tu base de datos.</p>
-                    </div>
-                </div>
-
-                <form onsubmit="crearNuevoCampoPersonalizado(event)"
-                    class="bg-gray-50 p-4 rounded-xl border border-gray-200 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                    <div>
-                        <label class="font-bold text-gray-700 block mb-1">Nombre Técnico de la Columna (SQL):</label>
-                        <input type="text" id="campoSqlName" required placeholder="ej. alergias_alimentos"
-                            class="p-2.5 border rounded-xl bg-white w-full font-mono text-indigo-900">
-                    </div>
-                    <div>
-                        <label class="font-bold text-gray-700 block mb-1">Etiqueta para la Interfaz:</label>
-                        <input type="text" id="campoLabelName" required placeholder="ej. Alergias Alimentarias"
-                            class="p-2.5 border rounded-xl bg-white w-full">
-                    </div>
-                    <div>
-                        <label class="font-bold text-gray-700 block mb-1">Tipo de Dato:</label>
-                        <select id="campoTipo" class="p-2.5 border rounded-xl bg-white w-full font-bold">
-                            <option value="text">Texto (VARCHAR / TEXT)</option>
-                            <option value="numeric">Número (NUMERIC / INT)</option>
-                            <option value="boolean">Verificación (BOOLEAN)</option>
-                            <option value="date">Fecha (DATE)</option>
-                        </select>
-                    </div>
-                    <div class="md:col-span-3 flex justify-end">
-                        <button type="submit"
-                            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-2.5 rounded-xl shadow transition">
-                            <i class="fa-solid fa-code mr-1"></i> Generar Script SQL & Añadir Campo
-                        </button>
-                    </div>
-                </form>
-
-                <div class="bg-slate-900 text-slate-100 p-4 rounded-xl space-y-2">
-                    <div class="flex justify-between items-center border-b border-slate-700 pb-2">
-                        <span class="text-xs font-mono text-amber-400 font-bold flex items-center gap-2">
-                            <i class="fa-solid fa-terminal"></i> Script SQL para Supabase Editor
-                        </span>
-                        <button onclick="copiarScriptSql()"
-                            class="bg-slate-800 hover:bg-slate-700 text-xs px-3 py-1 rounded-lg border border-slate-600 text-gray-300">
-                            <i class="fa-solid fa-copy mr-1"></i> Copiar Código
-                        </button>
-                    </div>
-                    <pre id="codeSqlOutput"
-                        class="text-xs font-mono text-green-400 overflow-x-auto p-2 bg-slate-950 rounded-lg">-- Los scripts SQL generados aparecerán aquí para pegarlos en Supabase SQL Editor</pre>
-                </div>
-            </div>
-        </div>
-
-        <!-- PESTAÑA INSCRITOS -->
-        <div id="tabInscritos" class="tab-content hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
-                    <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
-                        <i class="fa-solid fa-users text-green-600"></i> Directorio de Campamentistas y Staff
-                    </h3>
-                    <div class="flex flex-wrap gap-2 w-full md:w-auto">
-                        <div class="relative flex-1 md:w-64">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-                                <i class="fa-solid fa-magnifying-glass text-xs"></i>
-                            </span>
-                            <input type="text" id="txtBuscarInscrito" oninput="renderizarTablaInscritos()"
-                                placeholder="Buscar por CI, Nombre, Célula..."
-                                class="pl-8 pr-3 py-1.5 border border-gray-300 rounded-xl text-xs w-full outline-none focus:ring-2 focus:ring-green-600">
-                        </div>
-
-                        <button onclick="toggleFormulario('panelConfigColumnas')"
-                            class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-3 py-2 rounded-xl border transition flex items-center gap-1">
-                            <i class="fa-solid fa-sliders"></i> Columnas
-                        </button>
-                        <button onclick="toggleFormulario('formContenedorCampamentista')"
-                            class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
-                            <i class="fa-solid fa-plus"></i> Inscribir
-                        </button>
-                    </div>
-                </div>
-
-                <div id="panelConfigColumnas"
-                    class="hidden bg-slate-50 p-4 rounded-xl border border-slate-200 mb-4 text-xs space-y-3">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-2">
-                        <span class="font-bold text-gray-700 uppercase">Personalización de Tabla</span>
-                        <div class="flex items-center gap-2">
-                            <label class="font-bold text-gray-600">Ordenar Por:</label>
-                            <select id="selOrdenInscritos" onchange="renderizarTablaInscritos()"
-                                class="p-1.5 border rounded-lg bg-white font-semibold">
-                                <option value="nombre_completo">Nombre Completo</option>
-                                <option value="ci">C.I.</option>
-                                <option value="equipo">Equipo</option>
-                                <option value="tipo_inscripcion">Tipo de Inscripción</option>
-                                <option value="talla_polera">Talla de Polera</option>
-                                <option value="estado_carta">Estado de Carta</option>
-                                <option value="saldo">Saldo</option>
-                            </select>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs text-gray-600">
+                                <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                                    <tr>
+                                        <th class="p-2">Fecha Actualización</th>
+                                        <th class="p-2">C.I.</th>
+                                        <th class="p-2">Campamentista</th>
+                                        <th class="p-2">Célula</th>
+                                        <th class="p-2">Documento</th>
+                                        <th class="p-2 text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tblCartasPendientes" class="divide-y divide-gray-100"></tbody>
+                            </table>
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_ci"
-                                data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> C.I.</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_nombre"
-                                data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> Nombre</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_fecha"
-                                data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> Fecha nac. / Edad</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_rol"
-                                data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> Rol</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_inscripcion"
-                                data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> Inscripción</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_saldo"
-                                data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> Saldo</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_equipo"
-                                data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> Equipo</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_tel"
-                                data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> Teléfono</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_celula"
-                                data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> Célula</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_talla"
-                                data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> Talla Polera</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_actividad"
-                                data-columna-inscritos onchange="actualizarColumnasInscritos()"> Actividad</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_habilidad"
-                                data-columna-inscritos onchange="actualizarColumnasInscritos()"> Habilidad / talento</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_nadar"
-                                data-columna-inscritos onchange="actualizarColumnasInscritos()"> Sabe nadar</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_menor"
-                                data-columna-inscritos onchange="actualizarColumnasInscritos()"> Menor de edad</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_emergencia"
-                                data-columna-inscritos onchange="actualizarColumnasInscritos()"> Contacto de emergencia</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_alergias"
-                                data-columna-inscritos onchange="actualizarColumnasInscritos()"> Alergias</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_tutor"
-                                data-columna-inscritos onchange="actualizarColumnasInscritos()"> Tutor Legal</label>
-                        <label class="flex items-center gap-1"><input type="checkbox" id="col_carta"
-                                data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> Carta</label>
+                </div>
+
+                <!-- PESTAÑA CAMPOS DE FORMULARIO & SCRIPTS SQL -->
+                <div id="tabCampos" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-6">
+                        <div class="flex justify-between items-center border-b pb-3">
+                            <div>
+                                <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
+                                    <i class="fa-solid fa-cubes-stacked text-indigo-600"></i> Módulo de Granularidad de
+                                    Datos
+                                </h3>
+                                <p class="text-xs text-gray-500">Configura nuevos campos personalizados y genera el
+                                    script SQL
+                                    automáticamente para tu base de datos.</p>
+                            </div>
+                        </div>
+
+                        <form onsubmit="crearNuevoCampoPersonalizado(event)"
+                            class="bg-gray-50 p-4 rounded-xl border border-gray-200 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                            <div>
+                                <label class="font-bold text-gray-700 block mb-1">Nombre Técnico de la Columna
+                                    (SQL):</label>
+                                <input type="text" id="campoSqlName" required placeholder="ej. alergias_alimentos"
+                                    class="p-2.5 border rounded-xl bg-white w-full font-mono text-indigo-900">
+                            </div>
+                            <div>
+                                <label class="font-bold text-gray-700 block mb-1">Etiqueta para la Interfaz:</label>
+                                <input type="text" id="campoLabelName" required placeholder="ej. Alergias Alimentarias"
+                                    class="p-2.5 border rounded-xl bg-white w-full">
+                            </div>
+                            <div>
+                                <label class="font-bold text-gray-700 block mb-1">Tipo de Dato:</label>
+                                <select id="campoTipo" class="p-2.5 border rounded-xl bg-white w-full font-bold">
+                                    <option value="text">Texto (VARCHAR / TEXT)</option>
+                                    <option value="numeric">Número (NUMERIC / INT)</option>
+                                    <option value="boolean">Verificación (BOOLEAN)</option>
+                                    <option value="date">Fecha (DATE)</option>
+                                </select>
+                            </div>
+                            <div class="md:col-span-3 flex justify-end">
+                                <button type="submit"
+                                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-2.5 rounded-xl shadow transition">
+                                    <i class="fa-solid fa-code mr-1"></i> Generar Script SQL & Añadir Campo
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="bg-slate-900 text-slate-100 p-4 rounded-xl space-y-2">
+                            <div class="flex justify-between items-center border-b border-slate-700 pb-2">
+                                <span class="text-xs font-mono text-amber-400 font-bold flex items-center gap-2">
+                                    <i class="fa-solid fa-terminal"></i> Script SQL para Supabase Editor
+                                </span>
+                                <button onclick="copiarScriptSql()"
+                                    class="bg-slate-800 hover:bg-slate-700 text-xs px-3 py-1 rounded-lg border border-slate-600 text-gray-300">
+                                    <i class="fa-solid fa-copy mr-1"></i> Copiar Código
+                                </button>
+                            </div>
+                            <pre id="codeSqlOutput"
+                                class="text-xs font-mono text-green-400 overflow-x-auto p-2 bg-slate-950 rounded-lg">-- Los scripts SQL generados aparecerán aquí para pegarlos en Supabase SQL Editor</pre>
+                        </div>
                     </div>
                 </div>
 
-                <div id="formContenedorCampamentista"
-                    class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
-                    <div class="mb-4 border-b border-gray-200 pb-3">
-                        <h4 class="font-bold text-gray-800 text-base">Inscribir campamentista o staff</h4>
-                        <p class="text-xs text-gray-500 mt-1">Completa los datos en cada sección. Los campos con * son obligatorios.</p>
-                    </div>
-                    <form onsubmit="crearNuevoCampamentista(event)" class="space-y-4">
-                        <section class="bg-white p-4 rounded-xl border border-gray-200">
-                            <h5 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
-                                <i class="fa-solid fa-user text-blue-600"></i> Datos personales
-                            </h5>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="newCi" class="text-xs font-bold text-gray-600">C.I. *</label>
-                                    <input type="text" id="newCi" required
-                                        class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+                <!-- PESTAÑA INSCRITOS -->
+                <div id="tabInscritos" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+                            <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
+                                <i class="fa-solid fa-users text-green-600"></i> Directorio de Campamentistas y Staff
+                            </h3>
+                            <div class="flex flex-wrap gap-2 w-full md:w-auto">
+                                <div class="relative flex-1 md:w-64">
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                                    </span>
+                                    <input type="text" id="txtBuscarInscrito" oninput="renderizarTablaInscritos()"
+                                        placeholder="Buscar por CI, Nombre, Célula..."
+                                        class="pl-8 pr-3 py-1.5 border border-gray-300 rounded-xl text-xs w-full outline-none focus:ring-2 focus:ring-green-600">
                                 </div>
-                                <div>
-                                    <label for="newNombre" class="text-xs font-bold text-gray-600">Nombre completo *</label>
-                                    <input type="text" id="newNombre" required
-                                        class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
-                                </div>
-                                <div>
-                                    <label for="newFechaNac" class="text-xs font-bold text-gray-600">Fecha de nacimiento (dd/mm/yyyy)</label>
-                                    <input type="text" id="newFechaNac" placeholder="dd/mm/yyyy" inputmode="numeric" maxlength="10"
-                                        oninput="calcularEdadDesdeFecha('newFechaNac', 'newEdadVal', 'newSecTutor')"
-                                        class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
-                                </div>
-                                <div>
-                                    <label for="newEdadVal" class="text-xs font-bold text-gray-600">Edad calculada</label>
-                                    <input type="text" id="newEdadVal" readonly placeholder="Se calcula con la fecha de nacimiento"
-                                        class="w-full mt-1 p-2.5 bg-gray-100 border border-gray-200 rounded-lg text-sm font-bold text-indigo-900">
-                                </div>
-                                <div>
-                                    <label for="newTel" class="text-xs font-bold text-gray-600">Teléfono / WhatsApp</label>
-                                    <input type="text" id="newTel"
-                                        class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
-                                </div>
-                                <div>
-                                    <label for="newCelula" class="text-xs font-bold text-gray-600">Célula</label>
-                                    <select id="newCelula" class="select-celula w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-indigo-500"
-                                        onchange="actualizarCampoOtraCelula(this, 'newCelulaOtra')"></select>
-                                    <label for="newCelulaOtra" class="hidden mt-2 text-xs font-bold text-gray-600">Nombre de la célula</label>
-                                    <input type="text" id="newCelulaOtra" placeholder="Escribe el nombre de la célula"
-                                        class="hidden w-full mt-2 p-2.5 border border-gray-300 rounded-lg text-sm bg-white">
+
+                                <button onclick="toggleFormulario('panelConfigColumnas')"
+                                    class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-3 py-2 rounded-xl border transition flex items-center gap-1">
+                                    <i class="fa-solid fa-sliders"></i> Columnas
+                                </button>
+                                <button onclick="toggleFormulario('formContenedorCampamentista')"
+                                    class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
+                                    <i class="fa-solid fa-plus"></i> Inscribir
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="panelConfigColumnas"
+                            class="hidden bg-slate-50 p-4 rounded-xl border border-slate-200 mb-4 text-xs space-y-3">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-2">
+                                <span class="font-bold text-gray-700 uppercase">Personalización de Tabla</span>
+                                <div class="flex items-center gap-2">
+                                    <label class="font-bold text-gray-600">Ordenar Por:</label>
+                                    <select id="selOrdenInscritos" onchange="renderizarTablaInscritos()"
+                                        class="p-1.5 border rounded-lg bg-white font-semibold">
+                                        <option value="nombre_completo">Nombre Completo</option>
+                                        <option value="ci">C.I.</option>
+                                        <option value="equipo">Equipo</option>
+                                        <option value="tipo_inscripcion">Tipo de Inscripción</option>
+                                        <option value="talla_polera">Talla de Polera</option>
+                                        <option value="estado_carta">Estado de Carta</option>
+                                        <option value="saldo">Saldo</option>
+                                    </select>
                                 </div>
                             </div>
-                        </section>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                                <label class="flex items-center gap-1"><input type="checkbox" id="col_ci"
+                                        data-columna-inscritos checked onchange="actualizarColumnasInscritos()">
+                                    C.I.</label>
+                                <label class="flex items-center gap-1"><input type="checkbox" id="col_nombre"
+                                        data-columna-inscritos checked onchange="actualizarColumnasInscritos()">
+                                    Nombre</label>
+                                <label class="flex items-center gap-1"><input type="checkbox" id="col_fecha"
+                                        data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> Fecha
+                                    nac. / Edad</label>
+                                <label class="flex items-center gap-1"><input type="checkbox" id="col_rol"
+                                        data-columna-inscritos checked onchange="actualizarColumnasInscritos()">
+                                    Rol</label>
+                                <label class="flex items-center gap-1"><input type="checkbox" id="col_inscripcion"
+                                        data-columna-inscritos checked onchange="actualizarColumnasInscritos()">
+                                    Inscripción</label>
+                                <label class="flex items-center gap-1"><input type="checkbox" id="col_saldo"
+                                        data-columna-inscritos checked onchange="actualizarColumnasInscritos()">
+                                    Saldo</label>
+                                <label class="flex items-center gap-1"><input type="checkbox" id="col_equipo"
+                                        data-columna-inscritos checked onchange="actualizarColumnasInscritos()">
+                                    Equipo</label>
+                                <label class="flex items-center gap-1"><input type="checkbox" id="col_tel"
+                                        data-columna-inscritos checked onchange="actualizarColumnasInscritos()">
+                                    Teléfono</label>
+                                <label class="flex items-center gap-1"><input type="checkbox" id="col_celula"
+                                        data-columna-inscritos checked onchange="actualizarColumnasInscritos()">
+                                    Célula</label>
+                                <label class="flex items-center gap-1"><input type="checkbox" id="col_talla"
+                                        data-columna-inscritos checked onchange="actualizarColumnasInscritos()"> Talla
+                                    Polera</label>
+                                <label class="flex items-center gap-1"><input type="checkbox" id="col_actividad"
+                                        data-columna-inscritos onchange="actualizarColumnasInscritos()">
+                                    Actividad</label>
+                                <label class="flex items-center gap-1"><input type="checkbox" id="col_habilidad"
+                                        data-columna-inscritos onchange="actualizarColumnasInscritos()"> Habilidad /
+                                    talento</label>
+                                <label class="flex items-center gap-1"><input type="checkbox" id="col_nadar"
+                                        data-columna-inscritos onchange="actualizarColumnasInscritos()"> Sabe
+                                    nadar</label>
+                                <label class="flex items-center gap-1"><input type="checkbox" id="col_menor"
+                                        data-columna-inscritos onchange="actualizarColumnasInscritos()"> Menor de
+                                    edad</label>
+                                <label class="flex items-center gap-1"><input type="checkbox" id="col_emergencia"
+                                        data-columna-inscritos onchange="actualizarColumnasInscritos()"> Contacto de
+                                    emergencia</label>
+                                <label class="flex items-center gap-1"><input type="checkbox" id="col_alergias"
+                                        data-columna-inscritos onchange="actualizarColumnasInscritos()">
+                                    Alergias</label>
+                                <label class="flex items-center gap-1"><input type="checkbox" id="col_tutor"
+                                        data-columna-inscritos onchange="actualizarColumnasInscritos()"> Tutor
+                                    Legal</label>
+                                <label class="flex items-center gap-1"><input type="checkbox" id="col_carta"
+                                        data-columna-inscritos checked onchange="actualizarColumnasInscritos()">
+                                    Carta</label>
+                            </div>
+                        </div>
 
-                        <section class="bg-white p-4 rounded-xl border border-gray-200">
-                            <h5 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
-                                <i class="fa-solid fa-ticket text-indigo-600"></i> Inscripción y asignación
-                            </h5>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="newTalla" class="text-xs font-bold text-gray-600">Talla de polera</label>
-                                    <select id="newTalla" class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white">
-                                        <option value="">-- Seleccionar --</option>
-                                        <option value="XS">XS</option>
-                                        <option value="S">S</option>
-                                        <option value="M">M</option>
-                                        <option value="L">L</option>
-                                        <option value="XL">XL</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="newTipoInscripcion" class="text-xs font-bold text-gray-600">Tipo de inscripción</label>
-                                    <select id="newTipoInscripcion" onchange="evaluarPrecioManual(this.value, 'newDivPrecioManual')"
-                                        class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white font-bold text-indigo-900"></select>
-                                </div>
-                                <div id="newDivPrecioManual" class="hidden">
-                                    <label for="newPrecioManual" class="text-xs font-bold text-amber-800">Precio personalizado (Bs)</label>
-                                    <input type="number" id="newPrecioManual"
-                                        class="w-full mt-1 p-2.5 border border-amber-300 rounded-lg text-sm bg-amber-50 font-bold">
-                                </div>
-                                <div>
-                                    <label for="newEquipo" class="text-xs font-bold text-gray-600">Equipo</label>
-                                    <select id="newEquipo" class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white">
-                                        <option value="Sin Asignar">Sin asignar</option>
-                                        <option value="Búfalos">Búfalos 🦬</option>
-                                        <option value="Águilas">Águilas 🦅</option>
-                                        <option value="Leones">Leones 🦁</option>
-                                        <option value="Ciervos">Ciervos 🦌</option>
-                                    </select>
-                                </div>
-                                <div class="md:col-span-2 flex flex-wrap items-center gap-4 bg-purple-50 p-3 rounded-lg border border-purple-200">
-                                    <label class="text-xs font-bold text-purple-900 flex items-center gap-2">
-                                        <input type="checkbox" id="newEsStaff" class="rounded text-purple-600">
-                                        Pertenece al staff
-                                    </label>
-                                    <label class="text-xs font-bold text-gray-700 flex items-center gap-2">
-                                        <input type="checkbox" id="newEsMenor" class="rounded text-blue-600">
-                                        Es menor de edad
-                                    </label>
-                                </div>
-                                <div id="newSecTutor"
-                                    class="hidden md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 bg-amber-50/50 p-3 rounded-lg border border-amber-200">
-                                    <div>
-                                        <label for="newTutorNombre" class="text-xs font-bold text-gray-600">Nombre del tutor legal</label>
-                                        <input type="text" id="newTutorNombre"
-                                            class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white">
+                        <div id="formContenedorCampamentista"
+                            class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
+                            <div class="mb-4 border-b border-gray-200 pb-3">
+                                <h4 class="font-bold text-gray-800 text-base">Inscribir campamentista o staff</h4>
+                                <p class="text-xs text-gray-500 mt-1">Completa los datos en cada sección. Los campos con
+                                    * son obligatorios.</p>
+                            </div>
+                            <form onsubmit="crearNuevoCampamentista(event)" class="space-y-4">
+                                <section class="bg-white p-4 rounded-xl border border-gray-200">
+                                    <h5 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+                                        <i class="fa-solid fa-user text-blue-600"></i> Datos personales
+                                    </h5>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="newCi" class="text-xs font-bold text-gray-600">C.I. *</label>
+                                            <input type="text" id="newCi" required
+                                                class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+                                        </div>
+                                        <div>
+                                            <label for="newNombre" class="text-xs font-bold text-gray-600">Nombre
+                                                completo *</label>
+                                            <input type="text" id="newNombre" required
+                                                class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+                                        </div>
+                                        <div>
+                                            <label for="newFechaNac" class="text-xs font-bold text-gray-600">Fecha de
+                                                nacimiento (dd/mm/yyyy)</label>
+                                            <input type="text" id="newFechaNac" placeholder="dd/mm/yyyy"
+                                                inputmode="numeric" maxlength="10"
+                                                oninput="calcularEdadDesdeFecha('newFechaNac', 'newEdadVal', 'newSecTutor')"
+                                                class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+                                        </div>
+                                        <div>
+                                            <label for="newEdadVal" class="text-xs font-bold text-gray-600">Edad
+                                                calculada</label>
+                                            <input type="text" id="newEdadVal" readonly
+                                                placeholder="Se calcula con la fecha de nacimiento"
+                                                class="w-full mt-1 p-2.5 bg-gray-100 border border-gray-200 rounded-lg text-sm font-bold text-indigo-900">
+                                        </div>
+                                        <div>
+                                            <label for="newTel" class="text-xs font-bold text-gray-600">Teléfono /
+                                                WhatsApp</label>
+                                            <input type="text" id="newTel"
+                                                class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+                                        </div>
+                                        <div>
+                                            <label for="newCelula"
+                                                class="text-xs font-bold text-gray-600">Célula</label>
+                                            <select id="newCelula"
+                                                class="select-celula w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-indigo-500"
+                                                onchange="actualizarCampoOtraCelula(this, 'newCelulaOtra')"></select>
+                                            <label for="newCelulaOtra"
+                                                class="hidden mt-2 text-xs font-bold text-gray-600">Nombre de la
+                                                célula</label>
+                                            <input type="text" id="newCelulaOtra"
+                                                placeholder="Escribe el nombre de la célula"
+                                                class="hidden w-full mt-2 p-2.5 border border-gray-300 rounded-lg text-sm bg-white">
+                                        </div>
                                     </div>
-                                    <div>
-                                        <label for="newTutorTel" class="text-xs font-bold text-gray-600">Teléfono del tutor</label>
-                                        <input type="text" id="newTutorTel"
-                                            class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white">
+                                </section>
+
+                                <section class="bg-white p-4 rounded-xl border border-gray-200">
+                                    <h5 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+                                        <i class="fa-solid fa-ticket text-indigo-600"></i> Inscripción y asignación
+                                    </h5>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="newTalla" class="text-xs font-bold text-gray-600">Talla de
+                                                polera</label>
+                                            <select id="newTalla"
+                                                class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white">
+                                                <option value="">-- Seleccionar --</option>
+                                                <option value="XS">XS</option>
+                                                <option value="S">S</option>
+                                                <option value="M">M</option>
+                                                <option value="L">L</option>
+                                                <option value="XL">XL</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="newTipoInscripcion" class="text-xs font-bold text-gray-600">Tipo
+                                                de inscripción</label>
+                                            <select id="newTipoInscripcion"
+                                                onchange="evaluarPrecioManual(this.value, 'newDivPrecioManual')"
+                                                class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white font-bold text-indigo-900"></select>
+                                        </div>
+                                        <div id="newDivPrecioManual" class="hidden">
+                                            <label for="newPrecioManual" class="text-xs font-bold text-amber-800">Precio
+                                                personalizado (Bs)</label>
+                                            <input type="number" id="newPrecioManual"
+                                                class="w-full mt-1 p-2.5 border border-amber-300 rounded-lg text-sm bg-amber-50 font-bold">
+                                        </div>
+                                        <div>
+                                            <label for="newEquipo"
+                                                class="text-xs font-bold text-gray-600">Equipo</label>
+                                            <select id="newEquipo"
+                                                class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white">
+                                                <option value="Sin Asignar">Sin asignar</option>
+                                                <option value="Búfalos">Búfalos 🦬</option>
+                                                <option value="Águilas">Águilas 🦅</option>
+                                                <option value="Leones">Leones 🦁</option>
+                                                <option value="Ciervos">Ciervos 🦌</option>
+                                            </select>
+                                        </div>
+                                        <div
+                                            class="md:col-span-2 flex flex-wrap items-center gap-4 bg-purple-50 p-3 rounded-lg border border-purple-200">
+                                            <label class="text-xs font-bold text-purple-900 flex items-center gap-2">
+                                                <input type="checkbox" id="newEsStaff" class="rounded text-purple-600">
+                                                Pertenece al staff
+                                            </label>
+                                            <label class="text-xs font-bold text-gray-700 flex items-center gap-2">
+                                                <input type="checkbox" id="newEsMenor" class="rounded text-blue-600">
+                                                Es menor de edad
+                                            </label>
+                                        </div>
+                                        <div id="newSecTutor"
+                                            class="hidden md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 bg-amber-50/50 p-3 rounded-lg border border-amber-200">
+                                            <div>
+                                                <label for="newTutorNombre"
+                                                    class="text-xs font-bold text-gray-600">Nombre del tutor
+                                                    legal</label>
+                                                <input type="text" id="newTutorNombre"
+                                                    class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white">
+                                            </div>
+                                            <div>
+                                                <label for="newTutorTel"
+                                                    class="text-xs font-bold text-gray-600">Teléfono del tutor</label>
+                                                <input type="text" id="newTutorTel"
+                                                    class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white">
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        </section>
+                                </section>
 
-                        <section class="bg-white p-4 rounded-xl border border-gray-200">
-                            <h5 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
-                                <i class="fa-solid fa-heart-pulse text-rose-600"></i> Salud y seguridad
-                            </h5>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="newActividad" class="text-xs font-bold text-gray-600">Actividad favorita</label>
-                                    <select id="newActividad" class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white">
-                                        <option value="">-- Seleccionar --</option>
-                                        <option value="Fútbol">Fútbol</option>
-                                        <option value="Vóley">Vóley</option>
-                                        <option value="Memorizar Versículos">Memorizar Versículos</option>
-                                        <option value="Canto y Alabanza">Canto y Alabanza</option>
-                                        <option value="Coreografía / Baile">Coreografía / Baile</option>
-                                        <option value="Teatro / Dramatización">Teatro / Dramatización</option>
-                                        <option value="Atletismo / Carreras">Atletismo / Carreras</option>
-                                        <option value="Juegos de Mesa">Juegos de Mesa</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="newHabilidad" class="text-xs font-bold text-gray-600">Habilidad o talento especial</label>
-                                    <input type="text" id="newHabilidad"
-                                        class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
-                                </div>
-                                <div>
-                                    <label for="newSabeNadar" class="text-xs font-bold text-gray-600">¿Sabe nadar? *</label>
-                                    <select id="newSabeNadar" required
-                                        class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-indigo-500">
-                                        <option value="">-- Seleccionar --</option>
-                                        <option value="true">Sí</option>
-                                        <option value="false">No</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="newEmergencia" class="text-xs font-bold text-gray-600">Contacto de emergencia</label>
-                                    <input type="text" id="newEmergencia"
-                                        class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
-                                </div>
-                                <div class="md:col-span-2">
-                                    <label for="newAlergias" class="text-xs font-bold text-gray-600">Alergias o medicamentos</label>
-                                    <input type="text" id="newAlergias"
-                                        class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
-                                </div>
-                            </div>
-                        </section>
+                                <section class="bg-white p-4 rounded-xl border border-gray-200">
+                                    <h5 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+                                        <i class="fa-solid fa-heart-pulse text-rose-600"></i> Salud y seguridad
+                                    </h5>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="newActividad" class="text-xs font-bold text-gray-600">Actividad
+                                                favorita</label>
+                                            <select id="newActividad"
+                                                class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white">
+                                                <option value="">-- Seleccionar --</option>
+                                                <option value="Fútbol">Fútbol</option>
+                                                <option value="Vóley">Vóley</option>
+                                                <option value="Memorizar Versículos">Memorizar Versículos</option>
+                                                <option value="Canto y Alabanza">Canto y Alabanza</option>
+                                                <option value="Coreografía / Baile">Coreografía / Baile</option>
+                                                <option value="Teatro / Dramatización">Teatro / Dramatización</option>
+                                                <option value="Atletismo / Carreras">Atletismo / Carreras</option>
+                                                <option value="Juegos de Mesa">Juegos de Mesa</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="newHabilidad" class="text-xs font-bold text-gray-600">Habilidad
+                                                o talento especial</label>
+                                            <input type="text" id="newHabilidad"
+                                                class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+                                        </div>
+                                        <div>
+                                            <label for="newSabeNadar" class="text-xs font-bold text-gray-600">¿Sabe
+                                                nadar? *</label>
+                                            <select id="newSabeNadar" required
+                                                class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-indigo-500">
+                                                <option value="">-- Seleccionar --</option>
+                                                <option value="true">Sí</option>
+                                                <option value="false">No</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="newEmergencia" class="text-xs font-bold text-gray-600">Contacto
+                                                de emergencia</label>
+                                            <input type="text" id="newEmergencia"
+                                                class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <label for="newAlergias" class="text-xs font-bold text-gray-600">Alergias o
+                                                medicamentos</label>
+                                            <input type="text" id="newAlergias"
+                                                class="w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+                                        </div>
+                                    </div>
+                                </section>
 
-                        <div class="flex flex-col-reverse sm:flex-row justify-end gap-2">
-                            <button type="button" onclick="toggleFormulario('formContenedorCampamentista')"
-                                class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold text-sm px-5 py-2.5 rounded-xl">Cancelar</button>
-                            <button type="submit"
-                                class="bg-green-600 hover:bg-green-700 text-white font-bold text-sm px-6 py-2.5 rounded-xl transition shadow">Guardar inscripción</button>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-gray-600">
-                        <thead id="theadInscritos" class="bg-gray-50 text-gray-400 uppercase font-semibold"></thead>
-                        <tbody id="tblTodosInscritos" class="divide-y divide-gray-100"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div id="tabCategorias" class="tab-content hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-gray-800 text-base">Gestión de Tipos de Inscripción</h3>
-                    <button onclick="prepararCrearCategoria()"
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
-                        <i class="fa-solid fa-plus"></i> Nueva Categoría
-                    </button>
-                </div>
-
-                <div id="formContenedorCategoria" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
-                    <form onsubmit="guardarTipoInscripcion(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <input type="hidden" id="catIdEdit">
-                        <div>
-                            <label class="text-[10px] font-bold text-gray-500 uppercase">Nombre Categoría:</label>
-                            <input type="text" id="catNombre" placeholder="Nombre" required
-                                class="p-2.5 border rounded-xl text-xs bg-white w-full">
-                        </div>
-                        <div>
-                            <label class="text-[10px] font-bold text-gray-500 uppercase">Precio Oficial (Bs):</label>
-                            <input type="number" step="0.01" id="catPrecio" placeholder="Precio (Bs)" required
-                                class="p-2.5 border rounded-xl text-xs bg-white w-full">
+                                <div class="flex flex-col-reverse sm:flex-row justify-end gap-2">
+                                    <button type="button" onclick="toggleFormulario('formContenedorCampamentista')"
+                                        class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold text-sm px-5 py-2.5 rounded-xl">Cancelar</button>
+                                    <button type="submit"
+                                        class="bg-green-600 hover:bg-green-700 text-white font-bold text-sm px-6 py-2.5 rounded-xl transition shadow">Guardar
+                                        inscripción</button>
+                                </div>
+                            </form>
                         </div>
 
-                        <div class="flex flex-col gap-2 justify-center bg-white p-3 rounded-xl border">
-                            <label class="text-xs font-bold text-gray-700 flex items-center gap-2">
-                                <input type="checkbox" id="catEsManual" class="rounded text-indigo-600">
-                                ¿Precio Manual / Especial?
-                            </label>
-                            <label class="text-xs font-bold text-green-700 flex items-center gap-2">
-                                <input type="checkbox" id="catEsVisible" checked class="rounded text-green-600">
-                                👁️ Visible para las personas en el Portal
-                            </label>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs text-gray-600">
+                                <thead id="theadInscritos" class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                                </thead>
+                                <tbody id="tblTodosInscritos" class="divide-y divide-gray-100"></tbody>
+                            </table>
                         </div>
-
-                        <div class="col-span-3 flex justify-end gap-2">
-                            <button type="button" onclick="toggleFormulario('formContenedorCategoria')"
-                                class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
-                            <button type="submit"
-                                class="bg-indigo-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">Guardar
-                                Tipo de Inscripción</button>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-gray-600">
-                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                            <tr>
-                                <th class="p-2">Nombre de Categoría</th>
-                                <th class="p-2">Precio Estándar</th>
-                                <th class="p-2">Modalidad</th>
-                                <th class="p-2">Visibilidad Portal</th>
-                                <th class="p-2 text-center">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tblTiposInscripcion" class="divide-y divide-gray-100"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- INGRESOS Y CONFIGURACIÓN QR -->
-        <div id="tabIngresos" class="tab-content hidden space-y-6">
-            <div
-                class="bg-indigo-50 p-4 rounded-2xl border border-indigo-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div class="flex items-center gap-3">
-                    <div
-                        class="w-12 h-12 bg-indigo-600 text-white rounded-xl flex items-center justify-center text-xl shadow">
-                        <i class="fa-solid fa-qrcode"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-sm text-indigo-900">Configuración del QR de Pago</h4>
-                        <p class="text-xs text-indigo-700">Sube la imagen del QR para que los campamentistas la vean en
-                            su portal al pagar.</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
-                    <input type="file" id="inputQrAdmin" accept="image/jpeg,image/png,image/webp"
-                        class="text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-indigo-600 file:text-white file:font-bold">
-                    <button onclick="guardarQrSistema()"
-                        class="bg-indigo-700 hover:bg-indigo-800 text-white font-bold text-xs px-4 py-2 rounded-xl shadow transition">
-                        Guardar QR
-                    </button>
-                </div>
-            </div>
 
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
-                <div class="flex justify-between items-center border-b pb-3">
-                    <h3 class="font-bold text-gray-800 text-base">Historial de Ingresos Confirmados</h3>
-                    <button onclick="prepararCrearCobroDirecto()"
-                        class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
-                        <i class="fa-solid fa-cash-register"></i> + Registrar Cobro Directo
-                    </button>
-                </div>
-
-                <div id="formContenedorPagoDirecto"
-                    class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-3">
-                    <h4 id="lblTituloPagoForm" class="font-bold text-xs text-gray-700 uppercase border-b pb-1">Registrar
-                        Pago Manual a Campamentista</h4>
-                    <form onsubmit="guardarCobroDirecto(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <input type="hidden" id="pagoAdminIdEdit">
-                        <div>
-                            <label
-                                class="text-[10px] font-bold text-gray-500 uppercase block mb-1">Campamentista:</label>
-                            <select id="pagoAdminInscrito" onchange="verificarSaldoInscritoSelect(this.value)" required
-                                class="p-2.5 border rounded-xl text-xs bg-white font-bold w-full">
-                                <option value="">-- Seleccionar Campamentista --</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-[10px] font-bold text-gray-500 uppercase block mb-1">Monto (Bs):</label>
-                            <input type="number" step="0.01" id="pagoAdminMonto" placeholder="Monto Recibido (Bs)"
-                                required class="p-2.5 border rounded-xl text-xs bg-white font-bold w-full">
-                        </div>
-                        <div>
-                            <label class="text-[10px] font-bold text-gray-500 uppercase block mb-1">Comprobante / Foto
-                                (Obligatorio):</label>
-                            <input type="file" id="pagoAdminFile" accept="image/jpeg,image/png,image/webp,application/pdf"
-                                class="p-1 border rounded-xl text-xs bg-white w-full">
-                        </div>
-                        <div class="md:col-span-3">
-                            <label
-                                class="text-[10px] font-bold text-gray-500 uppercase block mb-1">Observaciones:</label>
-                            <input type="text" id="pagoAdminObs" placeholder="Ej. Recibo físico entregado en mano"
-                                class="p-2.5 border rounded-xl text-xs bg-white w-full">
-                        </div>
-                        <div class="md:col-span-3 flex justify-end gap-2">
-                            <button type="button" onclick="toggleFormulario('formContenedorPagoDirecto')"
-                                class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
-                            <button type="submit" id="btnConfirmarCobroDirecto"
-                                class="bg-green-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">Confirmar
-                                e Ingresar Pago</button>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-gray-600">
-                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                            <tr>
-                                <th class="p-2">Fecha</th>
-                                <th class="p-2">Inscrito</th>
-                                <th class="p-2">Monto</th>
-                                <th class="p-2">Observaciones</th>
-                                <th class="p-2">Comprobante</th>
-                                <th class="p-2 text-center">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tblHistorialIngresos" class="divide-y divide-gray-100"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div id="tabEgresos" class="tab-content hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-gray-800 text-base">Registro de Egresos</h3>
-                    <button onclick="prepararCrearEgreso()"
-                        class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
-                        <i class="fa-solid fa-plus"></i> Registrar Egreso
-                    </button>
-                </div>
-
-                <div id="formContenedorEgreso" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
-                    <form onsubmit="registrarNuevoEgreso(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <input type="hidden" id="egIdEdit">
-                        <input type="text" id="egConcepto" placeholder="Concepto de Gasto" required
-                            class="p-2.5 border rounded-xl text-xs bg-white">
-                        <select id="egCategoria" class="p-2.5 border rounded-xl text-xs bg-white">
-                            <option value="Alimentación">Alimentación</option>
-                            <option value="Logística">Logística</option>
-                            <option value="Sonido">Sonido / Iluminación</option>
-                            <option value="Transporte">Transporte</option>
-                            <option value="Otros">Otros Gastos</option>
-                        </select>
-                        <input type="number" step="0.01" id="egMonto" placeholder="Monto (Bs)" required
-                            class="p-2.5 border rounded-xl text-xs bg-white">
-                        <div class="col-span-3 flex justify-end gap-2">
-                            <button type="button" onclick="toggleFormulario('formContenedorEgreso')"
-                                class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
-                            <button type="submit"
-                                class="bg-red-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">- Guardar
-                                Egreso</button>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-gray-600">
-                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                            <tr>
-                                <th class="p-2">Fecha</th>
-                                <th class="p-2">Concepto</th>
-                                <th class="p-2">Categoría</th>
-                                <th class="p-2">Monto</th>
-                                <th class="p-2">Registrado por</th>
-                                <th class="p-2 text-center">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tblListaEgresos" class="divide-y divide-gray-100"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div id="tabReportes" class="tab-content hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
-                <div class="border-b pb-3">
-                    <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
-                        <i class="fa-solid fa-table-cells text-blue-600"></i> Reportes dinámicos
-                    </h3>
-                    <p class="text-xs text-gray-500 mt-1">Combina variables en filas y columnas, y elige qué valor resumir.</p>
-                </div>
-
-                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                        <div>
-                            <label for="repFilaSelect" class="text-[10px] font-bold text-gray-500 uppercase block">Filas (agrupar por)</label>
-                            <select id="repFilaSelect" onchange="normalizarDimensionesReporte('fila')" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold text-indigo-900"></select>
-                        </div>
-                        <div>
-                            <label for="repSubfilaSelect" class="text-[10px] font-bold text-gray-500 uppercase block">Subfilas (opcional)</label>
-                            <select id="repSubfilaSelect" onchange="normalizarDimensionesReporte('subfila')" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold"></select>
-                        </div>
-                        <div>
-                            <label for="repColumnaSelect" class="text-[10px] font-bold text-gray-500 uppercase block">Columnas (opcional)</label>
-                            <select id="repColumnaSelect" onchange="normalizarDimensionesReporte('columna')" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold"></select>
-                        </div>
-                        <div>
-                            <label for="repValorSelect" class="text-[10px] font-bold text-gray-500 uppercase block">Valores (resumir)</label>
-                            <select id="repValorSelect" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold"></select>
-                        </div>
-                        <div>
-                            <label for="repGraficoTipo" class="text-[10px] font-bold text-gray-500 uppercase block">Visualización</label>
-                            <select id="repGraficoTipo" class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold">
-                                <option value="bar">Barras</option>
-                                <option value="line">Líneas</option>
-                                <option value="pie">Torta (totales por fila)</option>
-                                <option value="doughnut">Dona (totales por fila)</option>
-                            </select>
-                        </div>
-                        <label id="repFiltroDeudores" class="flex items-center gap-2 text-xs font-semibold text-amber-900 bg-amber-50 border border-amber-200 rounded-xl p-2.5 self-end">
-                            <input type="checkbox" id="repSoloDeudores" class="rounded">
-                            Solo personas con saldo pendiente
-                        </label>
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row justify-between items-center gap-2 pt-2">
-                        <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-                            <select id="selReportePlantillas" onchange="cargarPlantillaReporte(this.value)"
-                                class="p-2 border rounded-xl text-xs bg-white font-bold text-emerald-800">
-                                <option value="">-- Cargar plantilla --</option>
-                            </select>
-                            <input type="text" id="txtNombrePlantilla" placeholder="Nombre de plantilla"
-                                class="p-2 border rounded-xl text-xs w-full sm:w-48">
-                            <button onclick="guardarPlantillaReporte()"
-                                class="bg-slate-800 hover:bg-slate-900 text-amber-400 font-bold px-4 py-2 rounded-xl text-xs transition whitespace-nowrap">
-                                <i class="fa-solid fa-bookmark mr-1"></i> Guardar configuración
+                <div id="tabCategorias" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-gray-800 text-base">Gestión de Tipos de Inscripción</h3>
+                            <button onclick="prepararCrearCategoria()"
+                                class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
+                                <i class="fa-solid fa-plus"></i> Nueva Categoría
                             </button>
                         </div>
-                        <button onclick="generarReporteGrafico()"
-                            class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow transition">
-                            <i class="fa-solid fa-rotate mr-1"></i> Actualizar reporte
-                        </button>
+
+                        <div id="formContenedorCategoria"
+                            class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
+                            <form onsubmit="guardarTipoInscripcion(event)"
+                                class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <input type="hidden" id="catIdEdit">
+                                <div>
+                                    <label class="text-[10px] font-bold text-gray-500 uppercase">Nombre
+                                        Categoría:</label>
+                                    <input type="text" id="catNombre" placeholder="Nombre" required
+                                        class="p-2.5 border rounded-xl text-xs bg-white w-full">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-bold text-gray-500 uppercase">Precio Oficial
+                                        (Bs):</label>
+                                    <input type="number" step="0.01" id="catPrecio" placeholder="Precio (Bs)" required
+                                        class="p-2.5 border rounded-xl text-xs bg-white w-full">
+                                </div>
+
+                                <div class="flex flex-col gap-2 justify-center bg-white p-3 rounded-xl border">
+                                    <label class="text-xs font-bold text-gray-700 flex items-center gap-2">
+                                        <input type="checkbox" id="catEsManual" class="rounded text-indigo-600">
+                                        ¿Precio Manual / Especial?
+                                    </label>
+                                    <label class="text-xs font-bold text-green-700 flex items-center gap-2">
+                                        <input type="checkbox" id="catEsVisible" checked class="rounded text-green-600">
+                                        👁️ Visible para las personas en el Portal
+                                    </label>
+                                </div>
+
+                                <div class="col-span-3 flex justify-end gap-2">
+                                    <button type="button" onclick="toggleFormulario('formContenedorCategoria')"
+                                        class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                                    <button type="submit"
+                                        class="bg-indigo-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">Guardar
+                                        Tipo de Inscripción</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs text-gray-600">
+                                <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                                    <tr>
+                                        <th class="p-2">Nombre de Categoría</th>
+                                        <th class="p-2">Precio Estándar</th>
+                                        <th class="p-2">Modalidad</th>
+                                        <th class="p-2">Visibilidad Portal</th>
+                                        <th class="p-2 text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tblTiposInscripcion" class="divide-y divide-gray-100"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
-                <div id="contenedorResumenVariables" class="overflow-x-auto text-xs">
-                    <p class="text-gray-400 italic">Configura el reporte y selecciona «Actualizar reporte».</p>
-                </div>
-                <div class="bg-slate-50 p-4 rounded-xl border border-gray-200 min-h-[300px]">
-                    <div class="h-72"><canvas id="canvasGraficoReporte"></canvas></div>
-                </div>
-            </div>
-        </div>
-
-        <div id="tabUsuarios" class="tab-content hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-gray-800 text-base">Administradores del Sistema</h3>
-                    <button onclick="toggleFormulario('formContenedorAdmin')"
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
-                        <i class="fa-solid fa-user-plus"></i> Crear Admin / Encargado
-                    </button>
-                </div>
-
-                <div id="formContenedorAdmin" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
-                    <form onsubmit="guardarAdmin(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <input type="text" id="adminNewNombre" placeholder="Nombre Completo" required
-                            class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="text" id="adminNewUser" placeholder="Usuario" required
-                            class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="password" id="adminNewPass" placeholder="Mínimo 12 caracteres" minlength="12" maxlength="128" autocomplete="new-password" required
-                            class="p-2.5 border rounded-xl text-xs bg-white">
-                        <input type="text" id="adminNewTel" placeholder="Nº Celular / WhatsApp" required
-                            class="p-2.5 border rounded-xl text-xs bg-white font-bold text-emerald-800">
-                        <select id="adminRolSelect"
-                            class="p-2.5 border rounded-xl text-xs bg-white md:col-span-2"></select>
-                        <div class="col-span-4 flex justify-end gap-2">
-                            <button type="button" onclick="toggleFormulario('formContenedorAdmin')"
-                                class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
-                            <button type="submit"
-                                class="bg-indigo-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">+ Crear
-                                Admin</button>
+                <!-- INGRESOS Y CONFIGURACIÓN QR -->
+                <div id="tabIngresos" class="tab-content hidden space-y-6">
+                    <div
+                        class="bg-indigo-50 p-4 rounded-2xl border border-indigo-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-12 h-12 bg-indigo-600 text-white rounded-xl flex items-center justify-center text-xl shadow">
+                                <i class="fa-solid fa-qrcode"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm text-indigo-900">Configuración del QR de Pago</h4>
+                                <p class="text-xs text-indigo-700">Sube la imagen del QR para que los campamentistas la
+                                    vean en
+                                    su portal al pagar.</p>
+                            </div>
                         </div>
-                    </form>
-                </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-gray-600">
-                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                            <tr>
-                                <th class="p-2">Nombre</th>
-                                <th class="p-2">Usuario</th>
-                                <th class="p-2">Celular / WhatsApp</th>
-                                <th class="p-2">Rol Asignado</th>
-                                <th class="p-2 text-center">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tblListaAdmins" class="divide-y divide-gray-100"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div id="tabRoles" class="tab-content hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-gray-800 text-base">Roles y Permisos Granulares</h3>
-                    <button onclick="prepararCrearRol()"
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
-                        <i class="fa-solid fa-key"></i> Crear / Configurar Rol
-                    </button>
-                </div>
-
-                <div id="formContenedorRol" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
-                    <form onsubmit="guardarRol(event)" class="space-y-4">
-                        <input type="hidden" id="rolIdEdit">
-                        <input type="text" id="rolNombre" placeholder="Nombre del Rol (ej. Staff, Tesorero)" required
-                            class="p-2.5 border rounded-xl text-xs w-full max-w-md bg-white">
-
-                        <label class="text-xs font-bold text-gray-700 block">Matriz de Permisos:</label>
-                        <div
-                            class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-white p-4 rounded-xl border border-gray-200">
-                            <label
-                                class="flex items-center gap-2 text-xs font-bold text-green-700 col-span-2 md:col-span-4 bg-green-50 p-2 rounded-lg border border-green-200">
-                                <input type="checkbox" id="permVerFinanzas"> 💰 Permitir ver Totales de Ingresos,
-                                Egresos y Balance Neto
-                            </label>
-
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permSolicitudes"> Mod. Pendientes</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permInscritosVer"> Ver Inscritos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permInscritosCrear"> Crear Inscritos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permInscritosEditar"> Editar Inscritos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permInscritosEliminar"> Eliminar Inscritos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permCategorias"> Gestionar Categorías</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permIngresosVer"> Ver Ingresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permIngresosEliminar"> Eliminar Ingresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permEgresosVer"> Ver Egresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permEgresosCrear"> Crear Egresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permEgresosEditar"> Editar Egresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permEgresosEliminar"> Eliminar Egresos</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permReportesVer"> Ver Reportes</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permReportesCrear"> Crear Reportes</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permUsuarios"> Mod. Administradores</label>
-                            <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
-                                    id="permRoles"> Mod. Permisos y Roles</label>
+                        <div class="flex items-center gap-2">
+                            <input type="file" id="inputQrAdmin" accept="image/jpeg,image/png,image/webp"
+                                class="text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-indigo-600 file:text-white file:font-bold">
+                            <button onclick="guardarQrSistema()"
+                                class="bg-indigo-700 hover:bg-indigo-800 text-white font-bold text-xs px-4 py-2 rounded-xl shadow transition">
+                                Guardar QR
+                            </button>
                         </div>
-                        <div class="flex justify-end gap-2">
-                            <button type="button" onclick="toggleFormulario('formContenedorRol')"
-                                class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
-                            <button type="submit"
-                                class="bg-indigo-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">+ Guardar
-                                Rol</button>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
+                        <div class="flex justify-between items-center border-b pb-3">
+                            <h3 class="font-bold text-gray-800 text-base">Historial de Ingresos Confirmados</h3>
+                            <button onclick="prepararCrearCobroDirecto()"
+                                class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
+                                <i class="fa-solid fa-cash-register"></i> + Registrar Cobro Directo
+                            </button>
                         </div>
-                    </form>
+
+                        <div id="formContenedorPagoDirecto"
+                            class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-3">
+                            <h4 id="lblTituloPagoForm" class="font-bold text-xs text-gray-700 uppercase border-b pb-1">
+                                Registrar
+                                Pago Manual a Campamentista</h4>
+                            <form onsubmit="guardarCobroDirecto(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                <input type="hidden" id="pagoAdminIdEdit">
+                                <div>
+                                    <label
+                                        class="text-[10px] font-bold text-gray-500 uppercase block mb-1">Campamentista:</label>
+                                    <select id="pagoAdminInscrito" onchange="verificarSaldoInscritoSelect(this.value)"
+                                        required class="p-2.5 border rounded-xl text-xs bg-white font-bold w-full">
+                                        <option value="">-- Seleccionar Campamentista --</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-bold text-gray-500 uppercase block mb-1">Monto
+                                        (Bs):</label>
+                                    <input type="number" step="0.01" id="pagoAdminMonto"
+                                        placeholder="Monto Recibido (Bs)" required
+                                        class="p-2.5 border rounded-xl text-xs bg-white font-bold w-full">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-bold text-gray-500 uppercase block mb-1">Comprobante
+                                        / Foto
+                                        (Obligatorio):</label>
+                                    <input type="file" id="pagoAdminFile"
+                                        accept="image/jpeg,image/png,image/webp,application/pdf"
+                                        class="p-1 border rounded-xl text-xs bg-white w-full">
+                                </div>
+                                <div class="md:col-span-3">
+                                    <label
+                                        class="text-[10px] font-bold text-gray-500 uppercase block mb-1">Observaciones:</label>
+                                    <input type="text" id="pagoAdminObs"
+                                        placeholder="Ej. Recibo físico entregado en mano"
+                                        class="p-2.5 border rounded-xl text-xs bg-white w-full">
+                                </div>
+                                <div class="md:col-span-3 flex justify-end gap-2">
+                                    <button type="button" onclick="toggleFormulario('formContenedorPagoDirecto')"
+                                        class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                                    <button type="submit" id="btnConfirmarCobroDirecto"
+                                        class="bg-green-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">Confirmar
+                                        e Ingresar Pago</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs text-gray-600">
+                                <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                                    <tr>
+                                        <th class="p-2">Fecha</th>
+                                        <th class="p-2">Inscrito</th>
+                                        <th class="p-2">Monto</th>
+                                        <th class="p-2">Observaciones</th>
+                                        <th class="p-2">Comprobante</th>
+                                        <th class="p-2 text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tblHistorialIngresos" class="divide-y divide-gray-100"></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-gray-600">
-                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                            <tr>
-                                <th class="p-2">Nombre del Rol</th>
-                                <th class="p-2">Permisos Habilitados</th>
-                                <th class="p-2 text-center">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tblListaRolesExistentes" class="divide-y divide-gray-100"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+                <div id="tabEgresos" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-gray-800 text-base">Registro de Egresos</h3>
+                            <button onclick="prepararCrearEgreso()"
+                                class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
+                                <i class="fa-solid fa-plus"></i> Registrar Egreso
+                            </button>
+                        </div>
 
-        <div id="tabAuditoria" class="tab-content hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
-                        <i class="fa-solid fa-clipboard-check text-indigo-600"></i> Historial de Auditoría y Revisiones
-                    </h3>
-                    <button onclick="cargarAuditoriaLogs()"
-                        class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-3 py-1.5 rounded-lg border transition">
-                        <i class="fa-solid fa-arrows-rotate mr-1"></i> Actualizar
-                    </button>
+                        <div id="formContenedorEgreso"
+                            class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
+                            <form onsubmit="registrarNuevoEgreso(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <input type="hidden" id="egIdEdit">
+                                <input type="text" id="egConcepto" placeholder="Concepto de Gasto" required
+                                    class="p-2.5 border rounded-xl text-xs bg-white">
+                                <select id="egCategoria" class="p-2.5 border rounded-xl text-xs bg-white">
+                                    <option value="Alimentación">Alimentación</option>
+                                    <option value="Logística">Logística</option>
+                                    <option value="Sonido">Sonido / Iluminación</option>
+                                    <option value="Transporte">Transporte</option>
+                                    <option value="Otros">Otros Gastos</option>
+                                </select>
+                                <input type="number" step="0.01" id="egMonto" placeholder="Monto (Bs)" required
+                                    class="p-2.5 border rounded-xl text-xs bg-white">
+                                <div class="col-span-3 flex justify-end gap-2">
+                                    <button type="button" onclick="toggleFormulario('formContenedorEgreso')"
+                                        class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                                    <button type="submit"
+                                        class="bg-red-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">-
+                                        Guardar
+                                        Egreso</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs text-gray-600">
+                                <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                                    <tr>
+                                        <th class="p-2">Fecha</th>
+                                        <th class="p-2">Concepto</th>
+                                        <th class="p-2">Categoría</th>
+                                        <th class="p-2">Monto</th>
+                                        <th class="p-2">Registrado por</th>
+                                        <th class="p-2 text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tblListaEgresos" class="divide-y divide-gray-100"></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-gray-600">
-                        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
-                            <tr>
-                                <th class="p-2">Fecha y Hora</th>
-                                <th class="p-2">Administrador</th>
-                                <th class="p-2">Módulo</th>
-                                <th class="p-2">Acción / Revisión</th>
-                                <th class="p-2">Detalles</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tblLogsAuditoria" class="divide-y divide-gray-100"></tbody>
-                    </table>
+                <div id="tabReportes" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
+                        <div class="border-b pb-3">
+                            <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
+                                <i class="fa-solid fa-table-cells text-blue-600"></i> Reportes dinámicos
+                            </h3>
+                            <p class="text-xs text-gray-500 mt-1">Combina variables en filas y columnas, y elige qué
+                                valor resumir.</p>
+                        </div>
+
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                                <div>
+                                    <label for="repFilaSelect"
+                                        class="text-[10px] font-bold text-gray-500 uppercase block">Filas (agrupar
+                                        por)</label>
+                                    <select id="repFilaSelect" onchange="normalizarDimensionesReporte('fila')"
+                                        class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold text-indigo-900"></select>
+                                </div>
+                                <div>
+                                    <label for="repSubfilaSelect"
+                                        class="text-[10px] font-bold text-gray-500 uppercase block">Subfilas
+                                        (opcional)</label>
+                                    <select id="repSubfilaSelect" onchange="normalizarDimensionesReporte('subfila')"
+                                        class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold"></select>
+                                </div>
+                                <div>
+                                    <label for="repColumnaSelect"
+                                        class="text-[10px] font-bold text-gray-500 uppercase block">Columnas
+                                        (opcional)</label>
+                                    <select id="repColumnaSelect" onchange="normalizarDimensionesReporte('columna')"
+                                        class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold"></select>
+                                </div>
+                                <div>
+                                    <label for="repValorSelect"
+                                        class="text-[10px] font-bold text-gray-500 uppercase block">Valores
+                                        (resumir)</label>
+                                    <select id="repValorSelect"
+                                        class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold"></select>
+                                </div>
+                                <div>
+                                    <label for="repGraficoTipo"
+                                        class="text-[10px] font-bold text-gray-500 uppercase block">Visualización</label>
+                                    <select id="repGraficoTipo"
+                                        class="p-2.5 border rounded-xl text-xs w-full bg-white font-bold">
+                                        <option value="bar">Barras</option>
+                                        <option value="line">Líneas</option>
+                                        <option value="pie">Torta (totales por fila)</option>
+                                        <option value="doughnut">Dona (totales por fila)</option>
+                                    </select>
+                                </div>
+                                <label id="repFiltroDeudores"
+                                    class="flex items-center gap-2 text-xs font-semibold text-amber-900 bg-amber-50 border border-amber-200 rounded-xl p-2.5 self-end">
+                                    <input type="checkbox" id="repSoloDeudores" class="rounded">
+                                    Solo personas con saldo pendiente
+                                </label>
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row justify-between items-center gap-2 pt-2">
+                                <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                                    <select id="selReportePlantillas" onchange="cargarPlantillaReporte(this.value)"
+                                        class="p-2 border rounded-xl text-xs bg-white font-bold text-emerald-800">
+                                        <option value="">-- Cargar plantilla --</option>
+                                    </select>
+                                    <input type="text" id="txtNombrePlantilla" placeholder="Nombre de plantilla"
+                                        class="p-2 border rounded-xl text-xs w-full sm:w-48">
+                                    <button onclick="guardarPlantillaReporte()"
+                                        class="bg-slate-800 hover:bg-slate-900 text-amber-400 font-bold px-4 py-2 rounded-xl text-xs transition whitespace-nowrap">
+                                        <i class="fa-solid fa-bookmark mr-1"></i> Guardar configuración
+                                    </button>
+                                </div>
+                                <button onclick="generarReporteGrafico()"
+                                    class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow transition">
+                                    <i class="fa-solid fa-rotate mr-1"></i> Actualizar reporte
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="contenedorResumenVariables" class="overflow-x-auto text-xs">
+                            <p class="text-gray-400 italic">Configura el reporte y selecciona «Actualizar reporte».</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-xl border border-gray-200 min-h-[300px]">
+                            <div class="h-72"><canvas id="canvasGraficoReporte"></canvas></div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+
+                <div id="tabUsuarios" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-gray-800 text-base">Administradores del Sistema</h3>
+                            <button onclick="toggleFormulario('formContenedorAdmin')"
+                                class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
+                                <i class="fa-solid fa-user-plus"></i> Crear Admin / Encargado
+                            </button>
+                        </div>
+
+                        <div id="formContenedorAdmin"
+                            class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
+                            <form onsubmit="guardarAdmin(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <input type="text" id="adminNewNombre" placeholder="Nombre Completo" required
+                                    class="p-2.5 border rounded-xl text-xs bg-white">
+                                <input type="text" id="adminNewUser" placeholder="Usuario" required
+                                    class="p-2.5 border rounded-xl text-xs bg-white">
+                                <input type="password" id="adminNewPass" placeholder="Mínimo 12 caracteres"
+                                    minlength="12" maxlength="128" autocomplete="new-password" required
+                                    class="p-2.5 border rounded-xl text-xs bg-white">
+                                <input type="text" id="adminNewTel" placeholder="Nº Celular / WhatsApp" required
+                                    class="p-2.5 border rounded-xl text-xs bg-white font-bold text-emerald-800">
+                                <select id="adminRolSelect"
+                                    class="p-2.5 border rounded-xl text-xs bg-white md:col-span-2"></select>
+                                <div class="col-span-4 flex justify-end gap-2">
+                                    <button type="button" onclick="toggleFormulario('formContenedorAdmin')"
+                                        class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                                    <button type="submit"
+                                        class="bg-indigo-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">+
+                                        Crear
+                                        Admin</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs text-gray-600">
+                                <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                                    <tr>
+                                        <th class="p-2">Nombre</th>
+                                        <th class="p-2">Usuario</th>
+                                        <th class="p-2">Celular / WhatsApp</th>
+                                        <th class="p-2">Rol Asignado</th>
+                                        <th class="p-2 text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tblListaAdmins" class="divide-y divide-gray-100"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tabRoles" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-gray-800 text-base">Roles y Permisos Granulares</h3>
+                            <button onclick="prepararCrearRol()"
+                                class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1">
+                                <i class="fa-solid fa-key"></i> Crear / Configurar Rol
+                            </button>
+                        </div>
+
+                        <div id="formContenedorRol"
+                            class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
+                            <form onsubmit="guardarRol(event)" class="space-y-4">
+                                <input type="hidden" id="rolIdEdit">
+                                <input type="text" id="rolNombre" placeholder="Nombre del Rol (ej. Staff, Tesorero)"
+                                    required class="p-2.5 border rounded-xl text-xs w-full max-w-md bg-white">
+
+                                <label class="text-xs font-bold text-gray-700 block">Matriz de Permisos:</label>
+                                <div
+                                    class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-white p-4 rounded-xl border border-gray-200">
+                                    <label
+                                        class="flex items-center gap-2 text-xs font-bold text-green-700 col-span-2 md:col-span-4 bg-green-50 p-2 rounded-lg border border-green-200">
+                                        <input type="checkbox" id="permVerFinanzas"> 💰 Permitir ver Totales de
+                                        Ingresos,
+                                        Egresos y Balance Neto
+                                    </label>
+
+                                    <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                            id="permSolicitudes"> Mod. Pendientes</label>
+                                    <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                            id="permInscritosVer"> Ver Inscritos</label>
+                                    <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                            id="permInscritosCrear"> Crear Inscritos</label>
+                                    <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                            id="permInscritosEditar"> Editar Inscritos</label>
+                                    <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                            id="permInscritosEliminar"> Eliminar Inscritos</label>
+                                    <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                            id="permCategorias"> Gestionar Categorías</label>
+                                    <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                            id="permIngresosVer"> Ver Ingresos</label>
+                                    <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                            id="permIngresosEliminar"> Eliminar Ingresos</label>
+                                    <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                            id="permEgresosVer"> Ver Egresos</label>
+                                    <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                            id="permEgresosCrear"> Crear Egresos</label>
+                                    <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                            id="permEgresosEditar"> Editar Egresos</label>
+                                    <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                            id="permEgresosEliminar"> Eliminar Egresos</label>
+                                    <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                            id="permReportesVer"> Ver Reportes</label>
+                                    <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                            id="permReportesCrear"> Crear Reportes</label>
+                                    <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                            id="permUsuarios"> Mod. Administradores</label>
+                                    <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox"
+                                            id="permRoles"> Mod. Permisos y Roles</label>
+                                    <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" id="permReglas">
+                                        Administrar reglas y recomendaciones
+                                    </label>
+                                </div>
+                                <div class="flex justify-end gap-2">
+                                    <button type="button" onclick="toggleFormulario('formContenedorRol')"
+                                        class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cancelar</button>
+                                    <button type="submit"
+                                        class="bg-indigo-600 text-white font-bold text-xs px-6 py-2 rounded-xl shadow">+
+                                        Guardar
+                                        Rol</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs text-gray-600">
+                                <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                                    <tr>
+                                        <th class="p-2">Nombre del Rol</th>
+                                        <th class="p-2">Permisos Habilitados</th>
+                                        <th class="p-2 text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tblListaRolesExistentes" class="divide-y divide-gray-100"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tabAuditoria" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
+                                <i class="fa-solid fa-clipboard-check text-indigo-600"></i> Historial de Auditoría y
+                                Revisiones
+                            </h3>
+                            <button onclick="cargarAuditoriaLogs()"
+                                class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-3 py-1.5 rounded-lg border transition">
+                                <i class="fa-solid fa-arrows-rotate mr-1"></i> Actualizar
+                            </button>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs text-gray-600">
+                                <thead class="bg-gray-50 text-gray-400 uppercase font-semibold">
+                                    <tr>
+                                        <th class="p-2">Fecha y Hora</th>
+                                        <th class="p-2">Administrador</th>
+                                        <th class="p-2">Módulo</th>
+                                        <th class="p-2">Acción / Revisión</th>
+                                        <th class="p-2">Detalles</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tblLogsAuditoria" class="divide-y divide-gray-100"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tabReglas" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-5">
+                            <div>
+                                <h3 class="font-bold text-gray-800 text-base">
+                                    <i class="fa-solid fa-book-open text-amber-500 mr-2"></i>
+                                    Reglas y recomendaciones
+                                </h3>
+                                <p class="text-xs text-gray-500 mt-1">
+                                    El documento PDF será visible para todos los campamentistas.
+                                </p>
+                            </div>
+
+                            <button onclick="cargarDocumentoReglasAdmin()"
+                                class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-3 py-1.5 rounded-lg border transition">
+                                <i class="fa-solid fa-arrows-rotate mr-1"></i> Actualizar
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <label class="block text-xs font-bold text-gray-700">
+                                    Documento PDF *
+                                </label>
+
+                                <input type="file" id="archivoReglasCampamento" accept="application/pdf"
+                                    class="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100">
+
+                                <button onclick="subirDocumentoReglas()"
+                                    class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-3 rounded-xl text-sm transition shadow">
+                                    <i class="fa-solid fa-upload mr-1"></i>
+                                    Subir o reemplazar documento
+                                </button>
+
+                                <p id="estadoReglasAdmin" class="text-xs text-gray-500">
+                                    Verificando documento actual...
+                                </p>
+
+                                <a id="btnVerReglasAdmin" href="#" target="_blank" rel="noopener noreferrer"
+                                    class="hidden bg-gray-900 hover:bg-black text-white font-bold py-3 rounded-xl text-sm transition flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-eye"></i>
+                                    Ver documento actual
+                                </a>
+
+                                <button id="btnDescargarReglasAdmin" type="button"
+                                    onclick="descargarDocumentoReglasAdmin()"
+                                    class="hidden bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm transition items-center justify-center gap-2">
+                                    <i class="fa-solid fa-download"></i>
+                                    Descargar documento actual
+                                </button>
+                            </div>
+
+                            <div class="h-[520px] bg-gray-100 border border-gray-200 rounded-xl overflow-hidden">
+                                <iframe id="visorReglasAdmin" class="w-full h-full border-0"
+                                    title="Vista previa del documento de reglas">
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </main>
         </div>
@@ -1048,7 +1225,8 @@
                 </div>
                 <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
                     <label class="font-bold text-amber-900 block mb-1">🔑 Cambiar Contraseña (Opcional):</label>
-                    <input type="password" id="editAdminNewPass" minlength="12" maxlength="128" autocomplete="new-password" placeholder="Mínimo 12 caracteres (opcional)"
+                    <input type="password" id="editAdminNewPass" minlength="12" maxlength="128"
+                        autocomplete="new-password" placeholder="Mínimo 12 caracteres (opcional)"
                         class="w-full p-2 border rounded-xl bg-white">
                 </div>
                 <div class="flex justify-end gap-2 border-t pt-3">
@@ -1095,9 +1273,10 @@
                         class="w-full p-2.5 border rounded-xl font-semibold">
                 </div>
                 <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
-                    <label for="perfilAdminNuevaPass" class="font-bold text-amber-900 block mb-1">Cambiar contraseña (opcional)</label>
-                    <input type="password" id="perfilAdminNuevaPass" minlength="12" maxlength="128" autocomplete="new-password"
-                        placeholder="Mínimo 12 caracteres; vacío para mantener la actual"
+                    <label for="perfilAdminNuevaPass" class="font-bold text-amber-900 block mb-1">Cambiar contraseña
+                        (opcional)</label>
+                    <input type="password" id="perfilAdminNuevaPass" minlength="12" maxlength="128"
+                        autocomplete="new-password" placeholder="Mínimo 12 caracteres; vacío para mantener la actual"
                         class="w-full p-2 border rounded-xl bg-white">
                     <p class="text-[10px] text-amber-800 mt-1">Si la cambias, usa al menos 12 caracteres.</p>
                 </div>
@@ -1173,8 +1352,8 @@
                         </div>
                         <div>
                             <label class="text-xs font-bold text-gray-600">Fecha de Nacimiento (dd/mm/yyyy)</label>
-                            <input type="text" id="editInsFechaNac" placeholder="dd/mm/yyyy"
-                                inputmode="numeric" maxlength="10"
+                            <input type="text" id="editInsFechaNac" placeholder="dd/mm/yyyy" inputmode="numeric"
+                                maxlength="10"
                                 oninput="calcularEdadDesdeFecha('editInsFechaNac', 'editInsEdadVal', 'editSecTutor')"
                                 class="w-full p-2 border rounded-xl text-xs outline-none">
                         </div>
@@ -1190,7 +1369,8 @@
                         </div>
                         <div>
                             <label class="text-xs font-bold text-gray-600">Célula</label>
-                            <select id="editInsCelula" class="select-celula w-full p-2 border rounded-xl text-xs bg-white"
+                            <select id="editInsCelula"
+                                class="select-celula w-full p-2 border rounded-xl text-xs bg-white"
                                 onchange="actualizarCampoOtraCelula(this, 'editInsCelulaOtra')"></select>
                             <input type="text" id="editInsCelulaOtra" placeholder="Escribe el nombre de la célula"
                                 class="hidden w-full mt-2 p-2 border rounded-xl text-xs outline-none">

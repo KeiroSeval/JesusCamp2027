@@ -379,7 +379,7 @@ async function cargarPerfil() {
         const comprobanteUrl = urlArchivoSegura(p.comprobante_url);
         tbody.innerHTML += `
   <tr>
-    <td class="p-2">${new Date(p.created_at || p.fecha).toLocaleDateString()} ${new Date(p.created_at || p.fecha).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</td>
+    <td class="p-2">${new Date(p.created_at || p.fecha).toLocaleDateString()} ${new Date(p.created_at || p.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
     <td class="p-2 font-bold">Bs ${escaparHtml(p.monto)}</td>
     <td class="p-2">${comprobanteUrl ? `<a href="${escaparHtml(comprobanteUrl)}" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline font-bold">Ver Foto</a>` : 'Sin archivo'}</td>
     <td class="p-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${colorEstado}">${escaparHtml(p.estado)}</span></td>
@@ -635,8 +635,8 @@ async function abrirModalAyuda() {
 
     (admins || []).forEach(a => {
         let telClean = (a.telefono || '').replace(/\D/g, '');
-                        let btnWp = telClean
-                                ? `<a href="https://wa.me/${telClean}" target="_blank" rel="noopener noreferrer" class="inline-flex shrink-0 items-center justify-center gap-1.5 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 text-white font-bold text-xs px-3 py-2 rounded-lg shadow-sm transition whitespace-nowrap">
+        let btnWp = telClean
+            ? `<a href="https://wa.me/${telClean}" target="_blank" rel="noopener noreferrer" class="inline-flex shrink-0 items-center justify-center gap-1.5 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 text-white font-bold text-xs px-3 py-2 rounded-lg shadow-sm transition whitespace-nowrap">
                                          <i class="fa-brands fa-whatsapp text-base"></i> WhatsApp
                </a>`
             : `<span class="text-[10px] text-gray-400 font-semibold italic">Sin número</span>`;
@@ -680,3 +680,92 @@ async function verQrPagoModal() {
 function cerrarModalQr() {
     document.getElementById('modalVerQr').classList.add('hidden');
 }
+
+
+
+const REGLAS_BUCKET = 'documentos-campamento';
+const REGLAS_PATH = 'reglas-y-recomendaciones.pdf';
+
+async function descargarDocumentoReglas() {
+    const url = document.getElementById('btnDescargarReglas').dataset.documentoUrl;
+
+    if (!url) {
+        alert('Todavía no hay un documento disponible.');
+        return;
+    }
+
+    const respuesta = await fetch(url);
+
+    if (!respuesta.ok) {
+        alert('No se pudo descargar el documento.');
+        return;
+    }
+
+    const blob = await respuesta.blob();
+    const objetoUrl = URL.createObjectURL(blob);
+    const enlace = document.createElement('a');
+
+    enlace.href = objetoUrl;
+    enlace.download = 'Reglas_y_recomendaciones_JC2027.pdf';
+    document.body.appendChild(enlace);
+    enlace.click();
+    enlace.remove();
+
+    setTimeout(() => URL.revokeObjectURL(objetoUrl), 1000);
+}
+
+async function cargarDocumentoReglasPublico() {
+    const estado = document.getElementById('estadoReglasPublicas');
+    const btnDescargar = document.getElementById('btnDescargarReglas');
+
+    const { data } = db.storage.from(REGLAS_BUCKET).getPublicUrl(REGLAS_PATH);
+    const url = data?.publicUrl || '';
+
+    if (urlArchivoSegura(url)) {
+        const urlSegura = urlArchivoSegura(url);
+        estado.textContent = 'Documento disponible.';
+        estado.className = 'text-xs text-green-600 text-center mt-3 font-semibold';
+
+        btnDescargar.removeAttribute('aria-disabled');
+        btnDescargar.classList.remove('opacity-50', 'pointer-events-none');
+        btnDescargar.dataset.documentoUrl = urlSegura;
+    } else {
+        estado.textContent = 'Aún no hay un documento disponible.';
+        estado.className = 'text-xs text-amber-700 text-center mt-3 font-semibold';
+
+        btnDescargar.href = '#';
+        btnDescargar.setAttribute('aria-disabled', 'true');
+        btnDescargar.classList.add('opacity-50', 'pointer-events-none');
+    }
+}
+
+async function abrirDocumentoReglas() {
+    const { data } = db.storage.from(REGLAS_BUCKET).getPublicUrl(REGLAS_PATH);
+    const url = data?.publicUrl || '';
+    const urlSegura = urlArchivoSegura(url);
+
+    if (!urlSegura) {
+        alert('Todavía no se ha publicado el documento de reglas y recomendaciones.');
+        return;
+    }
+
+    const modal = document.getElementById('modalReglasCampamento');
+    const visor = document.getElementById('visorReglasCampamento');
+
+    visor.src = `${urlSegura}?v=${Date.now()}#toolbar=1`;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.classList.add('overflow-hidden');
+}
+
+function cerrarDocumentoReglas() {
+    const modal = document.getElementById('modalReglasCampamento');
+    const visor = document.getElementById('visorReglasCampamento');
+
+    visor.src = '';
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.classList.remove('overflow-hidden');
+}
+
+cargarDocumentoReglasPublico();

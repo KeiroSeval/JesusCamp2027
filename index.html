@@ -24,7 +24,8 @@
         <div class="portal-navbar__inner">
             <button onclick="regresarInicio()" class="flex items-center space-x-2 text-left focus:outline-none group">
                 <i class="fa-solid fa-campground text-amber-400 text-xl group-hover:scale-110 transition-transform"></i>
-                <span class="font-bold text-lg tracking-wide group-hover:text-amber-400 transition-colors">JESUS CAMP 2027</span>
+                <span class="font-bold text-lg tracking-wide group-hover:text-amber-400 transition-colors">JESUS CAMP
+                    2027</span>
             </button>
 
             <div id="contenedorNavBoton">
@@ -53,7 +54,8 @@
             <p class="text-xs text-gray-500 mb-6">Ingresa tu C.I. para gestionar tu perfil, pagos y carta.</p>
 
             <div class="space-y-3">
-                <input type="text" id="inputCI" inputmode="numeric" autocomplete="off" maxlength="24" placeholder="Tu C.I. (ej. 87654321)"
+                <input type="text" id="inputCI" inputmode="numeric" autocomplete="off" maxlength="24"
+                    placeholder="Tu C.I. (ej. 87654321)"
                     class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-center text-lg font-semibold tracking-wider">
                 <button onclick="buscarCampamentista()"
                     class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition">
@@ -63,44 +65,107 @@
             <p id="msgBusqueda" class="text-red-500 text-xs mt-3 hidden"></p>
         </section>
 
+        <!-- REGLAS Y RECOMENDACIONES -->
+        <section id="secReglasCampamento"
+            class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 max-w-md mx-auto">
+            <div class="flex items-center gap-4">
+                <div
+                    class="w-14 h-14 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center text-xl shrink-0">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+
+                <div class="flex-1 text-left">
+                    <h2 class="font-bold text-gray-900">Reglas y recomendaciones</h2>
+                    <p class="text-xs text-gray-500 mt-1">
+                        Consulta el documento oficial del campamento.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mt-5">
+                <button onclick="abrirDocumentoReglas()"
+                    class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-3 rounded-xl text-xs transition shadow">
+                    <i class="fa-solid fa-eye mr-1"></i> Ver documento
+                </button>
+
+                <button id="btnDescargarReglas" type="button" onclick="descargarDocumentoReglas()"
+                    class="bg-gray-900 hover:bg-black text-white font-bold py-3 rounded-xl text-xs transition shadow flex items-center justify-center opacity-50 pointer-events-none">
+                    <i class="fa-solid fa-download mr-1"></i> Descargar
+                </button>
+            </div>
+
+            <p id="estadoReglasPublicas" class="text-xs text-gray-500 text-center mt-3">
+                Verificando documento...
+            </p>
+        </section>
+
+        <div id="modalReglasCampamento"
+            class="fixed inset-0 bg-gray-900/70 backdrop-blur-sm z-50 hidden items-center justify-center p-3">
+
+            <div class="bg-white rounded-2xl w-full max-w-5xl h-[90vh] shadow-2xl overflow-hidden flex flex-col">
+                <div class="flex justify-between items-center px-4 py-3 border-b">
+                    <h3 class="font-bold text-gray-800 text-sm">
+                        <i class="fa-solid fa-book-open text-amber-500 mr-1"></i>
+                        Reglas y recomendaciones del campamento
+                    </h3>
+
+                    <button onclick="cerrarDocumentoReglas()" class="text-gray-400 hover:text-gray-700 text-xl px-2">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <iframe id="visorReglasCampamento" class="w-full flex-1 border-0 bg-gray-100"
+                    title="Documento de reglas y recomendaciones">
+                </iframe>
+            </div>
+        </div>
+
         <!-- VISTA DE PERFIL -->
         <div id="secPerfil" class="hidden space-y-6">
 
             <!-- ALERTA DE PERFIL INCOMPLETO -->
-            <div id="alertaPerfilIncompleto" class="hidden bg-amber-50 border-l-4 border-amber-500 p-4 rounded-xl shadow-sm">
+            <div id="alertaPerfilIncompleto"
+                class="hidden bg-amber-50 border-l-4 border-amber-500 p-4 rounded-xl shadow-sm">
                 <div class="flex items-center gap-3">
                     <i class="fa-solid fa-triangle-exclamation text-amber-600 text-xl"></i>
                     <div>
                         <h4 class="font-bold text-sm text-amber-900">¡Información Incompleta!</h4>
-                        <p class="text-xs text-amber-700">Por favor revisa y completa tus datos personales (teléfono, fecha de nacimiento, contacto de emergencia, etc.) para formalizar tu registro.</p>
+                        <p class="text-xs text-amber-700">Por favor revisa y completa tus datos personales (teléfono,
+                            fecha de nacimiento, contacto de emergencia, etc.) para formalizar tu registro.</p>
                     </div>
                 </div>
             </div>
 
             <!-- CARDS FINANZAS -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
+                <div
+                    class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
                     <div>
                         <p class="text-[10px] font-semibold text-gray-400 uppercase">Costo Total</p>
                         <h3 class="text-xl font-black text-gray-800" id="lblCosto">Bs 0</h3>
                     </div>
                     <div class="p-2.5 bg-gray-100 text-gray-600 rounded-xl"><i class="fa-solid fa-tag"></i></div>
                 </div>
-                <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
+                <div
+                    class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
                     <div>
                         <p class="text-[10px] font-semibold text-gray-400 uppercase">Abonado</p>
                         <h3 class="text-xl font-black text-green-600" id="lblAbonado">Bs 0</h3>
                     </div>
-                    <div class="p-2.5 bg-green-50 text-green-600 rounded-xl"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="p-2.5 bg-green-50 text-green-600 rounded-xl"><i class="fa-solid fa-circle-check"></i>
+                    </div>
                 </div>
-                <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
+                <div
+                    class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
                     <div>
                         <p class="text-[10px] font-semibold text-gray-400 uppercase">Saldo</p>
                         <h3 class="text-xl font-black text-red-600" id="lblSaldo">Bs 0</h3>
                     </div>
-                    <div class="p-2.5 bg-red-50 text-red-600 rounded-xl"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                    <div class="p-2.5 bg-red-50 text-red-600 rounded-xl"><i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
                 </div>
-                <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
+                <div
+                    class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
                     <div>
                         <p class="text-[10px] font-semibold text-gray-400 uppercase">Equipo Asignado</p>
                         <h3 class="text-sm font-black text-indigo-600" id="lblEquipo">Sin Asignar</h3>
@@ -147,7 +212,8 @@
                     <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
                         <i class="fa-solid fa-upload text-indigo-600"></i> Adjuntar o Actualizar Carta
                     </h3>
-                    <p class="text-xs text-gray-500">Descarga la Carta de Compromiso, fírmala y sube una fotografía o documento PDF visible.</p>
+                    <p class="text-xs text-gray-500">Descarga la Carta de Compromiso, fírmala y sube una fotografía o
+                        documento PDF visible.</p>
                     <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 pt-2">
                         <input type="file" id="cartaArchivo" accept="image/jpeg,image/png,image/webp,application/pdf"
                             class="text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
@@ -161,7 +227,8 @@
             </div>
 
             <!-- DATOS PERSONALES -->
-            <div id="tabUsrDatos" class="tab-usr-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
+            <div id="tabUsrDatos"
+                class="tab-usr-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
                 <div class="flex justify-between items-center mb-2">
                     <h3 class="font-bold text-gray-800 text-lg flex items-center gap-2">
                         <i class="fa-solid fa-user text-blue-600"></i> Información Inscrita
@@ -178,10 +245,12 @@
                     </div>
                 </div>
 
-                <div id="panelCambioPendiente" class="hidden rounded-xl border border-amber-300 bg-amber-50 p-4 space-y-3" role="status">
+                <div id="panelCambioPendiente"
+                    class="hidden rounded-xl border border-amber-300 bg-amber-50 p-4 space-y-3" role="status">
                     <div>
                         <h4 class="font-bold text-sm text-amber-900">Modificación en revisión</h4>
-                        <p class="text-xs text-amber-800">No puedes enviar otra solicitud hasta que esta sea aprobada o rechazada. Así quedarían los datos si se aprueba:</p>
+                        <p class="text-xs text-amber-800">No puedes enviar otra solicitud hasta que esta sea aprobada o
+                            rechazada. Así quedarían los datos si se aprueba:</p>
                     </div>
                     <div id="listaCambiosPendientes" class="space-y-2"></div>
                 </div>
@@ -199,18 +268,20 @@
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500">Fecha de Nacimiento (dd/mm/yyyy)</label>
-                        <input type="text" id="usrFechaNac" disabled placeholder="dd/mm/yyyy" inputmode="numeric" maxlength="10"
-                            oninput="actualizarVistaFechaNacimiento()"
+                        <input type="text" id="usrFechaNac" disabled placeholder="dd/mm/yyyy" inputmode="numeric"
+                            maxlength="10" oninput="actualizarVistaFechaNacimiento()"
                             class="usr-input w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500">Edad Calculada</label>
-                        <input type="text" id="usrEdadText" disabled readonly placeholder="Selecciona tu fecha de nacimiento"
+                        <input type="text" id="usrEdadText" disabled readonly
+                            placeholder="Selecciona tu fecha de nacimiento"
                             class="w-full mt-1 p-2.5 bg-gray-100 border border-gray-200 rounded-lg text-sm font-bold text-indigo-900">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500">Célula</label>
-                        <select id="usrCelula" disabled class="usr-input select-celula w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none"
+                        <select id="usrCelula" disabled
+                            class="usr-input select-celula w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none"
                             onchange="actualizarCampoOtraCelula(this, 'usrCelulaOtra')"></select>
                         <input type="text" id="usrCelulaOtra" disabled placeholder="Escribe el nombre de la célula"
                             class="usr-input hidden w-full mt-2 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none">
@@ -276,7 +347,8 @@
                     <div id="secMenorEdad"
                         class="hidden md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 bg-amber-50/50 p-4 rounded-xl border border-amber-200">
                         <div class="md:col-span-2 font-bold text-xs text-amber-900 flex items-center gap-1">
-                            <i class="fa-solid fa-child-reaching"></i> Información de Tutor Legal (Requerido para Menores de Edad)
+                            <i class="fa-solid fa-child-reaching"></i> Información de Tutor Legal (Requerido para
+                            Menores de Edad)
                         </div>
                         <div>
                             <label class="text-xs font-bold text-gray-500">Nombre del Tutor</label>
@@ -300,9 +372,12 @@
             </div>
 
             <!-- SUBIR COMPROBANTE -->
-            <div id="tabUsrPago" class="tab-usr-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <button onclick="verQrPagoModal()" class="w-full mb-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 font-bold py-3 rounded-xl border border-indigo-200 text-xs transition flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-qrcode text-indigo-600 text-base"></i> Ver / Descargar QR Oficial para Transferencia
+            <div id="tabUsrPago"
+                class="tab-usr-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <button onclick="verQrPagoModal()"
+                    class="w-full mb-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 font-bold py-3 rounded-xl border border-indigo-200 text-xs transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-qrcode text-indigo-600 text-base"></i> Ver / Descargar QR Oficial para
+                    Transferencia
                 </button>
 
                 <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
@@ -310,8 +385,10 @@
                 </h3>
 
                 <div class="space-y-4 max-w-lg">
-                    <div id="msgPagoBloqueado" class="hidden bg-amber-50 border border-amber-300 text-amber-900 p-3 rounded-xl text-xs font-bold">
-                        ⚠️ Tienes un abono pendiente de revisión por el tesorero. Podrás subir otro pago cuando este sea procesado.
+                    <div id="msgPagoBloqueado"
+                        class="hidden bg-amber-50 border border-amber-300 text-amber-900 p-3 rounded-xl text-xs font-bold">
+                        ⚠️ Tienes un abono pendiente de revisión por el tesorero. Podrás subir otro pago cuando este sea
+                        procesado.
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500">Monto del Abono (Bs) *</label>
@@ -322,7 +399,8 @@
                         <label class="text-xs font-bold text-gray-700 flex items-center gap-1">
                             Foto / Recibo del Comprobante (Obligatorio) *
                         </label>
-                        <input type="file" id="pagoArchivo" accept="image/jpeg,image/png,image/webp,application/pdf" required
+                        <input type="file" id="pagoArchivo" accept="image/jpeg,image/png,image/webp,application/pdf"
+                            required
                             class="w-full mt-1 text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
                     </div>
                     <div>
@@ -338,7 +416,8 @@
             </div>
 
             <!-- HISTORIAL DE CUOTAS -->
-            <div id="tabUsrHistorial" class="tab-usr-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+            <div id="tabUsrHistorial"
+                class="tab-usr-content hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                 <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
                     <i class="fa-solid fa-receipt text-gray-600"></i> Historial de Cuotas
                 </h3>
@@ -362,42 +441,51 @@
     </main>
 
     <!-- BOTÓN FLOTANTE Y MODAL DE AYUDA / CONSULTAS -->
-    <button onclick="abrirModalAyuda()" class="fixed bottom-5 right-5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold p-3.5 rounded-full shadow-2xl flex items-center gap-2 border-2 border-white z-40 transition hover:scale-105 text-xs">
+    <button onclick="abrirModalAyuda()"
+        class="fixed bottom-5 right-5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold p-3.5 rounded-full shadow-2xl flex items-center gap-2 border-2 border-white z-40 transition hover:scale-105 text-xs">
         <i class="fa-solid fa-headset text-lg"></i>
         <span class="hidden sm:inline">Solicitar Ayuda / Encargados</span>
     </button>
 
-    <div id="modalAyudaConsultas" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div id="modalAyudaConsultas"
+        class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
             <div class="flex justify-between items-center border-b pb-2">
                 <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
                     <i class="fa-solid fa-headset text-indigo-600"></i> Encargados de Atención
                 </h3>
-                <button onclick="cerrarModalAyuda()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="cerrarModalAyuda()" class="text-gray-400 hover:text-gray-600"><i
+                        class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
-            <p class="text-xs text-gray-500">Si tienes dudas sobre tus pagos o inscripción, puedes contactar a cualquiera de los siguientes encargados:</p>
+            <p class="text-xs text-gray-500">Si tienes dudas sobre tus pagos o inscripción, puedes contactar a
+                cualquiera de los siguientes encargados:</p>
 
             <div id="listaAdminsAyuda" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
 
             <div class="pt-2 border-t text-right">
-                <button onclick="cerrarModalAyuda()" class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cerrar</button>
+                <button onclick="cerrarModalAyuda()"
+                    class="bg-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl">Cerrar</button>
             </div>
         </div>
     </div>
 
     <!-- MODAL MOSTRAR QR CON BOTÓN DE DESCARGA -->
-    <div id="modalVerQr" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div id="modalVerQr"
+        class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center space-y-4">
             <h3 class="font-bold text-gray-800 text-base flex items-center justify-center gap-2">
                 <i class="fa-solid fa-qrcode text-indigo-600"></i> QR Oficial de Pago
             </h3>
-            <div id="contImagenQr" class="bg-gray-50 p-2 rounded-xl border flex justify-center items-center min-h-[200px]">
+            <div id="contImagenQr"
+                class="bg-gray-50 p-2 rounded-xl border flex justify-center items-center min-h-[200px]">
                 <p class="text-xs text-gray-400">Cargando código QR...</p>
             </div>
             <div class="flex gap-2">
-                <button onclick="cerrarModalQr()" class="w-1/2 bg-gray-200 text-gray-700 font-bold text-xs py-2.5 rounded-xl">Cerrar</button>
-                <a id="btnDescargarQr" href="#" download="QR_JC2027.png" target="_blank" class="w-1/2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2.5 rounded-xl flex items-center justify-center gap-1 shadow">
+                <button onclick="cerrarModalQr()"
+                    class="w-1/2 bg-gray-200 text-gray-700 font-bold text-xs py-2.5 rounded-xl">Cerrar</button>
+                <a id="btnDescargarQr" href="#" download="QR_JC2027.png" target="_blank"
+                    class="w-1/2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2.5 rounded-xl flex items-center justify-center gap-1 shadow">
                     <i class="fa-solid fa-download"></i> Descargar QR
                 </a>
             </div>
